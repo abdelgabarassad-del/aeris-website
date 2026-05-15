@@ -565,7 +565,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 16px;
 }
 
-.contact-box .contact-item {
+.contact-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -574,7 +574,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: .95rem;
 }
 
-.contact-box .contact-icon {
+.contact-icon {
   width: 24px; height: 24px;
   display: flex;
   align-items: center;
