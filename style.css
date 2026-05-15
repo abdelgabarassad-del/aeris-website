@@ -253,10 +253,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--white);
   margin-bottom: 18px;
   text-shadow: 0 4px 30px rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
 }
 
-.hero-title span {
-  color: var(--accent);
+.hero-title img {
+  height: clamp(70px, 15vw, 140px);
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.4));
 }
 
 .hero-tagline {
