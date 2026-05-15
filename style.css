@@ -115,27 +115,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-logo {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 1.35rem;
-  color: var(--accent);
-  letter-spacing: .12em;
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.nav-logo .logo-dot {
-  width: 10px; height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--accent);
-  animation: pulse-dot 2s ease-in-out infinite;
+.nav-logo-img {
+  height: 48px;
+  width: auto;
+  display: block;
+  transition: var(--transition);
 }
 
-@keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 6px var(--accent); }
-  50% { box-shadow: 0 0 18px var(--accent), 0 0 30px rgba(93,255,160,.3); }
+.nav-logo:hover .nav-logo-img {
+  filter: drop-shadow(0 0 8px var(--accent));
+  transform: scale(1.05);
 }
 
 .nav-links {
