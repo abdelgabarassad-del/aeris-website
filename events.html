@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A.E.R.I.S. Events — Engineering Day, Lanchire Visit, and more from the AASTMT aerospace and robotics team." />
+  <title>Events | A.E.R.I.S.</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" id="site-header">
+    <nav class="nav-wrapper">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="nav-logo-img" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li><a href="index.html#products">Products</a></li>
+        <li><a href="index.html#competitions">Competitions</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ========== EVENTS ========== -->
+  <main class="events-page">
+    <div class="container">
+
+      <h1 class="page-title fade-in">Our Events</h1>
+
+      <!-- EVENT BLOCK 1 -->
+      <article class="event-block fade-in" id="engineering-day">
+        <div class="event-text">
+          <h3>Engineering Day</h3>
+          <p>
+            Summary about the event. Engineering Day brought together students, faculty, and industry professionals to showcase innovative projects, conduct workshops on emerging technologies, and celebrate the spirit of hands-on engineering. A.E.R.I.S. presented live UAV demonstrations and interactive sessions on drone design fundamentals.
+          </p>
+          <span class="event-date">&#128197; 2023</span>
+        </div>
+        <div class="event-image">
+          <img src="images/landscape-placeholder.png" alt="Engineering Day event photo" loading="lazy" />
+        </div>
+      </article>
+
+      <!-- EVENT BLOCK 2 -->
+      <article class="event-block fade-in" id="lanchire-visit">
+        <div class="event-text">
+          <h3>Lanchire Visit</h3>
+          <p>
+            Summary about the event. The Lanchire Visit provided our team members with an exclusive behind-the-scenes look at advanced manufacturing facilities and cutting-edge aerospace research labs. Students gained valuable insights into professional workflows and industry-standard practices for UAV development.
+          </p>
+          <span class="event-date">&#128197; 2024</span>
+        </div>
+        <div class="event-image">
+          <img src="images/landscape-placeholder.png" alt="Lanchire Visit event photo" loading="lazy" />
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="footer-logo-img" />
+        </a>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="events.html">Events</a>
+          <a href="index.html#products">Products</a>
+          <a href="index.html#competitions">Competitions</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 A.E.R.I.S. — Advanced Engineering &amp; Robotics in Flight Systems. Made by el 7ara2 el gamed el CEO ely mafy4 mno etnyn ENG./DR ABDULJABAR ASAAD All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    /* Mobile nav toggle */
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    /* Scroll-triggered fade-in */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
