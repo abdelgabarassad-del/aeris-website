@@ -735,11 +735,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-logo {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: var(--accent);
-  letter-spacing: .12em;
+  display: block;
+}
+
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 0 6px rgba(246,242,223,.4));
+  transition: transform var(--transition);
+}
+
+.footer-logo:hover .footer-logo-img {
+  transform: scale(1.05);
 }
 
 .footer-links {
