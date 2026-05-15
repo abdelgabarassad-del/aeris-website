@@ -497,10 +497,9 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 28px;
-  background: rgba(93, 255, 160, .06);
-  border: 1px solid rgba(93, 255, 160, .18);
-  border-radius: var(--radius-lg);
+  padding: 8px;
+  background: none;
+  border: none;
   color: var(--white-soft);
   font-family: var(--font-sub);
   font-weight: 600;
@@ -518,10 +517,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .linktree-link:hover {
   transform: translateY(-3px);
-  background: rgba(93, 255, 160, .12);
-  border-color: var(--accent);
   color: var(--white);
-  box-shadow: 0 8px 30px var(--accent-glow);
 }
 
 .linktree-link:hover svg {
@@ -530,9 +526,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Instagram brand hover */
 #linktree-instagram:hover {
-  border-color: #e1306c;
-  background: rgba(225, 48, 108, .12);
-  box-shadow: 0 8px 30px rgba(225, 48, 108, .2);
+  color: #e1306c;
 }
 #linktree-instagram:hover svg {
   color: #e1306c;
@@ -541,9 +535,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* LinkedIn brand hover */
 #linktree-linkedin:hover {
-  border-color: #0a66c2;
-  background: rgba(10, 102, 194, .12);
-  box-shadow: 0 8px 30px rgba(10, 102, 194, .2);
+  color: #0a66c2;
 }
 #linktree-linkedin:hover svg {
   color: #0a66c2;
