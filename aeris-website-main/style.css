@@ -692,6 +692,14 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
+.board-grid--supervisors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
 .department-column {
   display: flex;
   flex-direction: column;
@@ -1094,6 +1102,9 @@ h1, h2, h3, h4, h5, h6 {
   .board-grid--departments {
     grid-template-columns: repeat(2, 1fr);
   }
+  .board-grid--supervisors {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1151,7 +1162,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   /* Team section */
-  .board-grid--departments {
+  .board-grid--departments,
+  .board-grid--supervisors {
     grid-template-columns: 1fr;
     max-width: 400px;
     margin: 0 auto;
