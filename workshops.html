@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A.E.R.I.S. Workshops — Hands-on training in UAV Design, Avionics, Embedded Systems, and CAD Rapid Prototyping." />
-  <title>Workshops | A.E.R.I.S.</title>
+  <meta name="description" content="A.E.R.I.S. Workshops After Hours Gallery — A visually stunning showcase of our hands-on labs, team collaborations, and flight test builds." />
+  <title>After Hours Gallery | A.E.R.I.S.</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- CDN to dynamically decode HEIC image format natively in all browsers -->
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.4.0/dist/heic2any.min.js"></script>
 </head>
 <body>
 
@@ -31,90 +33,155 @@
     </nav>
   </header>
 
-  <!-- ========== WORKSHOPS ========== -->
-  <main class="events-page">
+  <!-- ========== GALLERY ========== -->
+  <main class="gallery-section">
     <div class="container">
 
-      <h1 class="page-title fade-in">Our Workshops</h1>
+      <h1 class="page-title fade-in" style="text-align: center; margin-bottom: 20px; color: var(--accent);">After Hours Gallery</h1>
+      <p class="fade-in" style="text-align: center; max-width: 700px; margin: 0 auto 40px; color: var(--white-soft); font-size: 1.05rem;">
+        An exclusive look behind the scenes at our workspace. Explore the collaborative build sessions, hardware assemblies, and late-night testing runs that power A.E.R.I.S.
+      </p>
 
-      <!-- WORKSHOP BLOCK 1 -->
-      <article class="event-block fade-in" id="workshop-uav-design">
-        <div class="event-text">
-          <h3>UAV Design &amp; Aerodynamics</h3>
-          <p>
-            Explore the fundamentals of flight dynamics, airfoil selection, and aircraft configuration. This workshop provides students with hands-on experience in calculating lift, drag, and thrust requirements, allowing participants to conceptualize and optimize unmanned aerial vehicles for various flight missions.
-          </p>
-          <span class="event-date">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            </svg>
-            Hands-on Engineering
-          </span>
-        </div>
-        <div class="event-image">
-          <img src="images/landscape-placeholder.png" alt="UAV Design Workshop" loading="lazy" />
-        </div>
-      </article>
+      <!-- Category Filter Buttons -->
+      <div class="gallery-filters fade-in">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="image">Images</button>
+        <button class="filter-btn" data-filter="video">Videos</button>
+      </div>
 
-      <!-- WORKSHOP BLOCK 2 -->
-      <article class="event-block fade-in" id="workshop-avionics">
-        <div class="event-text">
-          <h3>Avionics &amp; Autonomous Systems</h3>
-          <p>
-            Delve into the brain of unmanned systems. Participants learn how to configure open-source flight controllers like Pixhawk and ArduPilot, calibrate critical sensors (GPS, IMUs, compasses), and design autonomous mission pathways for surveying and competitive flight parameters.
-          </p>
-          <span class="event-date">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;">
-              <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
-            </svg>
-            Flight Integration
-          </span>
-        </div>
-        <div class="event-image">
-          <img src="images/landscape-placeholder.png" alt="Avionics & Autonomous Systems Workshop" loading="lazy" />
-        </div>
-      </article>
+      <!-- Gallery Grid -->
+      <div class="gallery-grid fade-in" id="galleryGrid">
 
-      <!-- WORKSHOP BLOCK 3 -->
-      <article class="event-block fade-in" id="workshop-embedded">
-        <div class="event-text">
-          <h3>Embedded Systems &amp; Robotics</h3>
-          <p>
-            Understand the hardware-software interface. This training covers microcontroller programming (Arduino, ESP32), sensor telemetry integration, actuator signal processing, and communication protocols (PWM, I2C, SPI) necessary for robust robot operations and custom telemetry designs.
-          </p>
-          <span class="event-date">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-            Microcontroller Programming
-          </span>
+        <!-- CARD 1 (HEIC Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/after hours.HEIC" data-title="Collaboration Session">
+          <img alt="A.E.R.I.S. After Hours Collaboration Session" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Collaboration Session</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              HEIC Image
+            </span>
+          </div>
         </div>
-        <div class="event-image">
-          <img src="images/landscape-placeholder.png" alt="Embedded Systems Workshop" loading="lazy" />
-        </div>
-      </article>
 
-      <!-- WORKSHOP BLOCK 4 -->
-      <article class="event-block fade-in" id="workshop-cad">
-        <div class="event-text">
-          <h3>CAD Modeling &amp; Rapid Prototyping</h3>
-          <p>
-            Transform concepts into physical airframes. Learn advanced 3D modeling using SolidWorks, perform finite element analysis (FEA) to verify structural integrity under load, and explore rapid prototyping techniques such as 3D printing and laser cutting using lightweight composite materials.
-          </p>
-          <span class="event-date">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
-            </svg>
-            3D Prototyping
-          </span>
+        <!-- CARD 2 (HEIC Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours.HEIC" data-title="Team Build &amp; Alignment">
+          <img alt="A.E.R.I.S. After Hours Team Build &amp; Alignment" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Team Build &amp; Alignment</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              HEIC Image
+            </span>
+          </div>
         </div>
-        <div class="event-image">
-          <img src="images/landscape-placeholder.png" alt="CAD Rapid Prototyping Workshop" loading="lazy" />
+
+        <!-- CARD 3 (HEIC Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours2.HEIC" data-title="Structural Integration">
+          <img alt="A.E.R.I.S. After Hours Structural Integration" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Structural Integration</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              HEIC Image
+            </span>
+          </div>
         </div>
-      </article>
+
+        <!-- CARD 4 (JPG Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours3.jpg" data-title="Flight Lab Testing">
+          <img alt="A.E.R.I.S. After Hours Flight Lab Testing" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Flight Lab Testing</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              JPG Image
+            </span>
+          </div>
+        </div>
+
+        <!-- CARD 5 (HEIC Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours5.HEIC" data-title="Electrical Calibration">
+          <img alt="A.E.R.I.S. After Hours Electrical Calibration" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Electrical Calibration</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              HEIC Image
+            </span>
+          </div>
+        </div>
+
+        <!-- CARD 6 (JPG Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours6.JPG" data-title="Structural Workbench">
+          <img alt="A.E.R.I.S. After Hours Structural Workbench" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Structural Workbench</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              JPG Image
+            </span>
+          </div>
+        </div>
+
+        <!-- CARD 7 (JPG Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours7.JPG" data-title="UAV Calibrations">
+          <img alt="A.E.R.I.S. After Hours UAV Calibrations" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">UAV Calibrations</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              JPG Image
+            </span>
+          </div>
+        </div>
+
+        <!-- CARD 8 (JPG Image) -->
+        <div class="gallery-card" data-type="image" data-src="images/afterhours9.JPG" data-title="Avionics Integration">
+          <img alt="A.E.R.I.S. After Hours Avionics Integration" class="gallery-image" />
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Avionics Integration</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              JPG Image
+            </span>
+          </div>
+        </div>
+
+        <!-- CARD 9 (MOV Video) -->
+        <div class="gallery-card" data-type="video" data-src="images/afterhourse vid.MOV" data-title="Workspace Behind The Scenes">
+          <!-- Video element for preview (muted, autoplay-on-hover style) -->
+          <video muted playsinline preload="metadata" class="gallery-image">
+            <source src="images/afterhourse vid.MOV" type="video/mp4">
+          </video>
+          <!-- Custom play overlay icon -->
+          <div class="video-play-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div class="gallery-card-overlay">
+            <h4 class="gallery-card-title">Workspace Behind The Scenes</h4>
+            <span class="gallery-card-type">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              MOV Video
+            </span>
+          </div>
+        </div>
+
+      </div>
 
     </div>
   </main>
+
+  <!-- ========== LIGHTBOX MODAL ========== -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous item">&#10094;</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next item">&#10095;</button>
+    <div class="lightbox-content-wrapper">
+      <div id="lightboxMediaContainer"></div>
+      <h3 class="lightbox-caption" id="lightboxCaption"></h3>
+    </div>
+  </div>
 
   <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
@@ -159,8 +226,171 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    /* Dynamic Category Filtering */
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryCards = document.querySelectorAll('.gallery-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Toggle active button class
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filterValue = btn.getAttribute('data-filter');
+
+        galleryCards.forEach(card => {
+          const type = card.getAttribute('data-type');
+          if (filterValue === 'all' || type === filterValue) {
+            card.style.display = 'block';
+            setTimeout(() => card.style.opacity = '1', 50);
+          } else {
+            card.style.opacity = '0';
+            setTimeout(() => card.style.display = 'none', 300);
+          }
+        });
+      });
+    });
+
+    /* Progressive HEIC Decoding & Loading */
+    galleryCards.forEach(card => {
+      const img = card.querySelector('img');
+      const video = card.querySelector('video');
+      const src = card.getAttribute('data-src');
+
+      if (img) {
+        if (src.toLowerCase().endsWith('.heic')) {
+          card.classList.add('loading');
+          
+          // Use heic2any client-side script to render HEIC natively
+          fetch(src)
+            .then(res => res.blob())
+            .then(blob => heic2any({ blob: blob, toType: 'image/jpeg', quality: 0.65 }))
+            .then(conversionResult => {
+              const url = URL.createObjectURL(conversionResult);
+              img.src = url;
+              img.onload = () => {
+                card.classList.remove('loading');
+                img.classList.add('loaded');
+              };
+            })
+            .catch(err => {
+              console.error('HEIC load failed for ' + src, err);
+              // Fallback to static placeholder if decoding fails
+              img.src = 'images/landscape-placeholder.png';
+              img.onload = () => {
+                card.classList.remove('loading');
+                img.classList.add('loaded');
+              };
+            });
+        } else {
+          // Standard Jpeg / Png image
+          img.src = src;
+          img.onload = () => {
+            img.classList.add('loaded');
+          };
+        }
+      }
+
+      if (video) {
+        // Hover autoplay logic for video card
+        card.addEventListener('mouseenter', () => video.play());
+        card.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+        video.onloadeddata = () => {
+          video.classList.add('loaded');
+        };
+      }
+    });
+
+    /* Lightbox Modal System */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const mediaContainer = document.getElementById('lightboxMediaContainer');
+    const captionText = document.getElementById('lightboxCaption');
+
+    let currentActiveIndex = 0;
+    let visibleCards = [];
+
+    // Open Lightbox
+    const openLightbox = (card) => {
+      // Get current list of displayed (filtered) cards
+      visibleCards = Array.from(galleryCards).filter(c => c.style.display !== 'none');
+      currentActiveIndex = visibleCards.indexOf(card);
+      updateLightboxContent();
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Lock background scrolling
+    };
+
+    // Update Lightbox Display
+    const updateLightboxContent = () => {
+      mediaContainer.innerHTML = ''; // Clear container
+      const currentCard = visibleCards[currentActiveIndex];
+      const src = currentCard.getAttribute('data-src');
+      const title = currentCard.getAttribute('data-title');
+      const type = currentCard.getAttribute('data-type');
+
+      if (type === 'video') {
+        const videoEl = document.createElement('video');
+        videoEl.src = src;
+        videoEl.controls = true;
+        videoEl.autoplay = true;
+        videoEl.loop = true;
+        mediaContainer.appendChild(videoEl);
+      } else {
+        const imgEl = document.createElement('img');
+        // If image is a HEIC converted blob, use the loaded image's resolved object URL
+        const originalImg = currentCard.querySelector('img');
+        imgEl.src = originalImg.src || src;
+        mediaContainer.appendChild(imgEl);
+      }
+
+      captionText.textContent = title;
+    };
+
+    // Close Lightbox
+    const closeLightbox = () => {
+      lightbox.classList.remove('active');
+      mediaContainer.innerHTML = '';
+      document.body.style.overflow = ''; // Unlock scrolling
+    };
+
+    // Navigate Lightbox
+    const navigateLightbox = (direction) => {
+      if (visibleCards.length <= 1) return;
+      currentActiveIndex += direction;
+      if (currentActiveIndex >= visibleCards.length) currentActiveIndex = 0;
+      if (currentActiveIndex < 0) currentActiveIndex = visibleCards.length - 1;
+      updateLightboxContent();
+    };
+
+    // Bind Event Listeners
+    galleryCards.forEach(card => {
+      card.addEventListener('click', () => openLightbox(card));
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+    lightboxNext.addEventListener('click', () => navigateLightbox(1));
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    });
+
+    // Close lightbox when clicking outside the media
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
   </script>
 
 </body>
