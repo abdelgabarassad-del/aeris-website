@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Join the A.E.R.I.S. flight systems engineering team — apply for our Mechanical, Electrical, Software, or Non-Technical divisions." />
+  <title>Join Our Team | A.E.R.I.S.</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .recruitment-page {
+      padding: calc(68px + var(--section-pad)) 0 var(--section-pad);
+      background: var(--bg-primary);
+    }
+    
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    
+    .section-subtitle {
+      font-family: var(--font-sub);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--white-muted);
+      text-align: center;
+      letter-spacing: .06em;
+      margin-bottom: 48px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .recruitment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 992px) {
+      .recruitment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sub-teams details info cards */
+    .info-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .subteam-card {
+      background: rgba(30, 59, 45, 0.4);
+      border: 1px solid rgba(246, 242, 223, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: var(--transition);
+    }
+
+    .subteam-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: rgba(30, 59, 45, 0.55);
+    }
+
+    .subteam-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .subteam-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(246, 242, 223, 0.06);
+      border-radius: 50%;
+      border: 1px solid rgba(246, 242, 223, 0.15);
+      color: var(--accent);
+    }
+
+    .subteam-card:hover .subteam-icon {
+      border-color: var(--accent);
+      background: rgba(246, 242, 223, 0.12);
+      filter: drop-shadow(0 0 8px var(--accent));
+    }
+
+    .subteam-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .subteam-desc {
+      color: var(--white-soft);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: rgba(30, 59, 45, 0.55);
+      border: 2px solid var(--accent-border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, .4), 0 0 30px var(--accent-glow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: calc(var(--radius-lg) - 2px);
+      background: radial-gradient(ellipse at 50% 0%, rgba(246, 242, 223, .04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-family: var(--font-sub);
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 14px 18px;
+      background: rgba(20, 40, 31, 0.6);
+      border: 1px solid rgba(246, 242, 223, 0.2);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(246, 242, 223, 0.25);
+      background: rgba(20, 40, 31, 0.8);
+    }
+
+    .form-group select option {
+      background: var(--bg-secondary);
+      color: var(--white);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 576px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .form-card {
+        padding: 24px;
+      }
+    }
+
+    .info-banner {
+      background: rgba(246, 242, 223, 0.06);
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-bottom: 28px;
+      font-size: 0.92rem;
+      color: var(--white-soft);
+      line-height: 1.5;
+    }
+
+    .info-banner strong {
+      color: var(--accent);
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Loading state */
+    .btn-primary.is-loading {
+      position: relative;
+      color: transparent !important;
+      pointer-events: none;
+    }
+
+    .btn-primary.is-loading .btn-text {
+      visibility: hidden;
+    }
+
+    .btn-primary.is-loading::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-top: -10px;
+      margin-left: -10px;
+      border: 3px solid rgba(20, 40, 31, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--bg-primary);
+      animation: spin 1s ease-in-out infinite;
+      -webkit-animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* CSS Success Modal */
+    .success-hud {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-hud svg {
+      color: #7dd3a8;
+      filter: drop-shadow(0 0 10px rgba(125, 211, 168, 0.3));
+      margin-bottom: 24px;
+    }
+
+    .success-hud h3 {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .success-hud p {
+      color: var(--white-soft);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 30px;
+    }
+
+    /* Error Alert */
+    .form-error-banner {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1.5px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      animation: slideDown 0.3s var(--ease) forwards;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Developer integration instructions card */
+    .setup-card {
+      margin-top: 40px;
+      background: rgba(30, 59, 45, 0.85);
+      border: 1px dashed rgba(246, 242, 223, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      font-size: 0.92rem;
+      color: var(--white-soft);
+      line-height: 1.6;
+    }
+
+    .setup-card h4 {
+      font-family: var(--font-heading);
+      color: var(--accent);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .setup-card ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .setup-card code {
+      font-family: monospace;
+      background: rgba(10, 20, 16, 0.8);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #92d8ff;
+    }
+
+    .code-container {
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .code-block {
+      background: #0d1a14;
+      color: #a3b8ad;
+      padding: 16px;
+      border-radius: var(--radius);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      overflow-x: auto;
+      white-space: pre;
+      border: 1px solid rgba(246, 242, 223, 0.1);
+      max-height: 250px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" id="site-header">
+    <nav class="nav-wrapper">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="nav-logo-img" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="workshops.html">Workshops</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="competitions.html">Competitions</a></li>
+        <li><a href="sponsors.html">Sponsors</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ========== RECRUITMENT PAGE ========== -->
+  <main class="recruitment-page" id="recruitment-page">
+    <div class="container">
+      
+      <h1 class="section-title fade-in">Join A.E.R.I.S.</h1>
+      <p class="section-subtitle fade-in">
+        Become part of our specialized aerospace sub-teams. Build custom quadcopters, model aerodynamics, code control algorithms, and shape the future of flight systems.
+      </p>
+
+      <div class="recruitment-grid">
+        
+        <!-- Info / Guidelines Column -->
+        <div class="info-column fade-in">
+          <div class="info-banner">
+            <strong>Recruitment Process</strong>
+            Applications are reviewed on a rolling basis. Once submitted, our division heads will evaluate your profile. Shortlisted candidates will be invited for a technical and behavioral interview.
+          </div>
+
+          <!-- Mechanical Team Card -->
+          <div class="subteam-card">
+            <div class="subteam-header">
+              <div class="subteam-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <h3 class="subteam-title">Mechanical Division</h3>
+            </div>
+            <p class="subteam-desc">
+              Focuses on airframe design, structural optimization, rapid prototyping (3D printing, laser cutting), and balsa wood fabrication. Employs SolidWorks for CAD modeling and ANSYS for CFD analysis.
+            </p>
+          </div>
+
+          <!-- Electrical Team Card -->
+          <div class="subteam-card">
+            <div class="subteam-header">
+              <div class="subteam-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <h3 class="subteam-title">Electrical Division</h3>
+            </div>
+            <p class="subteam-desc">
+              Handles embedded hardware integration, custom ESC optimization, telemetry configurations, sensor interfacing, power distribution wiring, and signal diagnostics for absolute flight stability.
+            </p>
+          </div>
+
+          <!-- Software Team Card -->
+          <div class="subteam-card">
+            <div class="subteam-header">
+              <div class="subteam-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <h3 class="subteam-title">Software Division</h3>
+            </div>
+            <p class="subteam-desc">
+              Works on flight control coding, path planning, autonomous navigation algorithms, web integration, dashboard displays, telemetry databases, and real-time sensor processing models.
+            </p>
+          </div>
+
+          <!-- Non-Technical Team Card -->
+          <div class="subteam-card">
+            <div class="subteam-header">
+              <div class="subteam-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3 class="subteam-title">Non-Technical Division</h3>
+            </div>
+            <p class="subteam-desc">
+              Coordinates public relations, external media outreach, brand representation, corporate sponsorship outreach, logistics planning, and competition operations management.
+            </p>
+          </div>
+        </div>
+
+        <!-- Application Form Column -->
+        <div class="form-column fade-in">
+          
+          <div class="form-card" id="formCard">
+            <h2 style="font-family: var(--font-heading); color: var(--accent); margin-bottom: 24px; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1.5px solid rgba(246, 242, 223, 0.15); padding-bottom: 10px;">Application Form</h2>
+            
+            <div class="form-error-banner" id="errorBanner">
+              <strong>Error!</strong> An issue occurred while sending your application. Please check your network connection and try again.
+            </div>
+
+            <form id="recruitmentForm">
+              
+              <!-- Full Name -->
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="e.g., Jane Doe" required />
+              </div>
+
+              <!-- Contact Row -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input type="email" id="email" name="email" placeholder="e.g., jane@gmail.com" required />
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input type="tel" id="phone" name="phone" placeholder="e.g., +20 100 000 0000" required />
+                </div>
+              </div>
+
+              <!-- Academic Row -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="universityId">University ID / Major</label>
+                  <input type="text" id="universityId" name="universityId" placeholder="e.g., Computer Engineering" required />
+                </div>
+                <div class="form-group">
+                  <label for="academicYear">Academic Year</label>
+                  <select id="academicYear" name="academicYear" required>
+                    <option value="" disabled selected>Select Year</option>
+                    <option value="1st Year">1st Year (Prep)</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                    <option value="5th Year">5th Year</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Preferences Row -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="primaryDept">Primary Preference</label>
+                  <select id="primaryDept" name="primaryDept" required>
+                    <option value="" disabled selected>Select Division</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Software">Software</option>
+                    <option value="Non-Technical">Non-Technical</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="secondaryDept">Secondary Preference</label>
+                  <select id="secondaryDept" name="secondaryDept" required>
+                    <option value="" disabled selected>Select Division</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Software">Software</option>
+                    <option value="Non-Technical">Non-Technical</option>
+                    <option value="None">None</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Sub-team specific interest -->
+              <div class="form-group">
+                <label for="subInterest">Sub-Team Interest / Focus (Optional)</label>
+                <input type="text" id="subInterest" name="subInterest" placeholder="e.g., CAD Design, CFD, Avionics, Autonomous Code, Photography" />
+              </div>
+
+              <!-- Previous Experience -->
+              <div class="form-group">
+                <label for="experience">Previous Projects or Technical Skills</label>
+                <textarea id="experience" name="experience" rows="3" placeholder="Briefly describe your skill set, coding experience, tools used, or previous team activities..." required></textarea>
+              </div>
+
+              <!-- Why Join -->
+              <div class="form-group">
+                <label for="whyJoin">Why do you want to join A.E.R.I.S.?</label>
+                <textarea id="whyJoin" name="whyJoin" rows="3" placeholder="What motivates you to join our division, and what do you hope to learn or contribute?" required></textarea>
+              </div>
+
+              <!-- Portfolio / CV Link -->
+              <div class="form-group">
+                <label for="portfolioLink">CV / Portfolio / GitHub Link</label>
+                <input type="url" id="portfolioLink" name="portfolioLink" placeholder="e.g., https://github.com/yourprofile or Google Drive link" required />
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px;">
+                <span class="btn-text">Submit Application &#9656;</span>
+              </button>
+
+            </form>
+          </div>
+
+          <!-- Success Screen -->
+          <div class="form-card success-hud" id="successHUD">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h3>Application Received!</h3>
+            <p>
+              Your application details have been submitted successfully. A copy of your details has been logged, and our team will get in touch with you shortly.
+            </p>
+            <button type="button" class="btn-primary" id="resetFormBtn">
+              Apply Again &#9656;
+            </button>
+          </div>
+
+          <!-- Instructions Card for the user (only shows up when placeholder URL is active) -->
+          <div class="setup-card" id="setupCard">
+            <h4>💡 Setup Google Sheets Integration</h4>
+            <p style="margin-bottom: 12px;">This application form sends inputs directly to a Google Spreadsheet. To activate it:</p>
+            <ol>
+              <li>Open your **Google Spreadsheet**.</li>
+              <li>Go to **Extensions** → **Apps Script**.</li>
+              <li>Clear the code editor and paste the code below:</li>
+            </ol>
+            <div class="code-container">
+              <pre class="code-block" id="appsScriptCode">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var newRow = [];
+  
+  newRow.push(new Date()); // Timestamp
+  newRow.push(e.parameter.fullName || "");
+  newRow.push(e.parameter.email || "");
+  newRow.push(e.parameter.phone || "");
+  newRow.push(e.parameter.universityId || "");
+  newRow.push(e.parameter.academicYear || "");
+  newRow.push(e.parameter.primaryDept || "");
+  newRow.push(e.parameter.secondaryDept || "");
+  newRow.push(e.parameter.subInterest || "");
+  newRow.push(e.parameter.experience || "");
+  newRow.push(e.parameter.whyJoin || "");
+  newRow.push(e.parameter.portfolioLink || "");
+  
+  sheet.appendRow(newRow);
+  
+  return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
+                       .setMimeType(ContentService.MimeType.JSON)
+                       .setHeaders({"Access-Control-Allow-Origin": "*"});
+}</pre>
+            </div>
+            <ol start="4" style="margin-top: 14px;">
+              <li>Click **Deploy** (top right) → **New deployment**.</li>
+              <li>Choose **Web app**, set "Execute as" to **Me**, and "Who has access" to **Anyone**.</li>
+              <li>Click **Deploy**, copy the **Web App URL**, and paste it in `recruitment.html` at `GOOGLE_SHEET_SCRIPT_URL`.</li>
+            </ol>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="footer-logo-img" />
+        </a>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="events.html">Events</a>
+          <a href="workshops.html">Workshops</a>
+          <a href="projects.html">Projects</a>
+          <a href="competitions.html">Competitions</a>
+          <a href="sponsors.html">Sponsors</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 A.E.R.I.S. — Advanced Engineering &amp; Robotics in Flight Systems. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // ----------------------------------------------------
+    // CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+    // ----------------------------------------------------
+    const GOOGLE_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby224OCKjaZopm_LEVoVPZEgMCzzLae_D8ZV1LgQQLfak8egdElKLHiFtbF007GlvU-/exec';
+    // ----------------------------------------------------
+
+    /* Toggle instructions card visibility */
+    const setupCard = document.getElementById('setupCard');
+    if (GOOGLE_SHEET_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' && GOOGLE_SHEET_SCRIPT_URL !== '') {
+      setupCard.style.display = 'none';
+    }
+
+    /* Mobile nav toggle */
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    /* Scroll-triggered fade-in */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    /* Form Handler */
+    const form = document.getElementById('recruitmentForm');
+    const formCard = document.getElementById('formCard');
+    const successHUD = document.getElementById('successHUD');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBanner = document.getElementById('errorBanner');
+    const resetFormBtn = document.getElementById('resetFormBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Hide any previous errors
+      errorBanner.style.display = 'none';
+      
+      // Enter loading state
+      submitBtn.classList.add('is-loading');
+      
+      // Collect parameters
+      const formData = new FormData(form);
+      
+      // If URL placeholder is unchanged, simulate submission for demo purposes
+      if (GOOGLE_SHEET_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' || GOOGLE_SHEET_SCRIPT_URL === '') {
+        console.warn("A.E.R.I.S. Info: Simulating submission because GOOGLE_SHEET_SCRIPT_URL is not set.");
+        setTimeout(() => {
+          submitBtn.classList.remove('is-loading');
+          formCard.style.display = 'none';
+          successHUD.style.display = 'block';
+          window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
+        }, 1200);
+        return;
+      }
+
+      try {
+        // Convert FormData to urlencoded string for CORS compatibility
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          params.append(key, value);
+        }
+
+        const response = await fetch(GOOGLE_SHEET_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // standard way to bypass strict preflight in GAS Web Apps
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: params.toString()
+        });
+
+        // Since 'no-cors' mode returns opaque response, we can transition to success
+        submitBtn.classList.remove('is-loading');
+        form.reset();
+        formCard.style.display = 'none';
+        successHUD.style.display = 'block';
+        window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
+
+      } catch (err) {
+        console.error("Recruitment form error:", err);
+        submitBtn.classList.remove('is-loading');
+        errorBanner.style.display = 'block';
+        window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
+      }
+    });
+
+    /* Reset form from success view */
+    resetFormBtn.addEventListener('click', () => {
+      successHUD.style.display = 'none';
+      formCard.style.display = 'block';
+      form.reset();
+      window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
