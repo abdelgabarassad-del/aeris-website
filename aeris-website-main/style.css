@@ -694,9 +694,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .board-grid--supervisors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  max-width: 950px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
