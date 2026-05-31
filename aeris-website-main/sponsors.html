@@ -102,6 +102,7 @@
       border: 1.5px solid rgba(246, 242, 223, .15);
       color: var(--accent);
       transition: var(--transition);
+      overflow: hidden;
     }
 
     .sponsor-card:hover .sponsor-card__logo-wrapper {
@@ -114,6 +115,12 @@
     .sponsor-card__logo-wrapper svg {
       width: 32px;
       height: 32px;
+    }
+
+    .sponsor-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .sponsor-card__name {
@@ -505,16 +512,12 @@
           <div class="sponsors-grid">
             <div class="sponsor-card sponsor-card--diamond">
               <div class="sponsor-card__logo-wrapper">
-                <!-- Glowing Shield / Academy SVG -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                  <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-                </svg>
+                <img src="images/academpic.png" alt="AASTMT Logo" class="sponsor-logo-img" />
               </div>
-              <h3 class="sponsor-card__name">AASTMT Alamein Campus</h3>
-              <span class="sponsor-card__type">Principal Academic Sponsor</span>
+              <h3 class="sponsor-card__name">AASTMT - El Alamein Branch</h3>
+              <span class="sponsor-card__type">Principal Academic Partner</span>
               <p class="sponsor-card__desc">
-                Providing facilities, mentorship, and key structural resources for autonomous technology engineering, prototyping, and scientific aerospace research in Egypt's Alamein City.
+                Providing state-of-the-art laboratory facilities, academic mentorship, and critical structural resources for engineering, prototyping, and aerospace flight system research at the Arab Academy for Science, Technology and Maritime Transport (AASTMT) El Alamein campus.
               </p>
             </div>
           </div>
@@ -523,52 +526,29 @@
         <!-- Corporate & Tech Tiers -->
         <div class="tier-container">
           <h2 class="tier-title">Technology &amp; Local Partners</h2>
-          <div class="sponsors-grid">
+          <div class="sponsors-grid" style="max-width: 860px; margin: 0 auto;">
             
-            <!-- Tech 1 -->
+            <!-- Robotronics -->
             <div class="sponsor-card">
               <div class="sponsor-card__logo-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
+                <img src="images/robospon.png" alt="Robotronics Logo" class="sponsor-logo-img" />
               </div>
-              <h3 class="sponsor-card__name">Helix Aerospace Labs</h3>
-              <span class="sponsor-card__type">Technology Partner</span>
+              <h3 class="sponsor-card__name">Robotronics</h3>
+              <span class="sponsor-card__type">Online Electronics Partner</span>
               <p class="sponsor-card__desc">
-                Supports the team with lightweight composite airframes, rapid additive prototyping filaments, and structural wind tunnel analysis access.
+                An exceptional online electronics retailer offering a vast selection of robotic kits, avionics sensors, and flight controllers. Robotronics generously supports A.E.R.I.S. by providing exclusive member discounts on their entire product catalog.
               </p>
             </div>
 
-            <!-- Tech 2 -->
+            <!-- Electra Store -->
             <div class="sponsor-card">
               <div class="sponsor-card__logo-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
-                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
-                  <line x1="6" y1="6" x2="6.01" y2="6"/>
-                  <line x1="6" y1="18" x2="6.01" y2="18"/>
-                </svg>
+                <img src="images/electraspon.png" alt="Electra Store Logo" class="sponsor-logo-img" />
               </div>
-              <h3 class="sponsor-card__name">Nexus Flight Systems</h3>
-              <span class="sponsor-card__type">Avionics Partner</span>
+              <h3 class="sponsor-card__name">Electra Store</h3>
+              <span class="sponsor-card__type">Local &amp; Online Electronics Partner</span>
               <p class="sponsor-card__desc">
-                Collaborates on flight controller optimization, embedded telemetry protocols, and simulation control units for high-wind environments.
-              </p>
-            </div>
-
-            <!-- Store Sponsor -->
-            <div class="sponsor-card">
-              <div class="sponsor-card__logo-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-              </div>
-              <h3 class="sponsor-card__name">Alamein Electronics</h3>
-              <span class="sponsor-card__type">Local Store Partner</span>
-              <p class="sponsor-card__desc">
-                Generously supplies sensors, custom soldering materials, active circuit boards, and microcontrollers for local UAV power distributions.
+                A premier electronics supplier featuring both an extensive online shop and a physical retail store. Electra Store fuels our UAV designs with high-grade components and power distribution hardware at tailored discount rates.
               </p>
             </div>
 
@@ -794,6 +774,10 @@
           <a href="sponsors.html">Sponsors</a>
           <a href="index.html#contact">Contact</a>
           <a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a>
+        </div>
+                <div class="footer-branch">
+          <img src="images/academpic.png" alt="AASTMT Logo" class="footer-branch-logo" />
+          <span>AASTMT — El Alamein Branch</span>
         </div>
         <p class="footer-copy">&copy; 2026 A.E.R.I.S. — Advanced Engineering &amp; Robotics in Flight Systems. All rights reserved.</p>
       </div>
