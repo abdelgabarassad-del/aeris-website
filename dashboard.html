@@ -287,7 +287,8 @@
         // Populate welcome banner
         const welcomeBanner = document.getElementById('welcome-banner');
         const personalGreetings = {
-          '251001377': { name: 'Hannah', lang: 'fr' }
+          '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
+          '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' }
         };
         const person = personalGreetings[regNum];
         const roleIcon = role === 'head'
@@ -296,11 +297,12 @@
 
         let bannerHTML;
         if (person && person.lang === 'fr') {
+          const frRoleLabel = role === 'head' ? "Chef d'équipe" : "Membre de l'équipe";
           bannerHTML = `
             <div class="welcome-banner__icon">${roleIcon}</div>
             <div class="welcome-banner__text">
-              <span class="welcome-banner__greeting">Bienvenue, <strong>${person.name}</strong> ✨</span>
-              <span class="welcome-banner__role">Connectée en tant que <strong>Chef d'équipe</strong></span>
+              <span class="welcome-banner__greeting">${person.greeting}, <strong>${person.name}</strong> ${person.emoji}</span>
+              <span class="welcome-banner__role">Connectée en tant que <strong>${frRoleLabel}</strong></span>
             </div>
           `;
         } else {
@@ -337,14 +339,15 @@
     function showGrantedMessage(role, regNum) {
       // Personalized greetings
       const personalGreetings = {
-        '251001377': { name: 'Hannah', lang: 'fr' }
+        '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
+        '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' }
       };
 
       const person = personalGreetings[regNum];
       let welcomeText;
 
       if (person && person.lang === 'fr') {
-        welcomeText = `Accès accordé — Bienvenue, <strong>${person.name}</strong> ✨`;
+        welcomeText = `Accès accordé — ${person.greeting}, <strong>${person.name}</strong> ${person.emoji}`;
       } else {
         const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
         welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
