@@ -287,6 +287,113 @@
   }
 }
 
+/* ---------- Welcome Banner ---------- */
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 700px;
+  margin: 0 auto 32px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, rgba(125, 211, 168, .08) 0%, rgba(30, 59, 45, .5) 100%);
+  border: 1px solid rgba(125, 211, 168, .2);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  animation: welcomeSlideIn .6s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.welcome-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 168, .6), transparent);
+}
+
+.welcome-banner::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(125, 211, 168, .1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes welcomeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-banner__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: rgba(125, 211, 168, .12);
+  border-radius: 50%;
+  color: #7dd3a8;
+  box-shadow: 0 0 15px rgba(125, 211, 168, .15);
+}
+
+.welcome-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.welcome-banner__greeting {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--white);
+}
+
+.welcome-banner__greeting strong {
+  color: #7dd3a8;
+}
+
+.welcome-banner__role {
+  font-family: var(--font-sub);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--white-muted);
+  letter-spacing: .04em;
+}
+
+.welcome-banner__role strong {
+  color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .welcome-banner {
+    padding: 16px 20px;
+    gap: 14px;
+  }
+  .welcome-banner__icon {
+    width: 40px;
+    height: 40px;
+  }
+  .welcome-banner__greeting {
+    font-size: 1rem;
+  }
+}
+
 /* ---------- Experimental Banner ---------- */
 .experimental-banner {
   position: fixed;

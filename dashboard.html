@@ -85,6 +85,8 @@
   <!-- ========== DASHBOARD ========== -->
   <main class="dashboard-page" id="dashboard-page">
     <div class="container">
+      <!-- Welcome Banner (populated after auth) -->
+      <div class="welcome-banner" id="welcome-banner" style="display: none;"></div>
 
       <h1 class="page-title fade-in">Team Dashboard</h1>
       <p class="dashboard-subtitle fade-in">Manage and track tasks across all departments</p>
@@ -267,10 +269,10 @@
     const sessionRole = sessionStorage.getItem('aeris_auth_role');
     const sessionReg = sessionStorage.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
-      grantAccess(sessionRole);
+      grantAccess(sessionRole, sessionReg);
     }
 
-    function grantAccess(role) {
+    function grantAccess(role, regNum) {
       authGate.classList.add('auth-gate--granted');
       setTimeout(() => {
         authGate.style.display = 'none';
@@ -281,6 +283,38 @@
         // Auto-set role — hide the role selector since it's auto-determined
         currentRole = role;
         roleSelector.style.display = 'none';
+
+        // Populate welcome banner
+        const welcomeBanner = document.getElementById('welcome-banner');
+        const personalGreetings = {
+          '251001377': { name: 'Hannah', lang: 'fr' }
+        };
+        const person = personalGreetings[regNum];
+        const roleIcon = role === 'head'
+          ? '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'
+          : '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+        let bannerHTML;
+        if (person && person.lang === 'fr') {
+          bannerHTML = `
+            <div class="welcome-banner__icon">${roleIcon}</div>
+            <div class="welcome-banner__text">
+              <span class="welcome-banner__greeting">Bienvenue, <strong>${person.name}</strong> ✨</span>
+              <span class="welcome-banner__role">Connectée en tant que <strong>Chef d'équipe</strong></span>
+            </div>
+          `;
+        } else {
+          const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
+          bannerHTML = `
+            <div class="welcome-banner__icon">${roleIcon}</div>
+            <div class="welcome-banner__text">
+              <span class="welcome-banner__greeting">Welcome back 👋</span>
+              <span class="welcome-banner__role">Logged in as <strong>${roleLabel}</strong></span>
+            </div>
+          `;
+        }
+        welcomeBanner.innerHTML = bannerHTML;
+        welcomeBanner.style.display = 'flex';
 
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
@@ -346,7 +380,7 @@
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
-      setTimeout(() => grantAccess(role), 1200);
+      setTimeout(() => grantAccess(role, regNum), 1200);
     }
 
     authSubmit.addEventListener('click', handleAuth);
