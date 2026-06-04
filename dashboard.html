@@ -300,15 +300,29 @@
       }, 600);
     }
 
-    function showGrantedMessage(role) {
-      const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
+    function showGrantedMessage(role, regNum) {
+      // Personalized greetings
+      const personalGreetings = {
+        '251001377': { name: 'Hannah', lang: 'fr' }
+      };
+
+      const person = personalGreetings[regNum];
+      let welcomeText;
+
+      if (person && person.lang === 'fr') {
+        welcomeText = `Accès accordé — Bienvenue, <strong>${person.name}</strong> ✨`;
+      } else {
+        const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
+        welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
+      }
+
       const roleIcon = role === 'head'
         ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'
         : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
       authMessage.className = 'auth-gate__message auth-gate__message--success';
       authMessage.innerHTML = `
         ${roleIcon}
-        <span>Access granted — Welcome, <strong>${roleLabel}</strong></span>
+        <span>${welcomeText}</span>
       `;
     }
 
@@ -329,7 +343,7 @@
       const role = HEADS.has(regNum) ? 'head' : 'member';
       sessionStorage.setItem('aeris_auth_role', role);
       sessionStorage.setItem('aeris_auth_reg', regNum);
-      showGrantedMessage(role);
+      showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
       setTimeout(() => grantAccess(role), 1200);
