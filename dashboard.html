@@ -55,6 +55,33 @@
     </div>
   </div>
 
+  <!-- ========== AUTH GATE ========== -->
+  <div class="auth-gate" id="auth-gate">
+    <div class="auth-gate__card">
+      <div class="auth-gate__logo">
+        <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="auth-gate__logo-img" />
+      </div>
+      <div class="auth-gate__glow"></div>
+      <h2 class="auth-gate__title">Team Dashboard Access</h2>
+      <p class="auth-gate__subtitle">Enter your registration number to continue</p>
+      <div class="auth-gate__input-group" id="auth-input-group">
+        <div class="auth-gate__input-wrapper">
+          <svg class="auth-gate__input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="text" id="auth-reg-input" class="auth-gate__input" placeholder="e.g. 251000861" maxlength="9" autocomplete="off" inputmode="numeric" />
+        </div>
+        <button class="auth-gate__submit" id="auth-submit">
+          <span>Verify Access</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="auth-gate__message" id="auth-message"></div>
+      <div class="auth-gate__footer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Access restricted to A.E.R.I.S. team members only</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== DASHBOARD ========== -->
   <main class="dashboard-page" id="dashboard-page">
     <div class="container">
@@ -203,8 +230,125 @@
     </div>
   </footer>
 
-  <!-- ========== SCRIPTS ========== -->
   <script>
+    /* ========== TEAM DATABASE ========== */
+    const HEADS = new Set([
+      '251001377', '231002350', '241012132', '251002119',
+      '231012588', '251011829', '231012318', '241003033'
+    ]);
+
+    const ALL_MEMBERS = new Set([
+      '251000861', '251012364', '221011368', '251001249', '251010424',
+      '251000305', '241012132', '231003934', '251001767', '251000553',
+      '251001377', '251010151', '241003033', '231002350', '251001035',
+      '251002119', '251010536', '231012588', '241002278', '251003016',
+      '231012318', '231003587', '231010429', '251001982', '221003996',
+      '241002229', '231004251', '241000881', '251011829'
+    ]);
+
+    /* ========== AUTH GATE LOGIC ========== */
+    const authGate = document.getElementById('auth-gate');
+    const authInput = document.getElementById('auth-reg-input');
+    const authSubmit = document.getElementById('auth-submit');
+    const authMessage = document.getElementById('auth-message');
+    const authInputGroup = document.getElementById('auth-input-group');
+    const dashboardPage = document.getElementById('dashboard-page');
+    const siteHeader = document.getElementById('site-header');
+    const experimentalBanner = document.getElementById('experimental-banner');
+    const siteFooter = document.querySelector('.site-footer');
+    const roleSelector = document.getElementById('role-selector');
+
+    // Hide dashboard content on load
+    dashboardPage.style.display = 'none';
+    experimentalBanner.style.display = 'none';
+    siteFooter.style.display = 'none';
+
+    // Check for existing session
+    const sessionRole = sessionStorage.getItem('aeris_auth_role');
+    const sessionReg = sessionStorage.getItem('aeris_auth_reg');
+    if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
+      grantAccess(sessionRole);
+    }
+
+    function grantAccess(role) {
+      authGate.classList.add('auth-gate--granted');
+      setTimeout(() => {
+        authGate.style.display = 'none';
+        dashboardPage.style.display = 'block';
+        experimentalBanner.style.display = 'block';
+        siteFooter.style.display = 'block';
+
+        // Auto-set role — hide the role selector since it's auto-determined
+        currentRole = role;
+        roleSelector.style.display = 'none';
+
+        // Show task form if head
+        taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
+        renderTasks();
+      }, 600);
+    }
+
+    function denyAccess() {
+      authInputGroup.classList.add('auth-gate--denied');
+      authMessage.className = 'auth-gate__message auth-gate__message--error';
+      authMessage.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <span>Access denied — registration number not recognized</span>
+      `;
+      setTimeout(() => {
+        authInputGroup.classList.remove('auth-gate--denied');
+      }, 600);
+    }
+
+    function showGrantedMessage(role) {
+      const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
+      const roleIcon = role === 'head'
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+      authMessage.className = 'auth-gate__message auth-gate__message--success';
+      authMessage.innerHTML = `
+        ${roleIcon}
+        <span>Access granted — Welcome, <strong>${roleLabel}</strong></span>
+      `;
+    }
+
+    function handleAuth() {
+      const regNum = authInput.value.trim();
+      if (!regNum) {
+        authInput.focus();
+        authInputGroup.classList.add('auth-gate--denied');
+        setTimeout(() => authInputGroup.classList.remove('auth-gate--denied'), 600);
+        return;
+      }
+
+      if (!ALL_MEMBERS.has(regNum)) {
+        denyAccess();
+        return;
+      }
+
+      const role = HEADS.has(regNum) ? 'head' : 'member';
+      sessionStorage.setItem('aeris_auth_role', role);
+      sessionStorage.setItem('aeris_auth_reg', regNum);
+      showGrantedMessage(role);
+      authInput.disabled = true;
+      authSubmit.disabled = true;
+      setTimeout(() => grantAccess(role), 1200);
+    }
+
+    authSubmit.addEventListener('click', handleAuth);
+    authInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleAuth();
+    });
+
+    // Only allow numeric input
+    authInput.addEventListener('input', () => {
+      authInput.value = authInput.value.replace(/\D/g, '');
+      // Clear error state on new input
+      authMessage.className = 'auth-gate__message';
+      authMessage.innerHTML = '';
+    });
+
+    /* ========== NAV & COMMON ========== */
     /* Mobile nav toggle */
     const toggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
@@ -261,17 +405,6 @@
     function saveTasks(tasks) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     }
-
-    // Role switching
-    roleBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        roleBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentRole = btn.dataset.role;
-        taskFormWrapper.style.display = currentRole === 'head' ? 'block' : 'none';
-        renderTasks();
-      });
-    });
 
     // Department switching
     deptTabs.forEach(tab => {
