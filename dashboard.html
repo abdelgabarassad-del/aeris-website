@@ -249,35 +249,35 @@
     ]);
 
     const PERSONAL_GREETINGS = {
-      '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
-      '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' },
-      '251000861': { message: 'would you mind ya hazem el tasks' },
-      '251012364': { message: 'MAHIII 3amlah ehhhh' },
-      '221011368': { message: 'zaraaa faytk تعاشبي شاييي' },
-      '251001249': { message: 'prince el soa2ah sba7 el fol' },
-      '251010424': { message: 'el dkah fi el ada2 kolha' },
-      '251000305': { message: 'sba7 el fol ya ba4ah' },
-      '241012132': { message: 'eh el klam ya m3lm' },
-      '231003934': { message: 'whassssuppp babyyyy' },
-      '251001767': { message: 'esraaaa 3amlah ehhh' },
-      '251000553': { message: 'malk el computer vision' },
-      '251010151': { message: '4ofy tasks eh el nahrdah ya 7aga' },
-      '241003033': { message: 'baba el 2atatss' },
-      '231002350': { message: 'el tomyah 4a5syan' },
-      '251001035': { message: 'malk el need for speed irl' },
-      '251002119': { message: 'sba7 el btats' },
-      '251010536': { message: 'ya balo' },
-      '231012588': { message: 'hi' },
-      '241002278': { message: 'howa el ghazaly' },
-      '251003016': { message: 'kidnapper el 2atats 3amlah eh' },
-      '231012318': { message: 'kolha fi el a5r 62 sanah' },
-      '231003587': { message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
-      '231010429': { message: 'boda ezayak' },
-      '251001982': { message: 'sba7 el fol' },
-      '221003996': { message: 'malk el gym kolo' },
-      '241002229': { message: 'sba7 el fol' },
-      '231004251': { message: 'bobos 3aml ehhh' },
-      '241000881': { message: 'monkznah 3aml eh' }
+      '251001377': { name: 'Hannah Ahmed', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
+      '251011829': { name: 'hala farouk', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' },
+      '251000861': { name: 'Hazem walid', message: 'would you mind ya hazem el tasks' },
+      '251012364': { name: 'Mahinor Harb', message: 'MAHIII 3amlah ehhhh' },
+      '221011368': { name: 'Sara Abdo', message: 'zaraaa faytk تعاشبي شاييي' },
+      '251001249': { name: 'Omar Moataz shaaban', message: 'prince el soa2ah sba7 el fol' },
+      '251010424': { name: 'Sara Ahmed', message: 'el dkah fi el ada2 kolha' },
+      '251000305': { name: 'Abdelrahman ehab elsayed', message: 'sba7 el fol ya ba4ah' },
+      '241012132': { name: 'Bassem Toulan', message: 'eh el klam ya m3lm' },
+      '231003934': { name: 'Ibrahim Hassan Ibrahim', message: 'whassssuppp babyyyy' },
+      '251001767': { name: 'Esraa Mohammed', message: 'esraaaa 3amlah ehhh' },
+      '251000553': { name: 'Khalid Ahmed Mohamed', message: 'malk el computer vision' },
+      '251010151': { name: 'Sherry George Youssef', message: '4ofy tasks eh el nahrdah ya 7aga' },
+      '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
+      '231002350': { name: 'Abduljabar asaad', message: 'el tomyah 4a5syan' },
+      '251001035': { name: 'Yousef Ashraf Sakr', message: 'malk el need for speed irl' },
+      '251002119': { name: 'Absher Sorour', message: 'sba7 el btats' },
+      '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
+      '231012588': { name: 'judy samer', message: 'hi' },
+      '241002278': { name: 'Marwan mohamed elghazaly', message: 'howa el ghazaly' },
+      '251003016': { name: 'hana moataz', message: 'kidnapper el 2atats 3amlah eh' },
+      '231012318': { name: 'omar abdeslam atwan', message: 'kolha fi el a5r 62 sanah' },
+      '231003587': { name: 'amr mohamed el ghazaly', message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
+      '231010429': { name: 'abdelrahman aly', message: 'boda ezayak' },
+      '251001982': { name: 'ahmad aziz', message: 'sba7 el fol' },
+      '221003996': { name: 'ahmed tarek', message: 'malk el gym kolo' },
+      '241002229': { name: 'amir abbas', message: 'sba7 el fol' },
+      '231004251': { name: 'Adham Ahmed', message: 'bobos 3aml ehhh' },
+      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' }
     };
 
     /* ========== AUTH GATE LOGIC ========== */
@@ -340,7 +340,7 @@
               <div class="welcome-banner__icon">${roleIcon}</div>
               <div class="welcome-banner__text">
                 <span class="welcome-banner__greeting">${person.message}</span>
-                <span class="welcome-banner__role">Logged in as <strong>${roleLabel}</strong></span>
+                <span class="welcome-banner__role">Logged in as <strong>${person.name}</strong> — ${roleLabel}</span>
               </div>
             `;
           }
