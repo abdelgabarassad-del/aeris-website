@@ -248,6 +248,38 @@
       '241002229', '231004251', '241000881', '251011829'
     ]);
 
+    const PERSONAL_GREETINGS = {
+      '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
+      '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' },
+      '251000861': { message: 'would you mind ya hazem el tasks' },
+      '251012364': { message: 'MAHIII 3amlah ehhhh' },
+      '221011368': { message: 'zaraaa faytk تعاشبي شاييي' },
+      '251001249': { message: 'prince el soa2ah sba7 el fol' },
+      '251010424': { message: 'el dkah fi el ada2 kolha' },
+      '251000305': { message: 'sba7 el fol ya ba4ah' },
+      '241012132': { message: 'eh el klam ya m3lm' },
+      '231003934': { message: 'whassssuppp babyyyy' },
+      '251001767': { message: 'esraaaa 3amlah ehhh' },
+      '251000553': { message: 'malk el computer vision' },
+      '251010151': { message: '4ofy tasks eh el nahrdah ya 7aga' },
+      '241003033': { message: 'baba el 2atatss' },
+      '231002350': { message: 'el tomyah 4a5syan' },
+      '251001035': { message: 'malk el need for speed irl' },
+      '251002119': { message: 'sba7 el btats' },
+      '251010536': { message: 'ya balo' },
+      '231012588': { message: 'hi' },
+      '241002278': { message: 'howa el ghazaly' },
+      '251003016': { message: 'kidnapper el 2atats 3amlah eh' },
+      '231012318': { message: 'kolha fi el a5r 62 sanah' },
+      '231003587': { message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
+      '231010429': { message: 'boda ezayak' },
+      '251001982': { message: 'sba7 el fol' },
+      '221003996': { message: 'malk el gym kolo' },
+      '241002229': { message: 'sba7 el fol' },
+      '231004251': { message: 'bobos 3aml ehhh' },
+      '241000881': { message: 'monkznah 3aml eh' }
+    };
+
     /* ========== AUTH GATE LOGIC ========== */
     const authGate = document.getElementById('auth-gate');
     const authInput = document.getElementById('auth-reg-input');
@@ -286,25 +318,32 @@
 
         // Populate welcome banner
         const welcomeBanner = document.getElementById('welcome-banner');
-        const personalGreetings = {
-          '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
-          '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' }
-        };
-        const person = personalGreetings[regNum];
+        const person = PERSONAL_GREETINGS[regNum];
         const roleIcon = role === 'head'
           ? '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>'
           : '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
 
         let bannerHTML;
-        if (person && person.lang === 'fr') {
-          const frRoleLabel = role === 'head' ? "Chef d'équipe" : "Membre de l'équipe";
-          bannerHTML = `
-            <div class="welcome-banner__icon">${roleIcon}</div>
-            <div class="welcome-banner__text">
-              <span class="welcome-banner__greeting">${person.greeting}, <strong>${person.name}</strong> ${person.emoji}</span>
-              <span class="welcome-banner__role">Connectée en tant que <strong>${frRoleLabel}</strong></span>
-            </div>
-          `;
+        if (person) {
+          if (person.lang === 'fr') {
+            const frRoleLabel = role === 'head' ? "Chef d'équipe" : "Membre de l'équipe";
+            bannerHTML = `
+              <div class="welcome-banner__icon">${roleIcon}</div>
+              <div class="welcome-banner__text">
+                <span class="welcome-banner__greeting">${person.greeting}, <strong>${person.name}</strong> ${person.emoji}</span>
+                <span class="welcome-banner__role">Connectée en tant que <strong>${frRoleLabel}</strong></span>
+              </div>
+            `;
+          } else {
+            const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
+            bannerHTML = `
+              <div class="welcome-banner__icon">${roleIcon}</div>
+              <div class="welcome-banner__text">
+                <span class="welcome-banner__greeting">${person.message}</span>
+                <span class="welcome-banner__role">Logged in as <strong>${roleLabel}</strong></span>
+              </div>
+            `;
+          }
         } else {
           const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
           bannerHTML = `
@@ -337,17 +376,15 @@
     }
 
     function showGrantedMessage(role, regNum) {
-      // Personalized greetings
-      const personalGreetings = {
-        '251001377': { name: 'Hannah', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
-        '251011829': { name: 'Hala', lang: 'fr', greeting: 'Ravie de te revoir', emoji: '💫' }
-      };
-
-      const person = personalGreetings[regNum];
+      const person = PERSONAL_GREETINGS[regNum];
       let welcomeText;
 
-      if (person && person.lang === 'fr') {
-        welcomeText = `Accès accordé — ${person.greeting}, <strong>${person.name}</strong> ${person.emoji}`;
+      if (person) {
+        if (person.lang === 'fr') {
+          welcomeText = `Accès accordé — ${person.greeting}, <strong>${person.name}</strong> ${person.emoji}`;
+        } else {
+          welcomeText = `Access granted — ${person.message}`;
+        }
       } else {
         const roleLabel = role === 'head' ? 'Team Head' : 'Team Member';
         welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
