@@ -301,8 +301,9 @@
     const sessionRole = sessionStorage.getItem('aeris_auth_role');
     const sessionReg = sessionStorage.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
-      // Apply Stitch theme class early for instant styling
+      // Apply theme class early for instant styling
       if (sessionReg === '251001377') document.body.classList.add('stitch-theme');
+      if (sessionReg === '231002350') document.body.classList.add('jet-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -363,9 +364,10 @@
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
         renderTasks();
 
-        // Apply French UI if this is the French user
+        // Apply per-user themes
         applyFrenchUI();
         applyStitchTheme();
+        applyJetTheme();
       }, 600);
     }
 
@@ -423,8 +425,9 @@
       const role = HEADS.has(regNum) ? 'head' : 'member';
       sessionStorage.setItem('aeris_auth_role', role);
       sessionStorage.setItem('aeris_auth_reg', regNum);
-      // Apply Stitch theme early so auth success has Stitch styling
+      // Apply theme early so auth success has themed styling
       if (regNum === FRENCH_REG) document.body.classList.add('stitch-theme');
+      if (regNum === JET_REG) document.body.classList.add('jet-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -549,11 +552,23 @@
 
       // Flash success
       const isFr = isFrenchUser();
-      submitBtn.textContent = isFr ? '✓ Ajoutée !' : '✓ Added!';
-      submitBtn.style.background = '#7dd3a8';
+      const isJet = isJetUser();
+      let successText = '✓ Added!';
+      let defaultText = ' Add Task';
+      if (isFr) {
+        successText = '✓ Ajoutée !';
+        defaultText = ' Ajouter la Tâche';
+      } else if (isJet) {
+        successText = '✓ Mission Logged! 🚀';
+        defaultText = ' Log Task';
+      }
+      submitBtn.textContent = successText;
+      submitBtn.style.background = isJet ? '#f59e0b' : '#7dd3a8';
+      submitBtn.style.color = isJet ? '#111' : '';
       setTimeout(() => {
-        submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + (isFr ? ' Ajouter la Tâche' : ' Add Task');
+        submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + defaultText;
         submitBtn.style.background = '';
+        submitBtn.style.color = '';
       }, 1500);
     });
 
@@ -660,12 +675,21 @@
     function applyFrenchUI() {
       if (!isFrenchUser()) return;
 
+      // Set document language
+      document.documentElement.lang = 'fr';
+
       // Page title & subtitle
       document.querySelector('.page-title').textContent = 'Tableau de Bord';
       document.querySelector('.dashboard-subtitle').textContent = 'Gérer et suivre les tâches de tous les départements';
 
       // HTML document title
       document.title = 'Tableau de Bord | A.E.R.I.S.';
+
+      // ARIA labels
+      const toggleBtn = document.getElementById('navToggle');
+      if (toggleBtn) toggleBtn.setAttribute('aria-label', 'Activer la navigation');
+      const closeBtn = document.getElementById('closeBanner');
+      if (closeBtn) closeBtn.setAttribute('aria-label', 'Fermer la bannière');
 
       // Experimental banner
       const bannerStrong = document.querySelector('.experimental-banner__text strong');
@@ -818,8 +842,15 @@
 
       // Inject Stitch face into welcome banner
       const welcomeBanner = document.getElementById('welcome-banner');
-      if (welcomeBanner && !welcomeBanner.querySelector('.stitch-deco')) {
-        welcomeBanner.insertAdjacentHTML('beforeend', getStitchFaceSVG(48));
+      if (welcomeBanner) {
+        if (!welcomeBanner.querySelector('.stitch-deco')) {
+          welcomeBanner.insertAdjacentHTML('beforeend', getStitchFaceSVG(52));
+        }
+        // Replace welcome banner icon with a paw print SVG
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 14c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-6-3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm12 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm-8-5c0 .83.67 1.5 1.5 1.5S11 6.83 11 6s-.67-1.5-1.5-1.5S8 5.17 8 6zm5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5S13 5.17 13 6z"/></svg>`;
+        }
       }
 
       // Inject Stitch into empty state (replaces the default X icon)
@@ -827,61 +858,326 @@
       if (emptyState && !emptyState.querySelector('.stitch-empty-deco')) {
         const stitchEmpty = document.createElement('div');
         stitchEmpty.className = 'stitch-empty-deco';
-        stitchEmpty.innerHTML = getStitchFaceSVG(72);
-        // Insert before the h3
+        stitchEmpty.innerHTML = getStitchFaceSVG(80);
         const emptyH3 = emptyState.querySelector('h3');
         if (emptyH3) {
           emptyState.insertBefore(stitchEmpty, emptyH3);
-          // Hide the default SVG icon
           const defaultSvg = emptyState.querySelector(':scope > svg');
           if (defaultSvg) defaultSvg.style.display = 'none';
         }
       }
 
-      // Add a subtle floating Stitch in bottom-right corner
-      if (!document.querySelector('.stitch-corner')) {
-        const corner = document.createElement('div');
+      // Stitch in bottom-right corner
+      let corner = document.querySelector('.stitch-corner');
+      if (!corner) {
+        corner = document.createElement('div');
         corner.className = 'stitch-corner';
-        corner.innerHTML = getStitchFaceSVG(60);
+        corner.innerHTML = getStitchFaceSVG(64);
         document.body.appendChild(corner);
+      }
+
+      // Add speech bubble to bottom-right Stitch on click with randomized phrases
+      if (corner && !document.querySelector('.stitch-bubble')) {
+        const bubble = document.createElement('div');
+        bubble.className = 'stitch-bubble';
+        bubble.textContent = 'Aloha Hannah! 🌺';
+        corner.appendChild(bubble);
+        
+        const phrases = [
+          'Aloha Hannah! 🌺',
+          'Ohana signifie famille! 💙',
+          'Bleu de l\'espace! 🌌',
+          'Tout est sous contrôle! 🛠️',
+          'A.E.R.I.S. en vol! 🚀'
+        ];
+        
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3000);
+        });
+      }
+
+      // Second Stitch in top-left corner (mirrored)
+      if (!document.querySelector('.stitch-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'stitch-corner-tl';
+        cornerTL.innerHTML = getStitchFaceSVG(44);
+        document.body.appendChild(cornerTL);
+      }
+
+      // "Ohana" decorative text along right edge
+      if (!document.querySelector('.stitch-ohana')) {
+        const ohana = document.createElement('div');
+        ohana.className = 'stitch-ohana';
+        ohana.textContent = 'Ohana signifie famille ✦';
+        document.body.appendChild(ohana);
+      }
+
+      // Paw print trail above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.stitch-paws')) {
+        const paws = document.createElement('div');
+        paws.className = 'stitch-paws';
+        const pawSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-3.5-1c-.83 0-1.5.67-1.5 1.5S7.67 12 8.5 12 10 11.33 10 10.5 9.33 9 8.5 9zm7 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5S16.33 9 15.5 9zm-5 5c-.83 0-1.5.67-1.5 1.5S9.67 16 10.5 16s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/></svg>`;
+        paws.innerHTML = pawSVG + pawSVG + pawSVG + pawSVG + pawSVG;
+        taskBoard.parentNode.insertBefore(paws, taskBoard);
       }
     }
 
-    /* Override taskCard to use French labels for this user */
-    const _originalTaskCard = taskCard;
-    taskCard = function(task) {
-      if (!isFrenchUser()) return _originalTaskCard(task);
+    /* ========== FIGHTER JET THEME (231002350 only) ========== */
+    const JET_REG = '231002350';
 
-      const priorityLabels = { low: 'Basse', medium: 'Moyenne', high: 'Haute', urgent: 'Urgente' };
-      const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-      const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+    function isJetUser() {
+      return sessionStorage.getItem('aeris_auth_reg') === JET_REG;
+    }
 
-      let actions = '';
-      if (task.status === 'todo') {
-        actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Commencer la tâche">▶ Commencer</button>`;
-      } else if (task.status === 'progress') {
-        actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Marquer terminée">✓ Terminé</button>`;
+    function getJetSilhouetteSVG(w = 80, h = 40) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="${w}" height="${h}" class="jet-deco">
+        <!-- Fighter jet silhouette -->
+        <g fill="#f59e0b" opacity=".9">
+          <!-- Fuselage -->
+          <path d="M10 40 L50 38 L90 35 L140 33 L170 30 L190 32 L195 36 L195 44 L190 48 L170 50 L140 47 L90 45 L50 42 Z"/>
+          <!-- Nose cone -->
+          <path d="M195 36 L200 40 L195 44 Z"/>
+          <!-- Main wings -->
+          <path d="M80 35 L110 10 L120 12 L100 35 Z"/>
+          <path d="M80 45 L110 70 L120 68 L100 45 Z"/>
+          <!-- Tail wings -->
+          <path d="M25 38 L15 18 L25 20 L35 35 Z"/>
+          <path d="M25 42 L15 62 L25 60 L35 45 Z"/>
+          <!-- Tail fin -->
+          <path d="M20 38 L10 22 L18 24 L28 36 Z"/>
+          <!-- Engine exhaust glow -->
+          <ellipse cx="5" cy="40" rx="6" ry="4" fill="#ef4444" opacity=".5"/>
+          <ellipse cx="3" cy="40" rx="3" ry="2" fill="#fbbf24" opacity=".7"/>
+          <!-- Cockpit -->
+          <ellipse cx="165" cy="39" rx="8" ry="3" fill="#22d3ee" opacity=".4"/>
+        </g>
+      </svg>`;
+    }
+
+    function getRadarSVG(size = 90) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="jet-radar">
+        <!-- Radar circles -->
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#f59e0b" stroke-width=".5" opacity=".4"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#f59e0b" stroke-width=".5" opacity=".3"/>
+        <circle cx="50" cy="50" r="15" fill="none" stroke="#f59e0b" stroke-width=".5" opacity=".2"/>
+        <!-- Crosshairs -->
+        <line x1="50" y1="5" x2="50" y2="95" stroke="#f59e0b" stroke-width=".3" opacity=".3"/>
+        <line x1="5" y1="50" x2="95" y2="50" stroke="#f59e0b" stroke-width=".3" opacity=".3"/>
+        <!-- Center dot -->
+        <circle cx="50" cy="50" r="2" fill="#f59e0b" opacity=".6"/>
+        <!-- Sweep line -->
+        <g class="jet-radar-sweep">
+          <line x1="50" y1="50" x2="50" y2="5" stroke="#f59e0b" stroke-width="1" opacity=".6"/>
+          <path d="M50 50 L47 8 A45 45 0 0 1 50 5 Z" fill="url(#radarGrad)" opacity=".3"/>
+        </g>
+        <defs>
+          <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#f59e0b" stop-opacity=".4"/>
+          </linearGradient>
+        </defs>
+        <!-- Blips -->
+        <circle cx="35" cy="25" r="1.5" fill="#f59e0b" opacity=".5">
+          <animate attributeName="opacity" values=".5;.1;.5" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="68" cy="38" r="1.5" fill="#f59e0b" opacity=".4">
+          <animate attributeName="opacity" values=".4;.1;.4" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>`;
+    }
+
+    function getHudCrosshairSVG(size = 70) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="jet-hud">
+        <!-- Outer ring -->
+        <circle cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width=".8" opacity=".4" stroke-dasharray="5 3"/>
+        <!-- Inner ring -->
+        <circle cx="50" cy="50" r="25" fill="none" stroke="#f59e0b" stroke-width=".5" opacity=".3"/>
+        <!-- Crosshair lines -->
+        <line x1="50" y1="10" x2="50" y2="35" stroke="#f59e0b" stroke-width=".8" opacity=".5"/>
+        <line x1="50" y1="65" x2="50" y2="90" stroke="#f59e0b" stroke-width=".8" opacity=".5"/>
+        <line x1="10" y1="50" x2="35" y2="50" stroke="#f59e0b" stroke-width=".8" opacity=".5"/>
+        <line x1="65" y1="50" x2="90" y2="50" stroke="#f59e0b" stroke-width=".8" opacity=".5"/>
+        <!-- Center diamond -->
+        <polygon points="50,42 58,50 50,58 42,50" fill="none" stroke="#f59e0b" stroke-width=".6" opacity=".5"/>
+        <!-- Corner brackets -->
+        <path d="M15 25 L15 15 L25 15" fill="none" stroke="#f59e0b" stroke-width=".6" opacity=".3"/>
+        <path d="M75 15 L85 15 L85 25" fill="none" stroke="#f59e0b" stroke-width=".6" opacity=".3"/>
+        <path d="M85 75 L85 85 L75 85" fill="none" stroke="#f59e0b" stroke-width=".6" opacity=".3"/>
+        <path d="M25 85 L15 85 L15 75" fill="none" stroke="#f59e0b" stroke-width=".6" opacity=".3"/>
+        <!-- Altitude ticks -->
+        <text x="88" y="32" fill="#f59e0b" font-size="5" opacity=".3" font-family="monospace">ALT</text>
+        <text x="5" y="80" fill="#f59e0b" font-size="5" opacity=".3" font-family="monospace">HDG</text>
+      </svg>`;
+    }
+
+    function applyJetTheme() {
+      if (!isJetUser()) return;
+
+      // Add theme class
+      document.body.classList.add('jet-theme');
+
+      // Inject jet silhouette into welcome banner
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        if (!welcomeBanner.querySelector('.jet-deco')) {
+          welcomeBanner.insertAdjacentHTML('beforeend', getJetSilhouetteSVG(80, 40));
+        }
+        // Replace welcome banner icon with a crosshair target SVG
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="6"/></svg>`;
+        }
       }
 
-      const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
+      // Inject jet into empty state
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState && !emptyState.querySelector('.jet-empty-deco')) {
+        const jetEmpty = document.createElement('div');
+        jetEmpty.className = 'jet-empty-deco';
+        jetEmpty.innerHTML = getJetSilhouetteSVG(100, 50);
+        const emptyH3 = emptyState.querySelector('h3');
+        if (emptyH3) {
+          emptyState.insertBefore(jetEmpty, emptyH3);
+          const defaultSvg = emptyState.querySelector(':scope > svg');
+          if (defaultSvg) defaultSvg.style.display = 'none';
+        }
+      }
 
-      return `
-        <div class="task-card task-card--${task.priority}" id="task-${task.id}">
-          <div class="task-card__top">
-            <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
-            ${deleteBtn}
+      // Radar sweep — bottom left (append SVG directly, no wrapper div in DOM)
+      if (!document.querySelector('.jet-radar')) {
+        const temp = document.createElement('div');
+        temp.innerHTML = getRadarSVG(90);
+        document.body.appendChild(temp.firstElementChild);
+      }
+
+      // HUD crosshair — bottom right (append SVG directly)
+      if (!document.querySelector('.jet-hud')) {
+        const temp = document.createElement('div');
+        temp.innerHTML = getHudCrosshairSVG(70);
+        document.body.appendChild(temp.firstElementChild);
+      }
+
+      // Speed lines — top right
+      if (!document.querySelector('.jet-speed-lines')) {
+        const speedLines = document.createElement('div');
+        speedLines.className = 'jet-speed-lines';
+        document.body.appendChild(speedLines);
+      }
+
+      // Customize task form for Jet user (tactical parameters)
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Mission / Task');
+      }
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = 'Mission / Operation Title';
+      const inputTaskTitle = document.getElementById('task-title');
+      if (inputTaskTitle) inputTaskTitle.placeholder = 'Designation code or title...';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = 'Mission Directive / Parameters';
+      const inputTaskDesc = document.getElementById('task-description');
+      if (inputTaskDesc) inputTaskDesc.placeholder = 'Provide operation details and specs...';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = 'Alert Level';
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '✈️ Patrol (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '⚡ Recon (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🔥 Intercept (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 Strike (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = 'Target Date / ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Log Task');
+      }
+    }
+
+    /* Override taskCard to use French or Jet labels depending on logged-in user */
+    const _originalTaskCard = taskCard;
+    taskCard = function(task) {
+      if (isFrenchUser()) {
+        const priorityLabels = { low: '🐾 Basse', medium: '🐾 Moyenne', high: '🐾 Haute', urgent: '🐾 Urgente' };
+        const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+        let actions = '';
+        if (task.status === 'todo') {
+          actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Commencer la tâche">▶ Commencer</button>`;
+        } else if (task.status === 'progress') {
+          actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Marquer terminée">✓ Terminé</button>`;
+        }
+
+        const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
+
+        return `
+          <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+            <div class="task-card__top">
+              <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+              ${deleteBtn}
+            </div>
+            <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
+            ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+            <div class="task-card__footer">
+              ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ${deadlineStr}
+              </span>` : ''}
+              ${actions}
+            </div>
           </div>
-          <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
-          ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
-          <div class="task-card__footer">
-            ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              ${deadlineStr}
-            </span>` : ''}
-            ${actions}
+        `;
+      }
+
+      if (isJetUser()) {
+        const priorityLabels = { low: '✈️ Patrol', medium: '⚡ Recon', high: '🔥 Intercept', urgent: '🚨 Strike' };
+        const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+        let actions = '';
+        if (task.status === 'todo') {
+          actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Engage task">▶ Engage</button>`;
+        } else if (task.status === 'progress') {
+          actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Secure task">✓ Secured</button>`;
+        }
+
+        const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+        return `
+          <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+            <div class="task-card__top">
+              <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+              ${deleteBtn}
+            </div>
+            <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
+            ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+            <div class="task-card__footer">
+              ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ${deadlineStr}
+              </span>` : ''}
+              ${actions}
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
+
+      return _originalTaskCard(task);
     };
 
     // Patch renderTasks to re-apply French column headers after every re-render
