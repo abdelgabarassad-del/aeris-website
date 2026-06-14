@@ -62,8 +62,8 @@
         <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="auth-gate__logo-img" />
       </div>
       <div class="auth-gate__glow"></div>
-      <h2 class="auth-gate__title">Team Dashboard Access</h2>
-      <p class="auth-gate__subtitle">Enter your registration number to continue</p>
+      <h2 class="auth-gate__title" id="auth-title">Team Dashboard Access</h2>
+      <p class="auth-gate__subtitle" id="auth-subtitle">Enter your registration number to continue</p>
       <div class="auth-gate__input-group" id="auth-input-group">
         <div class="auth-gate__input-wrapper">
           <svg class="auth-gate__input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -360,6 +360,9 @@
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
         renderTasks();
+
+        // Apply French UI if this is the French user
+        applyFrenchUI();
       }, 600);
     }
 
@@ -540,10 +543,11 @@
       renderTasks();
 
       // Flash success
-      submitBtn.textContent = '✓ Added!';
+      const isFr = isFrenchUser();
+      submitBtn.textContent = isFr ? '✓ Ajoutée !' : '✓ Added!';
       submitBtn.style.background = '#7dd3a8';
       setTimeout(() => {
-        submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Add Task';
+        submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + (isFr ? ' Ajouter la Tâche' : ' Add Task');
         submitBtn.style.background = '';
       }, 1500);
     });
@@ -640,6 +644,195 @@
       div.textContent = str;
       return div.innerHTML;
     }
+
+    /* ========== FRENCH LOCALIZATION (251001377 only) ========== */
+    const FRENCH_REG = '251001377';
+
+    function isFrenchUser() {
+      return sessionStorage.getItem('aeris_auth_reg') === FRENCH_REG;
+    }
+
+    function applyFrenchUI() {
+      if (!isFrenchUser()) return;
+
+      // Page title & subtitle
+      document.querySelector('.page-title').textContent = 'Tableau de Bord';
+      document.querySelector('.dashboard-subtitle').textContent = 'Gérer et suivre les tâches de tous les départements';
+
+      // HTML document title
+      document.title = 'Tableau de Bord | A.E.R.I.S.';
+
+      // Experimental banner
+      const bannerStrong = document.querySelector('.experimental-banner__text strong');
+      const bannerSpan = document.querySelector('.experimental-banner__text span');
+      if (bannerStrong) bannerStrong.textContent = 'Fonctionnalité Expérimentale';
+      if (bannerSpan) bannerSpan.textContent = 'Ce tableau de bord est en cours de développement et pas encore en utilisation active. Les fonctionnalités affichées ici sont uniquement à des fins de prévisualisation.';
+
+      // Navigation links
+      const navTranslations = {
+        'Home': 'Accueil',
+        'About Us': 'À Propos',
+        'Events': 'Événements',
+        'Workshops': 'Ateliers',
+        'Projects': 'Projets',
+        'Competitions': 'Compétitions',
+        'Sponsors': 'Sponsors',
+        'Contact': 'Contact',
+        'Dashboard': 'Tableau de Bord',
+        'Feedback': 'Avis'
+      };
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        const text = link.textContent.trim();
+        if (navTranslations[text]) link.textContent = navTranslations[text];
+      });
+
+      // Department tabs
+      const deptTranslations = {
+        'mechanical': 'Mécanique',
+        'electrical': 'Électrique',
+        'software': 'Logiciel',
+        'non-technical': 'Non-Technique'
+      };
+      document.querySelectorAll('.dept-tab').forEach(tab => {
+        const dept = tab.dataset.dept;
+        if (deptTranslations[dept]) {
+          // Keep the SVG, replace only the text node
+          const svg = tab.querySelector('svg');
+          tab.textContent = '';
+          if (svg) tab.appendChild(svg);
+          tab.append(' ' + deptTranslations[dept]);
+        }
+      });
+
+      // Task column headers
+      const colHeaders = {
+        'col-todo': 'À Faire',
+        'col-progress': 'En Cours',
+        'col-done': 'Terminé'
+      };
+      Object.entries(colHeaders).forEach(([id, label]) => {
+        const h3 = document.getElementById(id)?.querySelector('.task-column__header h3');
+        if (h3) h3.textContent = label;
+      });
+
+      // Task form
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Ajouter une Nouvelle Tâche');
+      }
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = 'Titre de la Tâche';
+      const inputTaskTitle = document.getElementById('task-title');
+      if (inputTaskTitle) inputTaskTitle.placeholder = 'Entrer le titre de la tâche...';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = 'Description';
+      const inputTaskDesc = document.getElementById('task-description');
+      if (inputTaskDesc) inputTaskDesc.placeholder = 'Décrire la tâche en détail...';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = 'Priorité';
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = 'Basse';
+        prioritySelect.querySelector('option[value="medium"]').textContent = 'Moyenne';
+        prioritySelect.querySelector('option[value="high"]').textContent = 'Haute';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = 'Urgente';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = 'Date Limite';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Ajouter la Tâche');
+      }
+
+      // Empty state
+      const emptyH3 = document.querySelector('#empty-state h3');
+      const emptyP = document.querySelector('#empty-state p');
+      if (emptyH3) emptyH3.textContent = 'Aucune Tâche';
+      if (emptyP) emptyP.innerHTML = 'Les tâches ajoutées par les chefs d\'équipe apparaîtront ici. Passez au rôle <strong>Chef d\'équipe</strong> pour créer des tâches.';
+
+      // Footer links
+      document.querySelectorAll('.footer-links a').forEach(link => {
+        const text = link.textContent.trim();
+        if (navTranslations[text]) link.textContent = navTranslations[text];
+      });
+
+      // Footer copy
+      const footerCopy = document.querySelector('.footer-copy');
+      if (footerCopy) footerCopy.innerHTML = '&copy; 2026 A.E.R.I.S. — Systèmes Avancés d\'Ingénierie &amp; Robotique en Vol. Tous droits réservés.';
+
+      // Footer branch
+      const footerBranch = document.querySelector('.footer-branch span');
+      if (footerBranch) footerBranch.textContent = 'AASTMT — Campus El Alamein';
+
+      // Auth gate footer
+      const authFooterSpan = document.querySelector('.auth-gate__footer span');
+      if (authFooterSpan) authFooterSpan.textContent = 'Accès réservé aux membres de l\'équipe A.E.R.I.S.';
+    }
+
+    /* Override taskCard to use French labels for this user */
+    const _originalTaskCard = taskCard;
+    taskCard = function(task) {
+      if (!isFrenchUser()) return _originalTaskCard(task);
+
+      const priorityLabels = { low: 'Basse', medium: 'Moyenne', high: 'Haute', urgent: 'Urgente' };
+      const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+      const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+      let actions = '';
+      if (task.status === 'todo') {
+        actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Commencer la tâche">▶ Commencer</button>`;
+      } else if (task.status === 'progress') {
+        actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Marquer terminée">✓ Terminé</button>`;
+      }
+
+      const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
+
+      return `
+        <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+          <div class="task-card__top">
+            <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+            ${deleteBtn}
+          </div>
+          <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
+          ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+          <div class="task-card__footer">
+            ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${deadlineStr}
+            </span>` : ''}
+            ${actions}
+          </div>
+        </div>
+      `;
+    };
+
+    // Patch renderTasks to re-apply French column headers after every re-render
+    const _origRenderTasks = renderTasks;
+    renderTasks = function() {
+      _origRenderTasks();
+      // After rendering, re-apply French column headers (since they are static HTML)
+      if (isFrenchUser()) {
+        const colHeaders = {
+          'col-todo': 'À Faire',
+          'col-progress': 'En Cours',
+          'col-done': 'Terminé'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const h3 = document.getElementById(id)?.querySelector('.task-column__header h3');
+          if (h3) h3.textContent = label;
+        });
+      }
+    };
 
     // Initial render
     renderTasks();
