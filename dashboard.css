@@ -1046,381 +1046,101 @@
   }
 }
 
-/* ==============================================
-   STITCH THEME â€” Only active when body has .stitch-theme
-   Playful touches inspired by Stitch from Lilo & Stitch
-   ============================================== */
-
-.stitch-theme .site-header {
-  border-bottom: 2px solid rgba(107, 164, 247, .3);
-  box-shadow: 0 4px 20px rgba(107, 164, 247, .15);
-}
-
-/* Blue-tinted background with more presence */
-.stitch-theme .dashboard-page {
-  background:
-    radial-gradient(ellipse 700px 500px at 20% 30%, rgba(66, 133, 244, .06) 0%, transparent 70%),
-    radial-gradient(ellipse 500px 400px at 80% 70%, rgba(147, 112, 219, .05) 0%, transparent 60%),
-    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(107, 164, 247, .03) 0%, transparent 50%),
-    var(--bg-primary);
-}
-
-/* Page title â€” Stitch blue accent */
-.stitch-theme .dashboard-page .page-title {
-  color: #6ba4f7;
-  text-shadow: 0 0 30px rgba(107, 164, 247, .2);
-}
-
-.stitch-theme .dashboard-subtitle {
-  color: rgba(107, 164, 247, .6);
-}
-
-/* Welcome banner â€” Stitch blue tones */
-.stitch-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(66, 133, 244, .12) 0%, rgba(40, 60, 100, .5) 100%);
-  border-color: rgba(107, 164, 247, .3);
-}
-
-.stitch-theme .welcome-banner::before {
-  background: linear-gradient(90deg, transparent, rgba(107, 164, 247, .6), rgba(147, 112, 219, .4), transparent);
-}
-
-.stitch-theme .welcome-banner::after {
-  background: radial-gradient(circle, rgba(107, 164, 247, .15) 0%, transparent 70%);
-}
-
-.stitch-theme .welcome-banner__icon {
-  background: rgba(107, 164, 247, .18);
-  color: #6ba4f7;
-  box-shadow: 0 0 18px rgba(107, 164, 247, .25);
-}
-
-.stitch-theme .welcome-banner__greeting strong {
-  color: #6ba4f7;
-}
-
-.stitch-theme .welcome-banner__role strong {
-  color: #6ba4f7;
-}
-
-/* Stitch face in the welcome banner â€” more visible */
-.stitch-theme .welcome-banner .stitch-deco {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 52px;
-  height: 52px;
-  opacity: .3;
-  pointer-events: none;
-  filter: drop-shadow(0 0 8px rgba(107, 164, 247, .4));
-  animation: stitchPeek 3s ease-in-out infinite alternate;
-}
-
-@keyframes stitchPeek {
-  0%   { transform: translateY(-50%) rotate(-5deg) scale(1); }
-  100% { transform: translateY(-50%) rotate(5deg) scale(1.08); }
-}
-
-/* Stitch corner — bottom right — more visible */
-.stitch-theme .stitch-corner {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 64px;
-  height: 64px;
-  opacity: .25;
-  pointer-events: auto;
-  cursor: pointer;
-  z-index: 50;
-  filter: drop-shadow(0 0 12px rgba(107, 164, 247, .5));
-  animation: stitchFloat 4s ease-in-out infinite alternate;
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.stitch-theme .stitch-corner:hover {
-  opacity: .85;
-  transform: scale(1.15) rotate(-5deg);
-}
-
-/* Stitch click bubble */
-.stitch-theme .stitch-bubble {
-  position: absolute;
-  bottom: 75px;
-  right: 0;
-  background: linear-gradient(135deg, #4a7bf7, #3563d4);
-  color: white;
-  padding: 8px 14px;
-  border-radius: 12px 12px 0 12px;
-  font-family: var(--font-heading), sans-serif;
-  font-size: .75rem;
-  font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 4px 15px rgba(53, 99, 212, .4);
-  border: 1px solid rgba(255, 255, 255, .15);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px) scale(0.95);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.stitch-theme .stitch-bubble.show {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-}
-
-@keyframes stitchFloat {
-  0%   { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-10px) rotate(8deg); }
-}
-
-/* Second Stitch — top left corner */
-.stitch-theme .stitch-corner-tl {
-  position: fixed;
-  top: 100px;
-  left: 24px;
-  width: 44px;
-  height: 44px;
-  opacity: .12;
-  pointer-events: none;
-  z-index: 50;
-  filter: drop-shadow(0 0 8px rgba(107, 164, 247, .3));
-  animation: stitchFloatTL 5s ease-in-out infinite alternate;
-  transform: scaleX(-1);
-}
-
-@keyframes stitchFloatTL {
-  0%   { transform: scaleX(-1) translateY(0) rotate(0deg); }
-  100% { transform: scaleX(-1) translateY(-6px) rotate(-5deg); }
-}
-
-/* Ohana quote — decorative text */
-.stitch-theme .stitch-ohana {
-  position: fixed;
-  bottom: 90px;
-  right: 20px;
-  font-family: var(--font-heading);
-  font-size: .7rem;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: rgba(107, 164, 247, .2);
-  pointer-events: none;
-  z-index: 50;
-  writing-mode: vertical-rl;
-  animation: ohanaFade 6s ease-in-out infinite alternate;
-}
-
-@keyframes ohanaFade {
-  0%   { opacity: .15; }
-  100% { opacity: .3; }
-}
-
-/* Paw print trail between columns */
-.stitch-theme .stitch-paws {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin: -8px 0 4px;
-  opacity: .15;
-  pointer-events: none;
-}
-
-.stitch-theme .stitch-paws svg {
-  width: 18px;
-  height: 18px;
-  color: #6ba4f7;
-  filter: drop-shadow(0 0 4px rgba(107, 164, 247, .3));
-}
-
-/* Auth gate — Stitch blue glow */
-.stitch-theme .auth-gate__glow {
-  background: radial-gradient(circle, rgba(107, 164, 247, .15) 0%, transparent 70%);
-}
-
-.stitch-theme .auth-gate__title {
-  color: #6ba4f7;
-}
-
-.stitch-theme .auth-gate__submit {
-  background: #6ba4f7;
-}
-
-.stitch-theme .auth-gate__submit:hover {
-  box-shadow: 0 8px 25px rgba(107, 164, 247, .4);
-}
-
-.stitch-theme .auth-gate__message--success {
-  color: #6ba4f7;
-}
-
-.stitch-theme .auth-gate__footer svg {
-  color: #6ba4f7;
-}
-
-/* Experimental banner — Stitch twist */
-.stitch-theme .experimental-banner {
-  background: linear-gradient(135deg, rgba(107, 164, 247, .1) 0%, rgba(147, 112, 219, .05) 100%);
-  border-bottom-color: rgba(107, 164, 247, .25);
-}
-
-.stitch-theme .experimental-banner__icon {
-  background: rgba(107, 164, 247, .18);
-  color: #6ba4f7;
-}
-
-.stitch-theme .experimental-banner__text strong {
-  color: #6ba4f7;
-}
-
-/* Task columns — Stitch blue accents */
-.stitch-theme .task-column {
-  border-color: rgba(107, 164, 247, .1);
-  background: rgba(20, 35, 60, .35);
-}
-
-.stitch-theme .task-column__header {
-  border-bottom-color: rgba(107, 164, 247, .12);
-}
-
-/* Task cards — Stitch blue */
-.stitch-theme .task-card {
-  background: rgba(25, 45, 75, .4);
-  border-color: rgba(107, 164, 247, .1);
-  position: relative;
-  overflow: hidden;
-}
-
-.stitch-theme .task-card::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  right: -8px;
-  width: 48px;
-  height: 48px;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236ba4f7'><path d='M12 14c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-6-3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm12 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm-8-5c0 .83.67 1.5 1.5 1.5S11 6.83 11 6s-.67-1.5-1.5-1.5S8 5.17 8 6zm5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5S13 5.17 13 6z'/></svg>") no-repeat center;
-  background-size: contain;
-  opacity: 0.05;
-  pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-}
-
-.stitch-theme .task-card:hover {
-  border-color: rgba(107, 164, 247, .25);
-  box-shadow: 0 8px 25px rgba(107, 164, 247, .1);
-}
-
-.stitch-theme .task-card:hover::after {
-  opacity: 0.12;
-  transform: scale(1.15) rotate(12deg);
-}
-
-/* Task form — Stitch accents */
-.stitch-theme .task-form {
-  background: rgba(25, 45, 75, .4);
-  border-color: rgba(107, 164, 247, .15);
-}
-
-.stitch-theme .task-form::before {
-  background: linear-gradient(90deg, #6ba4f7, rgba(147, 112, 219, .5), transparent);
-}
-
-.stitch-theme .task-form__title {
-  color: #6ba4f7;
-}
-
-.stitch-theme .task-form__title svg {
-  color: #6ba4f7;
-}
-
-.stitch-theme .form-group input:focus,
-.stitch-theme .form-group textarea:focus,
-.stitch-theme .form-group select:focus {
-  border-color: #6ba4f7;
-  box-shadow: 0 0 12px rgba(107, 164, 247, .25);
-}
-
-/* Department tabs — Stitch blue default */
-.stitch-theme .dept-tab {
-  background: rgba(25, 45, 75, .4);
-  border-color: rgba(107, 164, 247, .1);
-}
-
-.stitch-theme .dept-tab:hover {
-  border-color: rgba(107, 164, 247, .3);
-  background: rgba(25, 45, 75, .6);
-}
-
-/* Empty state — Stitch themed */
-.stitch-theme .empty-state svg {
-  color: #6ba4f7;
-}
-
-.stitch-theme .empty-state h3 {
-  color: #6ba4f7;
-}
-
-.stitch-theme .empty-state strong {
-  color: #6ba4f7;
-}
-
-.stitch-theme .empty-state .stitch-empty-deco {
-  width: 80px;
-  height: 80px;
-  opacity: .45;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 0 10px rgba(107, 164, 247, .4));
-  animation: stitchBounce 2s ease-in-out infinite;
-}
-
-@keyframes stitchBounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
-}
-
-/* Task card action buttons — Stitch blue */
-.stitch-theme .task-card__action {
-  color: #6ba4f7;
-}
-
-.stitch-theme .task-card__action:hover {
-  background: #6ba4f7;
-  border-color: #6ba4f7;
-  box-shadow: 0 4px 12px rgba(107, 164, 247, .3);
-}
-
-/* Scrollbar — Stitch blue */
-.stitch-theme::-webkit-scrollbar { width: 8px; }
-.stitch-theme::-webkit-scrollbar-track { background: var(--bg-primary); }
-.stitch-theme::-webkit-scrollbar-thumb { background: rgba(107, 164, 247, .3); border-radius: 4px; }
-.stitch-theme::-webkit-scrollbar-thumb:hover { background: rgba(107, 164, 247, .45); }
-
-/* Responsive — Stitch */
-@media (max-width: 768px) {
-  .stitch-theme .welcome-banner .stitch-deco { width: 40px; height: 40px; right: 12px; }
-  .stitch-theme .stitch-corner { width: 48px; height: 48px; bottom: 16px; right: 16px; }
-  .stitch-theme .stitch-corner-tl { display: none; }
-  .stitch-theme .stitch-ohana { display: none; }
-}
-
-@media (max-width: 480px) {
-  .stitch-theme .welcome-banner .stitch-deco { display: none; }
-  .stitch-theme .stitch-corner { width: 40px; height: 40px; }
-}
-
-
-/* ==============================================
-   FIGHTER JET THEME — Only active when body has .jet-theme
-   Medium-intensity military aviation aesthetic
-   ============================================== */
-
 .jet-theme {
   font-family: 'Courier New', Courier, monospace !important;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%23f59e0b' stroke-width='1.5'><circle cx='16' cy='16' r='9' stroke-dasharray='4 2'/><path d='M16 2v6m0 12v6M2 16h6m16 0h6'/></svg>") 16 16, crosshair !important;
+  animation: crtFlicker 0.25s infinite alternate;
+}
+
+/* Full screen CRT glass overlay with scanning matrix and flicker */
+.jet-theme::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%),
+    linear-gradient(90deg, rgba(245, 158, 11, 0.03), rgba(0, 0, 0, 0.04), rgba(245, 158, 11, 0.03));
+  background-size: 100% 4px, 8px 100%;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+@keyframes crtFlicker {
+  0% { opacity: 0.98; }
+  50% { opacity: 0.995; }
+  100% { opacity: 0.98; }
 }
 
 .jet-theme .site-header {
   border-bottom: 2px solid rgba(245, 158, 11, .35);
   box-shadow: 0 4px 20px rgba(245, 158, 11, .12);
+}
+
+/* Master Caution warning indicator */
+.jet-theme .jet-master-caution {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 4px 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 3px;
+  z-index: 99;
+  letter-spacing: 0.15em;
+  animation: cautionBlink 1s infinite steps(2);
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes cautionBlink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Horizontal HUD Compass Tape */
+.jet-theme .jet-compass-tape {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  background: rgba(17, 17, 21, 0.95);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: rgba(245, 158, 11, 0.55);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 8px 0;
+  letter-spacing: 0.15em;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  margin-bottom: 20px;
+  border-radius: 4px;
+  z-index: 2;
+  position: relative;
+}
+
+.jet-theme .jet-compass-tape .active-hdg {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.9);
+}
+
+/* Flight Path Marker Hud Vector Overlay */
+.jet-theme .jet-hud-fpm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.5));
 }
 
 /* Dark gunmetal background with HUD grid lines */

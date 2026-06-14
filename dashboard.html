@@ -297,12 +297,8 @@
     experimentalBanner.style.display = 'none';
     siteFooter.style.display = 'none';
 
-    // Check for existing session
-    const sessionRole = sessionStorage.getItem('aeris_auth_role');
-    const sessionReg = sessionStorage.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
       // Apply theme class early for instant styling
-      if (sessionReg === '251001377') document.body.classList.add('stitch-theme');
       if (sessionReg === '231002350') document.body.classList.add('jet-theme');
       grantAccess(sessionRole, sessionReg);
     }
@@ -426,7 +422,6 @@
       sessionStorage.setItem('aeris_auth_role', role);
       sessionStorage.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
-      if (regNum === FRENCH_REG) document.body.classList.add('stitch-theme');
       if (regNum === JET_REG) document.body.classList.add('jet-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
@@ -835,99 +830,9 @@
     }
 
     function applyStitchTheme() {
-      if (!isFrenchUser()) {
-        document.body.classList.remove('stitch-theme');
-        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
-        return;
-      }
-
-      // Add theme class to body for CSS styling
-      document.body.classList.add('stitch-theme');
-
-      // Inject Stitch face into welcome banner
-      const welcomeBanner = document.getElementById('welcome-banner');
-      if (welcomeBanner) {
-        if (!welcomeBanner.querySelector('.stitch-deco')) {
-          welcomeBanner.insertAdjacentHTML('beforeend', getStitchFaceSVG(52));
-        }
-        // Replace welcome banner icon with a paw print SVG
-        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
-        if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 14c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-6-3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm12 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm-8-5c0 .83.67 1.5 1.5 1.5S11 6.83 11 6s-.67-1.5-1.5-1.5S8 5.17 8 6zm5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5S13 5.17 13 6z"/></svg>`;
-        }
-      }
-
-      // Inject Stitch into empty state (replaces the default X icon)
-      const emptyState = document.getElementById('empty-state');
-      if (emptyState && !emptyState.querySelector('.stitch-empty-deco')) {
-        const stitchEmpty = document.createElement('div');
-        stitchEmpty.className = 'stitch-empty-deco';
-        stitchEmpty.innerHTML = getStitchFaceSVG(80);
-        const emptyH3 = emptyState.querySelector('h3');
-        if (emptyH3) {
-          emptyState.insertBefore(stitchEmpty, emptyH3);
-          const defaultSvg = emptyState.querySelector(':scope > svg');
-          if (defaultSvg) defaultSvg.style.display = 'none';
-        }
-      }
-
-      // Stitch in bottom-right corner
-      let corner = document.querySelector('.stitch-corner');
-      if (!corner) {
-        corner = document.createElement('div');
-        corner.className = 'stitch-corner';
-        corner.innerHTML = getStitchFaceSVG(64);
-        document.body.appendChild(corner);
-      }
-
-      // Add speech bubble to bottom-right Stitch on click with randomized phrases
-      if (corner && !document.querySelector('.stitch-bubble')) {
-        const bubble = document.createElement('div');
-        bubble.className = 'stitch-bubble';
-        bubble.textContent = 'Aloha Hannah! 🌺';
-        corner.appendChild(bubble);
-        
-        const phrases = [
-          'Aloha Hannah! 🌺',
-          'Ohana signifie famille! 💙',
-          'Bleu de l\'espace! 🌌',
-          'Tout est sous contrôle! 🛠️',
-          'A.E.R.I.S. en vol! 🚀'
-        ];
-        
-        corner.addEventListener('click', () => {
-          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-          bubble.textContent = randomPhrase;
-          bubble.classList.add('show');
-          setTimeout(() => bubble.classList.remove('show'), 3000);
-        });
-      }
-
-      // Second Stitch in top-left corner (mirrored)
-      if (!document.querySelector('.stitch-corner-tl')) {
-        const cornerTL = document.createElement('div');
-        cornerTL.className = 'stitch-corner-tl';
-        cornerTL.innerHTML = getStitchFaceSVG(44);
-        document.body.appendChild(cornerTL);
-      }
-
-      // "Ohana" decorative text along right edge
-      if (!document.querySelector('.stitch-ohana')) {
-        const ohana = document.createElement('div');
-        ohana.className = 'stitch-ohana';
-        ohana.textContent = 'Ohana signifie famille ✦';
-        document.body.appendChild(ohana);
-      }
-
-      // Paw print trail above task board
-      const taskBoard = document.getElementById('task-board');
-      if (taskBoard && !document.querySelector('.stitch-paws')) {
-        const paws = document.createElement('div');
-        paws.className = 'stitch-paws';
-        const pawSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-3.5-1c-.83 0-1.5.67-1.5 1.5S7.67 12 8.5 12 10 11.33 10 10.5 9.33 9 8.5 9zm7 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5S16.33 9 15.5 9zm-5 5c-.83 0-1.5.67-1.5 1.5S9.67 16 10.5 16s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/></svg>`;
-        paws.innerHTML = pawSVG + pawSVG + pawSVG + pawSVG + pawSVG;
-        taskBoard.parentNode.insertBefore(paws, taskBoard);
-      }
+      // Revert/clean up any remaining Stitch elements
+      document.body.classList.remove('stitch-theme');
+      document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
     }
 
     /* ========== FIGHTER JET THEME (231002350 only) ========== */
@@ -1080,6 +985,68 @@
         document.body.appendChild(speedLines);
       }
 
+    function applyJetTheme() {
+      if (!isJetUser()) {
+        document.body.classList.remove('jet-theme');
+        document.querySelectorAll('.jet-radar, .jet-hud, .jet-speed-lines, .jet-telemetry-left, .jet-telemetry-right, .jet-scanline, .jet-master-caution, .jet-compass-tape, .jet-hud-fpm').forEach(el => el.remove());
+        if (window.jetTelemetryInterval) {
+          clearInterval(window.jetTelemetryInterval);
+          window.jetTelemetryInterval = null;
+        }
+        return;
+      }
+
+      // Add theme class
+      document.body.classList.add('jet-theme');
+
+      // Inject jet silhouette into welcome banner
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        if (!welcomeBanner.querySelector('.jet-deco')) {
+          welcomeBanner.insertAdjacentHTML('beforeend', getJetSilhouetteSVG(80, 40));
+        }
+        // Replace welcome banner icon with a crosshair target SVG
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="6"/></svg>`;
+        }
+      }
+
+      // Inject jet into empty state
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState && !emptyState.querySelector('.jet-empty-deco')) {
+        const jetEmpty = document.createElement('div');
+        jetEmpty.className = 'jet-empty-deco';
+        jetEmpty.innerHTML = getJetSilhouetteSVG(100, 50);
+        const emptyH3 = emptyState.querySelector('h3');
+        if (emptyH3) {
+          emptyState.insertBefore(jetEmpty, emptyH3);
+          const defaultSvg = emptyState.querySelector(':scope > svg');
+          if (defaultSvg) defaultSvg.style.display = 'none';
+        }
+      }
+
+      // Radar sweep — bottom left (append SVG directly, no wrapper div in DOM)
+      if (!document.querySelector('.jet-radar')) {
+        const temp = document.createElement('div');
+        temp.innerHTML = getRadarSVG(90);
+        document.body.appendChild(temp.firstElementChild);
+      }
+
+      // HUD crosshair — bottom right (append SVG directly)
+      if (!document.querySelector('.jet-hud')) {
+        const temp = document.createElement('div');
+        temp.innerHTML = getHudCrosshairSVG(70);
+        document.body.appendChild(temp.firstElementChild);
+      }
+
+      // Speed lines — top right
+      if (!document.querySelector('.jet-speed-lines')) {
+        const speedLines = document.createElement('div');
+        speedLines.className = 'jet-speed-lines';
+        document.body.appendChild(speedLines);
+      }
+
       // Side tapes (Telemetry displays)
       if (!document.querySelector('.jet-telemetry-left')) {
         const leftTape = document.createElement('div');
@@ -1110,6 +1077,41 @@
         const scanline = document.createElement('div');
         scanline.className = 'jet-scanline';
         document.body.appendChild(scanline);
+      }
+
+      // Blinking Master Caution Light
+      if (!document.querySelector('.jet-master-caution')) {
+        const caution = document.createElement('div');
+        caution.className = 'jet-master-caution';
+        caution.innerHTML = '<span>⚠️ MASTER CAUTION</span>';
+        document.body.appendChild(caution);
+      }
+
+      // Horizontal compass tape
+      const dashboardPage = document.getElementById('dashboard-page');
+      const container = dashboardPage ? dashboardPage.querySelector('.container') : null;
+      if (container && !document.querySelector('.jet-compass-tape')) {
+        const compass = document.createElement('div');
+        compass.className = 'jet-compass-tape';
+        compass.innerHTML = `
+          <span>W</span> <span>·</span> <span>300</span> <span>·</span> <span>330</span> <span>·</span> <span class="active-hdg">N</span> <span>·</span> <span>030</span> <span>·</span> <span>060</span> <span>·</span> <span>E</span>
+        `;
+        container.insertBefore(compass, container.firstChild);
+      }
+
+      // Fixed Flight Path Marker HUD Vector
+      if (!document.querySelector('.jet-hud-fpm')) {
+        const fpm = document.createElement('div');
+        fpm.className = 'jet-hud-fpm';
+        fpm.innerHTML = `
+          <svg viewBox="0 0 100 100" width="40" height="40">
+            <circle cx="50" cy="50" r="10" fill="none" stroke="#f59e0b" stroke-width="1"/>
+            <line x1="10" y1="50" x2="40" y2="50" stroke="#f59e0b" stroke-width="1"/>
+            <line x1="60" y1="50" x2="90" y2="50" stroke="#f59e0b" stroke-width="1"/>
+            <line x1="50" y1="20" x2="50" y2="40" stroke="#f59e0b" stroke-width="1"/>
+          </svg>
+        `;
+        document.body.appendChild(fpm);
       }
 
       // Real-time telemetry simulation interval
@@ -1190,7 +1192,7 @@
     const _originalTaskCard = taskCard;
     taskCard = function(task) {
       if (isFrenchUser()) {
-        const priorityLabels = { low: '🐾 Basse', medium: '🐾 Moyenne', high: '🐾 Haute', urgent: '🐾 Urgente' };
+        const priorityLabels = { low: 'Basse', medium: 'Moyenne', high: 'Haute', urgent: 'Urgente' };
         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
 
