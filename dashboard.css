@@ -1414,6 +1414,10 @@
    Medium-intensity military aviation aesthetic
    ============================================== */
 
+.jet-theme {
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
 .jet-theme .site-header {
   border-bottom: 2px solid rgba(245, 158, 11, .35);
   box-shadow: 0 4px 20px rgba(245, 158, 11, .12);
@@ -1426,6 +1430,23 @@
     repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(245, 158, 11, .03) 59px, rgba(245, 158, 11, .03) 60px),
     radial-gradient(ellipse 600px 400px at 50% 40%, rgba(245, 158, 11, .04) 0%, transparent 70%),
     var(--bg-primary);
+}
+
+/* Center background pitch scale */
+.jet-theme .dashboard-page::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%23f59e0b' stroke-width='0.5'><path d='M80 80h15v5m25-5h-15v5M70 100h20m40 0h-20M80 120h15v-5m25 5h-15v-5' opacity='0.15'/><text x='62' y='83' fill='%23f59e0b' font-size='6' font-family='monospace' opacity='0.15'>10</text><text x='132' y='83' fill='%23f59e0b' font-size='6' font-family='monospace' opacity='0.15'>10</text><text x='62' y='123' fill='%23f59e0b' font-size='6' font-family='monospace' opacity='0.15'>-10</text><text x='132' y='123' fill='%23f59e0b' font-size='6' font-family='monospace' opacity='0.15'>-10</text></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Page title — afterburner amber */
@@ -1557,6 +1578,82 @@
   overflow: hidden;
 }
 
+/* Jet Telemetry Left & Right panels */
+.jet-theme .jet-telemetry-left,
+.jet-theme .jet-telemetry-right {
+  position: fixed;
+  top: 150px;
+  width: 150px;
+  background: rgba(17, 17, 21, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 12px;
+  border-radius: 4px;
+  color: #f59e0b;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 48;
+  box-shadow: 0 4px 25px rgba(245, 158, 11, 0.15);
+  pointer-events: none;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+}
+
+.jet-theme .jet-telemetry-left {
+  left: 20px;
+}
+
+.jet-theme .jet-telemetry-right {
+  right: 20px;
+}
+
+.jet-theme .jet-telemetry-left div,
+.jet-theme .jet-telemetry-right div {
+  margin-bottom: 8px;
+  border-bottom: 1px dotted rgba(245, 158, 11, 0.2);
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.jet-theme .jet-telemetry-left div:last-child,
+.jet-theme .jet-telemetry-right div:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.jet-theme .tape-val {
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(245, 158, 11, 0.7);
+}
+
+/* Faint Scanning Line Overlay */
+.jet-theme .jet-scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  animation: scanlineSweep 6s linear infinite;
+}
+
+@keyframes scanlineSweep {
+  0% { transform: translateY(-100px); }
+  100% { transform: translateY(110vh); }
+}
+
+@media (max-width: 1200px) {
+  .jet-theme .jet-telemetry-left,
+  .jet-theme .jet-telemetry-right {
+    display: none;
+  }
+}
+
 .jet-theme .jet-speed-lines::before,
 .jet-theme .jet-speed-lines::after {
   content: '';
@@ -1656,7 +1753,20 @@
   border-radius: 4px;
 }
 
-.jet-theme .task-column__header { border-bottom-color: rgba(245, 158, 11, .1); }
+.jet-theme .task-column__header {
+  border-bottom: 2px solid #f59e0b;
+  position: relative;
+}
+
+.jet-theme .task-column__header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(45deg, #f59e0b, #f59e0b 6px, transparent 6px, transparent 12px);
+  opacity: 0.35;
+}
+
 .jet-theme .task-column__count { background: rgba(245, 158, 11, .1); color: #f59e0b; }
 
 /* Task form — military panel */
@@ -1670,7 +1780,21 @@
   background: linear-gradient(90deg, #f59e0b, rgba(239, 68, 68, .4), transparent);
 }
 
-.jet-theme .task-form__title { color: #f59e0b; }
+.jet-theme .task-form__title {
+  color: #f59e0b;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.jet-theme .task-form__title::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(45deg, #f59e0b, #f59e0b 8px, #111 8px, #111 16px);
+  border-radius: 2px;
+}
+
 .jet-theme .task-form__title svg { color: #f59e0b; }
 
 .jet-theme .form-group input:focus,
@@ -1687,6 +1811,17 @@
   border-radius: 4px;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.jet-theme .task-card::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  pointer-events: none;
+  transition: border-color 0.3s ease;
 }
 
 .jet-theme .task-card::after {
@@ -1703,8 +1838,25 @@
 }
 
 .jet-theme .task-card:hover {
-  border-color: rgba(245, 158, 11, .2);
-  box-shadow: 0 8px 25px rgba(245, 158, 11, .08);
+  border-color: #ef4444 !important; /* HUD red alert */
+  background: rgba(30, 20, 20, 0.75) !important;
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.18);
+}
+
+.jet-theme .task-card:hover::before {
+  /* HUD corners target locking */
+  border-color: rgba(239, 68, 68, 0.4);
+  background: 
+    linear-gradient(to right, #ef4444 8px, transparent 8px) 0 0,
+    linear-gradient(to bottom, #ef4444 8px, transparent 8px) 0 0,
+    linear-gradient(to left, #ef4444 8px, transparent 8px) 100% 0,
+    linear-gradient(to bottom, #ef4444 8px, transparent 8px) 100% 0,
+    linear-gradient(to right, #ef4444 8px, transparent 8px) 0 100%,
+    linear-gradient(to top, #ef4444 8px, transparent 8px) 0 100%,
+    linear-gradient(to left, #ef4444 8px, transparent 8px) 100% 100%,
+    linear-gradient(to top, #ef4444 8px, transparent 8px) 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
 }
 
 .jet-theme .task-card:hover::after {

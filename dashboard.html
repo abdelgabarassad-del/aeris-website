@@ -835,7 +835,11 @@
     }
 
     function applyStitchTheme() {
-      if (!isFrenchUser()) return;
+      if (!isFrenchUser()) {
+        document.body.classList.remove('stitch-theme');
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
+        return;
+      }
 
       // Add theme class to body for CSS styling
       document.body.classList.add('stitch-theme');
@@ -1015,7 +1019,15 @@
     }
 
     function applyJetTheme() {
-      if (!isJetUser()) return;
+      if (!isJetUser()) {
+        document.body.classList.remove('jet-theme');
+        document.querySelectorAll('.jet-radar, .jet-hud, .jet-speed-lines, .jet-telemetry-left, .jet-telemetry-right, .jet-scanline').forEach(el => el.remove());
+        if (window.jetTelemetryInterval) {
+          clearInterval(window.jetTelemetryInterval);
+          window.jetTelemetryInterval = null;
+        }
+        return;
+      }
 
       // Add theme class
       document.body.classList.add('jet-theme');
@@ -1066,6 +1078,72 @@
         const speedLines = document.createElement('div');
         speedLines.className = 'jet-speed-lines';
         document.body.appendChild(speedLines);
+      }
+
+      // Side tapes (Telemetry displays)
+      if (!document.querySelector('.jet-telemetry-left')) {
+        const leftTape = document.createElement('div');
+        leftTape.className = 'jet-telemetry-left';
+        leftTape.innerHTML = `
+          <div class="tape-alt">ALT <span class="tape-val">42,800</span></div>
+          <div class="tape-spd">SPD <span class="tape-val">MACH 1.82</span></div>
+          <div class="tape-vspd">V/S <span class="tape-val">+120</span></div>
+          <div class="tape-compass">HDG <span class="tape-val">285° NW</span></div>
+        `;
+        document.body.appendChild(leftTape);
+      }
+
+      if (!document.querySelector('.jet-telemetry-right')) {
+        const rightTape = document.createElement('div');
+        rightTape.className = 'jet-telemetry-right';
+        rightTape.innerHTML = `
+          <div class="sys-status">SYS: ACTIVE</div>
+          <div class="wpn-status">WPN: READY</div>
+          <div class="radar-scan">TGT: LOCK</div>
+          <div class="g-force">G-FORCE: 1.2G</div>
+        `;
+        document.body.appendChild(rightTape);
+      }
+
+      // Scanline overlay
+      if (!document.querySelector('.jet-scanline')) {
+        const scanline = document.createElement('div');
+        scanline.className = 'jet-scanline';
+        document.body.appendChild(scanline);
+      }
+
+      // Real-time telemetry simulation interval
+      if (window.jetTelemetryInterval) clearInterval(window.jetTelemetryInterval);
+      
+      const leftTapeEl = document.querySelector('.jet-telemetry-left');
+      const rightTapeEl = document.querySelector('.jet-telemetry-right');
+      
+      if (leftTapeEl && rightTapeEl) {
+        window.jetTelemetryInterval = setInterval(() => {
+          // Altitude fluctuates around 42,800
+          const altVal = leftTapeEl.querySelector('.tape-alt .tape-val');
+          if (altVal) {
+            const currentAlt = parseInt(altVal.textContent.replace(',', ''));
+            const diff = Math.floor(Math.random() * 40) - 20; // -20 to +20
+            altVal.textContent = (currentAlt + diff).toLocaleString();
+          }
+          
+          // Speed fluctuates
+          const spdVal = leftTapeEl.querySelector('.tape-spd .tape-val');
+          if (spdVal) {
+            const currentSpd = parseFloat(spdVal.textContent.replace('MACH ', ''));
+            const diff = (Math.random() * 0.04 - 0.02); // -0.02 to +0.02
+            spdVal.textContent = 'MACH ' + (currentSpd + diff).toFixed(2);
+          }
+          
+          // G-Force fluctuates
+          const gVal = rightTapeEl.querySelector('.g-force');
+          if (gVal) {
+            const currentG = parseFloat(gVal.textContent.replace('G-FORCE: ', ''));
+            const diff = (Math.random() * 0.2 - 0.1); // -0.1 to +0.1
+            gVal.textContent = 'G-FORCE: ' + Math.max(0.8, Math.min(2.5, currentG + diff)).toFixed(1) + 'G';
+          }
+        }, 1200);
       }
 
       // Customize task form for Jet user (tactical parameters)
