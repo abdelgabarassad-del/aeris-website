@@ -340,6 +340,7 @@
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('jet-theme');
+      if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -404,6 +405,7 @@
         applyFrenchUI();
         applyStitchTheme();
         applyJetTheme();
+        applyMickeyTheme();
       }, 600);
     }
 
@@ -463,6 +465,7 @@
       safeSession.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
       if (regNum === JET_REG) document.body.classList.add('jet-theme');
+      if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -588,9 +591,13 @@
       // Flash success
       const isFr = isFrenchUser();
       const isJet = isJetUser();
+      const isMickey = isMickeyUser();
       let successText = '✓ Added!';
       let defaultText = ' Add Task';
-      if (isFr) {
+      if (isMickey) {
+        successText = '✓ Hot dog! Ajoutée ! 🌭';
+        defaultText = ' Ajouter la Tâche';
+      } else if (isFr) {
         successText = '✓ Ajoutée !';
         defaultText = ' Ajouter la Tâche';
       } else if (isJet) {
@@ -874,6 +881,13 @@
       // Revert/clean up any remaining Stitch elements
       document.body.classList.remove('stitch-theme');
       document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
+    }
+
+    /* ========== MICKEY MOUSE THEME (251011829 only) ========== */
+    const MICKEY_REG = '251011829';
+
+    function isMickeyUser() {
+      return safeSession.getItem('aeris_auth_reg') === MICKEY_REG;
     }
 
     /* ========== FIGHTER JET THEME (231002350 only) ========== */
@@ -1169,10 +1183,135 @@
       }
     }
 
-    /* Override taskCard to use French or Jet labels depending on logged-in user */
-    const _originalTaskCard = taskCard;
-    taskCard = function(task) {
-      if (isFrenchUser()) {
+    function applyMickeyTheme() {
+      if (!isMickeyUser()) {
+        document.body.classList.remove('mickey-theme');
+        document.querySelectorAll('.mickey-corner, .mickey-corner-tl, .mickey-bubble, .mickey-footprints').forEach(el => el.remove());
+        return;
+      }
+
+      // Add theme class
+      document.body.classList.add('mickey-theme');
+
+      // Inject Mickey silhouette into welcome banner
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        // Replace welcome banner icon with a Mickey ears SVG
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='22' height='22' fill='currentColor'><circle cx='7' cy='7' r='5'/><circle cx='17' cy='7' r='5'/><circle cx='12' cy='14' r='7'/></svg>`;
+        }
+      }
+
+      // Inject floating corner widget — bottom right
+      if (!document.querySelector('.mickey-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'mickey-corner';
+        corner.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='48' height='48' fill='currentColor'><circle cx='7' cy='7' r='5'/><circle cx='17' cy='7' r='5'/><circle cx='12' cy='14' r='7'/></svg>`;
+        document.body.appendChild(corner);
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'mickey-bubble';
+        document.body.appendChild(bubble);
+        
+        const phrases = [
+          "Oh boy! C'est reparti pour une super journée ! ☀️",
+          "Ha-ha! Tout est sous contrôle ! 🐭",
+          "Hot dog! On avance bien sur les tâches ! 🌭",
+          "C'est merveilleux ! 🏰",
+          "Salut l'ami ! Prêt à accomplir de grandes choses ? 🌟"
+        ];
+        
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Inject decorative ears top-left
+      if (!document.querySelector('.mickey-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'mickey-corner-tl';
+        cornerTL.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='36' height='36' fill='currentColor'><circle cx='7' cy='7' r='5'/><circle cx='17' cy='7' r='5'/><circle cx='12' cy='14' r='7'/></svg>`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Inject footprints trail above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.mickey-footprints')) {
+        const footprints = document.createElement('div');
+        footprints.className = 'mickey-footprints';
+        const earSVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' width='24' height='24'><circle cx='7' cy='7' r='5'/><circle cx='17' cy='7' r='5'/><circle cx='12' cy='14' r='7'/></svg>`;
+        footprints.innerHTML = earSVG + earSVG + earSVG + earSVG + earSVG;
+        taskBoard.parentNode.insertBefore(footprints, taskBoard);
+      }
+
+      // Customize task form headers in French for Mickey
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Créer un Nouveau Chef-d\'œuvre / Tâche');
+      }
+      
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = 'Nom de l\'Activité';
+      
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = 'Détails & Directives';
+      
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = 'Niveau de Magie / Priorité';
+      
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🐭 Petite Magie (Basse)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🐭 Magie Moyenne (Moyenne)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🐭 Grande Magie (Haute)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🏰 Magie Spectaculaire (Urgente)';
+      }
+    }
+
+     /* Override taskCard to use French or Jet labels depending on logged-in user */
+     const _originalTaskCard = taskCard;
+     taskCard = function(task) {
+       if (isMickeyUser()) {
+         const priorityLabels = { low: '🐭 Basse', medium: '🐭 Moyenne', high: '🐭 Haute', urgent: '🏰 Urgente' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Commencer la tâche">▶ Commencer</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Marquer terminée">✓ Terminé</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">${escapeHtml(task.title)} ✨</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
+       if (isFrenchUser()) {
         const priorityLabels = { low: 'Basse', medium: 'Moyenne', high: 'Haute', urgent: 'Urgente' };
         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';

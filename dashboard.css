@@ -1634,3 +1634,244 @@
   .jet-theme .jet-radar { width: 45px; height: 45px; }
   .jet-theme .jet-hud { width: 40px; height: 40px; }
 }
+
+/* ==========================================================================
+   ========== MICKEY MOUSE THEME (251011829 only) ==========
+   ========================================================================== */
+
+.mickey-theme {
+  --mickey-red: #ef4444;
+  --mickey-yellow: #facc15;
+  --mickey-black: #111115;
+  --mickey-dark-gray: #1f1f23;
+  --mickey-border: rgba(250, 204, 21, 0.25);
+  
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif !important;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='11' cy='11' r='5' fill='%23ef4444'/><circle cx='21' cy='11' r='5' fill='%23ef4444'/><circle cx='16' cy='18' r='7' fill='%2318181b' stroke='%23facc15' stroke-width='1.5'/></svg>") 16 16, auto !important;
+}
+
+/* Mickey animated background */
+.mickey-theme .dashboard-page {
+  background: 
+    radial-gradient(circle at 10% 10%, rgba(239, 68, 68, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(250, 204, 21, 0.04) 0%, transparent 40%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(250, 204, 21, 0.005) 0px, rgba(250, 204, 21, 0.005) 2px, transparent 2px, transparent 40px),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+/* Corner ears floating watermarks */
+.mickey-theme .mickey-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  opacity: 0.25;
+  z-index: 50;
+  color: var(--mickey-yellow);
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.mickey-theme .mickey-corner:hover {
+  opacity: 0.8;
+  transform: scale(1.15) rotate(15deg);
+  color: var(--mickey-red);
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5));
+}
+
+.mickey-theme .mickey-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.15;
+  z-index: 50;
+  color: var(--mickey-red);
+  pointer-events: none;
+}
+
+/* Speech bubble for corner widget */
+.mickey-theme .mickey-bubble {
+  position: fixed;
+  bottom: 85px;
+  right: 40px;
+  background: var(--mickey-dark-gray);
+  border: 2px solid var(--mickey-yellow);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  max-width: 240px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mickey-theme .mickey-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.mickey-theme .mickey-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: var(--mickey-yellow) transparent;
+  display: block;
+  width: 0;
+}
+
+/* Page titles */
+.mickey-theme .page-title {
+  color: var(--mickey-yellow) !important;
+  text-shadow: 0 0 20px rgba(250, 204, 21, 0.15) !important;
+  letter-spacing: 0.05em !important;
+}
+
+.mickey-theme .dashboard-subtitle {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Welcome Banner Mickey styling */
+.mickey-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(30, 30, 35, 0.7) 100%) !important;
+  border: 2px solid var(--mickey-red) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.08) !important;
+}
+
+.mickey-theme .welcome-banner::before {
+  background: linear-gradient(90deg, transparent, var(--mickey-yellow), var(--mickey-red), transparent) !important;
+  height: 3px !important;
+}
+
+.mickey-theme .welcome-banner__icon {
+  background: var(--mickey-yellow) !important;
+  color: var(--mickey-black) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.3) !important;
+}
+
+/* Department tabs */
+.mickey-theme .dept-tab {
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(30, 30, 35, 0.5) !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.mickey-theme .dept-tab:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: var(--mickey-red) !important;
+  transform: translateY(-2px) !important;
+}
+
+.mickey-theme .dept-tab.active {
+  background: var(--mickey-red) !important;
+  color: #fff !important;
+  border-color: var(--mickey-red) !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+.mickey-theme .dept-tab.active::before {
+  background: var(--mickey-yellow) !important;
+}
+
+/* Task Columns */
+.mickey-theme .task-column {
+  border-radius: 16px !important;
+  background: rgba(25, 25, 30, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.mickey-theme .task-column__header {
+  border-bottom: 2px solid var(--mickey-yellow) !important;
+}
+
+.mickey-theme .task-column__count {
+  background: var(--mickey-yellow) !important;
+  color: var(--mickey-black) !important;
+}
+
+/* Task Cards */
+.mickey-theme .task-card {
+  background: rgba(31, 31, 37, 0.85) !important;
+  border: 2px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.mickey-theme .task-card:hover {
+  border-color: var(--mickey-yellow) !important;
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 30px rgba(250, 204, 21, 0.15) !important;
+  background: var(--mickey-dark-gray) !important;
+}
+
+.mickey-theme .task-card--low { border-left: 4px solid var(--mickey-yellow) !important; }
+.mickey-theme .task-card--medium { border-left: 4px solid var(--mickey-red) !important; }
+.mickey-theme .task-card--high { border-left: 4px solid var(--mickey-black) !important; border-right: 2px solid var(--mickey-red) !important; }
+.mickey-theme .task-card--urgent { border-left: 4px solid var(--mickey-red) !important; border-right: 2px solid var(--mickey-yellow) !important; animation: mickeyUrgentPulse 1.5s infinite alternate !important; }
+
+@keyframes mickeyUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+}
+
+.mickey-theme .task-card__action {
+  background: var(--mickey-yellow) !important;
+  color: var(--mickey-black) !important;
+  border: 1px solid var(--mickey-yellow) !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+
+.mickey-theme .task-card__action:hover {
+  background: var(--mickey-red) !important;
+  border-color: var(--mickey-red) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Footprints decoration */
+.mickey-theme .mickey-footprints {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px 0 10px 0;
+  color: var(--mickey-yellow);
+  opacity: 0.25;
+}
+
+.mickey-theme .mickey-footprints svg {
+  width: 24px;
+  height: 24px;
+  animation: mickeyWobble 2s ease-in-out infinite alternate;
+}
+
+.mickey-theme .mickey-footprints svg:nth-child(even) {
+  animation-delay: 0.5s;
+  color: var(--mickey-red);
+}
+
+@keyframes mickeyWobble {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
+}
+
+.mickey-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(30, 30, 35, 0.5) 100%) !important;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.mickey-theme .experimental-banner__icon {
+  background: var(--mickey-red) !important;
+  color: #fff !important;
+}
+
