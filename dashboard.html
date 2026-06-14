@@ -297,6 +297,9 @@
     experimentalBanner.style.display = 'none';
     siteFooter.style.display = 'none';
 
+    // Check for existing session
+    const sessionRole = sessionStorage.getItem('aeris_auth_role');
+    const sessionReg = sessionStorage.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('jet-theme');
@@ -923,67 +926,7 @@
       </svg>`;
     }
 
-    function applyJetTheme() {
-      if (!isJetUser()) {
-        document.body.classList.remove('jet-theme');
-        document.querySelectorAll('.jet-radar, .jet-hud, .jet-speed-lines, .jet-telemetry-left, .jet-telemetry-right, .jet-scanline').forEach(el => el.remove());
-        if (window.jetTelemetryInterval) {
-          clearInterval(window.jetTelemetryInterval);
-          window.jetTelemetryInterval = null;
-        }
-        return;
-      }
 
-      // Add theme class
-      document.body.classList.add('jet-theme');
-
-      // Inject jet silhouette into welcome banner
-      const welcomeBanner = document.getElementById('welcome-banner');
-      if (welcomeBanner) {
-        if (!welcomeBanner.querySelector('.jet-deco')) {
-          welcomeBanner.insertAdjacentHTML('beforeend', getJetSilhouetteSVG(80, 40));
-        }
-        // Replace welcome banner icon with a crosshair target SVG
-        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
-        if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="6"/></svg>`;
-        }
-      }
-
-      // Inject jet into empty state
-      const emptyState = document.getElementById('empty-state');
-      if (emptyState && !emptyState.querySelector('.jet-empty-deco')) {
-        const jetEmpty = document.createElement('div');
-        jetEmpty.className = 'jet-empty-deco';
-        jetEmpty.innerHTML = getJetSilhouetteSVG(100, 50);
-        const emptyH3 = emptyState.querySelector('h3');
-        if (emptyH3) {
-          emptyState.insertBefore(jetEmpty, emptyH3);
-          const defaultSvg = emptyState.querySelector(':scope > svg');
-          if (defaultSvg) defaultSvg.style.display = 'none';
-        }
-      }
-
-      // Radar sweep — bottom left (append SVG directly, no wrapper div in DOM)
-      if (!document.querySelector('.jet-radar')) {
-        const temp = document.createElement('div');
-        temp.innerHTML = getRadarSVG(90);
-        document.body.appendChild(temp.firstElementChild);
-      }
-
-      // HUD crosshair — bottom right (append SVG directly)
-      if (!document.querySelector('.jet-hud')) {
-        const temp = document.createElement('div');
-        temp.innerHTML = getHudCrosshairSVG(70);
-        document.body.appendChild(temp.firstElementChild);
-      }
-
-      // Speed lines — top right
-      if (!document.querySelector('.jet-speed-lines')) {
-        const speedLines = document.createElement('div');
-        speedLines.className = 'jet-speed-lines';
-        document.body.appendChild(speedLines);
-      }
 
     function applyJetTheme() {
       if (!isJetUser()) {
