@@ -301,6 +301,8 @@
     const sessionRole = sessionStorage.getItem('aeris_auth_role');
     const sessionReg = sessionStorage.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
+      // Apply Stitch theme class early for instant styling
+      if (sessionReg === '251001377') document.body.classList.add('stitch-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -363,6 +365,7 @@
 
         // Apply French UI if this is the French user
         applyFrenchUI();
+        applyStitchTheme();
       }, 600);
     }
 
@@ -420,6 +423,8 @@
       const role = HEADS.has(regNum) ? 'head' : 'member';
       sessionStorage.setItem('aeris_auth_role', role);
       sessionStorage.setItem('aeris_auth_reg', regNum);
+      // Apply Stitch theme early so auth success has Stitch styling
+      if (regNum === FRENCH_REG) document.body.classList.add('stitch-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -777,6 +782,69 @@
       // Auth gate footer
       const authFooterSpan = document.querySelector('.auth-gate__footer span');
       if (authFooterSpan) authFooterSpan.textContent = 'Accès réservé aux membres de l\'équipe A.E.R.I.S.';
+    }
+
+    /* ========== STITCH THEME (251001377 only) ========== */
+    function getStitchFaceSVG(size = 48) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="stitch-deco">
+        <!-- Head shape -->
+        <ellipse cx="50" cy="52" rx="32" ry="28" fill="#4A7BF7" stroke="#3563d4" stroke-width="1.5"/>
+        <!-- Left ear -->
+        <ellipse cx="18" cy="28" rx="14" ry="8" fill="#4A7BF7" stroke="#3563d4" stroke-width="1.5" transform="rotate(-30 18 28)"/>
+        <ellipse cx="18" cy="28" rx="10" ry="5" fill="#8BB5FF" transform="rotate(-30 18 28)"/>
+        <!-- Right ear -->
+        <ellipse cx="82" cy="28" rx="14" ry="8" fill="#4A7BF7" stroke="#3563d4" stroke-width="1.5" transform="rotate(30 82 28)"/>
+        <ellipse cx="82" cy="28" rx="10" ry="5" fill="#8BB5FF" transform="rotate(30 82 28)"/>
+        <!-- Eye patches (lighter area around eyes) -->
+        <ellipse cx="50" cy="48" rx="24" ry="16" fill="#6B9EFF" opacity=".5"/>
+        <!-- Left eye -->
+        <ellipse cx="40" cy="46" rx="8" ry="9" fill="#1a1a2e"/>
+        <ellipse cx="42" cy="44" rx="3" ry="3.5" fill="white"/>
+        <!-- Right eye -->
+        <ellipse cx="60" cy="46" rx="8" ry="9" fill="#1a1a2e"/>
+        <ellipse cx="62" cy="44" rx="3" ry="3.5" fill="white"/>
+        <!-- Nose -->
+        <ellipse cx="50" cy="55" rx="4" ry="3" fill="#3563d4"/>
+        <!-- Mouth — cute smile -->
+        <path d="M 40 60 Q 50 68 60 60" fill="none" stroke="#3563d4" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+    }
+
+    function applyStitchTheme() {
+      if (!isFrenchUser()) return;
+
+      // Add theme class to body for CSS styling
+      document.body.classList.add('stitch-theme');
+
+      // Inject Stitch face into welcome banner
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner && !welcomeBanner.querySelector('.stitch-deco')) {
+        welcomeBanner.insertAdjacentHTML('beforeend', getStitchFaceSVG(48));
+      }
+
+      // Inject Stitch into empty state (replaces the default X icon)
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState && !emptyState.querySelector('.stitch-empty-deco')) {
+        const stitchEmpty = document.createElement('div');
+        stitchEmpty.className = 'stitch-empty-deco';
+        stitchEmpty.innerHTML = getStitchFaceSVG(72);
+        // Insert before the h3
+        const emptyH3 = emptyState.querySelector('h3');
+        if (emptyH3) {
+          emptyState.insertBefore(stitchEmpty, emptyH3);
+          // Hide the default SVG icon
+          const defaultSvg = emptyState.querySelector(':scope > svg');
+          if (defaultSvg) defaultSvg.style.display = 'none';
+        }
+      }
+
+      // Add a subtle floating Stitch in bottom-right corner
+      if (!document.querySelector('.stitch-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'stitch-corner';
+        corner.innerHTML = getStitchFaceSVG(60);
+        document.body.appendChild(corner);
+      }
     }
 
     /* Override taskCard to use French labels for this user */
