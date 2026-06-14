@@ -233,6 +233,43 @@
   </footer>
 
   <script>
+    // Safe storage access wrapper to prevent SecurityErrors on file:// protocol or disabled cookies
+    const safeSession = {
+      getItem(key) {
+        try {
+          return sessionStorage.getItem(key);
+        } catch (e) {
+          console.warn("Session storage access denied:", e);
+          return null;
+        }
+      },
+      setItem(key, value) {
+        try {
+          sessionStorage.setItem(key, value);
+        } catch (e) {
+          console.warn("Session storage access denied:", e);
+        }
+      }
+    };
+
+    const safeLocal = {
+      getItem(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          console.warn("Local storage access denied:", e);
+          return null;
+        }
+      },
+      setItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (e) {
+          console.warn("Local storage access denied:", e);
+        }
+      }
+    };
+
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
       '251001377', '231002350', '241012132', '251002119',
@@ -250,7 +287,7 @@
 
     const PERSONAL_GREETINGS = {
       '251001377': { name: 'Hannah Ahmed', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
-      '251011829': { name: 'hala farouk', message: 'enty koaysah?' },
+      '251011829': { name: 'hala farouk', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
       '251000861': { name: 'Hazem walid', message: 'would you mind ya hazem el tasks' },
       '251012364': { name: 'Mahinor Harb', message: 'MAHIII 3amlah ehhhh' },
       '221011368': { name: 'Sara Abdo', message: 'zaraaa faytk تعاشبي شاييي' },
@@ -293,13 +330,13 @@
     const roleSelector = document.getElementById('role-selector');
 
     // Hide dashboard content on load
-    dashboardPage.style.display = 'none';
-    experimentalBanner.style.display = 'none';
-    siteFooter.style.display = 'none';
+    if (dashboardPage) dashboardPage.style.display = 'none';
+    if (experimentalBanner) experimentalBanner.style.display = 'none';
+    if (siteFooter) siteFooter.style.display = 'none';
 
     // Check for existing session
-    const sessionRole = sessionStorage.getItem('aeris_auth_role');
-    const sessionReg = sessionStorage.getItem('aeris_auth_reg');
+    const sessionRole = safeSession.getItem('aeris_auth_role');
+    const sessionReg = safeSession.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && ALL_MEMBERS.has(sessionReg)) {
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('jet-theme');
@@ -422,8 +459,8 @@
       }
 
       const role = HEADS.has(regNum) ? 'head' : 'member';
-      sessionStorage.setItem('aeris_auth_role', role);
-      sessionStorage.setItem('aeris_auth_reg', regNum);
+      safeSession.setItem('aeris_auth_role', role);
+      safeSession.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
       if (regNum === JET_REG) document.body.classList.add('jet-theme');
       showGrantedMessage(role, regNum);
@@ -495,12 +532,12 @@
     // Task helpers
     function getTasks() {
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch { return []; }
+        return JSON.parse(safeLocal.getItem(STORAGE_KEY)) || [];
+      } catch (e) { return []; }
     }
 
     function saveTasks(tasks) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      safeLocal.setItem(STORAGE_KEY, JSON.stringify(tasks));
     }
 
     // Department switching
@@ -663,11 +700,11 @@
       return div.innerHTML;
     }
 
-    /* ========== FRENCH LOCALIZATION (251001377 only) ========== */
-    const FRENCH_REG = '251001377';
+    /* ========== FRENCH LOCALIZATION ========== */
+    const FRENCH_REGS = new Set(['251001377', '251011829']);
 
     function isFrenchUser() {
-      return sessionStorage.getItem('aeris_auth_reg') === FRENCH_REG;
+      return FRENCH_REGS.has(safeSession.getItem('aeris_auth_reg'));
     }
 
     function applyFrenchUI() {
@@ -738,7 +775,8 @@
         'col-done': 'Terminé'
       };
       Object.entries(colHeaders).forEach(([id, label]) => {
-        const h3 = document.getElementById(id)?.querySelector('.task-column__header h3');
+        const colEl = document.getElementById(id);
+        const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
         if (h3) h3.textContent = label;
       });
 
@@ -842,7 +880,7 @@
     const JET_REG = '231002350';
 
     function isJetUser() {
-      return sessionStorage.getItem('aeris_auth_reg') === JET_REG;
+      return safeSession.getItem('aeris_auth_reg') === JET_REG;
     }
 
     function getJetSilhouetteSVG(w = 80, h = 40) {
@@ -1215,7 +1253,8 @@
           'col-done': 'Terminé'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
-          const h3 = document.getElementById(id)?.querySelector('.task-column__header h3');
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
           if (h3) h3.textContent = label;
         });
       }
