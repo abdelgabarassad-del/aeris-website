@@ -320,7 +320,7 @@
       '251001377', '251010151', '241003033', '231002350', '251001035',
       '251002119', '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829'
+      '241002229', '231004251', '241000881', '251011829', '7676767766'
     ]);
 
     const ADVISORS = {
@@ -359,7 +359,8 @@
       '221003996': { name: 'ahmed tarek', message: 'malk el gym kolo' },
       '241002229': { name: 'amir abbas', message: 'sba7 el fol' },
       '231004251': { name: 'Adham Ahmed', message: 'bobos 3aml ehhh' },
-      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' }
+      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' },
+      '7676767766': { name: 'Aries Aguilar', message: 'Welcome back, my love Aries 💜✨' }
     };
 
     /* ========== AUTH GATE LOGIC ========== */
@@ -386,6 +387,7 @@
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('duck-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
+      if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -478,6 +480,7 @@
         applyStitchTheme();
         applyDuckTheme();
         applyMickeyTheme();
+        applyLoveTheme();
       }, 600);
     }
 
@@ -543,6 +546,7 @@
       // Apply theme early so auth success has themed styling
       if (regNum === DUCK_REG) document.body.classList.add('duck-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
+      if (regNum === '7676767766') document.body.classList.add('love-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -1120,6 +1124,61 @@
       </svg>`;
     }
 
+    /* ========== LOVE THEME (7676767766 only) ========== */
+    const LOVE_REG = '7676767766';
+
+    function isLoveUser() {
+      return safeSession.getItem('aeris_auth_reg') === LOVE_REG;
+    }
+
+    function applyLoveTheme() {
+      if (!isLoveUser()) {
+        document.body.classList.remove('love-theme');
+        document.querySelectorAll('.love-heart-container, .love-bubble, .love-deco, .love-heading-decoration').forEach(el => el.remove());
+        if (window.loveHeartsInterval) {
+          clearInterval(window.loveHeartsInterval);
+          window.loveHeartsInterval = null;
+        }
+        return;
+      }
+
+      document.body.classList.add('love-theme');
+
+      // Customize welcome banner icon to be a big pulsing heart
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#c084fc" stroke="#a855f7" stroke-width="1.5" class="heart-pulse"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+        }
+      }
+
+      // Customize page title for Love Theme
+      const pageTitle = document.querySelector('.page-title');
+      if (pageTitle && !document.querySelector('.love-heading-decoration')) {
+        pageTitle.insertAdjacentHTML('beforebegin', `<div class="love-heading-decoration">💖💘💝</div>`);
+      }
+
+      // Create a floating hearts overlay
+      if (!document.querySelector('.love-heart-container')) {
+        const heartContainer = document.createElement('div');
+        heartContainer.className = 'love-heart-container';
+        document.body.appendChild(heartContainer);
+
+        // Periodically spawn floating hearts
+        window.loveHeartsInterval = setInterval(() => {
+          const heart = document.createElement('div');
+          heart.className = 'love-deco floating-heart';
+          heart.style.left = Math.random() * 95 + 'vw';
+          heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+          heart.style.animationDuration = Math.random() * 4 + 3 + 's';
+          heart.innerHTML = ['💜', '💖', '💝', '💕', '💘'][Math.floor(Math.random() * 5)];
+          heartContainer.appendChild(heart);
+          setTimeout(() => heart.remove(), 7000);
+        }, 600);
+      }
+    }
+
     function applyStitchTheme() {
       // Revert/clean up any remaining Stitch elements
       document.body.classList.remove('stitch-theme');
@@ -1532,6 +1591,39 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isLoveUser()) {
+         const priorityLabels = { low: '💜 Soft Love', medium: '💖 Sweet Love', high: '💝 Deep Love', urgent: '💘 Eternal Love' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start love task">▶ Love Start</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Complete love task">✓ Love Done</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">${escapeHtml(task.title)} 💜</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isMickeyUser()) {
          const priorityLabels = { low: '🐭 Basse', medium: '🐭 Moyenne', high: '🐭 Haute', urgent: '🏰 Urgente' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
