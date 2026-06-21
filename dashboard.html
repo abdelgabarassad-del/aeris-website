@@ -351,7 +351,7 @@
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
       '231012588': { name: 'judy samer', message: 'hi' },
       '241002278': { name: 'Marwan mohamed elghazaly', message: 'howa el ghazaly' },
-      '251003016': { name: 'hana moataz', message: 'kidnapper el 2atats 3amlah eh' },
+      '251003016': { name: 'Hana Moataz', message: '🎉 Wishing you the happiest of birthdays, Hana! 🎂🎈' },
       '231012318': { name: 'omar abdeslam atwan', message: 'kolha fi el a5r 62 sanah' },
       '231003587': { name: 'amr mohamed el ghazaly', message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
       '231010429': { name: 'abdelrahman aly', message: 'boda ezayak' },
@@ -388,6 +388,7 @@
       if (sessionReg === '231002350') document.body.classList.add('duck-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
+      if (sessionReg === '251003016') document.body.classList.add('birthday-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -481,6 +482,7 @@
         applyDuckTheme();
         applyMickeyTheme();
         applyLoveTheme();
+        applyBirthdayTheme();
       }, 600);
     }
 
@@ -547,6 +549,7 @@
       if (regNum === DUCK_REG) document.body.classList.add('duck-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
+      if (regNum === '251003016') document.body.classList.add('birthday-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -1179,6 +1182,74 @@
       }
     }
 
+    /* ========== BIRTHDAY THEME (251003016 only) ========== */
+    const BDAY_REG = '251003016';
+
+    function isBirthdayUser() {
+      return safeSession.getItem('aeris_auth_reg') === BDAY_REG;
+    }
+
+    function applyBirthdayTheme() {
+      if (!isBirthdayUser()) {
+        document.body.classList.remove('birthday-theme');
+        document.querySelectorAll('.birthday-confetti-container, .birthday-deco, .birthday-heading-decoration').forEach(el => el.remove());
+        if (window.birthdayBalloonsInterval) {
+          clearInterval(window.birthdayBalloonsInterval);
+          window.birthdayBalloonsInterval = null;
+        }
+        return;
+      }
+
+      document.body.classList.add('birthday-theme');
+
+      // Customize welcome banner icon to be a cake wiggling
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" class="cake-wiggle"><path d="M12 2v10M18 8H6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8z"/><path d="M6 8a3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></svg>`;
+        }
+      }
+
+      // Customize page title for Birthday Theme
+      const pageTitle = document.querySelector('.page-title');
+      if (pageTitle && !document.querySelector('.birthday-heading-decoration')) {
+        pageTitle.insertAdjacentHTML('beforebegin', `<div class="birthday-heading-decoration">🎈🎂🎁🎉</div>`);
+      }
+
+      // Create a confetti and balloons overlay
+      if (!document.querySelector('.birthday-confetti-container')) {
+        const container = document.createElement('div');
+        container.className = 'birthday-confetti-container';
+        document.body.appendChild(container);
+
+        // Spawn falling confetti
+        for (let i = 0; i < 40; i++) {
+          const confetti = document.createElement('span');
+          confetti.className = 'birthday-deco confetti-particle';
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.background = ['#fbbf24', '#f59e0b', '#ef4444', '#ec4899', '#a855f7', '#3b82f6', '#10b981'][Math.floor(Math.random() * 7)];
+          confetti.style.width = Math.random() * 8 + 6 + 'px';
+          confetti.style.height = Math.random() * 14 + 10 + 'px';
+          confetti.style.animationDelay = Math.random() * 5 + 's';
+          confetti.style.animationDuration = Math.random() * 3 + 3 + 's';
+          container.appendChild(confetti);
+        }
+
+        // Periodically spawn floating balloons
+        window.birthdayBalloonsInterval = setInterval(() => {
+          const balloon = document.createElement('div');
+          balloon.className = 'birthday-deco floating-balloon';
+          balloon.style.left = Math.random() * 90 + 'vw';
+          balloon.style.fontSize = Math.random() * 25 + 20 + 'px';
+          balloon.style.animationDuration = Math.random() * 5 + 4 + 's';
+          balloon.innerHTML = ['🎈', '🎁', '🎉', '🎂'][Math.floor(Math.random() * 4)];
+          container.appendChild(balloon);
+          setTimeout(() => balloon.remove(), 9000);
+        }, 1200);
+      }
+    }
+
     function applyStitchTheme() {
       // Revert/clean up any remaining Stitch elements
       document.body.classList.remove('stitch-theme');
@@ -1591,6 +1662,39 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isBirthdayUser()) {
+         const priorityLabels = { low: '🎈 Birthday Treat', medium: '🎁 Present', high: '🎂 Big Celebration', urgent: '🎉 PARTY TIME' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start task">▶ Unbox</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Mark done">✓ Celebrate</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🎈 ${escapeHtml(task.title)} 🎂</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isLoveUser()) {
          const priorityLabels = { low: '💜 Soft Love', medium: '💖 Sweet Love', high: '💝 Deep Love', urgent: '💘 Eternal Love' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
