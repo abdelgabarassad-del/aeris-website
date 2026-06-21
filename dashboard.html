@@ -952,6 +952,9 @@
       document.querySelectorAll('.task-card__delete').forEach(btn => {
         btn.addEventListener('click', handleTaskDelete);
       });
+      document.querySelectorAll('.task-card').forEach(card => {
+        card.addEventListener('click', handleCardClick);
+      });
     }
 
     function taskCard(task) {
@@ -988,18 +991,6 @@
           </div>
         </div>
       `;
-    }
-
-    // Attach card event listeners
-      document.querySelectorAll('.task-card__action').forEach(btn => {
-        btn.addEventListener('click', handleTaskAction);
-      });
-      document.querySelectorAll('.task-card__delete').forEach(btn => {
-        btn.addEventListener('click', handleTaskDelete);
-      });
-      document.querySelectorAll('.task-card').forEach(card => {
-        card.addEventListener('click', handleCardClick);
-      });
     }
 
     function handleCardClick(e) {
