@@ -239,6 +239,60 @@
         <p>Tasks uploaded by team heads will appear here. Switch to <strong>Team Head</strong> role to create tasks.</p>
       </div>
 
+      <!-- ========== TASK DETAILS & FEEDBACK MODAL ========== -->
+      <div class="task-modal" id="task-modal" style="display: none;">
+        <div class="task-modal__overlay" id="task-modal-overlay"></div>
+        <div class="task-modal__content">
+          <button class="task-modal__close" id="task-modal-close" aria-label="Close modal">&times;</button>
+          
+          <div class="task-modal__header">
+            <span class="task-modal__dept-badge" id="modal-task-dept">Department</span>
+            <span class="task-modal__priority-badge" id="modal-task-priority">Priority</span>
+            <span class="task-modal__approved-badge" id="modal-task-approved-badge" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Approved by Advisor
+            </span>
+          </div>
+          
+          <h2 class="task-modal__title" id="modal-task-title">Task Title</h2>
+          <p class="task-modal__desc" id="modal-task-desc">Task Description</p>
+          
+          <div class="task-modal__meta">
+            <span class="task-meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Deadline: <strong id="modal-task-deadline">-</strong>
+            </span>
+          </div>
+          
+          <hr class="modal-divider">
+          
+          <!-- Feedback Section -->
+          <div class="modal-feedback-section">
+            <h3>Advisor Reviews &amp; Feedback</h3>
+            <div class="modal-feedback-list" id="modal-feedback-list">
+              <!-- Comments will go here -->
+            </div>
+            
+            <!-- Add Review Form (Only visible to AUTHORIZED_REVIEWERS) -->
+            <div class="modal-feedback-form" id="modal-feedback-form" style="display: none;">
+              <h4>Add Technical Review &amp; Evaluation</h4>
+              <textarea id="modal-feedback-input" rows="3" placeholder="Enter evaluation comments or advisory feedback here..."></textarea>
+              
+              <div class="modal-feedback-form__actions">
+                <label class="approve-checkbox-wrapper">
+                  <input type="checkbox" id="modal-approve-checkbox">
+                  <span class="custom-checkbox"></span>
+                  <span>Approve task completion</span>
+                </label>
+                <button class="btn-primary" id="modal-feedback-submit">
+                  Submit Review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -329,6 +383,10 @@
       '5970': { name: 'Professor Alaa Ossman', title: 'Professor & Academic Advisor' },
       '5550': { name: 'Eng. Mohamad Ashraf', title: 'Mentor & Engineering Advisor' }
     };
+
+    const AUTHORIZED_REVIEWERS = new Set([
+      '8383', '9749', '5970', '5550', '231002350'
+    ]);
 
     const PERSONAL_GREETINGS = {
       '251001377': { name: 'Hannah Ahmed', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
@@ -913,9 +971,10 @@
       const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
 
       return `
-        <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+        <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
           <div class="task-card__top">
             <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+            ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
             ${deleteBtn}
           </div>
           <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
@@ -931,7 +990,25 @@
       `;
     }
 
+    // Attach card event listeners
+      document.querySelectorAll('.task-card__action').forEach(btn => {
+        btn.addEventListener('click', handleTaskAction);
+      });
+      document.querySelectorAll('.task-card__delete').forEach(btn => {
+        btn.addEventListener('click', handleTaskDelete);
+      });
+      document.querySelectorAll('.task-card').forEach(card => {
+        card.addEventListener('click', handleCardClick);
+      });
+    }
+
+    function handleCardClick(e) {
+      const taskId = e.currentTarget.dataset.id;
+      openTaskModal(taskId);
+    }
+
     function handleTaskAction(e) {
+      e.stopPropagation();
       const id = e.currentTarget.dataset.id;
       const action = e.currentTarget.dataset.action;
       const tasks = getTasks();
@@ -944,6 +1021,7 @@
     }
 
     function handleTaskDelete(e) {
+      e.stopPropagation();
       const id = e.currentTarget.dataset.id;
       let tasks = getTasks();
       tasks = tasks.filter(t => t.id !== id);
@@ -956,6 +1034,219 @@
       div.textContent = str;
       return div.innerHTML;
     }
+
+    /* ========== TASK DETAILS & FEEDBACK MODAL LOGIC ========== */
+    let activeTaskId = null;
+
+    const taskModal = document.getElementById('task-modal');
+    const taskModalOverlay = document.getElementById('task-modal-overlay');
+    const taskModalClose = document.getElementById('task-modal-close');
+    const modalTaskDept = document.getElementById('modal-task-dept');
+    const modalTaskPriority = document.getElementById('modal-task-priority');
+    const modalTaskApprovedBadge = document.getElementById('modal-task-approved-badge');
+    const modalTaskTitle = document.getElementById('modal-task-title');
+    const modalTaskDesc = document.getElementById('modal-task-desc');
+    const modalTaskDeadline = document.getElementById('modal-task-deadline');
+    const modalFeedbackList = document.getElementById('modal-feedback-list');
+    const modalFeedbackForm = document.getElementById('modal-feedback-form');
+    const modalFeedbackInput = document.getElementById('modal-feedback-input');
+    const modalApproveCheckbox = document.getElementById('modal-approve-checkbox');
+    const modalFeedbackSubmit = document.getElementById('modal-feedback-submit');
+
+    function openTaskModal(taskId) {
+      const tasks = getTasks();
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      activeTaskId = taskId;
+
+      // Populate basic info
+      modalTaskTitle.textContent = task.title;
+      modalTaskDesc.textContent = task.description || (isFrenchUser() ? 'Aucune description fournie.' : 'No description provided.');
+      
+      // Capitalize department
+      const deptLabels = {
+        'mechanical': isFrenchUser() ? 'Mécanique' : 'Mechanical',
+        'electrical': isFrenchUser() ? 'Électrique' : 'Electrical',
+        'software': isFrenchUser() ? 'Logiciel' : 'Software',
+        'non-technical': isFrenchUser() ? 'Non-Technique' : 'Non-Technical'
+      };
+      modalTaskDept.textContent = deptLabels[task.department] || task.department;
+      modalTaskDept.className = `task-modal__dept-badge task-modal__dept-badge--${task.department}`;
+
+      // Priority translation/labels
+      const priorityLabels = {
+        low: isFrenchUser() ? 'Basse' : 'Low',
+        medium: isFrenchUser() ? 'Moyenne' : 'Medium',
+        high: isFrenchUser() ? 'Haute' : 'High',
+        urgent: isFrenchUser() ? 'Urgente' : 'Urgent'
+      };
+      modalTaskPriority.textContent = priorityLabels[task.priority] || task.priority;
+      modalTaskPriority.className = `task-modal__priority-badge task-modal__priority-badge--${task.priority}`;
+
+      // Show/hide approved badge
+      if (task.isApproved) {
+        modalTaskApprovedBadge.style.display = 'inline-flex';
+        if (isFrenchUser()) {
+          modalTaskApprovedBadge.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approuvé par l'Advisor`;
+        } else {
+          modalTaskApprovedBadge.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approved by Advisor`;
+        }
+      } else {
+        modalTaskApprovedBadge.style.display = 'none';
+      }
+
+      // Format deadline
+      if (task.deadline) {
+        const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+        modalTaskDeadline.textContent = new Date(task.deadline).toLocaleDateString(isFrenchUser() ? 'fr-FR' : 'en-US', dateOptions);
+      } else {
+        modalTaskDeadline.textContent = isFrenchUser() ? 'Aucune date limite' : 'No deadline';
+      }
+
+      // Render feedback reviews list
+      renderModalReviews(task);
+
+      // Check access permission for feedback form
+      const regNum = safeSession.getItem('aeris_auth_reg');
+      if (AUTHORIZED_REVIEWERS.has(regNum)) {
+        modalFeedbackForm.style.display = 'block';
+        modalFeedbackInput.value = '';
+        modalApproveCheckbox.checked = false;
+        // Make sure the approve checkbox label makes sense based on state
+        if (task.isApproved) {
+          modalApproveCheckbox.disabled = true;
+          const labelSpan = modalApproveCheckbox.parentNode.querySelector('span:last-child');
+          if (labelSpan) labelSpan.textContent = isFrenchUser() ? 'Déjà approuvé' : 'Already approved';
+        } else {
+          modalApproveCheckbox.disabled = false;
+          const labelSpan = modalApproveCheckbox.parentNode.querySelector('span:last-child');
+          if (labelSpan) labelSpan.textContent = isFrenchUser() ? 'Approuver la tâche' : 'Approve task completion';
+        }
+      } else {
+        modalFeedbackForm.style.display = 'none';
+      }
+
+      // Show modal
+      taskModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // prevent page scroll
+    }
+
+    function closeTaskModal() {
+      taskModal.style.display = 'none';
+      document.body.style.overflow = '';
+      activeTaskId = null;
+    }
+
+    function renderModalReviews(task) {
+      const reviews = task.reviews || [];
+      if (reviews.length === 0) {
+        modalFeedbackList.innerHTML = `
+          <div class="feedback-list__empty">
+            <p>${isFrenchUser() ? "Aucun commentaire ou avis n'a été ajouté." : "No reviews or feedback comments have been submitted yet."}</p>
+          </div>
+        `;
+        return;
+      }
+
+      modalFeedbackList.innerHTML = reviews.map(rev => {
+        const dateStr = new Date(rev.createdAt).toLocaleDateString(isFrenchUser() ? 'fr-FR' : 'en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+
+        // Determine if reviewer is faculty (professors or mentor) or CEO
+        const isCEO = rev.authorRole === 'Project Founder & CEO' || rev.authorRole.includes('CEO');
+        const badgeClass = isCEO ? 'feedback-card__badge--ceo' : 'feedback-card__badge--faculty';
+        const approvalBadge = rev.isApproval ? `
+          <span class="feedback-card__approval-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ${isFrenchUser() ? 'Approuvé' : 'Approved Task'}
+          </span>
+        ` : '';
+
+        return `
+          <div class="feedback-card ${rev.isApproval ? 'feedback-card--approved' : ''}">
+            <div class="feedback-card__header">
+              <div class="feedback-card__author-info">
+                <strong class="feedback-card__author">${escapeHtml(rev.authorName)}</strong>
+                <span class="feedback-card__badge ${badgeClass}">${escapeHtml(rev.authorRole)}</span>
+              </div>
+              <span class="feedback-card__date">${dateStr}</span>
+            </div>
+            <div class="feedback-card__content">${escapeHtml(rev.content).replace(/\n/g, '<br>')}</div>
+            ${approvalBadge}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function submitReview() {
+      if (!activeTaskId) return;
+      const content = modalFeedbackInput.value.trim();
+      if (!content) {
+        modalFeedbackInput.focus();
+        modalFeedbackInput.style.borderColor = '#f87171';
+        setTimeout(() => modalFeedbackInput.style.borderColor = '', 2000);
+        return;
+      }
+
+      const regNum = safeSession.getItem('aeris_auth_reg');
+      if (!AUTHORIZED_REVIEWERS.has(regNum)) return;
+
+      let authorName = 'Authorized Reviewer';
+      let authorRole = 'Advisor';
+
+      const advisor = ADVISORS[regNum];
+      if (advisor) {
+        authorName = advisor.name;
+        authorRole = advisor.title;
+      } else if (regNum === '231002350') {
+        authorName = 'Abduljabar Asaad';
+        authorRole = 'Project Founder & CEO';
+      }
+
+      const tasks = getTasks();
+      const task = tasks.find(t => t.id === activeTaskId);
+      if (task) {
+        task.reviews = task.reviews || [];
+        const isApproval = modalApproveCheckbox.checked;
+
+        task.reviews.push({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          authorName,
+          authorRole,
+          content,
+          createdAt: new Date().toISOString(),
+          isApproval
+        });
+
+        if (isApproval) {
+          task.isApproved = true;
+        }
+
+        saveTasks(tasks);
+        renderTasks();
+
+        // Refresh modal content immediately
+        openTaskModal(activeTaskId);
+      }
+    }
+
+    // Modal action bindings
+    if (taskModalClose) taskModalClose.addEventListener('click', closeTaskModal);
+    if (taskModalOverlay) taskModalOverlay.addEventListener('click', closeTaskModal);
+    if (modalFeedbackSubmit) modalFeedbackSubmit.addEventListener('click', submitReview);
+
+    // Escape key closes modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && taskModal && taskModal.style.display === 'flex') {
+        closeTaskModal();
+      }
+    });
 
     /* ========== FRENCH LOCALIZATION ========== */
     const FRENCH_REGS = new Set(['251001377', '251011829']);
@@ -1677,9 +1968,10 @@
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
 
          return `
-           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
              <div class="task-card__top">
                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
                ${deleteBtn}
              </div>
              <h4 class="task-card__title">🎈 ${escapeHtml(task.title)} 🎂</h4>
@@ -1710,9 +2002,10 @@
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
 
          return `
-           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
              <div class="task-card__top">
                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
                ${deleteBtn}
              </div>
              <h4 class="task-card__title">${escapeHtml(task.title)} 💜</h4>
@@ -1743,9 +2036,10 @@
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
 
          return `
-           <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
              <div class="task-card__top">
                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approuvé</span>` : ''}
                ${deleteBtn}
              </div>
              <h4 class="task-card__title">${escapeHtml(task.title)} ✨</h4>
@@ -1776,9 +2070,10 @@
         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
 
         return `
-          <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+          <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
             <div class="task-card__top">
               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+              ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approuvé</span>` : ''}
               ${deleteBtn}
             </div>
             <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
@@ -1809,9 +2104,10 @@
         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
 
         return `
-          <div class="task-card task-card--${task.priority}" id="task-${task.id}">
+          <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
             <div class="task-card__top">
               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+              ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
               ${deleteBtn}
             </div>
             <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
