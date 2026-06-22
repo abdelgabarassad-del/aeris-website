@@ -2703,29 +2703,131 @@ body.spongebob-theme {
 
 /* Columns overrides */
 .spongebob-theme .task-column {
-  background: rgba(0, 137, 123, 0.25) !important;
-  border: 3.5px solid #000 !important;
-  box-shadow: 5px 5px 0 #000 !important;
+  border: 4.5px solid #000 !important;
+  box-shadow: 7px 7px 0 #000 !important;
   border-radius: 20px !important;
   padding: 16px !important;
+  position: relative !important;
+}
+
+/* 1. Todo Column: Jellyfish Fields */
+.spongebob-theme #col-todo {
+  background: linear-gradient(180deg, #4fc3f7 0%, #a5d6a7 70%, #d7ccc8 100%) !important;
+}
+.spongebob-theme #col-todo::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10px;
+  width: 40px; height: 120px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 120'><path d='M20,120 Q10,90 20,60 T20,0' fill='none' stroke='%232e7d32' stroke-width='6' stroke-linecap='round'/><path d='M20,120 Q30,90 20,60 T20,0' fill='none' stroke='%234caf50' stroke-width='3' stroke-linecap='round'/></svg>") no-repeat bottom;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+.spongebob-theme #col-todo::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 10px;
+  width: 40px; height: 100px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100'><path d='M20,100 Q30,75 20,50 T20,0' fill='none' stroke='%231b5e20' stroke-width='5' stroke-linecap='round'/><path d='M20,100 Q10,75 20,50 T20,0' fill='none' stroke='%2381c784' stroke-width='2.5' stroke-linecap='round'/></svg>") no-repeat bottom;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 2. Progress Column: Krusty Krab */
+.spongebob-theme #col-progress {
+  background: #8d6e63 !important; /* Wood brown */
+  background-image: 
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0, 0, 0, 0.15) 40px, rgba(0, 0, 0, 0.15) 42px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.15)) !important;
+  border-color: #4e342e !important;
+}
+.spongebob-theme #col-progress::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 25px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 25' preserveAspectRatio='none'><path d='M0,2 Q50,10 100,2 T200,2' fill='none' stroke='%23000' stroke-width='2'/><polygon points='10,4 25,20 40,4' fill='%23ff1744' stroke='%23000' stroke-width='1.5'/><polygon points='50,5 65,22 80,5' fill='%23ffea00' stroke='%23000' stroke-width='1.5'/><polygon points='90,5 105,20 120,5' fill='%2300e5ff' stroke='%23000' stroke-width='1.5'/><polygon points='130,5 145,22 160,5' fill='%23ff1744' stroke='%23000' stroke-width='1.5'/><polygon points='170,4 185,20 200,4' fill='%23ffea00' stroke='%23000' stroke-width='1.5'/></svg>") repeat-x top;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 3. Done Column: Squidward's House */
+.spongebob-theme #col-done {
+  background: #37474f !important; /* Deep basalt blue-gray */
+  background-image: 
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(0, 0, 0, 0.1) 30px, rgba(0, 0, 0, 0.1) 32px) !important;
+  border-color: #212121 !important;
+}
+.spongebob-theme #col-done::before {
+  content: '';
+  position: absolute;
+  top: 40px; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 60px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><circle cx='30' cy='30' r='25' fill='%2300e5ff' stroke='%23000' stroke-width='3'/><circle cx='30' cy='30' r='18' fill='%23e0f7fa'/><line x1='5' y1='30' x2='55' y2='30' stroke='%23000' stroke-width='2'/><line x1='30' y1='5' x2='30' y2='55' stroke='%23000' stroke-width='2'/></svg>") no-repeat center;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Column Sign Headers styled as hanging wooden signs */
+.spongebob-theme .task-column__header {
+  background: #a1887f !important; /* Wood sign background */
+  border: 3.5px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.spongebob-theme .task-column__header::before {
+  content: '';
+  position: absolute;
+  top: -16px; left: 25%;
+  width: 6px; height: 18px;
+  background: repeating-linear-gradient(0deg, #8d6e63, #8d6e63 3px, #4e342e 3px, #4e342e 6px);
+  border: 1.5px solid #000;
+  border-radius: 2px;
+  z-index: 1;
+}
+.spongebob-theme .task-column__header::after {
+  content: '';
+  position: absolute;
+  top: -16px; right: 25%;
+  width: 6px; height: 18px;
+  background: repeating-linear-gradient(0deg, #8d6e63, #8d6e63 3px, #4e342e 3px, #4e342e 6px);
+  border: 1.5px solid #000;
+  border-radius: 2px;
+  z-index: 1;
 }
 
 /* Task Cards overrides */
 .spongebob-theme .task-card {
   background: #fffbeb !important;
-  border: 3.5px solid #000 !important;
+  background-image: 
+    radial-gradient(circle at 12% 20%, rgba(255, 235, 59, 0.2) 8px, transparent 8px),
+    radial-gradient(circle at 85% 42%, rgba(255, 235, 59, 0.2) 11px, transparent 11px),
+    radial-gradient(circle at 45% 72%, rgba(255, 235, 59, 0.15) 7px, transparent 7px) !important;
+  background-color: #fffde7 !important;
+  border: 4.5px solid #000 !important;
   box-shadow: 6px 6px 0 #000 !important;
   border-radius: 18px !important;
   color: #1c0524 !important;
   transition: transform 0.2s, box-shadow 0.2s;
   backdrop-filter: blur(4px);
+  z-index: 2 !important;
 }
 
 .spongebob-theme .task-card:hover {
-  transform: translateY(-4px) rotate(1deg) !important;
+  transform: translateY(-5px) rotate(-1deg) scale(1.02) !important;
   box-shadow: 8px 8px 0 #ffe135 !important;
   border-color: #000 !important;
-  background: #fffbeb !important;
 }
 
 /* Custom priority border accents */
@@ -3111,6 +3213,83 @@ body.spongebob-theme {
   50% { transform: scale(6.5); opacity: 1; }
   90% { opacity: 1; }
   100% { transform: scale(0); opacity: 0; }
+}
+
+/* SpongeBob Theme Custom Spatula Cursor */
+.spongebob-theme, 
+.spongebob-theme * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><path d='M6,42 L20,28' stroke='%235c4033' stroke-width='4' stroke-linecap='round'/><path d='M6,42 L20,28' stroke='%238b5a2b' stroke-width='2' stroke-linecap='round'/><path d='M19,29 L23,25' stroke='%2337474f' stroke-width='5' stroke-linecap='round'/><path d='M21,27 L31,17' stroke='%23b0bec5' stroke-width='3' stroke-linecap='round'/><path d='M21,27 L31,17' stroke='%23ffffff' stroke-width='1' stroke-linecap='round'/><polygon points='28,20 38,10 44,16 34,26' fill='%23cfd8dc' stroke='%23000000' stroke-width='2'/><line x1='32' y1='22' x2='37' y2='17' stroke='%23000000' stroke-width='1.5'/><line x1='29.5' y1='19.5' x2='34.5' y2='14.5' stroke='%23000000' stroke-width='1.5'/><line x1='34.5' y1='24.5' x2='39.5' y2='19.5' stroke='%23000000' stroke-width='1.5'/></svg>") 38 10, auto !important;
+}
+
+/* Jellyfish hover zapping wiggle styles */
+@keyframes jellyZap {
+  0% { transform: scale(1) skewX(0deg); filter: drop-shadow(0 0 8px rgba(255, 111, 145, 0.5)); }
+  20% { transform: scale(1.25) skewX(-12deg) rotate(-5deg); filter: drop-shadow(0 0 25px #ffe135) brightness(1.6); }
+  40% { transform: scale(0.8) skewX(12deg) rotate(5deg); filter: drop-shadow(0 0 35px #ffe135) brightness(2.3); }
+  60% { transform: scale(1.2) skewX(-6deg) rotate(-2deg); filter: drop-shadow(0 0 20px #ffe135) brightness(1.7); }
+  80% { transform: scale(0.85) skewX(6deg) rotate(2deg); filter: drop-shadow(0 0 30px #ffe135) brightness(2); }
+  100% { transform: scale(1) skewX(0deg); filter: drop-shadow(0 0 8px rgba(255, 111, 145, 0.5)); }
+}
+.spongebob-theme .floating-jelly.zapping svg {
+  animation: jellyZap 0.3s ease-in-out infinite !important;
+}
+
+/* Bubble splash on click */
+.spongebob-bubble-particle-splash {
+  position: fixed;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(0, 162, 232, 0.2) 60%, rgba(0, 162, 232, 0.8) 100%);
+  border-radius: 50%;
+  box-shadow: inset -1px -1px 3px rgba(255, 255, 255, 0.5), 0 0 5px rgba(0, 162, 232, 0.3);
+  pointer-events: none;
+  z-index: 100000;
+}
+@keyframes bubbleSplash {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Custom Scrollbars cartoon styling */
+.spongebob-theme::-webkit-scrollbar {
+  width: 12px;
+  background-color: #0288d1;
+}
+.spongebob-theme::-webkit-scrollbar-track {
+  background: #0288d1;
+  border-left: 3.5px solid #000;
+}
+.spongebob-theme::-webkit-scrollbar-thumb {
+  background-color: #ffe135;
+  border: 3.5px solid #000;
+  border-radius: 6px;
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.15);
+}
+.spongebob-theme::-webkit-scrollbar-thumb:hover {
+  background-color: #ffeb3b;
+}
+
+/* Side Seaweed Framing Overlay */
+.spongebob-side-seaweed {
+  position: fixed;
+  bottom: 0;
+  width: 70px;
+  height: 65vh;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: drop-shadow(2px 2px 0 #000);
+}
+.spongebob-side-seaweed.left {
+  left: 0;
+}
+.spongebob-side-seaweed.right {
+  right: 0;
+  transform: scaleX(-1);
 }
 
 /* ---------- Task Details & Feedback Modal ---------- */
