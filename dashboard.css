@@ -2341,28 +2341,38 @@ body.love-theme {
 }
 
 .love-theme .experimental-banner__icon {
-  background: rgba(244, 114, 182, .15) !important;
-  color: #f472b6 !important;
+@media (max-width: 768px) {
+  .news-section {
+    padding: 24px 20px;
+    margin-bottom: 32px;
+  }
+  .news-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+  }
+  .news-card {
+    padding: 18px;
+  }
 }
 
 
-/* ========== CELEBRATORY HAPPY BIRTHDAY THEME STYLES ========== */
-body.birthday-theme {
-  --bg-primary: #1c0524;
-  --bg-secondary: #2b0537;
-  --bg-card: #3b0a4b;
-  --accent: #fbbf24; /* golden celebration */
-  --accent-dim: #f59e0b;
-  --accent-glow: rgba(251, 191, 36, 0.25);
-  background: #1c0524;
+/* ========== SUPER HEAVY LOVE THEME STYLES ========== */
+body.love-theme {
+  --bg-primary: #12001a;
+  --bg-secondary: #1e002d;
+  --bg-card: #27003c;
+  --accent: #f472b6; /* vibrant soft pink */
+  --accent-dim: #ec4899; /* pink-500 */
+  --accent-glow: rgba(244, 114, 182, 0.25);
+  background: #12001a;
   background-image:
-    radial-gradient(ellipse 600px 400px at 50% 30%, rgba(251, 191, 36, .15) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 80% 70%, rgba(236, 72, 153, .12) 0%, transparent 60%);
-  color: #fffbeb;
+    radial-gradient(ellipse 600px 400px at 50% 30%, rgba(168, 85, 247, .15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 20% 70%, rgba(236, 72, 153, .1) 0%, transparent 60%);
+  color: #f5f3ff;
 }
 
-/* Confetti & Balloons Container */
-.birthday-confetti-container {
+/* Floating Hearts Container */
+.love-heart-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -2370,179 +2380,560 @@ body.birthday-theme {
   overflow: hidden;
 }
 
-.confetti-particle {
+.floating-heart {
   position: absolute;
-  top: -20px;
-  opacity: 0.8;
-  border-radius: 2px;
-  animation: fall 5s linear infinite;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(105vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-.floating-balloon {
-  position: absolute;
-  bottom: -60px;
+  bottom: -50px;
   opacity: 0;
-  animation: riseUp 7s linear infinite;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  animation: floatUp 6s linear infinite;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
 }
 
-@keyframes riseUp {
+@keyframes floatUp {
   0% {
-    transform: translateY(0) translateX(0) scale(0.7);
+    transform: translateY(0) translateX(0) scale(0.6);
     opacity: 0;
   }
-  15% {
-    opacity: 0.9;
+  10% {
+    opacity: 0.85;
   }
-  85% {
-    opacity: 0.9;
+  90% {
+    opacity: 0.85;
   }
   100% {
-    transform: translateY(-105vh) translateX(50px) scale(1.3);
+    transform: translateY(-105vh) translateX(40px) scale(1.2);
     opacity: 0;
   }
 }
 
-/* Welcome Banner welcome-banner overrides in birthday-theme */
-.birthday-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(59, 10, 75, 0.6) 100%) !important;
-  border-color: rgba(251, 191, 36, 0.3) !important;
-  box-shadow: 0 0 25px rgba(251, 191, 36, 0.2) !important;
+/* Welcome Banner welcome-banner overrides in love-theme */
+.love-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(168, 85, 247, .15) 0%, rgba(39, 0, 60, .5) 100%) !important;
+  border-color: rgba(168, 85, 247, .3) !important;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.15) !important;
 }
 
-.birthday-theme .welcome-banner__icon {
-  background: rgba(251, 191, 36, 0.18) !important;
-  color: #fbbf24 !important;
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3) !important;
+.love-theme .welcome-banner__icon {
+  background: rgba(168, 85, 247, .18) !important;
+  color: #c084fc !important;
+  box-shadow: 0 0 15px rgba(168, 85, 247, .3) !important;
 }
 
-/* Cake wiggle keyframes */
-@keyframes cakeWiggle {
-  0% { transform: scale(0.95) rotate(-3deg); }
-  100% { transform: scale(1.1) rotate(3deg); }
+/* Pulsing welcome icon */
+@keyframes heartPulse {
+  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.4)); }
+  100% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8)); }
 }
 
-.birthday-theme .cake-wiggle {
-  animation: cakeWiggle 0.6s infinite alternate ease-in-out;
+.love-theme .heart-pulse {
+  animation: heartPulse 0.8s infinite alternate cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Page title decorations */
-.birthday-heading-decoration {
+.love-heading-decoration {
   text-align: center;
   font-size: 2.2rem;
   margin-bottom: 8px;
-  animation: cakeWiggle 1.5s ease-in-out infinite alternate;
+  animation: loveWobble 2s ease-in-out infinite alternate;
+}
+
+@keyframes loveWobble {
+  from { transform: scale(0.9) rotate(-4deg); }
+  to { transform: scale(1.1) rotate(4deg); }
 }
 
 /* Task Cards overrides */
-.birthday-theme .task-card {
-  background: rgba(59, 10, 75, 0.7) !important;
-  border: 1px solid rgba(251, 191, 36, 0.15) !important;
+.love-theme .task-card {
+  background: rgba(39, 0, 60, 0.7) !important;
+  border: 1px solid rgba(244, 114, 182, 0.15) !important;
   border-radius: var(--radius-lg) !important;
 }
 
-.birthday-theme .task-card:hover {
-  border-color: #fbbf24 !important;
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.25) !important;
-  background: rgba(59, 10, 75, 0.85) !important;
+.love-theme .task-card:hover {
+  border-color: #f472b6 !important;
+  box-shadow: 0 0 20px rgba(244, 114, 182, 0.3) !important;
+  background: rgba(39, 0, 60, 0.85) !important;
 }
 
-/* Custom priority border accents */
-.birthday-theme .task-card--low { border-left: 4px solid #3b82f6 !important; }
-.birthday-theme .task-card--medium { border-left: 4px solid #fbbf24 !important; }
-.birthday-theme .task-card--high { border-left: 4px solid #ec4899 !important; }
-.birthday-theme .task-card--urgent { 
-  border-left: 4px solid #ef4444 !important;
-  animation: bdayUrgentPulse 1.5s infinite alternate !important;
+/* Task Priority Border Colors */
+.love-theme .task-card--low { border-left: 4px solid #c084fc !important; }
+.love-theme .task-card--medium { border-left: 4px solid #a855f7 !important; }
+.love-theme .task-card--high { border-left: 4px solid #ec4899 !important; }
+.love-theme .task-card--urgent { 
+  border-left: 4px solid #db2777 !important; 
+  animation: loveCardUrgentPulse 1.5s infinite alternate !important;
 }
 
-@keyframes bdayUrgentPulse {
-  0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.3); }
-  100% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.6); }
+@keyframes loveCardUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(219, 39, 119, 0.3); }
+  100% { box-shadow: 0 0 18px rgba(219, 39, 119, 0.6); }
 }
 
 /* Task Buttons overrides */
-.birthday-theme .task-card__action {
-  background: #fbbf24 !important;
-  color: #1c0524 !important;
+.love-theme .task-card__action {
+  background: #a855f7 !important;
+  color: #fff !important;
   border: none !important;
   font-weight: 700 !important;
   border-radius: 20px !important;
-  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2) !important;
+  box-shadow: 0 4px 10px rgba(168, 85, 247, 0.25) !important;
 }
 
-.birthday-theme .task-card__action:hover {
-  background: #ec4899 !important;
-  color: #fff !important;
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.45) !important;
+.love-theme .task-card__action:hover {
+  background: #db2777 !important;
+  box-shadow: 0 4px 15px rgba(219, 39, 119, 0.45) !important;
   transform: scale(1.05) !important;
 }
 
-/* News Section overrides in birthday theme */
-.birthday-theme .news-section {
-  background: rgba(59, 10, 75, 0.4) !important;
-  border-color: rgba(251, 191, 36, 0.15) !important;
+/* News Section overrides in love theme */
+.love-theme .news-section {
+  background: rgba(39, 0, 60, 0.4) !important;
+  border-color: rgba(244, 114, 182, 0.15) !important;
 }
 
-.birthday-theme .news-card {
-  background: rgba(59, 10, 75, 0.5) !important;
-  border-color: rgba(251, 191, 36, 0.08) !important;
+.love-theme .news-card {
+  background: rgba(39, 0, 60, 0.5) !important;
+  border-color: rgba(244, 114, 182, 0.08) !important;
 }
 
-.birthday-theme .news-card:hover {
-  background: rgba(59, 10, 75, 0.75) !important;
-  border-color: rgba(251, 191, 36, 0.25) !important;
+.love-theme .news-card:hover {
+  background: rgba(39, 0, 60, 0.75) !important;
+  border-color: rgba(244, 114, 182, 0.25) !important;
 }
 
-/* Active department tabs in birthday theme */
-.birthday-theme .dept-tab.active[data-dept="mechanical"] {
-  border-color: #fbbf24 !important;
-  background: rgba(251, 191, 36, 0.15) !important;
-  color: #fbbf24 !important;
+/* Active department tabs in love theme */
+.love-theme .dept-tab.active[data-dept="mechanical"] {
+  border-color: #c084fc !important;
+  background: rgba(192, 132, 252, 0.15) !important;
+  color: #d8b4fe !important;
 }
-.birthday-theme .dept-tab.active[data-dept="electrical"] {
-  border-color: #ec4899 !important;
-  background: rgba(236, 72, 153, 0.15) !important;
-  color: #ec4899 !important;
+.love-theme .dept-tab.active[data-dept="electrical"] {
+  border-color: #f472b6 !important;
+  background: rgba(244, 114, 182, 0.15) !important;
+  color: #fbcfe8 !important;
 }
-.birthday-theme .dept-tab.active[data-dept="software"] {
-  border-color: #3b82f6 !important;
-  background: rgba(59, 130, 246, 0.15) !important;
-  color: #3b82f6 !important;
+.love-theme .dept-tab.active[data-dept="software"] {
+  border-color: #818cf8 !important;
+  background: rgba(129, 140, 248, 0.15) !important;
+  color: #c7d2fe !important;
 }
-.birthday-theme .dept-tab.active[data-dept="non-technical"] {
-  border-color: #10b981 !important;
-  background: rgba(16, 185, 129, 0.15) !important;
-  color: #10b981 !important;
+.love-theme .dept-tab.active[data-dept="non-technical"] {
+  border-color: #f43f5e !important;
+  background: rgba(244, 63, 94, 0.15) !important;
+  color: #fecdd3 !important;
 }
 
 /* Theme input/form overrides */
-.birthday-theme input:focus,
-.birthday-theme textarea:focus,
-.birthday-theme select:focus {
+.love-theme input:focus,
+.love-theme textarea:focus,
+.love-theme select:focus {
   border-color: var(--accent) !important;
   box-shadow: 0 0 12px var(--accent-glow) !important;
 }
 
-.birthday-theme .experimental-banner {
-  background: linear-gradient(135deg, rgba(251, 191, 36, .12) 0%, rgba(30, 5, 38, .6) 100%) !important;
-  border-bottom: 1px solid rgba(251, 191, 36, .25) !important;
+.love-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(244, 114, 182, .12) 0%, rgba(30, 0, 45, .6) 100%) !important;
+  border-bottom: 1px solid rgba(244, 114, 182, .25) !important;
 }
 
-.birthday-theme .experimental-banner__icon {
-  background: rgba(251, 191, 36, .15) !important;
-  color: #fbbf24 !important;
+.love-theme .experimental-banner__icon {
+  background: rgba(244, 114, 182, .15) !important;
+  color: #f472b6 !important;
+}
+
+
+/* ========== THE CRUSTACEOUS SPONGEBOB THEME STYLES ========== */
+body.spongebob-theme {
+  --bg-primary: #0b4c73; /* Under the sea deep blue */
+  --bg-secondary: #0f2b46;
+  --bg-card: rgba(16, 76, 115, 0.65);
+  --accent: #ffe135; /* SpongeBob yellow */
+  --accent-dim: #f5b041; /* Warm yellow/orange */
+  --accent-glow: rgba(255, 225, 53, 0.3);
+  background: #0f2b46;
+  background-image:
+    radial-gradient(ellipse 700px 500px at 50% 30%, rgba(0, 162, 232, 0.2) 0%, transparent 80%),
+    radial-gradient(ellipse 500px 400px at 20% 70%, rgba(255, 225, 53, 0.08) 0%, transparent 70%);
+  color: #e0f7fa;
+}
+
+/* Wiggling pineapple welcome icon */
+@keyframes pineappleWiggle {
+  0% { transform: scale(0.95) rotate(-4deg); }
+  100% { transform: scale(1.1) rotate(4deg); }
+}
+.spongebob-theme .spongebob-pine {
+  animation: pineappleWiggle 0.8s infinite alternate ease-in-out;
+}
+
+/* Floating Jellyfish animation */
+.floating-jelly {
+  position: fixed;
+  bottom: -90px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: floatJelly 9s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 111, 145, 0.4));
+}
+
+@keyframes floatJelly {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-115vh) translateX(60px) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+.spongebob-theme .spongebob-jelly path {
+  animation: tentaclesWave 1.2s infinite alternate ease-in-out;
+}
+@keyframes tentaclesWave {
+  0% { transform: scaleX(0.9) skewX(-2deg); }
+  100% { transform: scaleX(1.1) skewX(2deg); }
+}
+
+/* Floating bubble animation */
+.spongebob-bubble-particle {
+  position: absolute;
+  bottom: -30px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.85) 0%, rgba(0, 162, 232, 0.2) 60%, rgba(0, 162, 232, 0.6) 100%);
+  border-radius: 50%;
+  box-shadow: inset -2px -2px 6px rgba(255, 255, 255, 0.5), 0 0 8px rgba(0, 162, 232, 0.3);
+  pointer-events: none;
+  z-index: 1;
+  animation: bubbleRise 6s ease-in infinite;
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% {
+    transform: translateY(-110vh) translateX(30px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Sky clouds rotation */
+.spongebob-flower svg {
+  animation: spinFlower 30s linear infinite;
+}
+@keyframes spinFlower {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Welcome Banner welcome-banner overrides in spongebob-theme */
+.spongebob-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(0, 162, 232, 0.2) 0%, rgba(11, 76, 115, 0.7) 100%) !important;
+  border-color: rgba(0, 162, 232, 0.4) !important;
+  box-shadow: 0 0 25px rgba(0, 162, 232, 0.25) !important;
+}
+
+.spongebob-theme .welcome-banner__icon {
+  background: rgba(255, 225, 53, 0.15) !important;
+  box-shadow: 0 0 15px rgba(255, 225, 53, 0.25) !important;
+}
+
+/* Heading Decorations */
+.spongebob-deco-heading {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  animation: pineappleWiggle 2s ease-in-out infinite alternate;
+}
+
+/* Task Cards overrides */
+.spongebob-theme .task-card {
+  background: rgba(11, 76, 115, 0.5) !important;
+  border: 1px solid rgba(0, 162, 232, 0.25) !important;
+  border-radius: var(--radius-lg) !important;
+  backdrop-filter: blur(4px);
+}
+
+.spongebob-theme .task-card:hover {
+  border-color: #ffe135 !important;
+  box-shadow: 0 0 20px rgba(255, 225, 53, 0.2) !important;
+  background: rgba(11, 76, 115, 0.7) !important;
+}
+
+/* Custom priority border accents */
+.spongebob-theme .task-card--low { border-left: 4px solid #4db6ac !important; }
+.spongebob-theme .task-card--medium { border-left: 4px solid #ffe135 !important; }
+.spongebob-theme .task-card--high { border-left: 4px solid #ff8a65 !important; }
+.spongebob-theme .task-card--urgent { 
+  border-left: 4px solid #ff5252 !important;
+  animation: sbUrgentPulse 1.5s infinite alternate !important;
+}
+
+@keyframes sbUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(255, 82, 82, 0.3); }
+  100% { box-shadow: 0 0 18px rgba(255, 82, 82, 0.6); }
+}
+
+/* Task Buttons overrides */
+.spongebob-theme .task-card__action {
+  background: #ffe135 !important;
+  color: #0f2b46 !important;
+  border: none !important;
+  font-weight: 800 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 10px rgba(255, 225, 53, 0.25) !important;
+}
+
+.spongebob-theme .task-card__action:hover {
+  background: #ff7043 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(255, 112, 67, 0.45) !important;
+  transform: scale(1.05) !important;
+}
+
+/* News Section overrides in spongebob theme */
+.spongebob-theme .news-section {
+  background: rgba(11, 76, 115, 0.3) !important;
+  border-color: rgba(0, 162, 232, 0.25) !important;
+}
+
+.spongebob-theme .news-card {
+  background: rgba(11, 76, 115, 0.4) !important;
+  border-color: rgba(0, 162, 232, 0.15) !important;
+}
+
+.spongebob-theme .news-card:hover {
+  background: rgba(11, 76, 115, 0.55) !important;
+  border-color: rgba(255, 225, 53, 0.2) !important;
+}
+
+/* Active department tabs in spongebob theme */
+.spongebob-theme .dept-tab.active[data-dept="mechanical"] {
+  border-color: #ffe135 !important;
+  background: rgba(255, 225, 53, 0.15) !important;
+  color: #ffe135 !important;
+}
+.spongebob-theme .dept-tab.active[data-dept="electrical"] {
+  border-color: #4db6ac !important;
+  background: rgba(77, 182, 172, 0.15) !important;
+  color: #4db6ac !important;
+}
+.spongebob-theme .dept-tab.active[data-dept="software"] {
+  border-color: #60a5fa !important;
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #60a5fa !important;
+}
+.spongebob-theme .dept-tab.active[data-dept="non-technical"] {
+  border-color: #ff8a65 !important;
+  background: rgba(255, 138, 101, 0.15) !important;
+  color: #ff8a65 !important;
+}
+
+/* Theme input/form overrides */
+.spongebob-theme input:focus,
+.spongebob-theme textarea:focus,
+.spongebob-theme select:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 12px var(--accent-glow) !important;
+}
+
+.spongebob-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(0, 162, 232, 0.12) 0%, rgba(15, 43, 70, 0.7) 100%) !important;
+  border-bottom: 1px solid rgba(0, 162, 232, 0.25) !important;
+}
+
+.spongebob-theme .experimental-banner__icon {
+  background: rgba(0, 162, 232, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+/* Warning Banner */
+.spongebob-caution {
+  background: #ffb300;
+  border: 2px solid #ff8f00;
+  color: #1a1a1a;
+  text-align: center;
+  padding: 8px 12px;
+  font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin-top: 15px;
+  border-radius: 8px;
+  animation: sbCautionBlink 1s infinite alternate;
+  box-shadow: 0 4px 15px rgba(255, 179, 0, 0.2);
+}
+@keyframes sbCautionBlink {
+  0% { opacity: 0.9; transform: scale(0.99); }
+  100% { opacity: 1; transform: scale(1.01); }
+}
+
+/* Telemetry display tapes */
+.spongebob-telemetry-left,
+.spongebob-telemetry-right {
+  position: fixed;
+  top: 140px;
+  width: 175px;
+  background: rgba(15, 43, 70, 0.85);
+  border: 1.5px solid #00a2e8;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #00e5ff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  z-index: 10;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+.spongebob-telemetry-left {
+  left: 20px;
+  border-left: 3px solid #ffe135;
+}
+.spongebob-telemetry-right {
+  right: 20px;
+  border-right: 3px solid #ffe135;
+}
+
+.spongebob-telemetry-left div,
+.spongebob-telemetry-right div {
+  margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.2);
+  padding-bottom: 4px;
+}
+.spongebob-telemetry-left div:last-child,
+.spongebob-telemetry-right div:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.spongebob-telemetry-left .tape-val,
+.spongebob-telemetry-right .tape-val {
+  font-weight: bold;
+  color: #ffe135;
+}
+
+@media (max-width: 1200px) {
+  .spongebob-telemetry-left,
+  .spongebob-telemetry-right {
+    display: none;
+  }
+}
+
+/* Floating Spatula Button Container */
+.spatula-btn-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 10005;
+}
+
+.spatula-btn-container svg {
+  cursor: pointer;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: spatulaFloat 2s ease-in-out infinite alternate;
+}
+.spatula-btn-container svg:hover {
+  transform: scale(1.15) rotate(15deg);
+  filter: drop-shadow(0 6px 12px rgba(255, 225, 53, 0.4));
+}
+
+@keyframes spatulaFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* Dialogue bubble above Spatula */
+.spongebob-bubble {
+  position: absolute;
+  bottom: 80px;
+  right: 10px;
+  background: #fffbeb;
+  border: 3.5px solid #ffe135;
+  border-radius: 18px;
+  padding: 14px 20px;
+  width: 250px;
+  color: #0f2b46;
+  font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 15px rgba(255, 225, 53, 0.2);
+  z-index: 10006;
+  display: none;
+}
+.spongebob-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: 22px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: #fffbeb transparent;
+  display: block;
+  width: 0;
+}
+.spongebob-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  border-width: 18px 18px 0 0;
+  border-style: solid;
+  border-color: #ffe135 transparent;
+  display: block;
+  width: 0;
+}
+.spongebob-bubble.show {
+  display: block;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* Full screen Bubble wipe animation overlay */
+.spongebob-bubble-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  pointer-events: none;
+  display: none;
+}
+.spongebob-bubble-wipe.active {
+  display: block;
+}
+
+.spongebob-bubble-wipe .wipe-bubble {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95) 0%, rgba(135, 206, 250, 0.6) 45%, rgba(30, 144, 255, 0.95) 100%);
+  border-radius: 50%;
+  box-shadow: inset -10px -10px 25px rgba(0, 0, 0, 0.12), 0 0 25px rgba(30, 144, 255, 0.5);
+  transform: scale(0);
+  margin-left: -110px;
+  margin-top: -110px;
+}
+
+.spongebob-bubble-wipe.active .wipe-bubble {
+  animation: wipeScale 1s cubic-bezier(0.77, 0, 0.175, 1) both;
+}
+
+@keyframes wipeScale {
+  0% { transform: scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: scale(6.5); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
 }
 
 /* ---------- Task Details & Feedback Modal ---------- */
@@ -3020,24 +3411,24 @@ body.birthday-theme {
   border-color: rgba(236, 72, 153, 0.25) !important;
 }
 
-/* Birthday Theme overrides */
-.birthday-theme .task-modal__content {
-  background: rgba(50, 10, 68, 0.98) !important;
-  border-color: rgba(251, 191, 36, 0.25) !important;
-  box-shadow: 0 0 40px rgba(251, 191, 36, 0.25) !important;
+/* Spongebob Theme overrides */
+.spongebob-theme .task-modal__content {
+  background: rgba(15, 43, 70, 0.98) !important;
+  border-color: rgba(255, 225, 53, 0.25) !important;
+  box-shadow: 0 0 40px rgba(255, 225, 53, 0.25) !important;
 }
-.birthday-theme .task-modal__overlay {
-  background: rgba(30, 5, 45, 0.8) !important;
+.spongebob-theme .task-modal__overlay {
+  background: rgba(15, 25, 35, 0.8) !important;
 }
-.birthday-theme .task-modal__close:hover {
-  color: #fbbf24 !important;
+.spongebob-theme .task-modal__close:hover {
+  color: #ffe135 !important;
 }
-.birthday-theme .modal-feedback-form textarea:focus {
-  border-color: #fbbf24 !important;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.35) !important;
+.spongebob-theme .modal-feedback-form textarea:focus {
+  border-color: #ffe135 !important;
+  box-shadow: 0 0 10px rgba(255, 225, 53, 0.35) !important;
 }
-.birthday-theme .task-card__approved-pill {
-  background: rgba(251, 191, 36, 0.15) !important;
-  color: #fbbf24 !important;
-  border-color: rgba(251, 191, 36, 0.25) !important;
+.spongebob-theme .task-card__approved-pill {
+  background: rgba(255, 225, 53, 0.15) !important;
+  color: #ffe135 !important;
+  border-color: rgba(255, 225, 53, 0.25) !important;
 }

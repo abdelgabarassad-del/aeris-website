@@ -409,7 +409,7 @@
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
       '231012588': { name: 'judy samer', message: 'hi' },
       '241002278': { name: 'Marwan mohamed elghazaly', message: 'howa el ghazaly' },
-      '251003016': { name: 'Hana Moataz', message: '🎉 Wishing you the happiest of birthdays, Hana! 🎂🎈' },
+      '251003016': { name: 'Hana Moataz', message: '🍍 Wishing you the F.U.N.-est of birthdays, Hana! 💛🌊' },
       '231012318': { name: 'omar abdeslam atwan', message: 'kolha fi el a5r 62 sanah' },
       '231003587': { name: 'amr mohamed el ghazaly', message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
       '231010429': { name: 'abdelrahman aly', message: 'boda ezayak' },
@@ -446,7 +446,7 @@
       if (sessionReg === '231002350') document.body.classList.add('duck-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
-      if (sessionReg === '251003016') document.body.classList.add('birthday-theme');
+      if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -540,7 +540,7 @@
         applyDuckTheme();
         applyMickeyTheme();
         applyLoveTheme();
-        applyBirthdayTheme();
+        applySpongebobTheme();
       }, 600);
     }
 
@@ -607,7 +607,7 @@
       if (regNum === DUCK_REG) document.body.classList.add('duck-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
-      if (regNum === '251003016') document.body.classList.add('birthday-theme');
+      if (regNum === '251003016') document.body.classList.add('spongebob-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -1510,71 +1510,349 @@
       }
     }
 
-    /* ========== BIRTHDAY THEME (251003016 only) ========== */
-    const BDAY_REG = '251003016';
+    /* ========== SPONGEBOB THEME (251003016 only) ========== */
+    const SPONGEBOB_REG = '251003016';
 
-    function isBirthdayUser() {
-      return safeSession.getItem('aeris_auth_reg') === BDAY_REG;
+    function isSpongebobUser() {
+      return safeSession.getItem('aeris_auth_reg') === SPONGEBOB_REG;
     }
 
-    function applyBirthdayTheme() {
-      if (!isBirthdayUser()) {
-        document.body.classList.remove('birthday-theme');
-        document.querySelectorAll('.birthday-confetti-container, .birthday-deco, .birthday-heading-decoration').forEach(el => el.remove());
-        if (window.birthdayBalloonsInterval) {
-          clearInterval(window.birthdayBalloonsInterval);
-          window.birthdayBalloonsInterval = null;
+    function getPineappleSVG(size = 48) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="${size}" height="${size}" class="spongebob-pine">
+        <path d="M 50,40 Q 30,10 20,20 Q 35,35 50,40 Z" fill="#2d7e35" stroke="#1c5520" stroke-width="1.5"/>
+        <path d="M 50,40 Q 50,5 40,10 Q 45,30 50,40 Z" fill="#3cb043" stroke="#1c5520" stroke-width="1.5"/>
+        <path d="M 50,40 Q 70,10 80,20 Q 65,35 50,40 Z" fill="#2d7e35" stroke="#1c5520" stroke-width="1.5"/>
+        <path d="M 50,40 Q 60,8 55,10 Q 52,30 50,40 Z" fill="#3cb043" stroke="#1c5520" stroke-width="1.5"/>
+        <path d="M 25,75 C 20,110 80,110 75,75 C 75,45 25,45 25,75 Z" fill="#f69b25" stroke="#ac620b" stroke-width="2"/>
+        <path d="M 30,55 C 40,75 60,95 70,100 M 35,48 C 50,70 65,90 73,85 M 27,65 C 35,80 50,95 60,103" fill="none" stroke="#ac620b" stroke-width="1.2" opacity="0.6"/>
+        <path d="M 70,55 C 60,75 40,95 30,100 M 65,48 C 50,70 35,90 27,85 M 73,65 C 65,80 50,95 40,103" fill="none" stroke="#ac620b" stroke-width="1.2" opacity="0.6"/>
+        <circle cx="50" cy="65" r="8" fill="#5ac0f8" stroke="#1c5574" stroke-width="1.5"/>
+        <circle cx="50" cy="65" r="5" fill="#e0f7fa"/>
+        <path d="M 42,106 L 42,90 C 42,85 58,85 58,90 L 58,106 Z" fill="#8492a6" stroke="#47525e" stroke-width="1.5"/>
+        <circle cx="46" cy="98" r="1" fill="#f1c40f"/>
+        <path d="M 72,60 L 80,55 L 82,59 L 75,64 Z" fill="#8492a6" stroke="#47525e" stroke-width="1"/>
+      </svg>`;
+    }
+
+    function getJellyfishSVG(color = '#ff9ebb', size = 36) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 70" width="${size}" height="${size}" class="spongebob-jelly">
+        <path d="M 10,30 C 10,10 40,10 40,30 C 40,35 10,35 10,30 Z" fill="${color}" opacity="0.85" stroke="#ff6f91" stroke-width="1"/>
+        <ellipse cx="25" cy="30" rx="15" ry="3" fill="${color}"/>
+        <path d="M 15,33 Q 12,45 16,58 Q 18,65 15,70" fill="none" stroke="#ff6f91" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M 25,33 Q 27,48 23,55 Q 21,63 26,70" fill="none" stroke="#ff6f91" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M 35,33 Q 32,45 37,58 Q 34,65 35,70" fill="none" stroke="#ff6f91" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="20" cy="20" r="1.5" fill="#ff4d79"/>
+        <circle cx="28" cy="16" r="2" fill="#ff4d79"/>
+        <circle cx="32" cy="24" r="1.2" fill="#ff4d79"/>
+      </svg>`;
+    }
+
+    function getSpatulaSVG(size = 64) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="spatula-btn">
+        <rect x="47" y="55" width="6" height="35" rx="3" fill="#8B5A2B" stroke="#4a3017" stroke-width="1.5"/>
+        <rect x="44" y="90" width="12" height="6" rx="2" fill="#5C4033" stroke="#4a3017" stroke-width="1.5"/>
+        <path d="M 45,55 L 45,50 L 55,50 L 55,55 Z" fill="#b0bec5" stroke="#37474f" stroke-width="1.5"/>
+        <path d="M 35,25 L 65,25 L 60,50 L 40,50 Z" fill="#cfd8dc" stroke="#37474f" stroke-width="1.5"/>
+        <rect x="42" y="28" width="3" height="15" rx="1" fill="#37474f"/>
+        <rect x="48.5" y="28" width="3" height="15" rx="1" fill="#37474f"/>
+        <rect x="55" y="28" width="3" height="15" rx="1" fill="#37474f"/>
+      </svg>`;
+    }
+
+    function getSkyFlowerSVG(color = '#ff9ebb', size = 120) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="sky-flower">
+        <circle cx="50" cy="30" r="18" fill="${color}" />
+        <circle cx="70" cy="42" r="18" fill="${color}" />
+        <circle cx="62" cy="68" r="18" fill="${color}" />
+        <circle cx="38" cy="68" r="18" fill="${color}" />
+        <circle cx="30" cy="42" r="18" fill="${color}" />
+        <circle cx="50" cy="50" r="14" fill="${color}" />
+      </svg>`;
+    }
+
+    const SPONGEBOB_QUOTES = [
+      "I'm ready! I'm ready! 🍍",
+      "F is for friends who do stuff together, U is for you and me, N is for anywhere at all down here in the deep blue sea! 🎶",
+      "Is mayonnaise an instrument? 🥁",
+      "No, this is Patrick! ☎️",
+      "Can you feel it now, Mr. Krabs? 🦀",
+      "The inner machinations of my mind are an enigma. 🥛",
+      "Imagination! 🌈",
+      "Who lives in a pineapple under the sea? 🧽",
+      "Firmly grasp it! 🪱",
+      "Sweet Victory! 🎺",
+      "Goodbye everyone, I'll remember you all in therapy! 🦠",
+      "I'm ugly and I'm proud! 🧽",
+      "Barnacles! 🪨"
+    ];
+
+    function applySpongebobTheme() {
+      if (!isSpongebobUser()) {
+        document.body.classList.remove('spongebob-theme');
+        document.querySelectorAll('.spongebob-container, .spongebob-deco, .spongebob-flower, .spongebob-telemetry-left, .spongebob-telemetry-right, .spongebob-bubble, .spatula-btn-container, .spongebob-caution, .spongebob-bubble-wipe').forEach(el => el.remove());
+        if (window.spongebobIntervals) {
+          window.spongebobIntervals.forEach(clearInterval);
+          window.spongebobIntervals = null;
         }
         return;
       }
 
-      document.body.classList.add('birthday-theme');
+      document.body.classList.add('spongebob-theme');
 
-      // Customize welcome banner icon to be a cake wiggling
+      // Customize welcome banner icon to be a wiggling pineapple
       const welcomeBanner = document.getElementById('welcome-banner');
       if (welcomeBanner) {
         const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
         if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" class="cake-wiggle"><path d="M12 2v10M18 8H6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8z"/><path d="M6 8a3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></svg>`;
+          welcomeIcon.innerHTML = getPineappleSVG(26);
         }
       }
 
-      // Customize page title for Birthday Theme
+      // Customize page title for SpongeBob Theme
       const pageTitle = document.querySelector('.page-title');
-      if (pageTitle && !document.querySelector('.birthday-heading-decoration')) {
-        pageTitle.insertAdjacentHTML('beforebegin', `<div class="birthday-heading-decoration">🎈🎂🎁🎉</div>`);
+      if (pageTitle && !document.querySelector('.spongebob-deco-heading')) {
+        pageTitle.insertAdjacentHTML('beforebegin', `<div class="spongebob-deco-heading spongebob-deco">🍍🧽🌊🍔</div>`);
       }
 
-      // Create a confetti and balloons overlay
-      if (!document.querySelector('.birthday-confetti-container')) {
+      // Create a background flower/bubble container
+      if (!document.querySelector('.spongebob-container')) {
         const container = document.createElement('div');
-        container.className = 'birthday-confetti-container';
+        container.className = 'spongebob-container';
         document.body.appendChild(container);
 
-        // Spawn falling confetti
-        for (let i = 0; i < 40; i++) {
-          const confetti = document.createElement('span');
-          confetti.className = 'birthday-deco confetti-particle';
-          confetti.style.left = Math.random() * 100 + 'vw';
-          confetti.style.background = ['#fbbf24', '#f59e0b', '#ef4444', '#ec4899', '#a855f7', '#3b82f6', '#10b981'][Math.floor(Math.random() * 7)];
-          confetti.style.width = Math.random() * 8 + 6 + 'px';
-          confetti.style.height = Math.random() * 14 + 10 + 'px';
-          confetti.style.animationDelay = Math.random() * 5 + 's';
-          confetti.style.animationDuration = Math.random() * 3 + 3 + 's';
-          container.appendChild(confetti);
-        }
+        // Add 5 fixed Bikini Bottom sky flowers (with different sizes & gentle spin)
+        const flowerColors = ['#ff9ebb', '#b2ebf2', '#e1bee7', '#ffe0b2', '#c8e6c9'];
+        const flowerPositions = [
+          { top: '8%', left: '8%', size: 100 },
+          { top: '35%', right: '12%', size: 140 },
+          { top: '65%', left: '15%', size: 120 },
+          { top: '80%', right: '8%', size: 110 },
+          { top: '50%', left: '75%', size: 90 }
+        ];
+        flowerPositions.forEach((pos, idx) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'spongebob-flower spongebob-deco';
+          wrapper.style.position = 'fixed';
+          wrapper.style.top = pos.top;
+          if (pos.left) wrapper.style.left = pos.left;
+          if (pos.right) wrapper.style.right = pos.right;
+          wrapper.style.zIndex = '0';
+          wrapper.style.opacity = '0.07';
+          wrapper.style.pointerEvents = 'none';
+          wrapper.style.transform = `rotate(${idx * 45}deg)`;
+          wrapper.innerHTML = getSkyFlowerSVG(flowerColors[idx % flowerColors.length], pos.size);
+          container.appendChild(wrapper);
+        });
 
-        // Periodically spawn floating balloons
-        window.birthdayBalloonsInterval = setInterval(() => {
-          const balloon = document.createElement('div');
-          balloon.className = 'birthday-deco floating-balloon';
-          balloon.style.left = Math.random() * 90 + 'vw';
-          balloon.style.fontSize = Math.random() * 25 + 20 + 'px';
-          balloon.style.animationDuration = Math.random() * 5 + 4 + 's';
-          balloon.innerHTML = ['🎈', '🎁', '🎉', '🎂'][Math.floor(Math.random() * 4)];
-          container.appendChild(balloon);
-          setTimeout(() => balloon.remove(), 9000);
-        }, 1200);
+        // Spawn falling/floating bubbles and jellyfish
+        // Periodically spawn floating jellyfish
+        const jellyInterval = setInterval(() => {
+          const jelly = document.createElement('div');
+          jelly.className = 'spongebob-deco floating-jelly';
+          jelly.style.left = Math.random() * 90 + 'vw';
+          jelly.style.animationDuration = Math.random() * 6 + 6 + 's';
+          const color = ['#ff9ebb', '#a7ffeb', '#e1bee7'][Math.floor(Math.random() * 3)];
+          jelly.innerHTML = getJellyfishSVG(color, Math.random() * 15 + 25);
+          container.appendChild(jelly);
+          setTimeout(() => jelly.remove(), 12000);
+        }, 3000);
+
+        // Periodically spawn bubbles
+        const bubbleInterval = setInterval(() => {
+          const b = document.createElement('span');
+          b.className = 'spongebob-deco spongebob-bubble-particle';
+          b.style.left = Math.random() * 100 + 'vw';
+          b.style.width = Math.random() * 18 + 8 + 'px';
+          b.style.height = b.style.width;
+          b.style.animationDuration = Math.random() * 4 + 4 + 's';
+          container.appendChild(b);
+          setTimeout(() => b.remove(), 8000);
+        }, 600);
+
+        window.spongebobIntervals = [jellyInterval, bubbleInterval];
+      }
+
+      // Blinking Plankton Caution Banner
+      if (!document.querySelector('.spongebob-caution')) {
+        const caution = document.createElement('div');
+        caution.className = 'spongebob-caution';
+        caution.innerHTML = '<span>🚨 WARNING: EVIL PLANKTON SPOTTED NEAR THE KRUSTY KRAB! 🚨</span>';
+        document.body.appendChild(caution);
+      }
+
+      // HUD Tapes - Bikini Bottom Telemetry
+      if (!document.querySelector('.spongebob-telemetry-left')) {
+        const leftTape = document.createElement('div');
+        leftTape.className = 'spongebob-telemetry-left';
+        leftTape.innerHTML = `
+          <div class="tape-bubble">BUBBLE LEVEL <span class="tape-val">94%</span></div>
+          <div class="tape-jelly">JELLY CAUGHT <span class="tape-val">14</span></div>
+          <div class="tape-pat">BRAIN CELL <span class="tape-val">1%</span></div>
+          <div class="tape-pat-status">PATRICK: SLEEPING</div>
+        `;
+        document.body.appendChild(leftTape);
+      }
+
+      if (!document.querySelector('.spongebob-telemetry-right')) {
+        const rightTape = document.createElement('div');
+        rightTape.className = 'spongebob-telemetry-right';
+        rightTape.innerHTML = `
+          <div class="krabby-status">FLIP SPEED: 24/m</div>
+          <div class="squid-mood">SQUIDWARD: ANNOYED</div>
+          <div class="plankton-threat">PLANKTON THREAT: 0.2%</div>
+          <div class="spatula-temp">SPATULA: 375°F</div>
+        `;
+        document.body.appendChild(rightTape);
+      }
+
+      // Real-time telemetry simulation interval
+      const leftTapeEl = document.querySelector('.spongebob-telemetry-left');
+      const rightTapeEl = document.querySelector('.spongebob-telemetry-right');
+      if (leftTapeEl && rightTapeEl) {
+        let pattiesFlipped = 142;
+        let jellyfishCount = 14;
+        
+        const simInterval = setInterval(() => {
+          const bubbleVal = leftTapeEl.querySelector('.tape-bubble .tape-val');
+          if (bubbleVal) {
+            bubbleVal.textContent = (Math.random() * 10 + 89).toFixed(0) + '%';
+          }
+          
+          const jellyVal = leftTapeEl.querySelector('.tape-jelly .tape-val');
+          if (jellyVal && Math.random() > 0.7) {
+            jellyfishCount++;
+            jellyVal.textContent = jellyfishCount;
+          }
+
+          const patVal = leftTapeEl.querySelector('.tape-pat .tape-val');
+          const patStatus = leftTapeEl.querySelector('.tape-pat-status');
+          if (patVal && patStatus) {
+            const hasBrain = Math.random() > 0.85;
+            patVal.textContent = hasBrain ? '2%' : '1%';
+            patStatus.innerHTML = hasBrain 
+              ? 'PATRICK: <span style="color:#60a5fa">THINKING!</span>' 
+              : 'PATRICK: SLEEPING';
+          }
+          
+          const krabbyVal = rightTapeEl.querySelector('.krabby-status');
+          if (krabbyVal) {
+            if (Math.random() > 0.5) pattiesFlipped += Math.floor(Math.random() * 3);
+            krabbyVal.textContent = `FLIPPED: ${pattiesFlipped} PATTIES`;
+          }
+
+          const squidVal = rightTapeEl.querySelector('.squid-mood');
+          if (squidVal) {
+            const moods = ['ANNOYED', 'VERY ANNOYED', 'PLAYING CLARINET', 'LAZY', 'READING'];
+            squidVal.textContent = 'SQUID: ' + moods[Math.floor(Math.random() * moods.length)];
+          }
+
+          const planktonVal = rightTapeEl.querySelector('.plankton-threat');
+          if (planktonVal) {
+            planktonVal.textContent = `PLANKTON: ${(Math.random() * 5).toFixed(1)}% THREAT`;
+          }
+
+          const spatulaVal = rightTapeEl.querySelector('.spatula-temp');
+          if (spatulaVal) {
+            spatulaVal.textContent = `SPATULA: ${(375 + Math.random() * 10 - 5).toFixed(0)}°F`;
+          }
+        }, 1500);
+
+        if (!window.spongebobIntervals) window.spongebobIntervals = [];
+        window.spongebobIntervals.push(simInterval);
+      }
+
+      // Bubble transition wipe element
+      if (!document.querySelector('.spongebob-bubble-wipe')) {
+        const wipe = document.createElement('div');
+        wipe.className = 'spongebob-bubble-wipe';
+        wipe.id = 'spongebob-bubble-wipe';
+        for (let i = 0; i < 25; i++) {
+          const wb = document.createElement('div');
+          wb.className = 'wipe-bubble';
+          wb.style.left = (Math.random() * 100) + 'vw';
+          wb.style.top = (Math.random() * 100) + 'vh';
+          wb.style.animationDelay = (Math.random() * 0.2) + 's';
+          wipe.appendChild(wb);
+        }
+        document.body.appendChild(wipe);
+      }
+
+      // Floating Spatula Button & dialogue bubble - bottom right
+      if (!document.querySelector('.spatula-btn-container')) {
+        const container = document.createElement('div');
+        container.className = 'spatula-btn-container';
+        
+        const dialogue = document.createElement('div');
+        dialogue.className = 'spongebob-bubble';
+        dialogue.id = 'spongebob-quote-bubble';
+        dialogue.textContent = "I'm ready! 🍍";
+        
+        const spatulaBtn = document.createElement('div');
+        spatulaBtn.innerHTML = getSpatulaSVG(56);
+        
+        container.appendChild(dialogue);
+        container.appendChild(spatulaBtn);
+        document.body.appendChild(container);
+
+        spatulaBtn.addEventListener('click', () => {
+          const wipe = document.getElementById('spongebob-bubble-wipe');
+          if (wipe) {
+            wipe.classList.add('active');
+            
+            setTimeout(() => {
+              const randQuote = SPONGEBOB_QUOTES[Math.floor(Math.random() * SPONGEBOB_QUOTES.length)];
+              dialogue.textContent = randQuote;
+              dialogue.classList.add('show');
+            }, 500);
+
+            setTimeout(() => {
+              wipe.classList.remove('active');
+            }, 1000);
+
+            setTimeout(() => {
+              dialogue.classList.remove('show');
+            }, 6000);
+          }
+        });
+      }
+
+      // Customize task form headers for SpongeBob
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Krusty Krab Duty');
+      }
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = 'Duty / Activity Name';
+      const inputTaskTitle = document.getElementById('task-title');
+      if (inputTaskTitle) inputTaskTitle.placeholder = 'Flipping patties, jellyfishing...';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = 'Duty Details & Instructions';
+      const inputTaskDesc = document.getElementById('task-description');
+      if (inputTaskDesc) inputTaskDesc.placeholder = 'Provide specific instructions for Bikini Bottom...';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = 'Duty Urgency Level';
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🍍 Jellyfishing (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🍔 Krabby Patty Duty (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '⚓ Boating School (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🌈 SWEET VICTORY! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = 'Target Completion Time';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Log Duty');
       }
     }
 
@@ -1990,16 +2268,16 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
-       if (isBirthdayUser()) {
-         const priorityLabels = { low: '🎈 Birthday Treat', medium: '🎁 Present', high: '🎂 Big Celebration', urgent: '🎉 PARTY TIME' };
+       if (isSpongebobUser()) {
+         const priorityLabels = { low: '🍍 Jellyfishing', medium: '🍔 Krabby Patty Duty', high: '⚓ Boating School', urgent: '🌈 SWEET VICTORY!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
 
          let actions = '';
          if (task.status === 'todo') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start task">▶ Unbox</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start task">▶ I'm Ready!</button>`;
          } else if (task.status === 'progress') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Mark done">✓ Celebrate</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Mark done">✓ Sweet Victory!</button>`;
          }
 
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
@@ -2011,7 +2289,7 @@
                ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
                ${deleteBtn}
              </div>
-             <h4 class="task-card__title">🎈 ${escapeHtml(task.title)} 🎂</h4>
+             <h4 class="task-card__title">🌊 ${escapeHtml(task.title)} 🍍</h4>
              ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
              <div class="task-card__footer">
                ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
