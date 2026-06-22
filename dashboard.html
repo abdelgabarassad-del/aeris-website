@@ -1711,7 +1711,7 @@
     function applySpongebobTheme() {
       if (!isSpongebobUser()) {
         document.body.classList.remove('spongebob-theme');
-        document.querySelectorAll('.spongebob-container, .spongebob-deco, .spongebob-flower, .spongebob-telemetry-left, .spongebob-telemetry-right, .spongebob-bubble, .spatula-btn-container, .spongebob-caution, .spongebob-bubble-wipe, .patrick-btn-container, .bikini-bottom-landscape').forEach(el => el.remove());
+        document.querySelectorAll('.spongebob-container, .spongebob-deco, .spongebob-flower, .spongebob-telemetry-left, .spongebob-telemetry-right, .spongebob-bubble, .spatula-btn-container, .spongebob-caution, .spongebob-bubble-wipe, .patrick-btn-container, .bikini-bottom-landscape, .spongebob-side-seaweed').forEach(el => el.remove());
         if (window.spongebobIntervals) {
           window.spongebobIntervals.forEach(clearInterval);
           window.spongebobIntervals = null;
@@ -1752,11 +1752,6 @@
         if (h3) h3.textContent = label;
       });
 
-      // Inject Bikini Bottom Conch street houses landscape at bottom
-      if (!document.querySelector('.bikini-bottom-landscape')) {
-        document.body.insertAdjacentHTML('beforeend', getBikiniBottomLandscapeHTML());
-      }
-
       // Create a background flower/bubble container
       if (!document.querySelector('.spongebob-container')) {
         const container = document.createElement('div');
@@ -1787,8 +1782,7 @@
           container.appendChild(wrapper);
         });
 
-        // Spawn falling/floating bubbles and jellyfish
-        // Periodically spawn floating jellyfish
+        // Spawn falling/floating bubbles and jellyfish (purely visual background elements)
         const jellyInterval = setInterval(() => {
           const jelly = document.createElement('div');
           jelly.className = 'spongebob-deco floating-jelly';
@@ -1797,20 +1791,9 @@
           const color = ['#ff9ebb', '#a7ffeb', '#e1bee7'][Math.floor(Math.random() * 3)];
           jelly.innerHTML = getJellyfishSVG(color, Math.random() * 15 + 25);
           container.appendChild(jelly);
-          
-          // Hover shock wiggle effect and synthesized sound!
-          jelly.addEventListener('mouseenter', () => {
-            jelly.classList.add('zapping');
-            playSpongebobZapSound();
-            setTimeout(() => {
-              jelly.classList.remove('zapping');
-            }, 600);
-          });
-
           setTimeout(() => jelly.remove(), 12000);
         }, 3000);
 
-        // Periodically spawn bubbles
         const bubbleInterval = setInterval(() => {
           const b = document.createElement('span');
           b.className = 'spongebob-deco spongebob-bubble-particle';
@@ -1823,282 +1806,6 @@
         }, 600);
 
         window.spongebobIntervals = [jellyInterval, bubbleInterval];
-      }
-
-      // Hook click event for audio pops and pop-on-click bubble mechanics
-      if (!window.spongebobClickListener) {
-        window.spongebobClickListener = function(e) {
-          if (isSpongebobUser()) {
-            if (e.target.classList.contains('spongebob-bubble-particle')) {
-              e.target.style.transform = 'scale(1.8)';
-              e.target.style.opacity = '0';
-              setTimeout(() => e.target.remove(), 150);
-            }
-            playSpongebobBubbleSound();
-            createBubbleSplash(e.clientX, e.clientY);
-          }
-        };
-        document.addEventListener('click', window.spongebobClickListener);
-      }
-
-      // Inject side seaweed overlays
-      if (!document.querySelector('.spongebob-side-seaweed')) {
-        const leftSeaweed = document.createElement('div');
-        leftSeaweed.className = 'spongebob-side-seaweed left spongebob-deco';
-        leftSeaweed.innerHTML = `
-          <svg viewBox="0 0 60 400" width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M 20,400 Q 40,300 20,200 T 30,0" fill="none" stroke="#1b5e20" stroke-width="14" stroke-linecap="round"/>
-            <path d="M 20,400 Q 40,300 20,200 T 30,0" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/>
-            <path d="M 40,400 Q 15,280 35,160 T 15,0" fill="none" stroke="#1b5e20" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 40,400 Q 15,280 35,160 T 15,0" fill="none" stroke="#4caf50" stroke-width="5" stroke-linecap="round"/>
-          </svg>
-        `;
-        document.body.appendChild(leftSeaweed);
-
-        const rightSeaweed = document.createElement('div');
-        rightSeaweed.className = 'spongebob-side-seaweed right spongebob-deco';
-        rightSeaweed.innerHTML = `
-          <svg viewBox="0 0 60 400" width="100%" height="100%" preserveAspectRatio="none">
-            <path d="M 20,400 Q 40,300 20,200 T 30,0" fill="none" stroke="#1b5e20" stroke-width="14" stroke-linecap="round"/>
-            <path d="M 20,400 Q 40,300 20,200 T 30,0" fill="none" stroke="#2e7d32" stroke-width="8" stroke-linecap="round"/>
-            <path d="M 40,400 Q 15,280 35,160 T 15,0" fill="none" stroke="#1b5e20" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 40,400 Q 15,280 35,160 T 15,0" fill="none" stroke="#4caf50" stroke-width="5" stroke-linecap="round"/>
-          </svg>
-        `;
-        document.body.appendChild(rightSeaweed);
-      }
-
-      // Blinking Plankton Caution Banner
-      if (!document.querySelector('.spongebob-caution')) {
-        const caution = document.createElement('div');
-        caution.className = 'spongebob-caution';
-        caution.innerHTML = '<span>🚨 WARNING: EVIL PLANKTON SPOTTED NEAR THE KRUSTY KRAB! 🚨</span>';
-        document.body.appendChild(caution);
-      }
-
-      // HUD Tapes - Bikini Bottom Telemetry
-      if (!document.querySelector('.spongebob-telemetry-left')) {
-        const leftTape = document.createElement('div');
-        leftTape.className = 'spongebob-telemetry-left';
-        leftTape.innerHTML = `
-          <div class="tape-bubble">BUBBLE LEVEL <span class="tape-val">94%</span></div>
-          <div class="tape-jelly">JELLY CAUGHT <span class="tape-val">14</span></div>
-          <div class="tape-pat">BRAIN CELL <span class="tape-val">1%</span></div>
-          <div class="tape-pat-status">PATRICK: SLEEPING</div>
-        `;
-        document.body.appendChild(leftTape);
-      }
-
-      if (!document.querySelector('.spongebob-telemetry-right')) {
-        const rightTape = document.createElement('div');
-        rightTape.className = 'spongebob-telemetry-right';
-        rightTape.innerHTML = `
-          <div class="krabby-status">FLIP SPEED: 24/m</div>
-          <div class="squid-mood">SQUIDWARD: ANNOYED</div>
-          <div class="plankton-threat">PLANKTON THREAT: 0.2%</div>
-          <div class="spatula-temp">SPATULA: 375°F</div>
-        `;
-        document.body.appendChild(rightTape);
-      }
-
-      // Real-time telemetry simulation interval
-      const leftTapeEl = document.querySelector('.spongebob-telemetry-left');
-      const rightTapeEl = document.querySelector('.spongebob-telemetry-right');
-      if (leftTapeEl && rightTapeEl) {
-        let pattiesFlipped = 142;
-        let jellyfishCount = 14;
-        
-        const simInterval = setInterval(() => {
-          const bubbleVal = leftTapeEl.querySelector('.tape-bubble .tape-val');
-          if (bubbleVal) {
-            bubbleVal.textContent = (Math.random() * 10 + 89).toFixed(0) + '%';
-          }
-          
-          const jellyVal = leftTapeEl.querySelector('.tape-jelly .tape-val');
-          if (jellyVal && Math.random() > 0.7) {
-            jellyfishCount++;
-            jellyVal.textContent = jellyfishCount;
-          }
-
-          const patVal = leftTapeEl.querySelector('.tape-pat .tape-val');
-          const patStatus = leftTapeEl.querySelector('.tape-pat-status');
-          if (patVal && patStatus) {
-            const hasBrain = Math.random() > 0.85;
-            patVal.textContent = hasBrain ? '2%' : '1%';
-            patStatus.innerHTML = hasBrain 
-              ? 'PATRICK: <span style="color:#2196f3">THINKING!</span>' 
-              : 'PATRICK: SLEEPING';
-          }
-          
-          const krabbyVal = rightTapeEl.querySelector('.krabby-status');
-          if (krabbyVal) {
-            if (Math.random() > 0.5) pattiesFlipped += Math.floor(Math.random() * 3);
-            krabbyVal.textContent = `FLIPPED: ${pattiesFlipped} PATTIES`;
-          }
-
-          const squidVal = rightTapeEl.querySelector('.squid-mood');
-          if (squidVal) {
-            const moods = ['ANNOYED', 'VERY ANNOYED', 'PLAYING CLARINET', 'LAZY', 'READING'];
-            squidVal.textContent = 'SQUID: ' + moods[Math.floor(Math.random() * moods.length)];
-          }
-
-          const planktonVal = rightTapeEl.querySelector('.plankton-threat');
-          if (planktonVal) {
-            planktonVal.textContent = `PLANKTON: ${(Math.random() * 5).toFixed(1)}% THREAT`;
-          }
-
-          const spatulaVal = rightTapeEl.querySelector('.spatula-temp');
-          if (spatulaVal) {
-            spatulaVal.textContent = `SPATULA: ${(375 + Math.random() * 10 - 5).toFixed(0)}°F`;
-          }
-        }, 1500);
-
-        if (!window.spongebobIntervals) window.spongebobIntervals = [];
-        window.spongebobIntervals.push(simInterval);
-      }
-
-      // Bubble transition wipe element
-      if (!document.querySelector('.spongebob-bubble-wipe')) {
-        const wipe = document.createElement('div');
-        wipe.className = 'spongebob-bubble-wipe';
-        wipe.id = 'spongebob-bubble-wipe';
-        for (let i = 0; i < 25; i++) {
-          const wb = document.createElement('div');
-          wb.className = 'wipe-bubble';
-          wb.style.left = (Math.random() * 100) + 'vw';
-          wb.style.top = (Math.random() * 100) + 'vh';
-          wb.style.animationDelay = (Math.random() * 0.2) + 's';
-          wipe.appendChild(wb);
-        }
-        document.body.appendChild(wipe);
-      }
-
-      // Floating Spatula Button & dialogue bubble - bottom right
-      if (!document.querySelector('.spatula-btn-container')) {
-        const container = document.createElement('div');
-        container.className = 'spatula-btn-container';
-        
-        const dialogue = document.createElement('div');
-        dialogue.className = 'spongebob-bubble';
-        dialogue.id = 'spongebob-quote-bubble';
-        dialogue.textContent = "I'm ready! 🍍";
-        
-        const spatulaBtn = document.createElement('div');
-        spatulaBtn.innerHTML = getSpatulaSVG(56);
-        
-        container.appendChild(dialogue);
-        container.appendChild(spatulaBtn);
-        document.body.appendChild(container);
-
-        spatulaBtn.addEventListener('click', () => {
-          const wipe = document.getElementById('spongebob-bubble-wipe');
-          if (wipe) {
-            wipe.classList.add('active');
-            
-            setTimeout(() => {
-              const randQuote = SPONGEBOB_QUOTES[Math.floor(Math.random() * SPONGEBOB_QUOTES.length)];
-              dialogue.textContent = randQuote;
-              dialogue.classList.add('show');
-            }, 500);
-
-            setTimeout(() => {
-              wipe.classList.remove('active');
-            }, 1000);
-
-            setTimeout(() => {
-              dialogue.classList.remove('show');
-            }, 6000);
-          }
-        });
-      }
-
-      // Floating Patrick Star Button & dialogue bubble - bottom left
-      if (!document.querySelector('.patrick-btn-container')) {
-        const container = document.createElement('div');
-        container.className = 'patrick-btn-container';
-        
-        const dialogue = document.createElement('div');
-        dialogue.className = 'patrick-bubble spongebob-bubble';
-        dialogue.id = 'patrick-quote-bubble';
-        dialogue.textContent = "No, this is Patrick! ☎️";
-        
-        const patrickBtn = document.createElement('div');
-        patrickBtn.innerHTML = getPatrickSVG(64);
-        
-        container.appendChild(dialogue);
-        container.appendChild(patrickBtn);
-        document.body.appendChild(container);
-
-        const PATRICK_QUOTES = [
-          "No, this is Patrick! ☎️",
-          "Is mayonnaise an instrument? 🥁",
-          "Dumb people are blissfully unaware of how dumb they really are. 🧠",
-          "The inner machinations of my mind are an enigma. 🥛",
-          "I can't see my forehead! 👁️",
-          "Knowledge can never replace friendship. I prefer to be an idiot! 💛",
-          "Is he Squidward? Are you Squidward? I'm Squidward! 🦑",
-          "Once there was an ugly barnacle. He was so ugly that everyone died. The end! 🪱"
-        ];
-
-        patrickBtn.addEventListener('click', () => {
-          const wipe = document.getElementById('spongebob-bubble-wipe');
-          if (wipe) {
-            wipe.classList.add('active');
-            
-            setTimeout(() => {
-              const randQuote = PATRICK_QUOTES[Math.floor(Math.random() * PATRICK_QUOTES.length)];
-              dialogue.textContent = randQuote;
-              dialogue.classList.add('show');
-            }, 500);
-
-            setTimeout(() => {
-              wipe.classList.remove('active');
-            }, 1000);
-
-            setTimeout(() => {
-              dialogue.classList.remove('show');
-            }, 6000);
-          }
-        });
-      }
-
-      // Customize task form headers for SpongeBob
-      const formTitle = document.querySelector('.task-form__title');
-      if (formTitle) {
-        const svg = formTitle.querySelector('svg');
-        formTitle.textContent = '';
-        if (svg) formTitle.appendChild(svg);
-        formTitle.append(' Log New Krusty Krab Duty');
-      }
-      const labelTaskTitle = document.querySelector('label[for="task-title"]');
-      if (labelTaskTitle) labelTaskTitle.textContent = 'Duty / Activity Name';
-      const inputTaskTitle = document.getElementById('task-title');
-      if (inputTaskTitle) inputTaskTitle.placeholder = 'Flipping patties, jellyfishing...';
-
-      const labelTaskDesc = document.querySelector('label[for="task-description"]');
-      if (labelTaskDesc) labelTaskDesc.textContent = 'Duty Details & Instructions';
-      const inputTaskDesc = document.getElementById('task-description');
-      if (inputTaskDesc) inputTaskDesc.placeholder = 'Provide specific instructions for Bikini Bottom...';
-
-      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
-      if (labelTaskPriority) labelTaskPriority.textContent = 'Duty Urgency Level';
-      const prioritySelect = document.getElementById('task-priority');
-      if (prioritySelect) {
-        prioritySelect.querySelector('option[value="low"]').textContent = '🍍 Jellyfishing (Low)';
-        prioritySelect.querySelector('option[value="medium"]').textContent = '🍔 Krabby Patty Duty (Med)';
-        prioritySelect.querySelector('option[value="high"]').textContent = '⚓ Boating School (High)';
-        prioritySelect.querySelector('option[value="urgent"]').textContent = '🌈 SWEET VICTORY! (Urgent)';
-      }
-
-      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
-      if (labelTaskDeadline) labelTaskDeadline.textContent = 'Target Completion Time';
-
-      const submitTaskBtn = document.getElementById('submit-task');
-      if (submitTaskBtn) {
-        const svg = submitTaskBtn.querySelector('svg');
-        submitTaskBtn.textContent = '';
-        if (svg) submitTaskBtn.appendChild(svg);
-        submitTaskBtn.append(' Log Duty');
       }
     }
 
