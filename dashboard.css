@@ -2543,30 +2543,43 @@ body.love-theme {
 }
 
 
-/* ========== THE PREVENTATIVE BIOLUMINESCENT SPONGEBOB THEME STYLES ========== */
+/* ========== 🧽 UNMISTAKABLY SPONGEBOB THEME STYLES 🧽 ========== */
 body.spongebob-theme {
-  --bg-primary: #040a16; /* Deep Ocean Slate */
-  --bg-secondary: #061225; /* Slightly lighter deep sea blue */
-  --bg-card: rgba(10, 24, 47, 0.7); /* Deep Sea Glass */
-  --accent: #06b6d4; /* Neon Sea-foam Teal */
-  --accent-dim: #0891b2;
-  --accent-glow: rgba(6, 182, 212, 0.25);
-  background: #040a16 !important;
+  --bg-primary: #061529; /* Deep Bikini Bottom Ocean */
+  --bg-secondary: #0a1e3d; /* Slightly lighter ocean */
+  --bg-card: rgba(10, 28, 55, 0.75);
+  --accent: #ffe135; /* SpongeBob Yellow! */
+  --accent-dim: #f5c518;
+  --accent-glow: rgba(255, 225, 53, 0.25);
+  background: #061529 !important;
   background-image:
-    radial-gradient(circle at 50% 15%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 15% 75%, rgba(20, 184, 166, 0.08) 0%, transparent 50%) !important;
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(255, 225, 53, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(76, 175, 80, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 300px 200px at 10% 60%, rgba(139, 69, 255, 0.04) 0%, transparent 50%) !important;
   color: #f1f5f9 !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🧽</text></svg>") 2 2, auto !important;
 }
 
-/* Floating Jellyfish animation */
+/* SpongeBob heading font */
+.spongebob-theme h1,
+.spongebob-theme h2,
+.spongebob-theme h3,
+.spongebob-theme .page-title,
+.spongebob-theme .welcome-banner__greeting {
+  font-family: 'Luckiest Guy', 'Fredoka', cursive !important;
+  letter-spacing: 1px !important;
+}
+
+/* ---- Floating Jellyfish animation ---- */
 .floating-jelly {
   position: fixed;
   bottom: -90px;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  animation: floatJelly 9s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.3));
+  animation: floatJelly 10s linear infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.4));
 }
 
 @keyframes floatJelly {
@@ -2574,25 +2587,21 @@ body.spongebob-theme {
     transform: translateY(0) translateX(0) rotate(0deg);
     opacity: 0;
   }
-  15% {
-    opacity: 0.18;
-  }
-  85% {
-    opacity: 0.18;
-  }
+  12% { opacity: 0.35; }
+  85% { opacity: 0.35; }
   100% {
     transform: translateY(-115vh) translateX(60px) rotate(15deg);
     opacity: 0;
   }
 }
 
-/* Floating bubble animation */
+/* ---- Floating bubble animation ---- */
 .spongebob-bubble-particle {
   position: absolute;
   bottom: -30px;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.45) 0%, rgba(6, 182, 212, 0.05) 60%, rgba(6, 182, 212, 0.15) 100%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(100, 200, 255, 0.08) 60%, rgba(100, 200, 255, 0.2) 100%);
   border-radius: 50%;
-  box-shadow: inset -1px -1px 3px rgba(255, 255, 255, 0.2), 0 0 5px rgba(6, 182, 212, 0.1);
+  box-shadow: inset -1px -1px 3px rgba(255, 255, 255, 0.3), 0 0 8px rgba(100, 200, 255, 0.15);
   pointer-events: none;
   z-index: 0;
   animation: bubbleRise 6s ease-in infinite;
@@ -2603,15 +2612,15 @@ body.spongebob-theme {
     transform: translateY(0) translateX(0) scale(0.5);
     opacity: 0;
   }
-  10% { opacity: 0.3; }
-  90% { opacity: 0.3; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
   100% {
     transform: translateY(-110vh) translateX(30px) scale(1.2);
     opacity: 0;
   }
 }
 
-/* Sky flowers gentle spin */
+/* ---- Sky flowers gentle spin ---- */
 .spongebob-flower svg {
   animation: spinFlower 45s linear infinite;
 }
@@ -2620,76 +2629,281 @@ body.spongebob-theme {
   to { transform: rotate(360deg); }
 }
 
-/* Welcome Banner welcome-banner overrides in spongebob-theme */
+/* ---- Emoji heading decoration ---- */
+.spongebob-deco-heading {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 4px;
+  letter-spacing: 6px;
+  filter: drop-shadow(0 0 6px rgba(255, 225, 53, 0.4));
+}
+
+/* ---- CAUTION BANNER ---- */
+.spongebob-caution {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffe135 0px, #ffe135 20px,
+    #1a1a1a 20px, #1a1a1a 40px
+  );
+  color: #1a1a1a;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1rem;
+  text-align: center;
+  padding: 6px 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(255, 225, 53, 0.3);
+  pointer-events: none;
+}
+.spongebob-caution span {
+  background: #ffe135;
+  padding: 2px 14px;
+  border-radius: 4px;
+}
+
+/* ---- SPATULA FLOATING BUTTON ---- */
+.spatula-btn-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10000;
+}
+.spatula-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 3px solid #ffe135;
+  background: linear-gradient(135deg, #ffe135 0%, #f5c518 100%);
+  box-shadow: 0 6px 25px rgba(255, 225, 53, 0.4), 0 0 40px rgba(255, 225, 53, 0.15);
+  cursor: pointer;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: spatulaBob 2.5s ease-in-out infinite;
+}
+.spatula-btn:hover {
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 8px 35px rgba(255, 225, 53, 0.6);
+}
+@keyframes spatulaBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ---- PATRICK FLOATING BUTTON ---- */
+.patrick-btn-container {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 10000;
+}
+.patrick-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 3px solid #ff9ebb;
+  background: linear-gradient(135deg, #ff9ebb 0%, #e57399 100%);
+  box-shadow: 0 6px 25px rgba(255, 158, 187, 0.35), 0 0 40px rgba(255, 158, 187, 0.12);
+  cursor: pointer;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: patrickBob 3s ease-in-out infinite;
+}
+.patrick-btn:hover {
+  transform: scale(1.15) rotate(-10deg);
+  box-shadow: 0 8px 35px rgba(255, 158, 187, 0.55);
+}
+@keyframes patrickBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ---- SPONGEBOB DIALOGUE BUBBLE ---- */
+.spongebob-dialogue {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  z-index: 10001;
+  background: #ffe135;
+  color: #1a1a1a;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 10px 18px;
+  border-radius: 18px 18px 4px 18px;
+  box-shadow: 0 6px 20px rgba(255, 225, 53, 0.3);
+  max-width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.spongebob-dialogue.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---- TELEMETRY HUD PANELS ---- */
+.spongebob-telemetry-left,
+.spongebob-telemetry-right {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.25;
+  font-family: 'Fredoka', monospace;
+  font-size: 0.65rem;
+  color: #ffe135;
+  line-height: 1.8;
+  text-shadow: 0 0 8px rgba(255, 225, 53, 0.5);
+  writing-mode: vertical-lr;
+  letter-spacing: 2px;
+}
+.spongebob-telemetry-left {
+  left: 8px;
+}
+.spongebob-telemetry-right {
+  right: 8px;
+}
+
+/* ---- BIKINI BOTTOM LANDSCAPE ---- */
+.bikini-bottom-landscape {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  overflow: hidden;
+}
+
+/* ---- SIDE SEAWEED ---- */
+.spongebob-side-seaweed {
+  position: fixed;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+}
+.spongebob-side-seaweed.left { left: 0; }
+.spongebob-side-seaweed.right { right: 0; }
+.spongebob-side-seaweed svg {
+  animation: seaweedSway 4s ease-in-out infinite alternate;
+}
+@keyframes seaweedSway {
+  0% { transform: rotate(-3deg); }
+  100% { transform: rotate(3deg); }
+}
+
+/* ---- BUBBLE WIPE TRANSITION ---- */
+.spongebob-bubble-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(255, 225, 53, 0.95) 0%, rgba(6, 21, 41, 0.98) 65%);
+  opacity: 0;
+  animation: bubbleWipeAnim 1s ease-out forwards;
+}
+@keyframes bubbleWipeAnim {
+  0% { opacity: 1; transform: scale(0.1); border-radius: 50%; }
+  50% { opacity: 0.9; transform: scale(1.2); border-radius: 0; }
+  100% { opacity: 0; transform: scale(1); }
+}
+.spongebob-bubble-wipe span {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 3.5rem;
+  color: #061529;
+  text-shadow: 0 0 20px rgba(255, 225, 53, 0.5);
+  animation: bubbleWipeText 1s ease-out;
+}
+@keyframes bubbleWipeText {
+  0% { opacity: 0; transform: scale(0.3); }
+  40% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+/* ======== Welcome Banner ======== */
 .spongebob-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(10, 24, 47, 0.75) 100%) !important;
-  border: 1.5px solid rgba(6, 182, 212, 0.3) !important;
-  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.08) !important;
-  border-radius: 16px !important;
+  background: linear-gradient(135deg, rgba(255, 225, 53, 0.12) 0%, rgba(10, 28, 55, 0.8) 100%) !important;
+  border: 2px solid rgba(255, 225, 53, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(255, 225, 53, 0.08), 0 0 60px rgba(255, 225, 53, 0.04) !important;
+  border-radius: 18px !important;
   color: #f1f5f9 !important;
   padding: 20px !important;
 }
 
 .spongebob-theme .welcome-banner__icon {
-  background: rgba(6, 182, 212, 0.15) !important;
-  border: 1.5px solid rgba(6, 182, 212, 0.4) !important;
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25) !important;
+  background: rgba(255, 225, 53, 0.15) !important;
+  border: 2px solid rgba(255, 225, 53, 0.4) !important;
+  box-shadow: 0 0 20px rgba(255, 225, 53, 0.2) !important;
 }
 
 .spongebob-theme .welcome-banner__role {
   color: #94a3b8 !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 
 .spongebob-theme .welcome-banner__greeting strong {
-  color: #00f0ff !important;
-  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3) !important;
+  color: #ffe135 !important;
+  text-shadow: 0 0 12px rgba(255, 225, 53, 0.4) !important;
+  font-family: 'Luckiest Guy', cursive !important;
 }
 
-/* Heading Decorations */
-.spongebob-deco-heading {
-  text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 8px;
-}
-
-/* Columns overrides */
+/* ======== Columns ======== */
 .spongebob-theme .task-column {
-  border: 1.5px solid rgba(6, 182, 212, 0.15) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid rgba(255, 225, 53, 0.12) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 225, 53, 0.03) !important;
   border-radius: 20px !important;
   padding: 16px !important;
   position: relative !important;
-  backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(10px) !important;
 }
 
-/* Todo Column (Jellyfish Fields - Pink highlight) */
+/* Todo Column — Jellyfish Fields (pink glow) */
 .spongebob-theme #col-todo {
-  background: linear-gradient(180deg, rgba(10, 24, 47, 0.8) 0%, rgba(26, 17, 36, 0.75) 100%) !important;
-  border-color: rgba(244, 114, 182, 0.25) !important;
-  box-shadow: 0 8px 32px 0 rgba(244, 114, 182, 0.05) !important;
+  background: linear-gradient(180deg, rgba(10, 28, 55, 0.85) 0%, rgba(40, 18, 50, 0.65) 100%) !important;
+  border-color: rgba(255, 105, 180, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.06), inset 0 0 40px rgba(255, 105, 180, 0.03) !important;
 }
 
-/* Progress Column (Krusty Krab - Gold highlight) */
+/* Progress Column — Krusty Krab (golden glow) */
 .spongebob-theme #col-progress {
-  background: linear-gradient(180deg, rgba(10, 24, 47, 0.8) 0%, rgba(36, 28, 16, 0.75) 100%) !important;
-  border-color: rgba(251, 191, 36, 0.25) !important;
-  box-shadow: 0 8px 32px 0 rgba(251, 191, 36, 0.05) !important;
+  background: linear-gradient(180deg, rgba(10, 28, 55, 0.85) 0%, rgba(50, 38, 10, 0.65) 100%) !important;
+  border-color: rgba(255, 225, 53, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(255, 225, 53, 0.06), inset 0 0 40px rgba(255, 225, 53, 0.03) !important;
 }
 
-/* Done Column (Sweet Victory - Teal highlight) */
+/* Done Column — Sweet Victory (green glow) */
 .spongebob-theme #col-done {
-  background: linear-gradient(180deg, rgba(10, 24, 47, 0.8) 0%, rgba(12, 28, 38, 0.75) 100%) !important;
-  border-color: rgba(6, 182, 212, 0.25) !important;
-  box-shadow: 0 8px 32px 0 rgba(6, 182, 212, 0.05) !important;
+  background: linear-gradient(180deg, rgba(10, 28, 55, 0.85) 0%, rgba(10, 50, 30, 0.65) 100%) !important;
+  border-color: rgba(76, 175, 80, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(76, 175, 80, 0.06), inset 0 0 40px rgba(76, 175, 80, 0.03) !important;
 }
 
-/* Column Headers (Clean glass panels, no wood signs/ropes) */
+/* ======== Column Headers — Wood Sign Style ======== */
 .spongebob-theme .task-column__header {
-  background: rgba(6, 18, 36, 0.85) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
+  background: linear-gradient(135deg, rgba(139, 90, 43, 0.35) 0%, rgba(90, 55, 20, 0.45) 100%) !important;
+  border: 2px solid rgba(210, 150, 70, 0.35) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 225, 53, 0.1) !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
   margin-top: 5px !important;
   margin-bottom: 20px !important;
   position: relative !important;
@@ -2697,24 +2911,30 @@ body.spongebob-theme {
 }
 
 .spongebob-theme .task-column__header h3 {
-  color: #e2e8f0 !important;
-  text-shadow: none !important;
+  color: #ffe135 !important;
+  text-shadow: 0 0 10px rgba(255, 225, 53, 0.3), 2px 2px 0 rgba(0, 0, 0, 0.3) !important;
+  font-family: 'Luckiest Guy', cursive !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.5px !important;
 }
 
-/* Task Cards overrides */
+/* ======== Task Cards ======== */
 .spongebob-theme .task-card {
-  background: rgba(10, 24, 47, 0.8) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
+  background: rgba(10, 28, 55, 0.8) !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.08) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
   border-radius: 14px !important;
   color: #e2e8f0 !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   backdrop-filter: blur(8px);
   z-index: 2 !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 
 .spongebob-theme .task-card__title {
   color: #ffffff !important;
+  font-family: 'Fredoka', sans-serif !important;
+  font-weight: 600 !important;
 }
 
 .spongebob-theme .task-card__desc {
@@ -2723,116 +2943,115 @@ body.spongebob-theme {
 
 .spongebob-theme .task-card:hover {
   transform: translateY(-4px) !important;
-  background: rgba(10, 24, 47, 0.9) !important;
+  background: rgba(10, 28, 55, 0.9) !important;
+  border-color: rgba(255, 225, 53, 0.2) !important;
 }
 
-/* Soft neon halos on hover */
-.spongebob-theme .task-card--low { border-left: 4px solid #f472b6 !important; }
+/* Priority accent colors on hover */
+.spongebob-theme .task-card--low { border-left: 4px solid #ff9ebb !important; }
 .spongebob-theme .task-card--low:hover {
-  box-shadow: 0 0 15px rgba(244, 114, 182, 0.25) !important;
-  border-color: rgba(244, 114, 182, 0.4) !important;
+  box-shadow: 0 0 18px rgba(255, 158, 187, 0.25) !important;
 }
 
-.spongebob-theme .task-card--medium { border-left: 4px solid #06b6d4 !important; }
+.spongebob-theme .task-card--medium { border-left: 4px solid #ffe135 !important; }
 .spongebob-theme .task-card--medium:hover {
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25) !important;
-  border-color: rgba(6, 182, 212, 0.4) !important;
+  box-shadow: 0 0 18px rgba(255, 225, 53, 0.25) !important;
 }
 
-.spongebob-theme .task-card--high { border-left: 4px solid #fbbf24 !important; }
+.spongebob-theme .task-card--high { border-left: 4px solid #ff8c00 !important; }
 .spongebob-theme .task-card--high:hover {
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.25) !important;
-  border-color: rgba(251, 191, 36, 0.4) !important;
+  box-shadow: 0 0 18px rgba(255, 140, 0, 0.25) !important;
 }
 
 .spongebob-theme .task-card--urgent { 
   border-left: 4px solid #f87171 !important;
 }
 .spongebob-theme .task-card--urgent:hover {
-  box-shadow: 0 0 20px rgba(248, 113, 113, 0.3) !important;
-  border-color: rgba(248, 113, 113, 0.5) !important;
+  box-shadow: 0 0 22px rgba(248, 113, 113, 0.3) !important;
 }
 
-/* Task Buttons overrides */
+/* ======== Task Buttons — SpongeBob Yellow ======== */
 .spongebob-theme .task-card__action {
-  background: rgba(6, 182, 212, 0.15) !important;
-  color: #00f0ff !important;
-  border: 1.5px solid rgba(6, 182, 212, 0.3) !important;
-  box-shadow: 0 4px 10px rgba(6, 182, 212, 0.1) !important;
-  font-weight: 600 !important;
+  background: rgba(255, 225, 53, 0.12) !important;
+  color: #ffe135 !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.25) !important;
+  box-shadow: 0 4px 10px rgba(255, 225, 53, 0.08) !important;
+  font-weight: 700 !important;
+  font-family: 'Fredoka', sans-serif !important;
   border-radius: 20px !important;
   transition: all 0.2s ease !important;
   text-shadow: none !important;
 }
 
 .spongebob-theme .task-card__action:hover {
-  background: #06b6d4 !important;
-  color: #040a16 !important;
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4) !important;
-  transform: scale(1.03) !important;
+  background: #ffe135 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 0 20px rgba(255, 225, 53, 0.45) !important;
+  transform: scale(1.05) !important;
 }
 
-/* News Section overrides in spongebob theme */
+/* ======== News Section ======== */
 .spongebob-theme .news-section {
-  background: rgba(10, 24, 47, 0.4) !important;
-  border: 1.5px solid rgba(6, 182, 212, 0.15) !important;
+  background: rgba(10, 28, 55, 0.4) !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.1) !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
   border-radius: 16px !important;
 }
 
 .spongebob-theme .news-card {
-  background: rgba(16, 32, 56, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: rgba(16, 36, 65, 0.7) !important;
+  border: 1px solid rgba(255, 225, 53, 0.06) !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
   border-radius: 12px !important;
 }
 
 .spongebob-theme .news-card:hover {
-  background: rgba(16, 32, 56, 0.85) !important;
-  border-color: rgba(6, 182, 212, 0.3) !important;
-  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.08) !important;
+  background: rgba(16, 36, 65, 0.85) !important;
+  border-color: rgba(255, 225, 53, 0.2) !important;
+  box-shadow: 0 6px 20px rgba(255, 225, 53, 0.06) !important;
 }
 
-/* Active department tabs in spongebob theme */
+/* ======== Dept Tabs ======== */
 .spongebob-theme .dept-tab {
-  border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.08) !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
   border-radius: 12px !important;
-  background: rgba(16, 32, 56, 0.6) !important;
+  background: rgba(16, 36, 65, 0.6) !important;
   color: #94a3b8 !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 .spongebob-theme .dept-tab:hover {
-  background: rgba(6, 182, 212, 0.05) !important;
-  border-color: rgba(6, 182, 212, 0.2) !important;
-  color: #fff !important;
+  background: rgba(255, 225, 53, 0.06) !important;
+  border-color: rgba(255, 225, 53, 0.2) !important;
+  color: #ffe135 !important;
 }
 
 .spongebob-theme .dept-tab.active[data-dept="mechanical"] {
-  border-color: rgba(6, 182, 212, 0.4) !important;
-  background: rgba(6, 182, 212, 0.15) !important;
-  color: #00f0ff !important;
+  border-color: rgba(255, 225, 53, 0.45) !important;
+  background: rgba(255, 225, 53, 0.12) !important;
+  color: #ffe135 !important;
 }
 .spongebob-theme .dept-tab.active[data-dept="electrical"] {
-  border-color: rgba(244, 114, 182, 0.4) !important;
-  background: rgba(244, 114, 182, 0.15) !important;
-  color: #f472b6 !important;
+  border-color: rgba(255, 158, 187, 0.45) !important;
+  background: rgba(255, 158, 187, 0.12) !important;
+  color: #ff9ebb !important;
 }
 .spongebob-theme .dept-tab.active[data-dept="software"] {
-  border-color: rgba(251, 191, 36, 0.4) !important;
-  background: rgba(251, 191, 36, 0.15) !important;
-  color: #fbbf24 !important;
+  border-color: rgba(255, 140, 0, 0.45) !important;
+  background: rgba(255, 140, 0, 0.12) !important;
+  color: #ff8c00 !important;
 }
 .spongebob-theme .dept-tab.active[data-dept="non-technical"] {
-  border-color: rgba(248, 113, 113, 0.4) !important;
-  background: rgba(248, 113, 113, 0.15) !important;
-  color: #f87171 !important;
+  border-color: rgba(76, 175, 80, 0.45) !important;
+  background: rgba(76, 175, 80, 0.12) !important;
+  color: #4CAF50 !important;
 }
 
-/* Theme input/form overrides */
+/* ======== Task Form ======== */
 .spongebob-theme .task-form {
-  background: rgba(10, 24, 47, 0.75) !important; 
-  border: 1.5px solid rgba(6, 182, 212, 0.25) !important; 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(10, 28, 55, 0.8) !important; 
+  border: 2px solid rgba(255, 225, 53, 0.2) !important; 
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 225, 53, 0.04) !important;
   border-radius: 20px !important;
   padding: 24px !important;
   backdrop-filter: blur(12px);
@@ -2841,65 +3060,90 @@ body.spongebob-theme {
 .spongebob-theme .task-form input,
 .spongebob-theme .task-form textarea,
 .spongebob-theme .task-form select {
-  background: rgba(6, 12, 24, 0.5) !important;
+  background: rgba(6, 12, 30, 0.6) !important;
   color: #fff !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.1) !important;
   border-radius: 10px !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 .spongebob-theme .task-form input:focus,
 .spongebob-theme .task-form textarea:focus,
 .spongebob-theme .task-form select:focus {
-  border-color: #06b6d4 !important;
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.25) !important;
+  border-color: #ffe135 !important;
+  box-shadow: 0 0 12px rgba(255, 225, 53, 0.25) !important;
   outline: none !important;
 }
 .spongebob-theme .task-form label {
-  color: #94a3b8 !important;
+  color: #cbd5e1 !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 .spongebob-theme .btn-primary,
 .spongebob-theme #submit-task {
-  background: #06b6d4 !important;
-  color: #040a16 !important;
+  background: linear-gradient(135deg, #ffe135 0%, #f5c518 100%) !important;
+  color: #1a1a1a !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.25) !important;
+  box-shadow: 0 4px 18px rgba(255, 225, 53, 0.3) !important;
   border-radius: 12px !important;
   font-weight: 700 !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 .spongebob-theme .btn-primary:hover,
 .spongebob-theme #submit-task:hover {
-  background: #00f0ff !important;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.35) !important;
-  transform: scale(1.02);
+  background: linear-gradient(135deg, #fff176 0%, #ffe135 100%) !important;
+  box-shadow: 0 0 20px rgba(255, 225, 53, 0.5) !important;
+  transform: scale(1.03);
 }
 
+/* ======== Experimental Banner ======== */
 .spongebob-theme .experimental-banner {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(10, 24, 47, 0.7) 100%) !important;
-  border-bottom: 1.5px solid rgba(6, 182, 212, 0.2) !important;
+  background: linear-gradient(135deg, rgba(255, 225, 53, 0.1) 0%, rgba(10, 28, 55, 0.8) 100%) !important;
+  border-bottom: 2px solid rgba(255, 225, 53, 0.2) !important;
   color: #f1f5f9 !important;
 }
 
 .spongebob-theme .experimental-banner__icon {
-  background: rgba(6, 182, 212, 0.15) !important;
-  color: #00f0ff !important;
-  border: 1.5px solid rgba(6, 182, 212, 0.3) !important;
+  background: rgba(255, 225, 53, 0.15) !important;
+  color: #ffe135 !important;
+  border: 1.5px solid rgba(255, 225, 53, 0.3) !important;
 }
 
-/* Custom Scrollbars styling */
+/* ======== Page Title ======== */
+.spongebob-theme .page-title {
+  color: #ffe135 !important;
+  text-shadow: 0 0 15px rgba(255, 225, 53, 0.3), 3px 3px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ======== Scrollbar ======== */
 .spongebob-theme::-webkit-scrollbar {
   width: 10px;
-  background-color: #040a16;
+  background-color: #061529;
 }
 .spongebob-theme::-webkit-scrollbar-track {
-  background: #040a16;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: #061529;
+  border-left: 1px solid rgba(255, 225, 53, 0.05);
 }
 .spongebob-theme::-webkit-scrollbar-thumb {
-  background-color: rgba(6, 182, 212, 0.2);
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background-color: rgba(255, 225, 53, 0.2);
+  border: 1px solid rgba(255, 225, 53, 0.3);
   border-radius: 6px;
 }
 .spongebob-theme::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(6, 182, 212, 0.4);
+  background-color: rgba(255, 225, 53, 0.4);
+}
+
+/* ======== Nav / Header overrides ======== */
+.spongebob-theme .site-header {
+  background: rgba(6, 21, 41, 0.95) !important;
+  border-bottom: 2px solid rgba(255, 225, 53, 0.15) !important;
+  box-shadow: 0 4px 30px rgba(255, 225, 53, 0.06) !important;
+}
+.spongebob-theme .nav-links a {
+  color: #cbd5e1 !important;
+  font-family: 'Fredoka', sans-serif !important;
+}
+.spongebob-theme .nav-links a:hover {
+  color: #ffe135 !important;
+  text-shadow: 0 0 8px rgba(255, 225, 53, 0.3) !important;
 }
 
 /* ---------- Task Details & Feedback Modal ---------- */
