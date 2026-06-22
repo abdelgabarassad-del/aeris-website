@@ -409,7 +409,7 @@
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
       '231012588': { name: 'judy samer', message: 'hi' },
       '241002278': { name: 'Marwan mohamed elghazaly', message: 'howa el ghazaly' },
-      '251003016': { name: 'Hana Moataz', message: '🍍 Wishing you the F.U.N.-est of birthdays, Hana! 💛🌊' },
+      '251003016': { name: 'Hana Moataz', message: '🍍 Ayy-aye Captain Hana! 🏴‍☠️ Are you ready to flip some tasks under the sea? 🧽🌊' },
       '231012318': { name: 'omar abdeslam atwan', message: 'kolha fi el a5r 62 sanah' },
       '231003587': { name: 'amr mohamed el ghazaly', message: 'tb3an aktar oa7d mabsot fi el maokf ely e7nah fih' },
       '231010429': { name: 'abdelrahman aly', message: 'boda ezayak' },
@@ -1586,10 +1586,28 @@
       "Barnacles! 🪨"
     ];
 
+    function getPatrickSVG(size = 56) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="${size}" height="${size}" class="patrick-star-widget">
+        <path d="M 50,15 L 62,45 L 85,50 L 68,68 L 73,95 L 50,82 L 27,95 L 32,68 L 15,50 L 38,45 Z" fill="#ffab91" stroke="#d84315" stroke-width="2"/>
+        <path d="M 33,72 L 67,72 L 73,95 L 50,82 L 27,95 Z" fill="#a7ffeb" stroke="#00b0ff" stroke-width="1.5"/>
+        <circle cx="40" cy="80" r="3" fill="#b388ff"/>
+        <circle cx="43" cy="83" r="2" fill="#b388ff"/>
+        <circle cx="58" cy="85" r="3" fill="#b388ff"/>
+        <circle cx="61" cy="81" r="2" fill="#b388ff"/>
+        <ellipse cx="46" cy="42" rx="4" ry="6" fill="#fff" stroke="#000" stroke-width="1"/>
+        <circle cx="46" cy="42" r="1.5" fill="#000"/>
+        <ellipse cx="54" cy="42" rx="4" ry="6" fill="#fff" stroke="#000" stroke-width="1"/>
+        <circle cx="54" cy="42" r="1.5" fill="#000"/>
+        <path d="M 42,33 L 48,35" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M 58,33 L 52,35" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M 44,52 Q 50,60 56,52" fill="none" stroke="#d84315" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+    }
+
     function applySpongebobTheme() {
       if (!isSpongebobUser()) {
         document.body.classList.remove('spongebob-theme');
-        document.querySelectorAll('.spongebob-container, .spongebob-deco, .spongebob-flower, .spongebob-telemetry-left, .spongebob-telemetry-right, .spongebob-bubble, .spatula-btn-container, .spongebob-caution, .spongebob-bubble-wipe').forEach(el => el.remove());
+        document.querySelectorAll('.spongebob-container, .spongebob-deco, .spongebob-flower, .spongebob-telemetry-left, .spongebob-telemetry-right, .spongebob-bubble, .spatula-btn-container, .spongebob-caution, .spongebob-bubble-wipe, .patrick-btn-container').forEach(el => el.remove());
         if (window.spongebobIntervals) {
           window.spongebobIntervals.forEach(clearInterval);
           window.spongebobIntervals = null;
@@ -1613,6 +1631,18 @@
       if (pageTitle && !document.querySelector('.spongebob-deco-heading')) {
         pageTitle.insertAdjacentHTML('beforebegin', `<div class="spongebob-deco-heading spongebob-deco">🍍🧽🌊🍔</div>`);
       }
+
+      // Apply column headers immediately
+      const colHeaders = {
+        'col-todo': 'Jellyfish Fields (To Catch) 🪱',
+        'col-progress': 'Krusty Krab Kitchen (Flipping) 🍔',
+        'col-done': 'Sweet Victory! (Done) 🏆'
+      };
+      Object.entries(colHeaders).forEach(([id, label]) => {
+        const colEl = document.getElementById(id);
+        const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+        if (h3) h3.textContent = label;
+      });
 
       // Create a background flower/bubble container
       if (!document.querySelector('.spongebob-container')) {
@@ -1801,6 +1831,56 @@
             
             setTimeout(() => {
               const randQuote = SPONGEBOB_QUOTES[Math.floor(Math.random() * SPONGEBOB_QUOTES.length)];
+              dialogue.textContent = randQuote;
+              dialogue.classList.add('show');
+            }, 500);
+
+            setTimeout(() => {
+              wipe.classList.remove('active');
+            }, 1000);
+
+            setTimeout(() => {
+              dialogue.classList.remove('show');
+            }, 6000);
+          }
+        });
+      }
+
+      // Floating Patrick Star Button & dialogue bubble - bottom left
+      if (!document.querySelector('.patrick-btn-container')) {
+        const container = document.createElement('div');
+        container.className = 'patrick-btn-container';
+        
+        const dialogue = document.createElement('div');
+        dialogue.className = 'patrick-bubble spongebob-bubble';
+        dialogue.id = 'patrick-quote-bubble';
+        dialogue.textContent = "No, this is Patrick! ☎️";
+        
+        const patrickBtn = document.createElement('div');
+        patrickBtn.innerHTML = getPatrickSVG(64);
+        
+        container.appendChild(dialogue);
+        container.appendChild(patrickBtn);
+        document.body.appendChild(container);
+
+        const PATRICK_QUOTES = [
+          "No, this is Patrick! ☎️",
+          "Is mayonnaise an instrument? 🥁",
+          "Dumb people are blissfully unaware of how dumb they really are. 🧠",
+          "The inner machinations of my mind are an enigma. 🥛",
+          "I can't see my forehead! 👁️",
+          "Knowledge can never replace friendship. I prefer to be an idiot! 💛",
+          "Is he Squidward? Are you Squidward? I'm Squidward! 🦑",
+          "Once there was an ugly barnacle. He was so ugly that everyone died. The end! 🪱"
+        ];
+
+        patrickBtn.addEventListener('click', () => {
+          const wipe = document.getElementById('spongebob-bubble-wipe');
+          if (wipe) {
+            wipe.classList.add('active');
+            
+            setTimeout(() => {
+              const randQuote = PATRICK_QUOTES[Math.floor(Math.random() * PATRICK_QUOTES.length)];
               dialogue.textContent = randQuote;
               dialogue.classList.add('show');
             }, 500);
@@ -2269,15 +2349,15 @@
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
        if (isSpongebobUser()) {
-         const priorityLabels = { low: '🍍 Jellyfishing', medium: '🍔 Krabby Patty Duty', high: '⚓ Boating School', urgent: '🌈 SWEET VICTORY!' };
+         const priorityLabels = { low: '⭐ Patrick Level', medium: '🦑 Squidward Level', high: '🧽 SpongeBob Level', urgent: '🦀 Mr. Krabs Level' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
 
          let actions = '';
          if (task.status === 'todo') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start task">▶ I'm Ready!</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start task">▶ I'M READY!</button>`;
          } else if (task.status === 'progress') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Mark done">✓ Sweet Victory!</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Mark done">✓ SWEET VICTORY!</button>`;
          }
 
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
@@ -2441,7 +2521,7 @@
       return _originalTaskCard(task);
     };
 
-    // Patch renderTasks to re-apply French column headers after every re-render
+    // Patch renderTasks to re-apply French or SpongeBob column headers after every re-render
     const _origRenderTasks = renderTasks;
     renderTasks = function() {
       _origRenderTasks();
@@ -2451,6 +2531,18 @@
           'col-todo': 'À Faire',
           'col-progress': 'En Cours',
           'col-done': 'Terminé'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isSpongebobUser()) {
+        const colHeaders = {
+          'col-todo': 'Jellyfish Fields (To Catch) 🪱',
+          'col-progress': 'Krusty Krab Kitchen (Flipping) 🍔',
+          'col-done': 'Sweet Victory! (Done) 🏆'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
