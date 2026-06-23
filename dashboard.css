@@ -6707,7 +6707,7 @@ body.tweety-theme::after {
 .tweety-theme .btn-primary:hover,
 .tweety-theme #submit-task:hover {
   background: #ffb74d !important;
-  color: #ffffff !important;
+  color: #0b3c53 !important;
   box-shadow: 6px 6px 0px #1e6b8c !important;
   transform: translateY(-2px) !important;
 }
@@ -6726,6 +6726,16 @@ body.tweety-theme::after {
   border-radius: 16px !important;
 }
 
+.tweety-theme .news-header__icon {
+  color: #0b3c53 !important;
+  filter: none !important;
+}
+
+.tweety-theme .news-header h2 {
+  color: #0b3c53 !important;
+  text-shadow: 1px 1px 0px #ffd54f !important;
+}
+
 .tweety-theme .news-card {
   background: #ffffff !important;
   border: 3px solid #1e6b8c !important;
@@ -6739,6 +6749,63 @@ body.tweety-theme::after {
   box-shadow: 6px 6px 0px #ffb74d !important;
 }
 
+.tweety-theme .news-card--faculty {
+  border-left: 8px solid #ffb74d !important;
+}
+
+.tweety-theme .news-card--head {
+  border-left: 8px solid #ffd54f !important;
+}
+
+.tweety-theme .news-card__author {
+  color: #0b3c53 !important;
+}
+
+.tweety-theme .news-card__badge--faculty {
+  background: rgba(255, 152, 0, 0.12) !important;
+  color: #e65100 !important;
+  border: 2px solid #1e6b8c !important;
+}
+
+.tweety-theme .news-card__badge--head {
+  background: rgba(255, 213, 79, 0.12) !important;
+  color: #b07200 !important;
+  border: 2px solid #1e6b8c !important;
+}
+
+.tweety-theme .news-card__delete {
+  color: #86abb5 !important;
+}
+
+.tweety-theme .news-card__delete:hover {
+  color: #ff5252 !important;
+}
+
+.tweety-theme .news-card__content {
+  color: #1e465a !important;
+}
+
+.tweety-theme .news-card__footer {
+  color: #4a6c80 !important;
+}
+
+.tweety-theme .news-card__footer svg {
+  color: #4a6c80 !important;
+  opacity: 1 !important;
+}
+
+.tweety-theme .news-feed__empty {
+  color: #1e465a !important;
+}
+
+.tweety-theme .news-feed__empty svg {
+  color: #86abb5 !important;
+}
+
+.tweety-theme .news-feed__empty p {
+  color: #1e465a !important;
+}
+
 .tweety-theme .news-toggle-form {
   background: #ffd54f !important;
   color: #0b3c53 !important;
@@ -6749,7 +6816,48 @@ body.tweety-theme::after {
 
 .tweety-theme .news-toggle-form:hover {
   background: #ffb74d !important;
-  color: #ffffff !important;
+  color: #0b3c53 !important;
+}
+
+.tweety-theme .news-form {
+  background: #ffffff !important;
+  border: 3px solid #1e6b8c !important;
+  box-shadow: 5px 5px 0px #ffd54f !important;
+  border-radius: 12px !important;
+}
+
+.tweety-theme .news-form__title,
+.tweety-theme .news-form__title svg {
+  color: #0b3c53 !important;
+}
+
+.tweety-theme .news-form label {
+  color: #0b3c53 !important;
+  font-weight: 600 !important;
+}
+
+.tweety-theme .news-form textarea {
+  background: #ffffff !important;
+  border: 2px solid #1e6b8c !important;
+  color: #0b3c53 !important;
+}
+
+.tweety-theme .news-form textarea::placeholder {
+  color: #86abb5 !important;
+}
+
+.tweety-theme .news-form .btn-secondary {
+  background: #86abb5 !important;
+  color: #0b3c53 !important;
+  border: 2px solid #1e6b8c !important;
+  box-shadow: 2px 2px 0px #ffd54f !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+}
+
+.tweety-theme .news-form .btn-secondary:hover {
+  background: #769ba5 !important;
+  color: #0b3c53 !important;
 }
 
 /* ==========================================================================
