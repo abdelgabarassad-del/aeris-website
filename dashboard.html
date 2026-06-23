@@ -454,6 +454,9 @@
       if (sessionReg === '241003033') document.body.classList.add('batman-theme');
       if (sessionReg === '251000861') document.body.classList.add('spiderman-theme');
       if (sessionReg === '251010424') document.body.classList.add('sonic-theme');
+      if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
+      if (sessionReg === '241012132') document.body.classList.add('vilebloods-theme');
+      if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -552,6 +555,9 @@
         applyBatmanTheme();
         applySpidermanTheme();
         applySonicTheme();
+        applyTomJerryTheme();
+        applyVilebloodsTheme();
+        applyIronmanTheme();
       }, 600);
     }
 
@@ -623,6 +629,9 @@
       if (regNum === BATMAN_REG) document.body.classList.add('batman-theme');
       if (regNum === SPIDERMAN_REG) document.body.classList.add('spiderman-theme');
       if (regNum === SONIC_REG) document.body.classList.add('sonic-theme');
+      if (regNum === TOMJERRY_REG) document.body.classList.add('tomjerry-theme');
+      if (regNum === VILEBLOODS_REG) document.body.classList.add('vilebloods-theme');
+      if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -2107,6 +2116,335 @@
       }
     }
 
+    /* ========== TOM & JERRY THEME (231003587 only) ========== */
+    const TOMJERRY_REG = '231003587';
+
+    function isTomJerryUser() {
+      return safeSession.getItem('aeris_auth_reg') === TOMJERRY_REG;
+    }
+
+    function applyTomJerryTheme() {
+      if (!isTomJerryUser()) {
+        document.body.classList.remove('tomjerry-theme');
+        document.querySelectorAll('.tomjerry-corner, .tomjerry-corner-tl, .tomjerry-bubble, .tomjerry-cheeses, .tomjerry-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('tomjerry-theme');
+
+      // Customize welcome banner icon to be a Cheese wedge SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="cheese-wiggle"><path d="M12 2L2 22h20L12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>`;
+        }
+      }
+
+      // Cheese wedge floater bottom right
+      if (!document.querySelector('.tomjerry-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'tomjerry-corner';
+        corner.innerHTML = `<div class="tomjerry-cheese-floater">🧀</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'tomjerry-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Don't you believe it! 🐱",
+          "Cheese? Yes, please! 🧀",
+          "Tom, look behind you! 🐭",
+          "Classic cat and mouse chase! 🐈💨🐀",
+          "Ouch! That hurt! 💥",
+          "Caught you! 🪤"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Mouse trap top-left
+      if (!document.querySelector('.tomjerry-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'tomjerry-corner-tl';
+        cornerTL.innerHTML = `🪤`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Cheeses trailing above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.tomjerry-cheeses')) {
+        const cheeses = document.createElement('div');
+        cheeses.className = 'tomjerry-cheeses';
+        const cheesesContent = `<span>🧀</span><span>🐈</span><span>🧀</span><span>🐀</span><span>🧀</span>`;
+        cheeses.innerHTML = cheesesContent;
+        taskBoard.parentNode.insertBefore(cheeses, taskBoard);
+      }
+
+      // Customize task form headers for Tom & Jerry
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Prank / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🧀 Jerry\'s Prank Plan';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🐈 Tom\'s Trap Blueprints / Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🪤 Chaos Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Nap Time (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🐭 Mischief Managed (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🪤 Cat Trap (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🧹 ANGRY HOUSEKEEPER! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '🧀 Escape ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Launch Chase!');
+      }
+    }
+
+    /* ========== IRON MAN THEME (251010536 only) ========== */
+    const IRONMAN_REG = '251010536';
+
+    function isIronmanUser() {
+      return safeSession.getItem('aeris_auth_reg') === IRONMAN_REG;
+    }
+
+    function applyIronmanTheme() {
+      if (!isIronmanUser()) {
+        document.body.classList.remove('ironman-theme');
+        document.querySelectorAll('.ironman-corner, .ironman-corner-tl, .ironman-bubble, .ironman-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('ironman-theme');
+
+      // Customize welcome banner icon to be a glowing Arc Reactor SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="reactor-glow"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>`;
+        }
+      }
+
+      // Arc reactor widget bottom right
+      if (!document.querySelector('.ironman-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'ironman-corner';
+        corner.innerHTML = `<div class="ironman-reactor-floater">🔵</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'ironman-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "I am Iron Man. 🤖",
+          "Sometimes you gotta run before you can walk. 🚀",
+          "Genius, billionaire, playboy, philanthropist. 🕶️",
+          "Jarvis, drop my needle. 🎶",
+          "Proof that Tony Stark has a heart. 💙",
+          "We have a Hulk. 💥",
+          "Suit up! 🚀"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Stark helmet top-left
+      if (!document.querySelector('.ironman-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'ironman-corner-tl';
+        cornerTL.innerHTML = `🤖`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Stark items above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.ironman-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'ironman-decors';
+        const decorsContent = `<span>🤖</span><span>⚡</span><span>🚀</span><span>🔋</span><span>🔵</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Iron Man
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Protocol / Project');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🤖 Stark Protocol';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '💻 Schematics / Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '⚡ Power Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🔋 Standby Mode (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🚀 Repulsor Charge (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '⚡ Overcharge (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 HOUSE PARTY PROTOCOL! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏱️ Launch ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Deploy Suit!');
+      }
+    }
+
+    /* ========== VILEBLOODS THEME (241012132 only) ========== */
+    const VILEBLOODS_REG = '241012132';
+
+    function isVilebloodsUser() {
+      return safeSession.getItem('aeris_auth_reg') === VILEBLOODS_REG;
+    }
+
+    function applyVilebloodsTheme() {
+      if (!isVilebloodsUser()) {
+        document.body.classList.remove('vilebloods-theme');
+        document.querySelectorAll('.vilebloods-corner, .vilebloods-corner-tl, .vilebloods-bubble, .vilebloods-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('vilebloods-theme');
+
+      // Customize welcome banner icon to be a Gothic Silver Crown SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="crown-glow"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18v2H3z"/></svg>`;
+        }
+      }
+
+      // Chalice / blood vial widget bottom right
+      if (!document.querySelector('.vilebloods-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'vilebloods-corner';
+        corner.innerHTML = `<div class="vilebloods-chalice">🍷</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'vilebloods-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "We Vilebloods of Cainhurst... We await the Blood Echoes. 🩸",
+          "Speak thy mind. We are in a receptive mood. 👑",
+          "Ah, the sweet scent of blood... 🍷",
+          "Offer the Blood Dregs to our Queen. 🩸",
+          "Submit to the Queen of Cainhurst. 👑",
+          "Fear the Old Blood. 🕯️",
+          "Ah, another hunter seeks our grace. ⚔️"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Gothic sword top-left
+      if (!document.querySelector('.vilebloods-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'vilebloods-corner-tl';
+        cornerTL.innerHTML = `⚔️`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Decors above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.vilebloods-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'vilebloods-decors';
+        const decorsContent = `<span>🩸</span><span>⚔️</span><span>👑</span><span>🍷</span><span>🦇</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Vilebloods
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log Cainhurst Duty / Vow');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🩸 Blood Vow';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '⚔️ Cainhurst Hunt Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🍷 Vileblood Tiers';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Hunter\'s Slumber (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '⚔️ Cainhurst Guardian (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🍷 Blood Echoes Hunt (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '👑 FOR THE QUEEN! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '🕯️ Sanguine Moon Deadline';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Swear Oath!');
+      }
+    }
+
     /* ========== MICKEY MOUSE THEME (251011829 only) ========== */
     const MICKEY_REG = '251011829';
 
@@ -2513,6 +2851,108 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isIronmanUser()) {
+         const priorityLabels = { low: '🔋 Standby Mode', medium: '🚀 Repulsor Charge', high: '⚡ Overcharge', urgent: '🚨 HOUSE PARTY PROTOCOL!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Power Up">▶ Power Up</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Execute Protocol">✓ Protocol Executed</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🤖 ${escapeHtml(task.title)} ⚡</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
+       if (isVilebloodsUser()) {
+         const priorityLabels = { low: '💤 Hunter\'s Slumber', medium: '⚔️ Cainhurst Guardian', high: '🍷 Blood Echoes Hunt', urgent: '👑 FOR THE QUEEN!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Awaken hunt">▶ Awaken Hunt</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Offer blood dregs">✓ Offer Blood Dregs</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🍷 ${escapeHtml(task.title)} ⚔️</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
+       if (isTomJerryUser()) {
+         const priorityLabels = { low: '💤 Nap Time', medium: '🐭 Mischief Managed', high: '🪤 Cat Trap', urgent: '🧹 ANGRY HOUSEKEEPER!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Launch chase">▶ Launch Chase</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Collect cheese">✓ Collect Cheese</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🐱 ${escapeHtml(task.title)} 🐭</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isSpidermanUser()) {
          const priorityLabels = { low: '🏙️ Citizen Duty', medium: '🕸️ Web Practice', high: '⚡ Supervillain Threat', urgent: '💥 AVENGERS LEVEL' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -2877,6 +3317,42 @@
           'col-todo': 'Daily Bugle Alerts (To Do) 📰',
           'col-progress': 'Web-Slinging (In Progress) 🕸️',
           'col-done': 'Saved the Day (Done) 🏆'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isIronmanUser()) {
+        const colHeaders = {
+          'col-todo': 'Tony\'s Garage (To Do) 🛠️',
+          'col-progress': 'Systems Online (In Progress) ⚡',
+          'col-done': 'Target Neutralized (Done) 🎯'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isVilebloodsUser()) {
+        const colHeaders = {
+          'col-todo': 'Hunter\'s Dream (To Do) 🕯️',
+          'col-progress': 'Cainhurst Hunt (In Progress) ⚔️',
+          'col-done': 'Vileblood Ascended (Done) 👑'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isTomJerryUser()) {
+        const colHeaders = {
+          'col-todo': 'Jerry\'s Mouse Hole (To Do) 🐀',
+          'col-progress': 'Cat & Mouse Chase (In Progress) 🐈💨',
+          'col-done': 'Caught! (Done) 🧀'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);

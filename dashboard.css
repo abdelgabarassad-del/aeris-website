@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka:wght@400;600;700&family=Cinzel:wght@400;700&family=Orbitron:wght@400;700;900&display=swap');
 
 /* ==========================================
    DASHBOARD PAGE — dashboard.css
@@ -4809,5 +4809,1231 @@ body.sonic-theme {
   color: #fff !important;
   text-shadow: 0 0 5px rgba(0, 85, 165, 0.4) !important;
 }
+
+/* ==========================================================================
+   🐱 TOM & JERRY THEME (231003587)
+   ========================================================================== */
+body.tomjerry-theme {
+  --bg-primary: #3c4858; /* Slate Mouse Grey */
+  --bg-secondary: #2d3748; /* Darker Slate Grey */
+  --bg-card: rgba(74, 85, 104, 0.7); /* Mid Grey with transparency */
+  --accent: #ffb300; /* Cheese Gold */
+  --accent-dim: #ffd54f; /* Light Cheese Yellow */
+  --accent-glow: rgba(255, 179, 0, 0.25);
+  background: #3c4858 !important;
+  color: #ffe082 !important; /* Soft yellow text */
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🧀</text></svg>") 2 2, auto !important;
+}
+
+.tomjerry-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(255, 179, 0, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(255, 112, 67, 0.06) 0%, transparent 60%),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.tomjerry-theme h1,
+.tomjerry-theme h2,
+.tomjerry-theme h3,
+.tomjerry-theme .page-title,
+.tomjerry-theme .welcome-banner__greeting {
+  font-family: 'Luckiest Guy', 'Fredoka', cursive !important;
+  letter-spacing: 1.2px !important;
+  color: #fff !important;
+  text-shadow: 2px 2px 0px #ff7043, -1px -1px 0px #ffb300 !important;
+}
+
+/* Wiggling Welcome SVG animation */
+@keyframes cheeseWiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-8deg) scale(1.05); }
+  75% { transform: rotate(8deg) scale(1.05); }
+}
+.tomjerry-theme .cheese-wiggle {
+  animation: cheeseWiggle 2.5s infinite ease-in-out;
+  color: #ffb300 !important;
+  fill: #ffb300 !important;
+}
+
+/* Corner widget / Floater bottom right */
+.tomjerry-theme .tomjerry-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb300 0%, #ff7043 100%);
+  border: 3px solid #fff;
+  box-shadow: 0 8px 24px rgba(255, 179, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+}
+
+.tomjerry-theme .tomjerry-corner:hover {
+  transform: scale(1.15) rotate(15deg);
+  box-shadow: 0 12px 30px rgba(255, 179, 0, 0.6);
+}
+
+.tomjerry-theme .tomjerry-cheese-floater {
+  font-size: 28px;
+  animation: floatCheese 2s infinite alternate ease-in-out;
+}
+
+@keyframes floatCheese {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* Speech bubble bottom right */
+.tomjerry-theme .tomjerry-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 35px;
+  background: #fff;
+  color: #2d3748;
+  padding: 10px 16px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  max-width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid #ffb300;
+}
+
+.tomjerry-theme .tomjerry-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.tomjerry-theme .tomjerry-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #ffb300 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Mouse trap top left corner widget */
+.tomjerry-theme .tomjerry-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.35;
+  z-index: 50;
+  font-size: 2.2rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 179, 0, 0.4));
+  animation: trapWobble 4s infinite ease-in-out;
+}
+
+@keyframes trapWobble {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-5deg); }
+}
+
+/* Cheeses trailing decoration */
+.tomjerry-theme .tomjerry-cheeses {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.45;
+}
+
+.tomjerry-theme .tomjerry-cheeses span {
+  font-size: 1.4rem;
+  display: inline-block;
+  animation: chaseHop 2.5s ease-in-out infinite alternate;
+}
+
+.tomjerry-theme .tomjerry-cheeses span:nth-child(even) {
+  animation-delay: 0.8s;
+}
+
+@keyframes chaseHop {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-8px) scale(1.1); }
+}
+
+/* Columns */
+.tomjerry-theme .task-column {
+  background: rgba(74, 85, 104, 0.45) !important;
+  border: 2px dashed rgba(255, 179, 0, 0.2) !important;
+  border-radius: 16px !important;
+}
+
+.tomjerry-theme .task-column__header {
+  background: linear-gradient(135deg, rgba(255, 179, 0, 0.15) 0%, rgba(255, 112, 67, 0.05) 100%) !important;
+  border: 2px solid #ffb300 !important;
+  box-shadow: 0 6px 15px rgba(255, 179, 0, 0.15) !important;
+  border-radius: 12px !important;
+}
+
+.tomjerry-theme .task-column__header h3 {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 2px #000 !important;
+}
+
+/* Task Cards */
+.tomjerry-theme .task-card {
+  background: rgba(45, 55, 72, 0.85) !important;
+  border: 1px solid rgba(255, 179, 0, 0.15) !important;
+  border-radius: 12px !important;
+  color: #ffe082 !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.tomjerry-theme .task-card:hover {
+  border-color: #ffb300 !important;
+  box-shadow: 0 0 15px rgba(255, 179, 0, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+.tomjerry-theme .task-card__title {
+  color: #fff !important;
+}
+
+.tomjerry-theme .task-card__desc {
+  color: #cbd5e0 !important;
+}
+
+/* Priority Card Border Accents */
+.tomjerry-theme .task-card--low { border-left: 4px solid #81e6d9 !important; }
+.tomjerry-theme .task-card--medium { border-left: 4px solid #ffb300 !important; }
+.tomjerry-theme .task-card--high { border-left: 4px solid #ff7043 !important; }
+.tomjerry-theme .task-card--urgent {
+  border-left: 4px solid #ff7043 !important;
+  border-right: 2px dashed #ffb300 !important;
+  animation: jerryUrgentPulse 1s infinite alternate !important;
+}
+
+@keyframes jerryUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(255, 112, 67, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(255, 112, 67, 0.6); }
+}
+
+/* Buttons and Controls */
+.tomjerry-theme .task-card__action {
+  background: #ffb300 !important;
+  color: #2d3748 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 8px rgba(255, 179, 0, 0.2) !important;
+}
+
+.tomjerry-theme .task-card__action:hover {
+  background: #ff7043 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(255, 112, 67, 0.4) !important;
+}
+
+/* Welcome Banner */
+.tomjerry-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(255, 179, 0, 0.15) 0%, rgba(45, 55, 72, 0.9) 100%) !important;
+  border: 2px solid #ffb300 !important;
+  border-radius: 14px !important;
+}
+
+.tomjerry-theme .welcome-banner__icon {
+  background: rgba(255, 179, 0, 0.2) !important;
+  color: #ffb300 !important;
+  box-shadow: 0 0 10px rgba(255, 179, 0, 0.3) !important;
+}
+
+.tomjerry-theme .welcome-banner__greeting strong {
+  color: #ffb300 !important;
+}
+
+/* Tabs */
+.tomjerry-theme .dept-tab.active {
+  background: rgba(255, 179, 0, 0.2) !important;
+  border-color: #ffb300 !important;
+  color: #fff !important;
+}
+
+/* Modal styling */
+.tomjerry-theme .task-modal__content {
+  background: rgba(45, 55, 72, 0.98) !important;
+  border: 2px solid #ffb300 !important;
+  box-shadow: 0 0 35px rgba(255, 179, 0, 0.25) !important;
+}
+
+.tomjerry-theme .task-modal__close:hover { color: #ffb300 !important; }
+
+/* Approved pill */
+.tomjerry-theme .task-card__approved-pill {
+  background: rgba(255, 179, 0, 0.1) !important;
+  color: #ffb300 !important;
+  border: 1px solid rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Form controls focus */
+.tomjerry-theme input:focus,
+.tomjerry-theme textarea:focus,
+.tomjerry-theme select:focus {
+  border-color: #ffb300 !important;
+  box-shadow: 0 0 12px rgba(255, 179, 0, 0.25) !important;
+}
+
+/* Experimental Banner */
+.tomjerry-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(255, 179, 0, .12) 0%, rgba(45, 55, 72, .9) 100%) !important;
+  border-bottom: 1px solid rgba(255, 179, 0, .25) !important;
+}
+
+.tomjerry-theme .experimental-banner__icon {
+  background: rgba(255, 179, 0, .15) !important;
+  color: #ffb300 !important;
+}
+
+.tomjerry-theme .experimental-banner__text strong {
+  color: #ffb300 !important;
+}
+
+/* ==========================================================================
+   🩸 VILEBLOODS THEME (241012132)
+   ========================================================================== */
+body.vilebloods-theme {
+  --bg-primary: #0a0406; /* Dark Cainhurst stone */
+  --bg-secondary: #1a0a0f; /* Cainhurst Castle chambers */
+  --bg-card: rgba(26, 10, 15, 0.85); /* Crimson stone shadow */
+  --accent: #8b0000; /* Dark Vileblood Red */
+  --accent-dim: #c5a059; /* Gilt silver / gold decoration */
+  --accent-glow: rgba(139, 0, 0, 0.4);
+  background: #0a0406 !important;
+  color: #dcdde1 !important; /* Silver grey text */
+  font-family: 'Cinzel', 'Georgia', serif !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ctext y='22' font-size='22'%3E🩸%3C/text%3E%3C/svg%3E") 2 2, auto !important;
+}
+
+.vilebloods-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(139, 0, 0, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.vilebloods-theme h1,
+.vilebloods-theme h2,
+.vilebloods-theme h3,
+.vilebloods-theme .page-title,
+.vilebloods-theme .welcome-banner__greeting {
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(139, 0, 0, 0.6), 1px 1px 2px #000 !important;
+}
+
+/* Glowing Welcome icon animation */
+@keyframes crownPulse {
+  0% { filter: drop-shadow(0 0 2px #c5a059); }
+  100% { filter: drop-shadow(0 0 10px #8b0000); }
+}
+.vilebloods-theme .crown-glow {
+  animation: crownPulse 2s infinite alternate ease-in-out;
+  color: #c5a059 !important;
+}
+
+/* Corner Chalice Widget */
+.vilebloods-theme .vilebloods-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a0a0f 0%, #0a0406 100%);
+  border: 3px double #c5a059;
+  box-shadow: 0 0 20px rgba(139, 0, 0, 0.6), inset 0 0 10px rgba(197, 160, 89, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.vilebloods-theme .vilebloods-corner:hover {
+  transform: scale(1.15) rotate(15deg);
+  box-shadow: 0 0 30px #8b0000;
+}
+
+.vilebloods-theme .vilebloods-chalice {
+  font-size: 32px;
+  animation: chaliceFloat 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes chaliceFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+/* Speech Bubble */
+.vilebloods-theme .vilebloods-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 35px;
+  background: #1a0a0f;
+  color: #dcdde1;
+  padding: 12px 18px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  max-width: 250px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  border: 2px solid #c5a059;
+}
+
+.vilebloods-theme .vilebloods-bubble.show {
+  opacity: 1;
+  transform: translateY(0 scale(1));
+}
+
+.vilebloods-theme .vilebloods-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #c5a059 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Gothic sword top-left widget */
+.vilebloods-theme .vilebloods-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.4;
+  z-index: 50;
+  font-size: 2.5rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5));
+  animation: swordGlint 3s infinite ease-in-out;
+}
+
+@keyframes swordGlint {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(5deg); }
+}
+
+/* Decors above task board */
+.vilebloods-theme .vilebloods-decors {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.5;
+}
+
+.vilebloods-theme .vilebloods-decors span {
+  font-size: 1.5rem;
+  display: inline-block;
+  animation: batFlutter 3s ease-in-out infinite alternate;
+}
+
+.vilebloods-theme .vilebloods-decors span:nth-child(even) {
+  animation-delay: 1.5s;
+}
+
+@keyframes batFlutter {
+  0% { transform: translateY(0) scale(0.95); }
+  100% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* Task Columns */
+.vilebloods-theme .task-column {
+  background: rgba(26, 10, 15, 0.65) !important;
+  border: 2px solid rgba(197, 160, 89, 0.25) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.vilebloods-theme .task-column__header {
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
+  border: 2px solid #c5a059 !important;
+  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4) !important;
+  border-radius: 8px !important;
+}
+
+.vilebloods-theme .task-column__header h3 {
+  color: #fff !important;
+  font-family: 'Cinzel', serif !important;
+  text-shadow: 0 0 8px rgba(197, 160, 89, 0.5) !important;
+}
+
+/* Task Cards */
+.vilebloods-theme .task-card {
+  background: rgba(10, 4, 6, 0.9) !important;
+  border: 1.5px solid rgba(197, 160, 89, 0.2) !important;
+  border-radius: 8px !important;
+  color: #dcdde1 !important;
+  font-family: 'Cinzel', serif !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.25s ease !important;
+}
+
+.vilebloods-theme .task-card:hover {
+  border-color: #c5a059 !important;
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
+.vilebloods-theme .task-card__title {
+  color: #ffffff !important;
+}
+
+.vilebloods-theme .task-card__desc {
+  color: #a4a5a7 !important;
+}
+
+/* Card Priority Styles */
+.vilebloods-theme .task-card--low { border-left: 4px solid #a4a5a7 !important; }
+.vilebloods-theme .task-card--medium { border-left: 4px solid #c5a059 !important; }
+.vilebloods-theme .task-card--high { border-left: 4px solid #8b0000 !important; }
+.vilebloods-theme .task-card--urgent {
+  border-left: 4px solid #8b0000 !important;
+  border-right: 2px dashed #c5a059 !important;
+  animation: vilebloodUrgentPulse 1.2s infinite alternate !important;
+}
+
+@keyframes vilebloodUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); }
+}
+
+/* Buttons */
+.vilebloods-theme .task-card__action {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 4px !important;
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+}
+
+.vilebloods-theme .task-card__action:hover {
+  background: #c5a059 !important;
+  color: #1a0a0f !important;
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.6) !important;
+}
+
+/* Welcome Banner */
+.vilebloods-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.25) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
+  border: 2px solid #c5a059 !important;
+  border-radius: 8px !important;
+}
+
+.vilebloods-theme .welcome-banner__icon {
+  background: rgba(139, 0, 0, 0.3) !important;
+  color: #c5a059 !important;
+}
+
+.vilebloods-theme .welcome-banner__greeting strong {
+  color: #c5a059 !important;
+}
+
+/* Department Tabs */
+.vilebloods-theme .dept-tab.active {
+  background: rgba(139, 0, 0, 0.3) !important;
+  border-color: #c5a059 !important;
+  color: #ffffff !important;
+}
+
+/* Modals */
+.vilebloods-theme .task-modal__content {
+  background: rgba(10, 4, 6, 0.98) !important;
+  border: 2px solid #c5a059 !important;
+  box-shadow: 0 0 40px rgba(139, 0, 0, 0.5) !important;
+}
+
+.vilebloods-theme .task-modal__close:hover { color: #c5a059 !important; }
+
+/* Scrollbar overrides for Vilebloods */
+.vilebloods-theme::-webkit-scrollbar,
+.vilebloods-theme ::-webkit-scrollbar {
+  width: 10px;
+}
+.vilebloods-theme::-webkit-scrollbar-track,
+.vilebloods-theme ::-webkit-scrollbar-track {
+  background: #0a0406;
+}
+.vilebloods-theme::-webkit-scrollbar-thumb,
+.vilebloods-theme ::-webkit-scrollbar-thumb {
+  background: #c5a059;
+  border: 1px solid #8b0000;
+  border-radius: 5px;
+}
+.vilebloods-theme::-webkit-scrollbar-thumb:hover,
+.vilebloods-theme ::-webkit-scrollbar-thumb:hover {
+  background: #8b0000;
+}
+
+/* ==========================================================================
+   🌀 SARA'S SONIC CURSOR OVERRIDE
+   ========================================================================== */
+body.sonic-theme {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M2 16 C2 10, 10 2, 16 2 C22 2, 30 10, 30 16 C30 22, 26 26, 20 28 C22 30, 24 32, 26 31 C20 33, 14 31, 11 27 C6 27, 2 22, 2 16 Z' fill='%230055a5'/%3E%3Cpath d='M10 16 C10 12, 14 10, 18 10 C22 10, 25 12, 25 16 C25 19, 22 22, 18 22 C14 22, 10 19, 10 16 Z' fill='%23ffdbac'/%3E%3Cellipse cx='16' cy='15' rx='1.5' ry='3' fill='%23fff'/%3E%3Cellipse cx='16' cy='15' rx='0.7' ry='1.5' fill='%23000'/%3E%3Cellipse cx='20' cy='15' rx='1.5' ry='3' fill='%23fff'/%3E%3Cellipse cx='20' cy='15' rx='0.7' ry='1.5' fill='%23000'/%3E%3Cpath d='M18 19 Q18 20 19 19' stroke='%23000' stroke-width='1' fill='none'/%3E%3C/svg%3E") 2 2, auto !important;
+}
+
+/* ==========================================================================
+   🔥 HEAVY THEME ENHANCEMENTS OVERRIDES (EXCLUDING DUCK, MICKEY, LOVE)
+   ========================================================================== */
+
+/* --- SPONGEBOB HEAVY & PERSONALIZED OVERRIDES --- */
+.spongebob-theme .task-column {
+  border: 4px solid #5d4037 !important; /* Thick underwater wood border */
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.45) !important;
+}
+.spongebob-theme .task-column__header {
+  border: 3px solid #8b5a2b !important;
+  box-shadow: 4px 4px 0px #000 !important;
+}
+.spongebob-theme .task-card {
+  border: 3px solid #5d4037 !important; /* Heavy cartoon line */
+  box-shadow: 6px 6px 0px #ffe135 !important; /* Flat SpongeBob yellow shadow */
+  background: #0f2e5c !important; /* Richer blue */
+}
+.spongebob-theme .task-card:hover {
+  transform: translateY(-4px) rotate(1deg) !important;
+  box-shadow: 8px 8px 0px #ffe135 !important;
+}
+/* Speech bubble styled like a tropical yellow wood sign */
+.spongebob-theme .sb-bubble {
+  background: #fff59d !important;
+  color: #5d4037 !important;
+  border: 3px solid #5d4037 !important;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3) !important;
+}
+.spongebob-theme .sb-bubble::after {
+  border-color: #5d4037 transparent !important;
+}
+/* Sponge theme scrollbar */
+.spongebob-theme::-webkit-scrollbar,
+.spongebob-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.spongebob-theme::-webkit-scrollbar-track,
+.spongebob-theme ::-webkit-scrollbar-track {
+  background: #061529;
+}
+.spongebob-theme::-webkit-scrollbar-thumb,
+.spongebob-theme ::-webkit-scrollbar-thumb {
+  background: #ffe135;
+  border: 3px solid #061529;
+  border-radius: 6px;
+}
+
+/* --- MCQUEEN HEAVY & PERSONALIZED OVERRIDES --- */
+.mcqueen-theme .dashboard-page {
+  background-image: repeating-linear-gradient(45deg, #111 0px, #111 20px, #1c0000 20px, #1c0000 40px) !important;
+}
+.mcqueen-theme .task-column {
+  border: 4px solid #111 !important;
+  box-shadow: 8px 8px 0px #e10600 !important;
+}
+.mcqueen-theme .task-column__header {
+  border: 3px solid #ffd700 !important;
+  box-shadow: 4px 4px 0px #111 !important;
+}
+.mcqueen-theme .task-card {
+  border: 3px solid #111 !important;
+  box-shadow: 5px 5px 0px #ffd700 !important;
+  background: #b30000 !important;
+  color: #fff !important;
+}
+.mcqueen-theme .task-card:hover {
+  transform: translateY(-4px) skewX(-2deg) !important;
+  box-shadow: 7px 7px 0px #ffd700 !important;
+}
+.mcqueen-theme .task-card__desc {
+  color: #ffcccc !important;
+}
+/* Pit radio radio-comms speech bubble */
+.mcqueen-theme .mcqueen-bubble {
+  background: #111 !important;
+  color: #ffd700 !important;
+  border: 3px solid #e10600 !important;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4) !important;
+}
+.mcqueen-theme .mcqueen-bubble::after {
+  border-color: #e10600 transparent !important;
+}
+/* Tire tread scrollbar */
+.mcqueen-theme::-webkit-scrollbar,
+.mcqueen-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.mcqueen-theme::-webkit-scrollbar-track,
+.mcqueen-theme ::-webkit-scrollbar-track {
+  background: #111;
+}
+.mcqueen-theme::-webkit-scrollbar-thumb,
+.mcqueen-theme ::-webkit-scrollbar-thumb {
+  background: #e10600;
+  border: 3px solid #111;
+  border-radius: 6px;
+}
+
+/* --- BATMAN HEAVY & PERSONALIZED OVERRIDES --- */
+.batman-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 800px 500px at 50% 15%, rgba(245, 176, 65, 0.12) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, rgba(11, 12, 16, 0.98), rgba(11, 12, 16, 0.98) 2px, transparent 2px, transparent 4px),
+    #0b0c10 !important;
+}
+.batman-theme .task-column {
+  border: 3px solid #1f2833 !important;
+  box-shadow: 8px 8px 0px #0b0c10 !important;
+  background: rgba(31, 40, 51, 0.9) !important;
+}
+.batman-theme .task-column__header {
+  border: 3px solid #f5b041 !important;
+  box-shadow: 0 4px 20px rgba(245, 176, 65, 0.3) !important;
+}
+.batman-theme .task-card {
+  border: 2px solid #f5b041 !important;
+  box-shadow: inset 0 0 10px rgba(245, 176, 65, 0.15) !important;
+  background: #0f1319 !important;
+}
+.batman-theme .task-card:hover {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(245, 176, 65, 0.5) !important;
+  transform: scale(1.02) !important;
+}
+/* Batcomputer tech-bubble */
+.batman-theme .batman-bubble {
+  background: #0b0c10 !important;
+  color: #ffffff !important;
+  border: 2px solid #f5b041 !important;
+  box-shadow: 0 0 20px rgba(245, 176, 65, 0.4) !important;
+}
+.batman-theme .batman-bubble::after {
+  border-color: #f5b041 transparent !important;
+}
+/* Bat cyber scrollbar */
+.batman-theme::-webkit-scrollbar,
+.batman-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.batman-theme::-webkit-scrollbar-track,
+.batman-theme ::-webkit-scrollbar-track {
+  background: #0b0c10;
+}
+.batman-theme::-webkit-scrollbar-thumb,
+.batman-theme ::-webkit-scrollbar-thumb {
+  background: #f5b041;
+  border: 3px solid #0b0c10;
+  border-radius: 6px;
+}
+
+/* --- SPIDER-MAN HEAVY & PERSONALIZED OVERRIDES --- */
+.spiderman-theme .dashboard-page {
+  background: 
+    radial-gradient(circle, transparent 20%, #0a1128 20%, #0a1128 80%, transparent 80%, transparent) 0 0/16px 16px, 
+    radial-gradient(circle, transparent 20%, #0a1128 20%, #0a1128 80%, transparent 80%, transparent) 8px 8px/16px 16px, 
+    linear-gradient(#1e3d59 1px, transparent 1px) 0 0/8px 8px, 
+    linear-gradient(90deg, #1e3d59 1px, transparent 1px) 0 0/8px 8px,
+    #0a1128 !important;
+}
+.spiderman-theme .task-column {
+  border: 4px solid #001f54 !important;
+  box-shadow: 8px 8px 0px #e50914 !important;
+}
+.spiderman-theme .task-column__header {
+  border: 3px solid #e50914 !important;
+  box-shadow: 4px 4px 0px #001f54 !important;
+}
+.spiderman-theme .task-card {
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px #001f54 !important;
+  background: #0f2547 !important;
+}
+.spiderman-theme .task-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: #e50914 !important;
+  box-shadow: 7px 7px 0px #e50914 !important;
+}
+/* Comic dialogue balloon */
+.spiderman-theme .spiderman-bubble {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  font-weight: 700 !important;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5) !important;
+}
+.spiderman-theme .spiderman-bubble::after {
+  border-color: #000000 transparent !important;
+}
+/* Spidey web scrollbar */
+.spiderman-theme::-webkit-scrollbar,
+.spiderman-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.spiderman-theme::-webkit-scrollbar-track,
+.spiderman-theme ::-webkit-scrollbar-track {
+  background: #0a1128;
+}
+.spiderman-theme::-webkit-scrollbar-thumb,
+.spiderman-theme ::-webkit-scrollbar-thumb {
+  background: #e50914;
+  border: 3px solid #0a1128;
+  border-radius: 6px;
+}
+
+/* --- SONIC HEAVY & PERSONALIZED OVERRIDES --- */
+.sonic-theme .dashboard-page {
+  background: 
+    repeating-linear-gradient(45deg, #001a35 0px, #001a35 15px, #002244 15px, #002244 30px) !important;
+}
+.sonic-theme .task-column {
+  border: 4px solid #0055a5 !important;
+  box-shadow: 8px 8px 0px #ffd700 !important;
+  background: repeating-conic-gradient(#5a3d28 0% 25%, #422d1e 0% 50%) 0 0/20px 20px !important; /* Green Hill Soil look! */
+}
+.sonic-theme .task-column__header {
+  border: 3px solid #ffd700 !important;
+  box-shadow: 4px 4px 0px #0055a5 !important;
+}
+.sonic-theme .task-card {
+  border: 3px solid #0055a5 !important;
+  box-shadow: 6px 6px 0px #ffd700 !important;
+  background: #002c58 !important;
+}
+.sonic-theme .task-card:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 8px 8px 0px #00a2ff !important;
+}
+/* Sega Genesis Textbox */
+.sonic-theme .sonic-bubble {
+  background: #000000 !important;
+  color: #ffff00 !important;
+  border: 3px double #ffffff !important;
+  font-family: 'Fredoka', 'Courier New', monospace !important;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5) !important;
+}
+.sonic-theme .sonic-bubble::after {
+  border-color: #ffffff transparent !important;
+}
+/* Gold rings scrollbar */
+.sonic-theme::-webkit-scrollbar,
+.sonic-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.sonic-theme::-webkit-scrollbar-track,
+.sonic-theme ::-webkit-scrollbar-track {
+  background: #002244;
+}
+.sonic-theme::-webkit-scrollbar-thumb,
+.sonic-theme ::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border: 3px solid #002244;
+  border-radius: 6px;
+}
+
+/* --- TOM & JERRY HEAVY & PERSONALIZED OVERRIDES --- */
+.tomjerry-theme .dashboard-page {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 179, 0, 0.15) 15px, transparent 16px) 0 0/50px 50px,
+    radial-gradient(circle at 75% 60%, rgba(255, 179, 0, 0.15) 20px, transparent 21px) 0 0/50px 50px,
+    #3c4858 !important;
+}
+.tomjerry-theme .task-column {
+  border: 4px solid #2d3748 !important;
+  box-shadow: 8px 8px 0px #ffb300 !important;
+  background: #e6a100 !important; /* Cheese columns! */
+}
+.tomjerry-theme .task-column__header {
+  border: 3px solid #2d3748 !important;
+  box-shadow: 4px 4px 0px #ff7043 !important;
+}
+.tomjerry-theme .task-card {
+  border: 3px solid #2d3748 !important;
+  box-shadow: 6px 6px 0px #ffb300 !important;
+  background: #4a5568 !important;
+}
+.tomjerry-theme .task-card:hover {
+  transform: translateY(-4px) rotate(-1deg) !important;
+  box-shadow: 8px 8px 0px #ff7043 !important;
+}
+/* Retro MGM ribbon speech bubble */
+.tomjerry-theme .tomjerry-bubble {
+  background: #ffe082 !important;
+  color: #2d3748 !important;
+  border: 3px solid #ff7043 !important;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4) !important;
+}
+.tomjerry-theme .tomjerry-bubble::after {
+  border-color: #ff7043 transparent !important;
+}
+/* Cheese gold scrollbar */
+.tomjerry-theme::-webkit-scrollbar-thumb,
+.tomjerry-theme ::-webkit-scrollbar-thumb {
+  background: #ffb300;
+  border: 3px solid #3c4858;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   🤖 IRON MAN THEME (251010536)
+   ========================================================================== */
+body.ironman-theme {
+  --bg-primary: #0c0e12; /* Stark dark titanium grey */
+  --bg-secondary: #1a1d24; /* Stark workshop dark */
+  --bg-card: rgba(26, 29, 36, 0.9); /* Armor plating grey */
+  --accent: #c8102e; /* Stark Hot Rod Red */
+  --accent-dim: #ffd700; /* Stark Gold */
+  --accent-glow: rgba(0, 210, 255, 0.3); /* Arc Reactor Blue */
+  background: #0c0e12 !important;
+  color: #f1f5f9 !important;
+  font-family: 'Fredoka', 'Orbitron', sans-serif !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='10' fill='none' stroke='%2300d2ff' stroke-width='2'/%3E%3Ccircle cx='14' cy='14' r='4' fill='%2300d2ff'/%3E%3Cpath d='M14 2 L14 8 M14 20 L14 26 M2 14 L8 14 M20 14 L26 14' stroke='%2300d2ff' stroke-width='1.5'/%3E%3C/svg%3E") 14 14, auto !important;
+}
+
+.ironman-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(0, 210, 255, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(200, 16, 46, 0.08) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, #090b0e, #090b0e 2px, transparent 2px, transparent 10px),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.ironman-theme h1,
+.ironman-theme h2,
+.ironman-theme h3,
+.ironman-theme .page-title,
+.ironman-theme .welcome-banner__greeting {
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.5), 2px 2px 0px #c8102e !important;
+}
+
+/* Wiggling Welcome SVG animation */
+@keyframes reactorPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 2px #00d2ff); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #00d2ff); }
+}
+.ironman-theme .reactor-glow {
+  animation: reactorPulse 1.5s infinite alternate ease-in-out;
+  color: #00d2ff !important;
+  fill: rgba(0, 210, 255, 0.2) !important;
+}
+
+/* Corner widget / Floater bottom right */
+.ironman-theme .ironman-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c8102e 0%, #a00c22 100%);
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6), inset 0 0 10px rgba(255, 215, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+}
+
+.ironman-theme .ironman-corner:hover {
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 0 30px #00d2ff;
+}
+
+.ironman-theme .ironman-reactor-floater {
+  font-size: 32px;
+  animation: floatReactor 2s infinite alternate ease-in-out;
+  filter: drop-shadow(0 0 4px #00d2ff);
+}
+
+@keyframes floatReactor {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* Speech bubble bottom right - Stark HUD layout */
+.ironman-theme .ironman-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 35px;
+  background: rgba(12, 14, 18, 0.95);
+  color: #00d2ff;
+  padding: 12px 18px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  max-width: 250px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
+  border: 2px solid #00d2ff;
+}
+
+.ironman-theme .ironman-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.ironman-theme .ironman-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #00d2ff transparent;
+  display: block;
+  width: 0;
+}
+
+/* Stark Helmet top left corner widget */
+.ironman-theme .ironman-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.45;
+  z-index: 50;
+  font-size: 2.4rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(200, 16, 46, 0.5));
+  animation: helmetPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes helmetPulse {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.05); opacity: 0.6; }
+}
+
+/* Stark items decoration above task board */
+.ironman-theme .ironman-decors {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.5;
+}
+
+.ironman-theme .ironman-decors span {
+  font-size: 1.5rem;
+  display: inline-block;
+  animation: reactorSpin 4s linear infinite;
+}
+
+.ironman-theme .ironman-decors span:nth-child(even) {
+  animation-duration: 3s;
+  animation-direction: reverse;
+}
+
+@keyframes reactorSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Columns */
+.ironman-theme .task-column {
+  background: rgba(26, 29, 36, 0.75) !important;
+  border: 4px solid #c8102e !important; /* Thick hot rod red outline */
+  box-shadow: 8px 8px 0px #ffd700 !important; /* Stark gold flat shadow */
+  border-radius: 16px !important;
+}
+
+.ironman-theme .task-column__header {
+  background: linear-gradient(135deg, #c8102e 0%, #3a0007 100%) !important;
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.25) !important;
+  border-radius: 12px !important;
+}
+
+.ironman-theme .task-column__header h3 {
+  color: #fff !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.4) !important;
+}
+
+/* Task Cards - Iron Armor plates */
+.ironman-theme .task-card {
+  background: #11141a !important;
+  border: 2px solid #c8102e !important;
+  box-shadow: 5px 5px 0px #ffd700 !important;
+  border-radius: 10px !important;
+  color: #f1f5f9 !important;
+  font-family: 'Fredoka', sans-serif !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.ironman-theme .task-card:hover {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6) !important;
+  transform: translateY(-4px) scale(1.02) !important;
+}
+
+.ironman-theme .task-card__title {
+  color: #fff !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+.ironman-theme .task-card__desc {
+  color: #94a3b8 !important;
+}
+
+/* Priority Card Border Accents */
+.ironman-theme .task-card--low { border-left: 6px solid #4a5568 !important; }
+.ironman-theme .task-card--medium { border-left: 6px solid #ffd700 !important; }
+.ironman-theme .task-card--high { border-left: 6px solid #c8102e !important; }
+.ironman-theme .task-card--urgent {
+  border-left: 6px solid #c8102e !important;
+  border-right: 2px dashed #00d2ff !important;
+  animation: arcOverloadPulse 1s infinite alternate !important;
+}
+
+@keyframes arcOverloadPulse {
+  0% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(0, 210, 255, 0.8); }
+}
+
+/* Buttons and Controls - Launch repulsors! */
+.ironman-theme .task-card__action {
+  background: #c8102e !important;
+  color: #fff !important;
+  border: 1.5px solid #ffd700 !important;
+  border-radius: 8px !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 8px rgba(200, 16, 46, 0.3) !important;
+}
+
+.ironman-theme .task-card__action:hover {
+  background: #ffd700 !important;
+  color: #0c0e12 !important;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.6) !important;
+}
+
+/* Welcome Banner */
+.ironman-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.2) 0%, rgba(26, 29, 36, 0.95) 100%) !important;
+  border: 2px solid #ffd700 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.2) !important;
+}
+
+.ironman-theme .welcome-banner__icon {
+  background: rgba(200, 16, 46, 0.3) !important;
+  color: #ffd700 !important;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3) !important;
+}
+
+.ironman-theme .welcome-banner__greeting strong {
+  color: #ffd700 !important;
+}
+
+/* Tabs */
+.ironman-theme .dept-tab.active {
+  background: rgba(200, 16, 46, 0.3) !important;
+  border-color: #ffd700 !important;
+  color: #fff !important;
+}
+
+/* Modal styling */
+.ironman-theme .task-modal__content {
+  background: rgba(12, 14, 18, 0.98) !important;
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 0 35px rgba(0, 210, 255, 0.4) !important;
+}
+
+.ironman-theme .task-modal__close:hover { color: #00d2ff !important; }
+
+/* Approved pill */
+.ironman-theme .task-card__approved-pill {
+  background: rgba(0, 210, 255, 0.1) !important;
+  color: #00d2ff !important;
+  border: 1px solid rgba(0, 210, 255, 0.3) !important;
+}
+
+/* Form controls focus */
+.ironman-theme input:focus,
+.ironman-theme textarea:focus,
+.ironman-theme select:focus {
+  border-color: #00d2ff !important;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.4) !important;
+}
+
+/* Experimental Banner */
+.ironman-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(200, 16, 46, .15) 0%, rgba(12, 14, 18, .9) 100%) !important;
+  border-bottom: 1px solid rgba(0, 210, 255, .25) !important;
+}
+
+.ironman-theme .experimental-banner__icon {
+  background: rgba(200, 16, 46, .2) !important;
+  color: #ffd700 !important;
+}
+
+.ironman-theme .experimental-banner__text strong {
+  color: #00d2ff !important;
+}
+
+/* High-tech Gold/Red scrollbar */
+.ironman-theme::-webkit-scrollbar,
+.ironman-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.ironman-theme::-webkit-scrollbar-track,
+.ironman-theme ::-webkit-scrollbar-track {
+  background: #0c0e12;
+}
+.ironman-theme::-webkit-scrollbar-thumb,
+.ironman-theme ::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border: 3px solid #0c0e12;
+  border-radius: 6px;
+}
+.ironman-theme::-webkit-scrollbar-thumb:hover,
+.ironman-theme ::-webkit-scrollbar-thumb:hover {
+  background: #c8102e;
+}
+
+
 
 
