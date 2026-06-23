@@ -5105,17 +5105,17 @@ body.tomjerry-theme {
   color: #ffb300 !important;
 }
 
-.tomjerry-them/* ==========================================================================
+/* ==========================================================================
    🩸 BLOODBORNE THEME (241012132)
    ========================================================================== */
 body.bloodborne-theme {
-  --bg-primary: #0c0e12; /* Cold gothic stone */
-  --bg-secondary: #141920; /* Yharnam streets shadow */
-  --bg-card: rgba(22, 28, 36, 0.85); /* Dark iron stone */
-  --accent: #9a0007; /* Blood Red */
-  --accent-dim: #88c0c0; /* Hunter Brass / Moonlit cyan */
-  --accent-glow: rgba(136, 192, 192, 0.3);
-  background: #0c0e12 !important;
+  --bg-primary: #1a0a0f; /* Dark blood gothic */
+  --bg-secondary: #0a0406; /* Pitch dark shadow */
+  --bg-card: rgba(10, 4, 6, 0.9); /* Cainhurst dark wood */
+  --accent: #8b0000; /* Cainhurst Crimson */
+  --accent-dim: #c5a059; /* Cainhurst Gold */
+  --accent-glow: rgba(139, 0, 0, 0.3);
+  background: #1a0a0f !important;
   color: #dcdde1 !important; /* Silver grey text */
   font-family: 'Cinzel', 'Georgia', serif !important;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ctext y='22' font-size='22'%3E🩸%3C/text%3E%3C/svg%3E") 2 2, auto !important;
@@ -5123,8 +5123,8 @@ body.bloodborne-theme {
 
 .bloodborne-theme .dashboard-page {
   background: 
-    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(136, 192, 192, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(154, 0, 7, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(139, 0, 0, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(197, 160, 89, 0.1) 0%, transparent 60%),
     var(--bg-primary) !important;
   background-attachment: fixed;
 }
@@ -5137,18 +5137,18 @@ body.bloodborne-theme {
   font-family: 'Cinzel', serif !important;
   font-weight: 700 !important;
   letter-spacing: 2px !important;
-  color: #e2f1f1 !important; /* Moonlit silver */
-  text-shadow: 0 0 10px rgba(136, 192, 192, 0.5), 1px 1px 2px #000 !important;
+  color: #c5a059 !important; /* Cainhurst Gold */
+  text-shadow: 0 0 10px rgba(139, 0, 0, 0.5), 1px 1px 2px #000 !important;
 }
 
 /* Glowing Welcome icon animation */
 @keyframes hunterPulse {
-  0% { filter: drop-shadow(0 0 2px #88c0c0); }
-  100% { filter: drop-shadow(0 0 10px #9a0007); }
+  0% { filter: drop-shadow(0 0 2px #c5a059); }
+  100% { filter: drop-shadow(0 0 10px #8b0000); }
 }
 .bloodborne-theme .hunter-glow {
   animation: hunterPulse 2s infinite alternate ease-in-out;
-  color: #88c0c0 !important;
+  color: #c5a059 !important;
 }
 
 /* Corner Lantern Widget */
@@ -5159,9 +5159,9 @@ body.bloodborne-theme {
   width: 65px;
   height: 65px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #141920 0%, #0c0e12 100%);
-  border: 3px double #88c0c0;
-  box-shadow: 0 0 20px rgba(136, 192, 192, 0.4), inset 0 0 10px rgba(136, 192, 192, 0.2);
+  background: linear-gradient(135deg, #0a0406 0%, #1a0a0f 100%);
+  border: 3px double #c5a059;
+  box-shadow: 0 0 20px rgba(139, 0, 0, 0.4), inset 0 0 10px rgba(139, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5172,7 +5172,7 @@ body.bloodborne-theme {
 
 .bloodborne-theme .bloodborne-corner:hover {
   transform: scale(1.15) rotate(15deg);
-  box-shadow: 0 0 30px #9a0007;
+  box-shadow: 0 0 30px #8b0000;
 }
 
 .bloodborne-theme .bloodborne-lantern {
@@ -5190,7 +5190,7 @@ body.bloodborne-theme {
   position: fixed;
   bottom: 100px;
   right: 35px;
-  background: #141920;
+  background: #0a0406;
   color: #dcdde1;
   padding: 12px 18px;
   border-radius: 14px 14px 2px 14px;
@@ -5203,7 +5203,7 @@ body.bloodborne-theme {
   pointer-events: none;
   z-index: 100;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-  border: 2px solid #88c0c0;
+  border: 2px solid #c5a059;
 }
 
 .bloodborne-theme .bloodborne-bubble.show {
@@ -5218,7 +5218,7 @@ body.bloodborne-theme {
   right: 20px;
   border-width: 8px 8px 0;
   border-style: solid;
-  border-color: #88c0c0 transparent;
+  border-color: #c5a059 transparent;
   display: block;
   width: 0;
 }
@@ -5232,7 +5232,7 @@ body.bloodborne-theme {
   z-index: 50;
   font-size: 2.5rem;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(136, 192, 192, 0.5));
+  filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5));
   animation: moonGlint 3s infinite ease-in-out;
 }
 
@@ -5267,29 +5267,29 @@ body.bloodborne-theme {
 
 /* Task Columns */
 .bloodborne-theme .task-column {
-  background: rgba(20, 25, 32, 0.7) !important;
-  border: 2px solid rgba(136, 192, 192, 0.2) !important;
+  background: rgba(26, 10, 15, 0.65) !important;
+  border: 2px solid rgba(197, 160, 89, 0.25) !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
 }
 
 .bloodborne-theme .task-column__header {
-  background: linear-gradient(135deg, rgba(136, 192, 192, 0.15) 0%, rgba(20, 25, 32, 0.95) 100%) !important;
-  border: 2px solid #88c0c0 !important;
-  box-shadow: 0 4px 15px rgba(136, 192, 192, 0.2) !important;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
+  border: 2px solid #c5a059 !important;
+  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4) !important;
   border-radius: 8px !important;
 }
 
 .bloodborne-theme .task-column__header h3 {
-  color: #e2f1f1 !important;
+  color: #fff !important;
   font-family: 'Cinzel', serif !important;
-  text-shadow: 0 0 8px rgba(136, 192, 192, 0.4) !important;
+  text-shadow: 0 0 8px rgba(197, 160, 89, 0.5) !important;
 }
 
 /* Task Cards */
 .bloodborne-theme .task-card {
-  background: rgba(12, 14, 18, 0.9) !important;
-  border: 1.5px solid rgba(136, 192, 192, 0.15) !important;
+  background: rgba(10, 4, 6, 0.9) !important;
+  border: 1.5px solid rgba(197, 160, 89, 0.2) !important;
   border-radius: 8px !important;
   color: #dcdde1 !important;
   font-family: 'Cinzel', serif !important;
@@ -5298,8 +5298,8 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card:hover {
-  border-color: #88c0c0 !important;
-  box-shadow: 0 0 15px rgba(136, 192, 192, 0.3) !important;
+  border-color: #c5a059 !important;
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -5308,29 +5308,29 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card__desc {
-  color: #9bb0b0 !important;
+  color: #a4a5a7 !important;
 }
 
 /* Card Priority Styles */
-.bloodborne-theme .task-card--low { border-left: 4px solid #718d8d !important; }
-.bloodborne-theme .task-card--medium { border-left: 4px solid #88c0c0 !important; }
-.bloodborne-theme .task-card--high { border-left: 4px solid #9a0007 !important; }
+.bloodborne-theme .task-card--low { border-left: 4px solid #a4a5a7 !important; }
+.bloodborne-theme .task-card--medium { border-left: 4px solid #c5a059 !important; }
+.bloodborne-theme .task-card--high { border-left: 4px solid #8b0000 !important; }
 .bloodborne-theme .task-card--urgent {
-  border-left: 4px solid #9a0007 !important;
-  border-right: 2px dashed #88c0c0 !important;
+  border-left: 4px solid #8b0000 !important;
+  border-right: 2px dashed #c5a059 !important;
   animation: bloodborneUrgentPulse 1.2s infinite alternate !important;
 }
 
 @keyframes bloodborneUrgentPulse {
-  0% { box-shadow: 0 0 5px rgba(154, 0, 7, 0.3); }
-  100% { box-shadow: 0 0 20px rgba(154, 0, 7, 0.7); }
+  0% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); }
 }
 
 /* Buttons */
 .bloodborne-theme .task-card__action {
-  background: #9a0007 !important;
+  background: #8b0000 !important;
   color: #ffffff !important;
-  border: 1px solid #88c0c0 !important;
+  border: 1px solid #c5a059 !important;
   border-radius: 4px !important;
   font-family: 'Cinzel', serif !important;
   font-weight: 700 !important;
@@ -5338,64 +5338,64 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card__action:hover {
-  background: #88c0c0 !important;
-  color: #0c0e12 !important;
-  box-shadow: 0 0 10px rgba(136, 192, 192, 0.6) !important;
+  background: #c5a059 !important;
+  color: #1a0a0f !important;
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.6) !important;
 }
 
 /* Welcome Banner */
 .bloodborne-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(136, 192, 192, 0.15) 0%, rgba(20, 25, 32, 0.95) 100%) !important;
-  border: 2px solid #88c0c0 !important;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.25) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
+  border: 2px solid #c5a059 !important;
   border-radius: 8px !important;
 }
 
 .bloodborne-theme .welcome-banner__icon {
-  background: rgba(136, 192, 192, 0.2) !important;
-  color: #88c0c0 !important;
+  background: rgba(139, 0, 0, 0.3) !important;
+  color: #c5a059 !important;
 }
 
 .bloodborne-theme .welcome-banner__greeting strong {
-  color: #88c0c0 !important;
+  color: #c5a059 !important;
 }
 
 /* Department Tabs */
 .bloodborne-theme .dept-tab.active {
-  background: rgba(136, 192, 192, 0.2) !important;
-  border-color: #88c0c0 !important;
+  background: rgba(139, 0, 0, 0.3) !important;
+  border-color: #c5a059 !important;
   color: #ffffff !important;
 }
 
 /* Modals */
 .bloodborne-theme .task-modal__content {
-  background: rgba(12, 14, 18, 0.98) !important;
-  border: 2px solid #88c0c0 !important;
-  box-shadow: 0 0 40px rgba(136, 192, 192, 0.3) !important;
+  background: rgba(10, 4, 6, 0.98) !important;
+  border: 2px solid #c5a059 !important;
+  box-shadow: 0 0 40px rgba(139, 0, 0, 0.5) !important;
 }
 
-.bloodborne-theme .task-modal__close:hover { color: #88c0c0 !important; }
+.bloodborne-theme .task-modal__close:hover { color: #c5a059 !important; }
 
 /* News Section & Form Overrides for Bloodborne */
 .bloodborne-theme .news-section {
-  background: rgba(20, 25, 32, 0.6) !important;
-  border: 2px solid rgba(136, 192, 192, 0.2) !important;
+  background: rgba(26, 10, 15, 0.6) !important;
+  border: 2px solid rgba(197, 160, 89, 0.2) !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
   border-radius: 12px !important;
 }
 
 .bloodborne-theme .news-card {
-  background: rgba(12, 14, 18, 0.85) !important;
-  border: 1.5px solid rgba(136, 192, 192, 0.12) !important;
+  background: rgba(10, 4, 6, 0.85) !important;
+  border: 1.5px solid rgba(197, 160, 89, 0.12) !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
   border-radius: 8px !important;
 }
 
 .bloodborne-theme .news-card:hover {
-  border-color: #88c0c0 !important;
+  border-color: #c5a059 !important;
 }
 
 .bloodborne-theme .news-card__author {
-  color: #e2f1f1 !important;
+  color: #c5a059 !important;
 }
 
 .bloodborne-theme .news-card__content {
@@ -5403,73 +5403,73 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .news-card__footer {
-  color: #9bb0b0 !important;
+  color: #a4a5a7 !important;
 }
 
 .bloodborne-theme .news-card__footer svg {
-  color: #88c0c0 !important;
+  color: #c5a059 !important;
 }
 
 .bloodborne-theme .news-toggle-form {
-  background: #9a0007 !important;
+  background: #8b0000 !important;
   color: #ffffff !important;
-  border: 1px solid #88c0c0 !important;
+  border: 1px solid #c5a059 !important;
 }
 
 .bloodborne-theme .news-toggle-form:hover {
-  background: #88c0c0 !important;
-  color: #0c0e12 !important;
+  background: #c5a059 !important;
+  color: #1a0a0f !important;
 }
 
 .bloodborne-theme .news-form {
-  background: rgba(12, 14, 18, 0.95) !important;
-  border: 2px solid #88c0c0 !important;
+  background: rgba(10, 4, 6, 0.95) !important;
+  border: 2px solid #c5a059 !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8) !important;
 }
 
 .bloodborne-theme .news-form textarea {
-  background: rgba(20, 25, 32, 0.8) !important;
-  border: 1px solid rgba(136, 192, 192, 0.3) !important;
-  color: #e2f1f1 !important;
+  background: rgba(26, 10, 15, 0.8) !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
+  color: #ffffff !important;
 }
 
 .bloodborne-theme .task-form {
-  background: rgba(20, 25, 32, 0.8) !important;
-  border: 2px solid rgba(136, 192, 192, 0.25) !important;
+  background: rgba(26, 10, 15, 0.8) !important;
+  border: 2px solid rgba(197, 160, 89, 0.25) !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
 }
 
 .bloodborne-theme .task-form label {
-  color: #88c0c0 !important;
+  color: #c5a059 !important;
   font-family: 'Cinzel', serif !important;
 }
 
 .bloodborne-theme input,
 .bloodborne-theme textarea,
 .bloodborne-theme select {
-  background: rgba(12, 14, 18, 0.9) !important;
-  border: 1px solid rgba(136, 192, 192, 0.3) !important;
+  background: rgba(10, 4, 6, 0.9) !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
   color: #dcdde1 !important;
 }
 
 .bloodborne-theme input:focus,
 .bloodborne-theme textarea:focus,
 .bloodborne-theme select:focus {
-  border-color: #88c0c0 !important;
-  box-shadow: 0 0 10px rgba(136, 192, 192, 0.4) !important;
+  border-color: #c5a059 !important;
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.4) !important;
 }
 
 .bloodborne-theme .btn-primary,
 .bloodborne-theme #submit-task {
-  background: #9a0007 !important;
+  background: #8b0000 !important;
   color: #ffffff !important;
-  border: 1px solid #88c0c0 !important;
+  border: 1px solid #c5a059 !important;
 }
 
 .bloodborne-theme .btn-primary:hover,
 .bloodborne-theme #submit-task:hover {
-  background: #88c0c0 !important;
-  color: #0c0e12 !important;
+  background: #c5a059 !important;
+  color: #1a0a0f !important;
 }
 
 /* Scrollbar overrides for Bloodborne */
@@ -5479,17 +5479,17 @@ body.bloodborne-theme {
 }
 .bloodborne-theme::-webkit-scrollbar-track,
 .bloodborne-theme ::-webkit-scrollbar-track {
-  background: #0c0e12;
+  background: #0a0406;
 }
 .bloodborne-theme::-webkit-scrollbar-thumb,
 .bloodborne-theme ::-webkit-scrollbar-thumb {
-  background: #88c0c0;
-  border: 1px solid #9a0007;
+  background: #c5a059;
+  border: 1px solid #8b0000;
   border-radius: 5px;
 }
 .bloodborne-theme::-webkit-scrollbar-thumb:hover,
 .bloodborne-theme ::-webkit-scrollbar-thumb:hover {
-  background: #9a0007;
+  background: #8b0000;
 }
 
 /* ==========================================================================

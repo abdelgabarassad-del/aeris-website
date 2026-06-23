@@ -2759,42 +2759,6 @@
         taskBoard.parentNode.insertBefore(decors, taskBoard);
       }
 
-      // Customize task form headers for Bloodborne
-      const formTitle = document.querySelector('.task-form__title');
-      if (formTitle) {
-        const svg = formTitle.querySelector('svg');
-        formTitle.textContent = '';
-        if (svg) formTitle.appendChild(svg);
-        formTitle.append(' Register Hunter\'s Contract / Hunt');
-      }
-
-      const labelTaskTitle = document.querySelector('label[for="task-title"]');
-      if (labelTaskTitle) labelTaskTitle.textContent = '⚔️ Hunter\'s Contract';
-
-      const labelTaskDesc = document.querySelector('label[for="task-description"]');
-      if (labelTaskDesc) labelTaskDesc.textContent = '🩸 Hunt Details & Echoes';
-
-      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
-      if (labelTaskPriority) labelTaskPriority.textContent = '🏮 Hunter\'s Insight';
-
-      const prioritySelect = document.getElementById('task-priority');
-      if (prioritySelect) {
-        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Hunter\'s Slumber (Low)';
-        prioritySelect.querySelector('option[value="medium"]').textContent = '⚔️ Good Hunter (Medium)';
-        prioritySelect.querySelector('option[value="high"]').textContent = '🩸 Great One Hunt (High)';
-        prioritySelect.querySelector('option[value="urgent"]').textContent = '👁️ FEAR THE OLD BLOOD! (Urgent)';
-      }
-
-      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
-      if (labelTaskDeadline) labelTaskDeadline.textContent = '🌙 Paleblood Moon Deadline';
-
-      const submitTaskBtn = document.getElementById('submit-task');
-      if (submitTaskBtn) {
-        const svg = submitTaskBtn.querySelector('svg');
-        submitTaskBtn.textContent = '';
-        if (svg) submitTaskBtn.appendChild(svg);
-        submitTaskBtn.append(' Begin Hunt!');
-      }
     }
 
     /* ========== LADYBUG THEME (251010151 only) ========== */
@@ -3447,41 +3411,6 @@
            </div>
          `;
        }
-
-       if (isBloodborneUser()) {
-         const priorityLabels = { low: '💤 Hunter\'s Slumber', medium: '⚔️ Good Hunter', high: '🩸 Great One Hunt', urgent: '👁️ FEAR THE OLD BLOOD!' };
-         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
-
-         let actions = '';
-         if (task.status === 'todo') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Wake to hunt">▶ Wake to Hunt</button>`;
-         } else if (task.status === 'progress') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Slay beast">✓ Slay Beast</button>`;
-         }
-
-         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
-
-         return `
-           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
-             <div class="task-card__top">
-               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
-               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
-               ${deleteBtn}
-             </div>
-             <h4 class="task-card__title">🩸 ${escapeHtml(task.title)} ⚔️</h4>
-             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
-             <div class="task-card__footer">
-               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                 ${deadlineStr}
-               </span>` : ''}
-               ${actions}
-             </div>
-           </div>
-         `;
-       }
-
         if (isLadybugUser()) {
           const priorityLabels = { low: '💤 Patrol Mode', medium: '👊 Akuma Alert', high: '🪀 Lucky Charm', urgent: '🦋 CATACLYSM!' };
           const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -3950,18 +3879,6 @@
           'col-todo': 'Akuma Sightings (To Do) 🦋',
           'col-progress': 'Lucky Charm Active (In Progress) 🪀',
           'col-done': 'Miraculous Ladybug (Done) 🐞✨'
-        };
-        Object.entries(colHeaders).forEach(([id, label]) => {
-          const colEl = document.getElementById(id);
-          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
-          if (h3) h3.textContent = label;
-        });
-      }
-      if (isBloodborneUser()) {
-        const colHeaders = {
-          'col-todo': 'Hunter\'s Dream (To Do) 🕯️',
-          'col-progress': 'Yharnam Streets (In Progress) ⚔️',
-          'col-done': 'Beast Slaughtered (Done) 🩸'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
