@@ -5105,19 +5105,15 @@ body.tomjerry-theme {
   color: #ffb300 !important;
 }
 
-.tomjerry-theme .experimental-banner__text strong {
-  color: #ffb300 !important;
-}
-
-/* ==========================================================================
-   🩸 VILEBLOODS THEME (241012132)
+.tomjerry-them/* ==========================================================================
+   🩸 BLOODBORNE THEME (241012132)
    ========================================================================== */
-body.vilebloods-theme {
-  --bg-primary: #0a0406; /* Dark Cainhurst stone */
-  --bg-secondary: #1a0a0f; /* Cainhurst Castle chambers */
+body.bloodborne-theme {
+  --bg-primary: #0a0406; /* Dark Hunter stone */
+  --bg-secondary: #1a0a0f; /* Yharnam streets shadow */
   --bg-card: rgba(26, 10, 15, 0.85); /* Crimson stone shadow */
-  --accent: #8b0000; /* Dark Vileblood Red */
-  --accent-dim: #c5a059; /* Gilt silver / gold decoration */
+  --accent: #8b0000; /* Blood Red */
+  --accent-dim: #c5a059; /* Hunter Brass / Gold decoration */
   --accent-glow: rgba(139, 0, 0, 0.4);
   background: #0a0406 !important;
   color: #dcdde1 !important; /* Silver grey text */
@@ -5125,7 +5121,7 @@ body.vilebloods-theme {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ctext y='22' font-size='22'%3E🩸%3C/text%3E%3C/svg%3E") 2 2, auto !important;
 }
 
-.vilebloods-theme .dashboard-page {
+.bloodborne-theme .dashboard-page {
   background: 
     radial-gradient(ellipse 700px 500px at 50% 20%, rgba(139, 0, 0, 0.2) 0%, transparent 70%),
     radial-gradient(ellipse 400px 300px at 80% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
@@ -5133,11 +5129,11 @@ body.vilebloods-theme {
   background-attachment: fixed;
 }
 
-.vilebloods-theme h1,
-.vilebloods-theme h2,
-.vilebloods-theme h3,
-.vilebloods-theme .page-title,
-.vilebloods-theme .welcome-banner__greeting {
+.bloodborne-theme h1,
+.bloodborne-theme h2,
+.bloodborne-theme h3,
+.bloodborne-theme .page-title,
+.bloodborne-theme .welcome-banner__greeting {
   font-family: 'Cinzel', serif !important;
   font-weight: 700 !important;
   letter-spacing: 2px !important;
@@ -5146,17 +5142,17 @@ body.vilebloods-theme {
 }
 
 /* Glowing Welcome icon animation */
-@keyframes crownPulse {
+@keyframes hunterPulse {
   0% { filter: drop-shadow(0 0 2px #c5a059); }
   100% { filter: drop-shadow(0 0 10px #8b0000); }
 }
-.vilebloods-theme .crown-glow {
-  animation: crownPulse 2s infinite alternate ease-in-out;
+.bloodborne-theme .hunter-glow {
+  animation: hunterPulse 2s infinite alternate ease-in-out;
   color: #c5a059 !important;
 }
 
-/* Corner Chalice Widget */
-.vilebloods-theme .vilebloods-corner {
+/* Corner Lantern Widget */
+.bloodborne-theme .bloodborne-corner {
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -5174,23 +5170,23 @@ body.vilebloods-theme {
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
 }
 
-.vilebloods-theme .vilebloods-corner:hover {
+.bloodborne-theme .bloodborne-corner:hover {
   transform: scale(1.15) rotate(15deg);
   box-shadow: 0 0 30px #8b0000;
 }
 
-.vilebloods-theme .vilebloods-chalice {
+.bloodborne-theme .bloodborne-lantern {
   font-size: 32px;
-  animation: chaliceFloat 2.5s infinite alternate ease-in-out;
+  animation: lanternFloat 2.5s infinite alternate ease-in-out;
 }
 
-@keyframes chaliceFloat {
+@keyframes lanternFloat {
   0% { transform: translateY(0); }
   100% { transform: translateY(-5px); }
 }
 
 /* Speech Bubble */
-.vilebloods-theme .vilebloods-bubble {
+.bloodborne-theme .bloodborne-bubble {
   position: fixed;
   bottom: 100px;
   right: 35px;
@@ -5210,12 +5206,12 @@ body.vilebloods-theme {
   border: 2px solid #c5a059;
 }
 
-.vilebloods-theme .vilebloods-bubble.show {
+.bloodborne-theme .bloodborne-bubble.show {
   opacity: 1;
-  transform: translateY(0 scale(1));
+  transform: translateY(0) scale(1);
 }
 
-.vilebloods-theme .vilebloods-bubble::after {
+.bloodborne-theme .bloodborne-bubble::after {
   content: '';
   position: absolute;
   bottom: -8px;
@@ -5227,8 +5223,8 @@ body.vilebloods-theme {
   width: 0;
 }
 
-/* Gothic sword top-left widget */
-.vilebloods-theme .vilebloods-corner-tl {
+/* Gothic hunter's moon top-left widget */
+.bloodborne-theme .bloodborne-corner-tl {
   position: fixed;
   top: 90px;
   left: 24px;
@@ -5237,16 +5233,16 @@ body.vilebloods-theme {
   font-size: 2.5rem;
   pointer-events: none;
   filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5));
-  animation: swordGlint 3s infinite ease-in-out;
+  animation: moonGlint 3s infinite ease-in-out;
 }
 
-@keyframes swordGlint {
+@keyframes moonGlint {
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.05) rotate(5deg); }
 }
 
 /* Decors above task board */
-.vilebloods-theme .vilebloods-decors {
+.bloodborne-theme .bloodborne-decors {
   display: flex;
   justify-content: center;
   gap: 40px;
@@ -5254,13 +5250,13 @@ body.vilebloods-theme {
   opacity: 0.5;
 }
 
-.vilebloods-theme .vilebloods-decors span {
+.bloodborne-theme .bloodborne-decors span {
   font-size: 1.5rem;
   display: inline-block;
   animation: batFlutter 3s ease-in-out infinite alternate;
 }
 
-.vilebloods-theme .vilebloods-decors span:nth-child(even) {
+.bloodborne-theme .bloodborne-decors span:nth-child(even) {
   animation-delay: 1.5s;
 }
 
@@ -5270,28 +5266,28 @@ body.vilebloods-theme {
 }
 
 /* Task Columns */
-.vilebloods-theme .task-column {
+.bloodborne-theme .task-column {
   background: rgba(26, 10, 15, 0.65) !important;
   border: 2px solid rgba(197, 160, 89, 0.25) !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
 }
 
-.vilebloods-theme .task-column__header {
+.bloodborne-theme .task-column__header {
   background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
   border: 2px solid #c5a059 !important;
   box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4) !important;
   border-radius: 8px !important;
 }
 
-.vilebloods-theme .task-column__header h3 {
+.bloodborne-theme .task-column__header h3 {
   color: #fff !important;
   font-family: 'Cinzel', serif !important;
   text-shadow: 0 0 8px rgba(197, 160, 89, 0.5) !important;
 }
 
 /* Task Cards */
-.vilebloods-theme .task-card {
+.bloodborne-theme .task-card {
   background: rgba(10, 4, 6, 0.9) !important;
   border: 1.5px solid rgba(197, 160, 89, 0.2) !important;
   border-radius: 8px !important;
@@ -5301,37 +5297,37 @@ body.vilebloods-theme {
   transition: all 0.25s ease !important;
 }
 
-.vilebloods-theme .task-card:hover {
+.bloodborne-theme .task-card:hover {
   border-color: #c5a059 !important;
   box-shadow: 0 0 15px rgba(139, 0, 0, 0.5) !important;
   transform: translateY(-2px) !important;
 }
 
-.vilebloods-theme .task-card__title {
+.bloodborne-theme .task-card__title {
   color: #ffffff !important;
 }
 
-.vilebloods-theme .task-card__desc {
+.bloodborne-theme .task-card__desc {
   color: #a4a5a7 !important;
 }
 
 /* Card Priority Styles */
-.vilebloods-theme .task-card--low { border-left: 4px solid #a4a5a7 !important; }
-.vilebloods-theme .task-card--medium { border-left: 4px solid #c5a059 !important; }
-.vilebloods-theme .task-card--high { border-left: 4px solid #8b0000 !important; }
-.vilebloods-theme .task-card--urgent {
+.bloodborne-theme .task-card--low { border-left: 4px solid #a4a5a7 !important; }
+.bloodborne-theme .task-card--medium { border-left: 4px solid #c5a059 !important; }
+.bloodborne-theme .task-card--high { border-left: 4px solid #8b0000 !important; }
+.bloodborne-theme .task-card--urgent {
   border-left: 4px solid #8b0000 !important;
   border-right: 2px dashed #c5a059 !important;
-  animation: vilebloodUrgentPulse 1.2s infinite alternate !important;
+  animation: bloodborneUrgentPulse 1.2s infinite alternate !important;
 }
 
-@keyframes vilebloodUrgentPulse {
+@keyframes bloodborneUrgentPulse {
   0% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.3); }
   100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); }
 }
 
 /* Buttons */
-.vilebloods-theme .task-card__action {
+.bloodborne-theme .task-card__action {
   background: #8b0000 !important;
   color: #ffffff !important;
   border: 1px solid #c5a059 !important;
@@ -5341,61 +5337,61 @@ body.vilebloods-theme {
   letter-spacing: 1px !important;
 }
 
-.vilebloods-theme .task-card__action:hover {
+.bloodborne-theme .task-card__action:hover {
   background: #c5a059 !important;
   color: #1a0a0f !important;
   box-shadow: 0 0 10px rgba(197, 160, 89, 0.6) !important;
 }
 
 /* Welcome Banner */
-.vilebloods-theme .welcome-banner {
+.bloodborne-theme .welcome-banner {
   background: linear-gradient(135deg, rgba(139, 0, 0, 0.25) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
   border: 2px solid #c5a059 !important;
   border-radius: 8px !important;
 }
 
-.vilebloods-theme .welcome-banner__icon {
+.bloodborne-theme .welcome-banner__icon {
   background: rgba(139, 0, 0, 0.3) !important;
   color: #c5a059 !important;
 }
 
-.vilebloods-theme .welcome-banner__greeting strong {
+.bloodborne-theme .welcome-banner__greeting strong {
   color: #c5a059 !important;
 }
 
 /* Department Tabs */
-.vilebloods-theme .dept-tab.active {
+.bloodborne-theme .dept-tab.active {
   background: rgba(139, 0, 0, 0.3) !important;
   border-color: #c5a059 !important;
   color: #ffffff !important;
 }
 
 /* Modals */
-.vilebloods-theme .task-modal__content {
+.bloodborne-theme .task-modal__content {
   background: rgba(10, 4, 6, 0.98) !important;
   border: 2px solid #c5a059 !important;
   box-shadow: 0 0 40px rgba(139, 0, 0, 0.5) !important;
 }
 
-.vilebloods-theme .task-modal__close:hover { color: #c5a059 !important; }
+.bloodborne-theme .task-modal__close:hover { color: #c5a059 !important; }
 
-/* Scrollbar overrides for Vilebloods */
-.vilebloods-theme::-webkit-scrollbar,
-.vilebloods-theme ::-webkit-scrollbar {
+/* Scrollbar overrides for Bloodborne */
+.bloodborne-theme::-webkit-scrollbar,
+.bloodborne-theme ::-webkit-scrollbar {
   width: 10px;
 }
-.vilebloods-theme::-webkit-scrollbar-track,
-.vilebloods-theme ::-webkit-scrollbar-track {
+.bloodborne-theme::-webkit-scrollbar-track,
+.bloodborne-theme ::-webkit-scrollbar-track {
   background: #0a0406;
 }
-.vilebloods-theme::-webkit-scrollbar-thumb,
-.vilebloods-theme ::-webkit-scrollbar-thumb {
+.bloodborne-theme::-webkit-scrollbar-thumb,
+.bloodborne-theme ::-webkit-scrollbar-thumb {
   background: #c5a059;
   border: 1px solid #8b0000;
   border-radius: 5px;
 }
-.vilebloods-theme::-webkit-scrollbar-thumb:hover,
-.vilebloods-theme ::-webkit-scrollbar-thumb:hover {
+.bloodborne-theme::-webkit-scrollbar-thumb:hover,
+.bloodborne-theme ::-webkit-scrollbar-thumb:hover {
   background: #8b0000;
 }
 

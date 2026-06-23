@@ -455,7 +455,7 @@
       if (sessionReg === '251000861') document.body.classList.add('spiderman-theme');
       if (sessionReg === '251010424') document.body.classList.add('sonic-theme');
       if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
-      if (sessionReg === '241012132') document.body.classList.add('vilebloods-theme');
+      if (sessionReg === '241012132') document.body.classList.add('bloodborne-theme');
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
@@ -559,7 +559,7 @@
         applySpidermanTheme();
         applySonicTheme();
         applyTomJerryTheme();
-        applyVilebloodsTheme();
+        applyBloodborneTheme();
         applyIronmanTheme();
         applyPoohTheme();
         applyTweetyTheme();
@@ -636,7 +636,7 @@
       if (regNum === SPIDERMAN_REG) document.body.classList.add('spiderman-theme');
       if (regNum === SONIC_REG) document.body.classList.add('sonic-theme');
       if (regNum === TOMJERRY_REG) document.body.classList.add('tomjerry-theme');
-      if (regNum === VILEBLOODS_REG) document.body.classList.add('vilebloods-theme');
+      if (regNum === BLOODBORNE_REG) document.body.classList.add('bloodborne-theme');
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
@@ -2682,50 +2682,52 @@
       }
     }
 
-    /* ========== VILEBLOODS THEME (241012132 only) ========== */
-    const VILEBLOODS_REG = '241012132';
+    /* ========== BLOODBORNE THEME (241012132 only) ========== */
+    const BLOODBORNE_REG = '241012132';
 
-    function isVilebloodsUser() {
-      return safeSession.getItem('aeris_auth_reg') === VILEBLOODS_REG;
+    function isBloodborneUser() {
+      return safeSession.getItem('aeris_auth_reg') === BLOODBORNE_REG;
     }
 
-    function applyVilebloodsTheme() {
-      if (!isVilebloodsUser()) {
-        document.body.classList.remove('vilebloods-theme');
-        document.querySelectorAll('.vilebloods-corner, .vilebloods-corner-tl, .vilebloods-bubble, .vilebloods-decors').forEach(el => el.remove());
+    function applyBloodborneTheme() {
+      if (!isBloodborneUser()) {
+        document.body.classList.remove('bloodborne-theme');
+        document.querySelectorAll('.bloodborne-corner, .bloodborne-corner-tl, .bloodborne-bubble, .bloodborne-decors').forEach(el => el.remove());
         return;
       }
 
-      document.body.classList.add('vilebloods-theme');
+      document.body.classList.add('bloodborne-theme');
 
-      // Customize welcome banner icon to be a Gothic Silver Crown SVG
+      // Customize welcome banner icon to be a Gothic Hunter's Mark SVG
       const welcomeBanner = document.getElementById('welcome-banner');
       if (welcomeBanner) {
         const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
         if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="crown-glow"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18v2H3z"/></svg>`;
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hunter-glow"><path d="M12 2v20 M12 5 C 9 7, 5 10, 5 13 C 5 17, 12 19, 12 19 C 12 19, 19 17, 19 13 C 19 10, 15 7, 12 5 Z M5 10 L 12 14 L 19 10"/></svg>`;
         }
       }
 
-      // Chalice / blood vial widget bottom right
-      if (!document.querySelector('.vilebloods-corner')) {
+      // Lantern widget bottom right
+      if (!document.querySelector('.bloodborne-corner')) {
         const corner = document.createElement('div');
-        corner.className = 'vilebloods-corner';
-        corner.innerHTML = `<div class="vilebloods-chalice">🍷</div>`;
+        corner.className = 'bloodborne-corner';
+        corner.innerHTML = `<div class="bloodborne-lantern">🏮</div>`;
         document.body.appendChild(corner);
 
         const bubble = document.createElement('div');
-        bubble.className = 'vilebloods-bubble';
+        bubble.className = 'bloodborne-bubble';
         document.body.appendChild(bubble);
 
         const phrases = [
-          "We Vilebloods of Cainhurst... We await the Blood Echoes. 🩸",
-          "Speak thy mind. We are in a receptive mood. 👑",
-          "Ah, the sweet scent of blood... 🍷",
-          "Offer the Blood Dregs to our Queen. 🩸",
-          "Submit to the Queen of Cainhurst. 👑",
-          "Fear the Old Blood. 🕯️",
-          "Ah, another hunter seeks our grace. ⚔️"
+          "Fear the Old Blood. 🩸",
+          "A hunter must hunt. ⚔️",
+          "We are born of the blood, made men by the blood, undone by the blood. 🩸",
+          "Tonight, Gehrman joins the hunt... 🌙",
+          "May you find your worth in the waking world. 🕯️",
+          "Ah, Kos, or some say Kosm... Do you hear our prayers? 🌌",
+          "The night, and the dream, were long... 💤",
+          "Welcome home, good hunter. 🕯️",
+          "Beast claw, saw cleaver... the tools of our hunt. ⚔️"
         ];
 
         corner.addEventListener('click', () => {
@@ -2736,59 +2738,59 @@
         });
       }
 
-      // Gothic sword top-left
-      if (!document.querySelector('.vilebloods-corner-tl')) {
+      // Gothic hunter's moon top-left
+      if (!document.querySelector('.bloodborne-corner-tl')) {
         const cornerTL = document.createElement('div');
-        cornerTL.className = 'vilebloods-corner-tl';
-        cornerTL.innerHTML = `⚔️`;
+        cornerTL.className = 'bloodborne-corner-tl';
+        cornerTL.innerHTML = `🌙`;
         document.body.appendChild(cornerTL);
       }
 
       // Decors above task board
       const taskBoard = document.getElementById('task-board');
-      if (taskBoard && !document.querySelector('.vilebloods-decors')) {
+      if (taskBoard && !document.querySelector('.bloodborne-decors')) {
         const decors = document.createElement('div');
-        decors.className = 'vilebloods-decors';
-        const decorsContent = `<span>🩸</span><span>⚔️</span><span>👑</span><span>🍷</span><span>🦇</span>`;
+        decors.className = 'bloodborne-decors';
+        const decorsContent = `<span>🩸</span><span>⚔️</span><span>🏮</span><span>🌙</span><span>🐺</span>`;
         decors.innerHTML = decorsContent;
         taskBoard.parentNode.insertBefore(decors, taskBoard);
       }
 
-      // Customize task form headers for Vilebloods
+      // Customize task form headers for Bloodborne
       const formTitle = document.querySelector('.task-form__title');
       if (formTitle) {
         const svg = formTitle.querySelector('svg');
         formTitle.textContent = '';
         if (svg) formTitle.appendChild(svg);
-        formTitle.append(' Log Cainhurst Duty / Vow');
+        formTitle.append(' Register Hunter\'s Contract / Hunt');
       }
 
       const labelTaskTitle = document.querySelector('label[for="task-title"]');
-      if (labelTaskTitle) labelTaskTitle.textContent = '🩸 Blood Vow';
+      if (labelTaskTitle) labelTaskTitle.textContent = '⚔️ Hunter\'s Contract';
 
       const labelTaskDesc = document.querySelector('label[for="task-description"]');
-      if (labelTaskDesc) labelTaskDesc.textContent = '⚔️ Cainhurst Hunt Details';
+      if (labelTaskDesc) labelTaskDesc.textContent = '🩸 Hunt Details & Echoes';
 
       const labelTaskPriority = document.querySelector('label[for="task-priority"]');
-      if (labelTaskPriority) labelTaskPriority.textContent = '🍷 Vileblood Tiers';
+      if (labelTaskPriority) labelTaskPriority.textContent = '🏮 Hunter\'s Insight';
 
       const prioritySelect = document.getElementById('task-priority');
       if (prioritySelect) {
         prioritySelect.querySelector('option[value="low"]').textContent = '💤 Hunter\'s Slumber (Low)';
-        prioritySelect.querySelector('option[value="medium"]').textContent = '⚔️ Cainhurst Guardian (Med)';
-        prioritySelect.querySelector('option[value="high"]').textContent = '🍷 Blood Echoes Hunt (High)';
-        prioritySelect.querySelector('option[value="urgent"]').textContent = '👑 FOR THE QUEEN! (Urgent)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '⚔️ Good Hunter (Medium)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🩸 Great One Hunt (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '👁️ FEAR THE OLD BLOOD! (Urgent)';
       }
 
       const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
-      if (labelTaskDeadline) labelTaskDeadline.textContent = '🕯️ Sanguine Moon Deadline';
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '🌙 Paleblood Moon Deadline';
 
       const submitTaskBtn = document.getElementById('submit-task');
       if (submitTaskBtn) {
         const svg = submitTaskBtn.querySelector('svg');
         submitTaskBtn.textContent = '';
         if (svg) submitTaskBtn.appendChild(svg);
-        submitTaskBtn.append(' Swear Oath!');
+        submitTaskBtn.append(' Begin Hunt!');
       }
     }
 
@@ -3795,11 +3797,11 @@
           if (h3) h3.textContent = label;
         });
       }
-      if (isVilebloodsUser()) {
+      if (isBloodborneUser()) {
         const colHeaders = {
           'col-todo': 'Hunter\'s Dream (To Do) 🕯️',
-          'col-progress': 'Cainhurst Hunt (In Progress) ⚔️',
-          'col-done': 'Vileblood Ascended (Done) 👑'
+          'col-progress': 'Yharnam Streets (In Progress) ⚔️',
+          'col-done': 'Beast Slaughtered (Done) 🩸'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
