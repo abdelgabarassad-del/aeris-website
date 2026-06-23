@@ -456,6 +456,7 @@
       if (sessionReg === '251010424') document.body.classList.add('sonic-theme');
       if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
       if (sessionReg === '241012132') document.body.classList.add('bloodborne-theme');
+      if (sessionReg === '251010151') document.body.classList.add('ladybug-theme');
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
@@ -560,6 +561,7 @@
         applySonicTheme();
         applyTomJerryTheme();
         applyBloodborneTheme();
+        applyLadybugTheme();
         applyIronmanTheme();
         applyPoohTheme();
         applyTweetyTheme();
@@ -637,6 +639,7 @@
       if (regNum === SONIC_REG) document.body.classList.add('sonic-theme');
       if (regNum === TOMJERRY_REG) document.body.classList.add('tomjerry-theme');
       if (regNum === BLOODBORNE_REG) document.body.classList.add('bloodborne-theme');
+      if (regNum === LADYBUG_REG) document.body.classList.add('ladybug-theme');
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
@@ -2794,6 +2797,117 @@
       }
     }
 
+    /* ========== LADYBUG THEME (251010151 only) ========== */
+    const LADYBUG_REG = '251010151';
+
+    function isLadybugUser() {
+      return safeSession.getItem('aeris_auth_reg') === LADYBUG_REG;
+    }
+
+    function applyLadybugTheme() {
+      if (!isLadybugUser()) {
+        document.body.classList.remove('ladybug-theme');
+        document.querySelectorAll('.ladybug-corner, .ladybug-corner-tl, .ladybug-bubble, .ladybug-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('ladybug-theme');
+
+      // Customize welcome banner icon to be Miraculous Yo-yo SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="ladybug-glow"><circle cx="12" cy="12" r="9" fill="#e60012" stroke="#111111" stroke-width="2" /><circle cx="12" cy="12" r="1.5" fill="#111" /><circle cx="9" cy="9" r="1" fill="#111" /><circle cx="15" cy="9" r="1" fill="#111" /><circle cx="9" cy="15" r="1" fill="#111" /><circle cx="15" cy="15" r="1" fill="#111" /></svg>`;
+        }
+      }
+
+      // Ladybug Yo-yo widget bottom right
+      if (!document.querySelector('.ladybug-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'ladybug-corner';
+        corner.innerHTML = `<div class="ladybug-yoyo">🪀</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'ladybug-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Tikki, spots on! 🐞✨",
+          "Lucky Charm! 🪀🐞",
+          "Pound it! 👊",
+          "No more evil-doing for you, little akuma. 🦋",
+          "Miraculous Ladybug! 🐞🌸",
+          "Bye bye, little butterfly. 🦋✨",
+          "Love always wins. ❤️",
+          "Sherry is on the case to save Paris! 🗼"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Akuma top-left
+      if (!document.querySelector('.ladybug-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'ladybug-corner-tl';
+        cornerTL.innerHTML = `🦋`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Decors above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.ladybug-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'ladybug-decors';
+        const decorsContent = `<span>🐞</span><span>🪀</span><span>✨</span><span>🦋</span><span>👊</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Ladybug
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log Mission / Lucky Charm Vow');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🐞 Heroic Duty';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🪀 Mission / Akuma Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '✨ Miraculous Threat Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Patrol Mode (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '👊 Akuma Alert (Medium)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🪀 Lucky Charm Needed (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🦋 CATACLYSM LEVEL! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏳ Time-Limit (De-transformation)';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Spots On!');
+      }
+    }
+
     /* ========== MICKEY MOUSE THEME (251011829 only) ========== */
     const MICKEY_REG = '251011829';
 
@@ -3334,16 +3448,16 @@
          `;
        }
 
-       if (isVilebloodsUser()) {
-         const priorityLabels = { low: '💤 Hunter\'s Slumber', medium: '⚔️ Cainhurst Guardian', high: '🍷 Blood Echoes Hunt', urgent: '👑 FOR THE QUEEN!' };
+       if (isBloodborneUser()) {
+         const priorityLabels = { low: '💤 Hunter\'s Slumber', medium: '⚔️ Good Hunter', high: '🩸 Great One Hunt', urgent: '👁️ FEAR THE OLD BLOOD!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
 
          let actions = '';
          if (task.status === 'todo') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Awaken hunt">▶ Awaken Hunt</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Wake to hunt">▶ Wake to Hunt</button>`;
          } else if (task.status === 'progress') {
-           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Offer blood dregs">✓ Offer Blood Dregs</button>`;
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Slay beast">✓ Slay Beast</button>`;
          }
 
          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
@@ -3355,7 +3469,7 @@
                ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
                ${deleteBtn}
              </div>
-             <h4 class="task-card__title">🍷 ${escapeHtml(task.title)} ⚔️</h4>
+             <h4 class="task-card__title">🩸 ${escapeHtml(task.title)} ⚔️</h4>
              ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
              <div class="task-card__footer">
                ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
@@ -3367,6 +3481,40 @@
            </div>
          `;
        }
+
+        if (isLadybugUser()) {
+          const priorityLabels = { low: '💤 Patrol Mode', medium: '👊 Akuma Alert', high: '🪀 Lucky Charm', urgent: '🦋 CATACLYSM!' };
+          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+          let actions = '';
+          if (task.status === 'todo') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Transform">▶ Transform</button>`;
+          } else if (task.status === 'progress') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="De-evilize">✓ De-evilize</button>`;
+          }
+
+          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+          return `
+            <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+              <div class="task-card__top">
+                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+                ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+                ${deleteBtn}
+              </div>
+              <h4 class="task-card__title">🐞 ${escapeHtml(task.title)} 🪀</h4>
+              ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+              <div class="task-card__footer">
+                ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ${deadlineStr}
+                </span>` : ''}
+                ${actions}
+              </div>
+            </div>
+          `;
+        }
 
        if (isTomJerryUser()) {
          const priorityLabels = { low: '💤 Nap Time', medium: '🐭 Mischief Managed', high: '🪤 Cat Trap', urgent: '🧹 ANGRY HOUSEKEEPER!' };
@@ -3790,6 +3938,18 @@
           'col-todo': 'Tony\'s Garage (To Do) 🛠️',
           'col-progress': 'Systems Online (In Progress) ⚡',
           'col-done': 'Target Neutralized (Done) 🎯'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isLadybugUser()) {
+        const colHeaders = {
+          'col-todo': 'Akuma Sightings (To Do) 🦋',
+          'col-progress': 'Lucky Charm Active (In Progress) 🪀',
+          'col-done': 'Miraculous Ladybug (Done) 🐞✨'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);

@@ -5109,13 +5109,13 @@ body.tomjerry-theme {
    🩸 BLOODBORNE THEME (241012132)
    ========================================================================== */
 body.bloodborne-theme {
-  --bg-primary: #0a0406; /* Dark Hunter stone */
-  --bg-secondary: #1a0a0f; /* Yharnam streets shadow */
-  --bg-card: rgba(26, 10, 15, 0.85); /* Crimson stone shadow */
-  --accent: #8b0000; /* Blood Red */
-  --accent-dim: #c5a059; /* Hunter Brass / Gold decoration */
-  --accent-glow: rgba(139, 0, 0, 0.4);
-  background: #0a0406 !important;
+  --bg-primary: #0c0e12; /* Cold gothic stone */
+  --bg-secondary: #141920; /* Yharnam streets shadow */
+  --bg-card: rgba(22, 28, 36, 0.85); /* Dark iron stone */
+  --accent: #9a0007; /* Blood Red */
+  --accent-dim: #88c0c0; /* Hunter Brass / Moonlit cyan */
+  --accent-glow: rgba(136, 192, 192, 0.3);
+  background: #0c0e12 !important;
   color: #dcdde1 !important; /* Silver grey text */
   font-family: 'Cinzel', 'Georgia', serif !important;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ctext y='22' font-size='22'%3E🩸%3C/text%3E%3C/svg%3E") 2 2, auto !important;
@@ -5123,8 +5123,8 @@ body.bloodborne-theme {
 
 .bloodborne-theme .dashboard-page {
   background: 
-    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(139, 0, 0, 0.2) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(136, 192, 192, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(154, 0, 7, 0.08) 0%, transparent 60%),
     var(--bg-primary) !important;
   background-attachment: fixed;
 }
@@ -5137,18 +5137,18 @@ body.bloodborne-theme {
   font-family: 'Cinzel', serif !important;
   font-weight: 700 !important;
   letter-spacing: 2px !important;
-  color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(139, 0, 0, 0.6), 1px 1px 2px #000 !important;
+  color: #e2f1f1 !important; /* Moonlit silver */
+  text-shadow: 0 0 10px rgba(136, 192, 192, 0.5), 1px 1px 2px #000 !important;
 }
 
 /* Glowing Welcome icon animation */
 @keyframes hunterPulse {
-  0% { filter: drop-shadow(0 0 2px #c5a059); }
-  100% { filter: drop-shadow(0 0 10px #8b0000); }
+  0% { filter: drop-shadow(0 0 2px #88c0c0); }
+  100% { filter: drop-shadow(0 0 10px #9a0007); }
 }
 .bloodborne-theme .hunter-glow {
   animation: hunterPulse 2s infinite alternate ease-in-out;
-  color: #c5a059 !important;
+  color: #88c0c0 !important;
 }
 
 /* Corner Lantern Widget */
@@ -5159,9 +5159,9 @@ body.bloodborne-theme {
   width: 65px;
   height: 65px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a0a0f 0%, #0a0406 100%);
-  border: 3px double #c5a059;
-  box-shadow: 0 0 20px rgba(139, 0, 0, 0.6), inset 0 0 10px rgba(197, 160, 89, 0.3);
+  background: linear-gradient(135deg, #141920 0%, #0c0e12 100%);
+  border: 3px double #88c0c0;
+  box-shadow: 0 0 20px rgba(136, 192, 192, 0.4), inset 0 0 10px rgba(136, 192, 192, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5172,7 +5172,7 @@ body.bloodborne-theme {
 
 .bloodborne-theme .bloodborne-corner:hover {
   transform: scale(1.15) rotate(15deg);
-  box-shadow: 0 0 30px #8b0000;
+  box-shadow: 0 0 30px #9a0007;
 }
 
 .bloodborne-theme .bloodborne-lantern {
@@ -5190,7 +5190,7 @@ body.bloodborne-theme {
   position: fixed;
   bottom: 100px;
   right: 35px;
-  background: #1a0a0f;
+  background: #141920;
   color: #dcdde1;
   padding: 12px 18px;
   border-radius: 14px 14px 2px 14px;
@@ -5203,7 +5203,7 @@ body.bloodborne-theme {
   pointer-events: none;
   z-index: 100;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-  border: 2px solid #c5a059;
+  border: 2px solid #88c0c0;
 }
 
 .bloodborne-theme .bloodborne-bubble.show {
@@ -5218,7 +5218,7 @@ body.bloodborne-theme {
   right: 20px;
   border-width: 8px 8px 0;
   border-style: solid;
-  border-color: #c5a059 transparent;
+  border-color: #88c0c0 transparent;
   display: block;
   width: 0;
 }
@@ -5232,7 +5232,7 @@ body.bloodborne-theme {
   z-index: 50;
   font-size: 2.5rem;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(139, 0, 0, 0.5));
+  filter: drop-shadow(0 0 10px rgba(136, 192, 192, 0.5));
   animation: moonGlint 3s infinite ease-in-out;
 }
 
@@ -5267,29 +5267,29 @@ body.bloodborne-theme {
 
 /* Task Columns */
 .bloodborne-theme .task-column {
-  background: rgba(26, 10, 15, 0.65) !important;
-  border: 2px solid rgba(197, 160, 89, 0.25) !important;
+  background: rgba(20, 25, 32, 0.7) !important;
+  border: 2px solid rgba(136, 192, 192, 0.2) !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
 }
 
 .bloodborne-theme .task-column__header {
-  background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
-  border: 2px solid #c5a059 !important;
-  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4) !important;
+  background: linear-gradient(135deg, rgba(136, 192, 192, 0.15) 0%, rgba(20, 25, 32, 0.95) 100%) !important;
+  border: 2px solid #88c0c0 !important;
+  box-shadow: 0 4px 15px rgba(136, 192, 192, 0.2) !important;
   border-radius: 8px !important;
 }
 
 .bloodborne-theme .task-column__header h3 {
-  color: #fff !important;
+  color: #e2f1f1 !important;
   font-family: 'Cinzel', serif !important;
-  text-shadow: 0 0 8px rgba(197, 160, 89, 0.5) !important;
+  text-shadow: 0 0 8px rgba(136, 192, 192, 0.4) !important;
 }
 
 /* Task Cards */
 .bloodborne-theme .task-card {
-  background: rgba(10, 4, 6, 0.9) !important;
-  border: 1.5px solid rgba(197, 160, 89, 0.2) !important;
+  background: rgba(12, 14, 18, 0.9) !important;
+  border: 1.5px solid rgba(136, 192, 192, 0.15) !important;
   border-radius: 8px !important;
   color: #dcdde1 !important;
   font-family: 'Cinzel', serif !important;
@@ -5298,8 +5298,8 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card:hover {
-  border-color: #c5a059 !important;
-  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5) !important;
+  border-color: #88c0c0 !important;
+  box-shadow: 0 0 15px rgba(136, 192, 192, 0.3) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -5308,29 +5308,29 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card__desc {
-  color: #a4a5a7 !important;
+  color: #9bb0b0 !important;
 }
 
 /* Card Priority Styles */
-.bloodborne-theme .task-card--low { border-left: 4px solid #a4a5a7 !important; }
-.bloodborne-theme .task-card--medium { border-left: 4px solid #c5a059 !important; }
-.bloodborne-theme .task-card--high { border-left: 4px solid #8b0000 !important; }
+.bloodborne-theme .task-card--low { border-left: 4px solid #718d8d !important; }
+.bloodborne-theme .task-card--medium { border-left: 4px solid #88c0c0 !important; }
+.bloodborne-theme .task-card--high { border-left: 4px solid #9a0007 !important; }
 .bloodborne-theme .task-card--urgent {
-  border-left: 4px solid #8b0000 !important;
-  border-right: 2px dashed #c5a059 !important;
+  border-left: 4px solid #9a0007 !important;
+  border-right: 2px dashed #88c0c0 !important;
   animation: bloodborneUrgentPulse 1.2s infinite alternate !important;
 }
 
 @keyframes bloodborneUrgentPulse {
-  0% { box-shadow: 0 0 5px rgba(139, 0, 0, 0.3); }
-  100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); }
+  0% { box-shadow: 0 0 5px rgba(154, 0, 7, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(154, 0, 7, 0.7); }
 }
 
 /* Buttons */
 .bloodborne-theme .task-card__action {
-  background: #8b0000 !important;
+  background: #9a0007 !important;
   color: #ffffff !important;
-  border: 1px solid #c5a059 !important;
+  border: 1px solid #88c0c0 !important;
   border-radius: 4px !important;
   font-family: 'Cinzel', serif !important;
   font-weight: 700 !important;
@@ -5338,42 +5338,139 @@ body.bloodborne-theme {
 }
 
 .bloodborne-theme .task-card__action:hover {
-  background: #c5a059 !important;
-  color: #1a0a0f !important;
-  box-shadow: 0 0 10px rgba(197, 160, 89, 0.6) !important;
+  background: #88c0c0 !important;
+  color: #0c0e12 !important;
+  box-shadow: 0 0 10px rgba(136, 192, 192, 0.6) !important;
 }
 
 /* Welcome Banner */
 .bloodborne-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(139, 0, 0, 0.25) 0%, rgba(26, 10, 15, 0.95) 100%) !important;
-  border: 2px solid #c5a059 !important;
+  background: linear-gradient(135deg, rgba(136, 192, 192, 0.15) 0%, rgba(20, 25, 32, 0.95) 100%) !important;
+  border: 2px solid #88c0c0 !important;
   border-radius: 8px !important;
 }
 
 .bloodborne-theme .welcome-banner__icon {
-  background: rgba(139, 0, 0, 0.3) !important;
-  color: #c5a059 !important;
+  background: rgba(136, 192, 192, 0.2) !important;
+  color: #88c0c0 !important;
 }
 
 .bloodborne-theme .welcome-banner__greeting strong {
-  color: #c5a059 !important;
+  color: #88c0c0 !important;
 }
 
 /* Department Tabs */
 .bloodborne-theme .dept-tab.active {
-  background: rgba(139, 0, 0, 0.3) !important;
-  border-color: #c5a059 !important;
+  background: rgba(136, 192, 192, 0.2) !important;
+  border-color: #88c0c0 !important;
   color: #ffffff !important;
 }
 
 /* Modals */
 .bloodborne-theme .task-modal__content {
-  background: rgba(10, 4, 6, 0.98) !important;
-  border: 2px solid #c5a059 !important;
-  box-shadow: 0 0 40px rgba(139, 0, 0, 0.5) !important;
+  background: rgba(12, 14, 18, 0.98) !important;
+  border: 2px solid #88c0c0 !important;
+  box-shadow: 0 0 40px rgba(136, 192, 192, 0.3) !important;
 }
 
-.bloodborne-theme .task-modal__close:hover { color: #c5a059 !important; }
+.bloodborne-theme .task-modal__close:hover { color: #88c0c0 !important; }
+
+/* News Section & Form Overrides for Bloodborne */
+.bloodborne-theme .news-section {
+  background: rgba(20, 25, 32, 0.6) !important;
+  border: 2px solid rgba(136, 192, 192, 0.2) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 12px !important;
+}
+
+.bloodborne-theme .news-card {
+  background: rgba(12, 14, 18, 0.85) !important;
+  border: 1.5px solid rgba(136, 192, 192, 0.12) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  border-radius: 8px !important;
+}
+
+.bloodborne-theme .news-card:hover {
+  border-color: #88c0c0 !important;
+}
+
+.bloodborne-theme .news-card__author {
+  color: #e2f1f1 !important;
+}
+
+.bloodborne-theme .news-card__content {
+  color: #dcdde1 !important;
+}
+
+.bloodborne-theme .news-card__footer {
+  color: #9bb0b0 !important;
+}
+
+.bloodborne-theme .news-card__footer svg {
+  color: #88c0c0 !important;
+}
+
+.bloodborne-theme .news-toggle-form {
+  background: #9a0007 !important;
+  color: #ffffff !important;
+  border: 1px solid #88c0c0 !important;
+}
+
+.bloodborne-theme .news-toggle-form:hover {
+  background: #88c0c0 !important;
+  color: #0c0e12 !important;
+}
+
+.bloodborne-theme .news-form {
+  background: rgba(12, 14, 18, 0.95) !important;
+  border: 2px solid #88c0c0 !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
+.bloodborne-theme .news-form textarea {
+  background: rgba(20, 25, 32, 0.8) !important;
+  border: 1px solid rgba(136, 192, 192, 0.3) !important;
+  color: #e2f1f1 !important;
+}
+
+.bloodborne-theme .task-form {
+  background: rgba(20, 25, 32, 0.8) !important;
+  border: 2px solid rgba(136, 192, 192, 0.25) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.bloodborne-theme .task-form label {
+  color: #88c0c0 !important;
+  font-family: 'Cinzel', serif !important;
+}
+
+.bloodborne-theme input,
+.bloodborne-theme textarea,
+.bloodborne-theme select {
+  background: rgba(12, 14, 18, 0.9) !important;
+  border: 1px solid rgba(136, 192, 192, 0.3) !important;
+  color: #dcdde1 !important;
+}
+
+.bloodborne-theme input:focus,
+.bloodborne-theme textarea:focus,
+.bloodborne-theme select:focus {
+  border-color: #88c0c0 !important;
+  box-shadow: 0 0 10px rgba(136, 192, 192, 0.4) !important;
+}
+
+.bloodborne-theme .btn-primary,
+.bloodborne-theme #submit-task {
+  background: #9a0007 !important;
+  color: #ffffff !important;
+  border: 1px solid #88c0c0 !important;
+}
+
+.bloodborne-theme .btn-primary:hover,
+.bloodborne-theme #submit-task:hover {
+  background: #88c0c0 !important;
+  color: #0c0e12 !important;
+}
 
 /* Scrollbar overrides for Bloodborne */
 .bloodborne-theme::-webkit-scrollbar,
@@ -5382,17 +5479,17 @@ body.bloodborne-theme {
 }
 .bloodborne-theme::-webkit-scrollbar-track,
 .bloodborne-theme ::-webkit-scrollbar-track {
-  background: #0a0406;
+  background: #0c0e12;
 }
 .bloodborne-theme::-webkit-scrollbar-thumb,
 .bloodborne-theme ::-webkit-scrollbar-thumb {
-  background: #c5a059;
-  border: 1px solid #8b0000;
+  background: #88c0c0;
+  border: 1px solid #9a0007;
   border-radius: 5px;
 }
 .bloodborne-theme::-webkit-scrollbar-thumb:hover,
 .bloodborne-theme ::-webkit-scrollbar-thumb:hover {
-  background: #8b0000;
+  background: #9a0007;
 }
 
 /* ==========================================================================
@@ -7201,6 +7298,440 @@ body.schnoz-theme {
 .schnoz-theme .news-toggle-form:hover {
   background: #fda4af !important;
   color: #18181b !important;
+}
+
+/* ==========================================================================
+   🐞 MIRACULOUS LADYBUG THEME (251010151)
+   ========================================================================== */
+body.ladybug-theme {
+  --bg-primary: #e60012; /* Ladybug Red */
+  --bg-secondary: #cc0010;
+  --bg-card: #1c1c1e; /* Dark Charcoal card for high readability */
+  --accent: #e60012;
+  --accent-dim: #ff3b30;
+  --accent-glow: rgba(230, 0, 18, 0.4);
+  /* Polka dot ladybug background pattern */
+  background: #e60012 !important;
+  background-image: radial-gradient(#111111 20%, transparent 20%),
+                    radial-gradient(#111111 20%, transparent 20%) !important;
+  background-size: 50px 50px !important;
+  background-position: 0 0, 25px 25px !important;
+  color: #ffffff !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🐞</text></svg>") 2 2, auto !important;
+}
+
+/* Page title */
+.ladybug-theme .page-title {
+  color: #ffffff !important;
+  text-shadow: 3px 3px 0px #111111, 0 0 10px rgba(255, 255, 255, 0.4) !important;
+  font-family: 'Fredoka', sans-serif !important;
+}
+
+/* Task Columns */
+.ladybug-theme .task-column {
+  background: rgba(17, 17, 17, 0.9) !important;
+  border: 3px solid #111111 !important;
+  box-shadow: 6px 6px 0px #ffffff !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(10px);
+}
+
+.ladybug-theme .task-column__header {
+  background: #e60012 !important;
+  border: 3px solid #111111 !important;
+  box-shadow: 4px 4px 0px #111111 !important;
+  border-radius: 12px !important;
+}
+
+.ladybug-theme .task-column__header h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 0px #111111 !important;
+}
+
+/* Task Cards */
+.ladybug-theme .task-card {
+  background: #1c1c1e !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 4px 4px 0px #111111 !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  font-family: 'Fredoka', sans-serif !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.ladybug-theme .task-card:hover {
+  border-color: #ff3b30 !important;
+  box-shadow: 6px 6px 0px #e60012 !important;
+  transform: translateY(-4px) rotate(-1deg) !important;
+}
+
+.ladybug-theme .task-card__title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.ladybug-theme .task-card__desc {
+  color: #ffccd0 !important;
+}
+
+/* Priority Card Border Accents */
+.ladybug-theme .task-card--low { border-left: 6px solid #8e8e93 !important; }
+.ladybug-theme .task-card--medium { border-left: 6px solid #ffcc00 !important; }
+.ladybug-theme .task-card--high { border-left: 6px solid #e60012 !important; }
+.ladybug-theme .task-card--urgent {
+  border-left: 6px solid #e60012 !important;
+  border-right: 2px dashed #ff3b30 !important;
+  animation: ladybugUrgentPulse 1.2s infinite alternate !important;
+}
+
+@keyframes ladybugUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(230, 0, 18, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(230, 0, 18, 0.8), 4px 4px 0px #111111; }
+}
+
+/* Action Buttons */
+.ladybug-theme .task-card__action {
+  background: #e60012 !important;
+  color: #ffffff !important;
+  border: 2px solid #111111 !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 2px 2px 0px #111111 !important;
+}
+
+.ladybug-theme .task-card__action:hover {
+  background: #ffffff !important;
+  color: #e60012 !important;
+  box-shadow: 3px 3px 0px #111111 !important;
+}
+
+/* Welcome Banner */
+.ladybug-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(230, 0, 18, 0.25) 0%, rgba(17, 17, 17, 0.95) 100%) !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 5px 5px 0px #111111 !important;
+  border-radius: 14px !important;
+}
+
+.ladybug-theme .welcome-banner__icon {
+  background: rgba(230, 0, 18, 0.3) !important;
+  color: #ffffff !important;
+  border: 2px solid #e60012 !important;
+}
+
+.ladybug-theme .welcome-banner__greeting strong {
+  color: #e60012 !important;
+}
+
+/* Department Tabs */
+.ladybug-theme .dept-tab {
+  background: rgba(17, 17, 17, 0.8) !important;
+  border: 2px solid #e60012 !important;
+  color: #ffccd0 !important;
+  border-radius: 12px !important;
+  box-shadow: 2px 2px 0px #111111 !important;
+  font-family: 'Fredoka', sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.ladybug-theme .dept-tab:hover {
+  background: #e60012 !important;
+  color: #ffffff !important;
+}
+
+.ladybug-theme .dept-tab.active {
+  background: #e60012 !important;
+  border-color: #111111 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0px #ffffff !important;
+}
+
+/* Modal styling */
+.ladybug-theme .task-modal__content {
+  background: #1c1c1e !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 0 0 35px rgba(230, 0, 18, 0.4), 8px 8px 0px #111111 !important;
+}
+
+.ladybug-theme .task-modal__close:hover {
+  color: #e60012 !important;
+}
+
+/* Form Controls */
+.ladybug-theme input:focus,
+.ladybug-theme textarea:focus,
+.ladybug-theme select:focus {
+  border-color: #e60012 !important;
+  box-shadow: 0 0 12px rgba(230, 0, 18, 0.5) !important;
+}
+
+/* Yellow and Blue scrollbar */
+.ladybug-theme::-webkit-scrollbar,
+.ladybug-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.ladybug-theme::-webkit-scrollbar-track,
+.ladybug-theme ::-webkit-scrollbar-track {
+  background: #111111;
+}
+.ladybug-theme::-webkit-scrollbar-thumb,
+.ladybug-theme ::-webkit-scrollbar-thumb {
+  background: #e60012;
+  border: 3px solid #111111;
+  border-radius: 6px;
+}
+.ladybug-theme::-webkit-scrollbar-thumb:hover,
+.ladybug-theme ::-webkit-scrollbar-thumb:hover {
+  background: #ff3b30;
+}
+
+/* Ladybug Corner Widget */
+.ladybug-theme .ladybug-corner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 3rem;
+  z-index: 1000;
+  cursor: pointer;
+  animation: ladybugWiggle 3s ease-in-out infinite;
+  user-select: none;
+  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes ladybugWiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-8deg) scale(1.05); }
+  75% { transform: rotate(8deg) scale(1.05); }
+}
+
+/* Ladybug Speech Bubble */
+.ladybug-theme .ladybug-bubble {
+  position: fixed;
+  bottom: 85px;
+  right: 30px;
+  background: #1c1c1e;
+  border: 3px solid #e60012;
+  border-radius: 16px;
+  padding: 12px 18px;
+  max-width: 250px;
+  box-shadow: 4px 4px 0px #111111;
+  z-index: 999;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffffff;
+  display: none;
+}
+
+.ladybug-theme .ladybug-bubble.show {
+  display: block;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.ladybug-theme .ladybug-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: 20px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: #e60012 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Ladybug Top-Left Widget */
+.ladybug-theme .ladybug-corner-tl {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  font-size: 2.5rem;
+  z-index: 100;
+  opacity: 0.8;
+  animation: floatTL 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Ladybug Decors above board */
+.ladybug-theme .ladybug-decors {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  animation: floatTL 3s ease-in-out infinite alternate;
+}
+
+/* Ladybug Yo-yo Spin Animation inside Welcome Banner */
+.ladybug-theme .ladybug-glow {
+  animation: ladybugSpin 3s linear infinite;
+}
+
+@keyframes ladybugSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Container */
+.ladybug-theme .task-form {
+  background: rgba(17, 17, 17, 0.9) !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 6px 6px 0px #ffffff !important;
+  border-radius: 20px !important;
+}
+
+.ladybug-theme .btn-primary,
+.ladybug-theme #submit-task {
+  background: #e60012 !important;
+  color: #ffffff !important;
+  border: 3px solid #111111 !important;
+  box-shadow: 4px 4px 0px #111111 !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+.ladybug-theme .btn-primary:hover,
+.ladybug-theme #submit-task:hover {
+  background: #ffffff !important;
+  color: #e60012 !important;
+  box-shadow: 6px 6px 0px #111111 !important;
+  transform: translateY(-2px) !important;
+}
+
+.ladybug-theme .task-form label {
+  color: #ffccd0 !important;
+  font-family: 'Fredoka', sans-serif !important;
+}
+
+.ladybug-theme input,
+.ladybug-theme textarea,
+.ladybug-theme select {
+  background: #1c1c1e !important;
+  border: 2px solid #e60012 !important;
+  color: #ffffff !important;
+}
+
+.ladybug-theme .task-card__approved-pill {
+  background: rgba(230, 0, 18, 0.2) !important;
+  color: #ffccd0 !important;
+  border: 1px solid #e60012 !important;
+}
+
+/* News Section Overrides */
+.ladybug-theme .news-section {
+  background: rgba(17, 17, 17, 0.9) !important;
+  border: 3px solid #111111 !important;
+  box-shadow: 6px 6px 0px #ffffff !important;
+}
+
+.ladybug-theme .news-header__icon {
+  color: #e60012 !important;
+}
+
+.ladybug-theme .news-header h2 {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 0px #111111 !important;
+}
+
+.ladybug-theme .news-card {
+  background: #1c1c1e !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 4px 4px 0px #111111 !important;
+  color: #ffffff !important;
+}
+
+.ladybug-theme .news-card:hover {
+  border-color: #ff3b30 !important;
+  box-shadow: 6px 6px 0px #e60012 !important;
+}
+
+.ladybug-theme .news-card__author {
+  color: #ffffff !important;
+}
+
+.ladybug-theme .news-card__badge--faculty {
+  background: rgba(230, 0, 18, 0.15) !important;
+  color: #ff3b30 !important;
+  border: 1.5px solid #e60012 !important;
+}
+
+.ladybug-theme .news-card__badge--head {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #ffffff !important;
+}
+
+.ladybug-theme .news-card__content {
+  color: #ffccd0 !important;
+}
+
+.ladybug-theme .news-card__footer {
+  color: #8e8e93 !important;
+}
+
+.ladybug-theme .news-card__footer svg {
+  color: #e60012 !important;
+  opacity: 1 !important;
+}
+
+.ladybug-theme .news-toggle-form {
+  background: #e60012 !important;
+  color: #ffffff !important;
+  border: 3px solid #111111 !important;
+  box-shadow: 3px 3px 0px #111111 !important;
+}
+
+.ladybug-theme .news-toggle-form:hover {
+  background: #ffffff !important;
+  color: #e60012 !important;
+}
+
+.ladybug-theme .news-form {
+  background: #1c1c1e !important;
+  border: 3px solid #e60012 !important;
+  box-shadow: 5px 5px 0px #111111 !important;
+}
+
+.ladybug-theme .news-form label {
+  color: #ffccd0 !important;
+}
+
+.ladybug-theme .news-form__title,
+.ladybug-theme .news-form__title svg {
+  color: #e60012 !important;
+}
+
+.ladybug-theme .news-form textarea {
+  background: #1c1c1e !important;
+  border: 2px solid #e60012 !important;
+  color: #ffffff !important;
+}
+
+.ladybug-theme .news-form textarea::placeholder {
+  color: #8e8e93 !important;
+}
+
+.ladybug-theme .news-form .btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 2px solid #e60012 !important;
+  box-shadow: 2px 2px 0px #111111 !important;
+}
+
+.ladybug-theme .news-form .btn-secondary:hover {
+  background: #e60012 !important;
+  color: #ffffff !important;
+}
+
+.ladybug-theme .news-feed__empty {
+  color: #ffccd0 !important;
+}
+
+.ladybug-theme .news-feed__empty svg {
+  color: #e60012 !important;
 }
 
 
