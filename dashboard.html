@@ -459,6 +459,7 @@
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
+      if (sessionReg === '251002119') document.body.classList.add('schnoz-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -562,6 +563,7 @@
         applyIronmanTheme();
         applyPoohTheme();
         applyTweetyTheme();
+        applySchnozTheme();
       }, 600);
     }
 
@@ -638,6 +640,7 @@
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
+      if (regNum === '251002119') document.body.classList.add('schnoz-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -2341,6 +2344,124 @@
       }
     }
 
+    /* ========== BERSERK SCHNOZ THEME (251002119 only) ========== */
+    const SCHNOZ_REG = '251002119';
+
+    function isSchnozUser() {
+      return safeSession.getItem('aeris_auth_reg') === SCHNOZ_REG;
+    }
+
+    function applySchnozTheme() {
+      if (!isSchnozUser()) {
+        document.body.classList.remove('schnoz-theme');
+        document.querySelectorAll('.schnoz-corner, .schnoz-corner-tl, .schnoz-bubble, .schnoz-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('schnoz-theme');
+
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" class="schnoz-spin"><path d="M12 2v20M5 12h14M2 17l5-5-5-5M22 17l-5-5 5-5"/></svg>`;
+        }
+      }
+
+      if (!document.querySelector('.schnoz-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'schnoz-corner';
+        corner.innerHTML = `
+          <svg viewBox="0 0 100 100" width="80" height="80">
+            <path d="M38 68 L38 88 M62 68 L62 88" stroke="#52525b" stroke-width="8" stroke-linecap="round"/>
+            <path d="M28 88 L38 88 M52 88 L62 88" stroke="#52525b" stroke-width="8" stroke-linecap="round"/>
+            <path d="M50 20 C30 20 20 40 20 55 C20 68 35 70 50 70 C65 70 80 68 80 55 C80 40 70 20 50 20 Z" fill="#fda4af" stroke="#3f3f46" stroke-width="4"/>
+            <path d="M30 58 Q40 64 50 58 M70 58 Q60 64 50 58" fill="none" stroke="#e11d48" stroke-width="2"/>
+            <circle cx="28" cy="38" r="6" fill="#fff" stroke="#000" stroke-width="2"/>
+            <circle cx="28" cy="38" r="2.5" fill="#000"/>
+            <circle cx="72" cy="38" r="6" fill="#fff" stroke="#000" stroke-width="2"/>
+            <circle cx="72" cy="38" r="2.5" fill="#000"/>
+          </svg>
+        `;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'schnoz-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Hmph... (Nose sounds) 👃",
+          "I am the supreme Apostle of the Snout. 👃",
+          "Struggle, progress, and conquer! ⚔️",
+          "Guts might have the Dragonslayer, but I have the Snout. 👃",
+          "Behold my glorious legs! 🦵👃🦵",
+          "Even the God Hand fears my nostrils. 😤",
+          "Eclipse? Just sneeze it away! 🤧",
+          "I struggle. Therefore, I sniff. 👃",
+          "Struggler... keep pushing your tasks! ⚔️"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      if (!document.querySelector('.schnoz-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'schnoz-corner-tl';
+        cornerTL.innerHTML = `👃`;
+        document.body.appendChild(cornerTL);
+      }
+
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.schnoz-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'schnoz-decors';
+        const decorsContent = `<span>👃</span><span>⚔️</span><span>👁️</span><span>👃</span><span>🩸</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Initiate Sacrifice / Struggle Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '⚔️ Struggle Directive';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '📖 God Hand Records / Schematics';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🩸 Apostle Threat Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🪨 Pebble (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '⚔️ Struggler (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🩸 Apostle Threat (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '👁️ ECLIPSE LEVEL (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏱️ Eclipse Countdown';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Begin Sacrifice!');
+      }
+    }
+
     /* ========== WINNIE THE POOH THEME (221011368 only) ========== */
     const POOH_REG = '221011368';
 
@@ -3077,6 +3198,39 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isSchnozUser()) {
+         const priorityLabels = { low: '🪨 Pebble', medium: '⚔️ Struggler', high: '🩸 Apostle Threat', urgent: '👁️ ECLIPSE LEVEL' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start Struggle">▶ Struggle</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Clear Apostle">✓ Conquer</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Sacrificed</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">👃 ${escapeHtml(task.title)} ⚔️</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
        if (isTweetyUser()) {
          const priorityLabels = { low: '💤 Safe in Cage', medium: '🪶 Flying High', high: '🐱 Puddy Tat Alert', urgent: '🚨 I TAWT I TAW A PUDDY TAT!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -3694,6 +3848,18 @@
           'col-todo': 'Tweety\'s Cage (To Do) 🐤',
           'col-progress': 'Flight Path (In Progress) ☁️',
           'col-done': 'Outsmarted Sylvester (Done) 🐱💥'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isSchnozUser()) {
+        const colHeaders = {
+          'col-todo': 'Eclipse Warnings (To Do) 👁️',
+          'col-progress': 'Struggling (In Progress) ⚔️',
+          'col-done': 'Outlived the God Hand (Done) 🩸'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);

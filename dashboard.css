@@ -6361,14 +6361,14 @@ body.pooh-theme {
    🐤 TWEETY BIRD THEME (251012364)
    ========================================================================== */
 body.tweety-theme {
-  --bg-primary: #e0f7fa;
-  --bg-secondary: #b3e5fc;
+  --bg-primary: #a0cbd3; /* Soft toned-down pastel blue */
+  --bg-secondary: #86abb5; /* Muted pastel blue */
   --bg-card: #ffffff;
   --accent: #ffd54f; /* Tweety Yellow */
   --accent-dim: #ffb74d; /* Beak Orange */
-  --accent-glow: rgba(255, 213, 79, 0.4);
-  background: linear-gradient(135deg, #e0f7fa 0%, #81d4fa 100%) !important;
-  color: #1c3d5a !important;
+  --accent-glow: rgba(255, 213, 79, 0.3);
+  background: linear-gradient(135deg, #a0cbd3 0%, #769ba5 100%) !important;
+  color: #0b3c53 !important;
   font-family: 'Fredoka', 'Nunito', sans-serif !important;
   cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🐤</text></svg>") 2 2, auto !important;
   position: relative;
@@ -6406,22 +6406,22 @@ body.tweety-theme::after {
 
 /* Task Board Columns */
 .tweety-theme .task-column {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 3px solid #0288d1 !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 6px 6px 0px #ffd54f !important; /* Flat yellow shadow */
   border-radius: 16px !important;
   backdrop-filter: blur(5px);
 }
 
 .tweety-theme .task-column__header {
-  background: #b3e5fc !important;
-  border: 3px solid #0288d1 !important;
+  background: #86abb5 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 3px 3px 0px #ffb74d !important; /* Flat orange shadow */
   border-radius: 12px !important;
 }
 
 .tweety-theme .task-column__header h3 {
-  color: #01579b !important;
+  color: #0b3c53 !important;
   font-weight: 700 !important;
   text-shadow: 1px 1px 0px #ffd54f !important;
 }
@@ -6429,10 +6429,10 @@ body.tweety-theme::after {
 /* Task Cards */
 .tweety-theme .task-card {
   background: #ffffff !important;
-  border: 3px solid #0288d1 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 4px 4px 0px #ffd54f !important; /* Flat yellow shadow */
   border-radius: 12px !important;
-  color: #01579b !important;
+  color: #0b3c53 !important;
   font-family: 'Fredoka', sans-serif !important;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -6444,12 +6444,12 @@ body.tweety-theme::after {
 }
 
 .tweety-theme .task-card__title {
-  color: #01579b !important;
+  color: #0b3c53 !important;
   font-weight: 700 !important;
 }
 
 .tweety-theme .task-card__desc {
-  color: #0288d1 !important;
+  color: #1e6b8c !important;
 }
 
 /* Priority Card Border Accents */
@@ -6470,31 +6470,31 @@ body.tweety-theme::after {
 /* Action Buttons */
 .tweety-theme .task-card__action {
   background: #ffd54f !important;
-  color: #01579b !important;
-  border: 2px solid #0288d1 !important;
+  color: #0b3c53 !important;
+  border: 2px solid #1e6b8c !important;
   border-radius: 12px !important;
   font-weight: 700 !important;
-  box-shadow: 2px 2px 0px #0288d1 !important;
+  box-shadow: 2px 2px 0px #1e6b8c !important;
 }
 
 .tweety-theme .task-card__action:hover {
   background: #ffb74d !important;
   color: #ffffff !important;
-  box-shadow: 3px 3px 0px #0288d1 !important;
+  box-shadow: 3px 3px 0px #1e6b8c !important;
 }
 
 /* Welcome Banner */
 .tweety-theme .welcome-banner {
   background: linear-gradient(135deg, rgba(255, 213, 79, 0.2) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
-  border: 3px solid #0288d1 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 5px 5px 0px #ffd54f !important;
   border-radius: 14px !important;
 }
 
 .tweety-theme .welcome-banner__icon {
   background: rgba(255, 213, 79, 0.3) !important;
-  color: #01579b !important;
-  border: 2px solid #0288d1 !important;
+  color: #0b3c53 !important;
+  border: 2px solid #1e6b8c !important;
   box-shadow: 0 0 10px rgba(255, 213, 79, 0.3) !important;
 }
 
@@ -6505,8 +6505,8 @@ body.tweety-theme::after {
 /* Department Tabs */
 .tweety-theme .dept-tab {
   background: rgba(255, 255, 255, 0.5) !important;
-  border: 2px solid #0288d1 !important;
-  color: #0288d1 !important;
+  border: 2px solid #1e6b8c !important;
+  color: #1e6b8c !important;
   border-radius: 12px !important;
   box-shadow: 2px 2px 0px #ffd54f !important;
   font-family: 'Fredoka', sans-serif !important;
@@ -6514,21 +6514,21 @@ body.tweety-theme::after {
 }
 
 .tweety-theme .dept-tab:hover {
-  background: #b3e5fc !important;
-  color: #01579b !important;
+  background: #86abb5 !important;
+  color: #0b3c53 !important;
 }
 
 .tweety-theme .dept-tab.active {
   background: #ffd54f !important;
-  border-color: #0288d1 !important;
-  color: #01579b !important;
+  border-color: #1e6b8c !important;
+  color: #0b3c53 !important;
   box-shadow: 3px 3px 0px #ffb74d !important;
 }
 
 /* Modal styling */
 .tweety-theme .task-modal__content {
-  background: #e0f7fa !important;
-  border: 3px solid #0288d1 !important;
+  background: #a0cbd3 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 0 0 35px rgba(129, 212, 250, 0.4), 8px 8px 0px #ffd54f !important;
 }
 
@@ -6540,7 +6540,7 @@ body.tweety-theme::after {
 .tweety-theme .task-card__approved-pill {
   background: rgba(255, 213, 79, 0.2) !important;
   color: #ff9800 !important;
-  border: 1px solid #0288d1 !important;
+  border: 1px solid #1e6b8c !important;
 }
 
 /* Form Controls */
@@ -6554,14 +6554,14 @@ body.tweety-theme::after {
 /* Experimental Banner */
 .tweety-theme .experimental-banner {
   background: linear-gradient(135deg, rgba(255, 213, 79, .15) 0%, rgba(255, 255, 255, .95) 100%) !important;
-  border-bottom: 3px solid #0288d1 !important;
-  color: #01579b !important;
+  border-bottom: 3px solid #1e6b8c !important;
+  color: #0b3c53 !important;
 }
 
 .tweety-theme .experimental-banner__icon {
   background: rgba(255, 213, 79, .2) !important;
   color: #ff9800 !important;
-  border: 1.5px solid #0288d1 !important;
+  border: 1.5px solid #1e6b8c !important;
 }
 
 .tweety-theme .experimental-banner__text strong {
@@ -6575,12 +6575,12 @@ body.tweety-theme::after {
 }
 .tweety-theme::-webkit-scrollbar-track,
 .tweety-theme ::-webkit-scrollbar-track {
-  background: #e0f7fa;
+  background: #a0cbd3;
 }
 .tweety-theme::-webkit-scrollbar-thumb,
 .tweety-theme ::-webkit-scrollbar-thumb {
   background: #ffd54f;
-  border: 3px solid #e0f7fa;
+  border: 3px solid #a0cbd3;
   border-radius: 6px;
 }
 .tweety-theme::-webkit-scrollbar-thumb:hover,
@@ -6613,7 +6613,7 @@ body.tweety-theme::after {
   bottom: 85px;
   right: 30px;
   background: #ffffff;
-  border: 3px solid #0288d1;
+  border: 3px solid #1e6b8c;
   border-radius: 16px;
   padding: 12px 18px;
   max-width: 250px;
@@ -6622,7 +6622,7 @@ body.tweety-theme::after {
   font-family: 'Fredoka', sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
-  color: #01579b;
+  color: #0b3c53;
   display: none;
 }
 
@@ -6643,7 +6643,7 @@ body.tweety-theme::after {
   right: 20px;
   border-width: 15px 15px 0 0;
   border-style: solid;
-  border-color: #0288d1 transparent;
+  border-color: #1e6b8c transparent;
   display: block;
   width: 0;
 }
@@ -6688,7 +6688,7 @@ body.tweety-theme::after {
 /* Form Container */
 .tweety-theme .task-form {
   background: rgba(255, 255, 255, 0.75) !important;
-  border: 3px solid #0288d1 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 6px 6px 0px #ffd54f !important;
   border-radius: 20px !important;
 }
@@ -6696,9 +6696,9 @@ body.tweety-theme::after {
 .tweety-theme .btn-primary,
 .tweety-theme #submit-task {
   background: #ffd54f !important;
-  color: #01579b !important;
-  border: 3px solid #0288d1 !important;
-  box-shadow: 4px 4px 0px #0288d1 !important;
+  color: #0b3c53 !important;
+  border: 3px solid #1e6b8c !important;
+  box-shadow: 4px 4px 0px #1e6b8c !important;
   border-radius: 12px !important;
   font-weight: 700 !important;
   transition: all 0.2s ease !important;
@@ -6708,30 +6708,30 @@ body.tweety-theme::after {
 .tweety-theme #submit-task:hover {
   background: #ffb74d !important;
   color: #ffffff !important;
-  box-shadow: 6px 6px 0px #0288d1 !important;
+  box-shadow: 6px 6px 0px #1e6b8c !important;
   transform: translateY(-2px) !important;
 }
 
 /* Title Header */
 .tweety-theme .page-title {
-  color: #01579b !important;
+  color: #0b3c53 !important;
   text-shadow: 2px 2px 0px #ffd54f !important;
 }
 
 /* News Section */
 .tweety-theme .news-section {
   background: rgba(255, 255, 255, 0.5) !important;
-  border: 3px solid #0288d1 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 6px 6px 0px #ffd54f !important;
   border-radius: 16px !important;
 }
 
 .tweety-theme .news-card {
   background: #ffffff !important;
-  border: 3px solid #0288d1 !important;
+  border: 3px solid #1e6b8c !important;
   box-shadow: 4px 4px 0px #ffb74d !important;
   border-radius: 12px !important;
-  color: #01579b !important;
+  color: #0b3c53 !important;
 }
 
 .tweety-theme .news-card:hover {
@@ -6741,15 +6741,362 @@ body.tweety-theme::after {
 
 .tweety-theme .news-toggle-form {
   background: #ffd54f !important;
-  color: #01579b !important;
-  border: 2px solid #0288d1 !important;
-  box-shadow: 3px 3px 0px #0288d1 !important;
+  color: #0b3c53 !important;
+  border: 2px solid #1e6b8c !important;
+  box-shadow: 3px 3px 0px #1e6b8c !important;
   font-weight: 700 !important;
 }
 
 .tweety-theme .news-toggle-form:hover {
   background: #ffb74d !important;
   color: #ffffff !important;
+}
+
+/* ==========================================================================
+   👃 BERSERK SCHNOZ THEME (251002119)
+   ========================================================================== */
+body.schnoz-theme {
+  --bg-primary: #121214;
+  --bg-secondary: #27272a;
+  --bg-card: #1c1c1f;
+  --accent: #fda4af; /* Schnoz Pink */
+  --accent-dim: #c084fc; /* Sacrifice Purple */
+  --accent-glow: rgba(253, 164, 175, 0.3);
+  background: #121214 !important;
+  background-image: radial-gradient(circle, #27272a 10%, transparent 11%), 
+                    radial-gradient(circle, #18181b 10%, transparent 11%) !important;
+  background-size: 20px 20px !important;
+  color: #e4e4e7 !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>👃</text></svg>") 2 2, auto !important;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Columns */
+.schnoz-theme .task-column {
+  background: rgba(28, 28, 31, 0.85) !important;
+  border: 4px solid #3f3f46 !important;
+  box-shadow: 6px 6px 0px #18181b !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(8px);
+}
+
+.schnoz-theme .task-column__header {
+  background: #27272a !important;
+  border: 2px solid #52525b !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 12px !important;
+}
+
+.schnoz-theme .task-column__header h3 {
+  color: #fda4af !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 0px #000 !important;
+}
+
+/* Task Cards */
+.schnoz-theme .task-card {
+  background: #1c1c1f !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 4px 4px 0px #18181b !important;
+  border-radius: 12px !important;
+  color: #e4e4e7 !important;
+  font-family: 'Fredoka', sans-serif !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.schnoz-theme .task-card:hover {
+  border-color: #fda4af !important;
+  box-shadow: 5px 5px 0px #fda4af !important;
+  transform: translateY(-4px) rotate(0.5deg) !important;
+}
+
+.schnoz-theme .task-card__title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.schnoz-theme .task-card__desc {
+  color: #a1a1aa !important;
+}
+
+/* Priority Card Border Accents */
+.schnoz-theme .task-card--low { border-left: 6px solid #52525b !important; }
+.schnoz-theme .task-card--medium { border-left: 6px solid #a1a1aa !important; }
+.schnoz-theme .task-card--high { border-left: 6px solid #fda4af !important; }
+.schnoz-theme .task-card--urgent {
+  border-left: 6px solid #dc2626 !important;
+  border-right: 2px dashed #fda4af !important;
+  animation: sacrificePulse 1s infinite alternate !important;
+}
+
+@keyframes sacrificePulse {
+  0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.4); }
+  100% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.8), 4px 4px 0px #dc2626; }
+}
+
+/* Action Buttons */
+.schnoz-theme .task-card__action {
+  background: #27272a !important;
+  color: #fda4af !important;
+  border: 2px solid #52525b !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 2px 2px 0px #18181b !important;
+}
+
+.schnoz-theme .task-card__action:hover {
+  background: #fda4af !important;
+  color: #18181b !important;
+  box-shadow: 3px 3px 0px #18181b !important;
+}
+
+/* Welcome Banner */
+.schnoz-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(253, 164, 175, 0.1) 0%, rgba(28, 28, 31, 0.95) 100%) !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 5px 5px 0px #18181b !important;
+  border-radius: 14px !important;
+}
+
+.schnoz-theme .welcome-banner__icon {
+  background: rgba(63, 63, 70, 0.5) !important;
+  color: #fda4af !important;
+  border: 2px solid #52525b !important;
+}
+
+.schnoz-theme .welcome-banner__greeting strong {
+  color: #fda4af !important;
+}
+
+/* Department Tabs */
+.schnoz-theme .dept-tab {
+  background: rgba(28, 28, 31, 0.5) !important;
+  border: 2px solid #3f3f46 !important;
+  color: #a1a1aa !important;
+  border-radius: 12px !important;
+  box-shadow: 2px 2px 0px #18181b !important;
+  font-family: 'Fredoka', sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.schnoz-theme .dept-tab:hover {
+  background: #27272a !important;
+  color: #ffffff !important;
+}
+
+.schnoz-theme .dept-tab.active {
+  background: #27272a !important;
+  border-color: #fda4af !important;
+  color: #fda4af !important;
+  box-shadow: 3px 3px 0px #18181b !important;
+}
+
+/* Modal styling */
+.schnoz-theme .task-modal__content {
+  background: #18181b !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 0 0 35px rgba(253, 164, 175, 0.15), 8px 8px 0px #18181b !important;
+}
+
+.schnoz-theme .task-modal__close:hover {
+  color: #fda4af !important;
+}
+
+/* Approved pill */
+.schnoz-theme .task-card__approved-pill {
+  background: rgba(253, 164, 175, 0.1) !important;
+  color: #fda4af !important;
+  border: 1px solid #fda4af !important;
+}
+
+/* Form Controls */
+.schnoz-theme input:focus,
+.schnoz-theme textarea:focus,
+.schnoz-theme select:focus {
+  border-color: #fda4af !important;
+  box-shadow: 0 0 12px rgba(253, 164, 175, 0.3) !important;
+}
+
+/* Experimental Banner */
+.schnoz-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(253, 164, 175, .08) 0%, rgba(24, 24, 27, .95) 100%) !important;
+  border-bottom: 3px solid #3f3f46 !important;
+  color: #a1a1aa !important;
+}
+
+.schnoz-theme .experimental-banner__icon {
+  background: rgba(63, 63, 70, .3) !important;
+  color: #fda4af !important;
+  border: 1.5px solid #3f3f46 !important;
+}
+
+.schnoz-theme .experimental-banner__text strong {
+  color: #fda4af !important;
+}
+
+/* Dark scrollbar */
+.schnoz-theme::-webkit-scrollbar,
+.schnoz-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.schnoz-theme::-webkit-scrollbar-track,
+.schnoz-theme ::-webkit-scrollbar-track {
+  background: #121214;
+}
+.schnoz-theme::-webkit-scrollbar-thumb,
+.schnoz-theme ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border: 3px solid #121214;
+  border-radius: 6px;
+}
+.schnoz-theme::-webkit-scrollbar-thumb:hover,
+.schnoz-theme ::-webkit-scrollbar-thumb:hover {
+  background: #fda4af;
+}
+
+/* Schnoz Corner Widget */
+.schnoz-theme .schnoz-corner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: pointer;
+  animation: schnozWalk 4s ease-in-out infinite alternate;
+  user-select: none;
+  filter: drop-shadow(4px 4px 0px #18181b);
+}
+
+@keyframes schnozWalk {
+  0% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(-10px) rotate(-3deg); }
+  100% { transform: translateX(10px) rotate(3deg); }
+}
+
+/* Schnoz Speech Bubble */
+.schnoz-theme .schnoz-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: #1c1c1f;
+  border: 3px solid #3f3f46;
+  border-radius: 16px;
+  padding: 12px 18px;
+  max-width: 250px;
+  box-shadow: 4px 4px 0px #18181b;
+  z-index: 999;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fda4af;
+  display: none;
+}
+
+.schnoz-theme .schnoz-bubble.show {
+  display: block;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.schnoz-theme .schnoz-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: 20px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: #3f3f46 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Schnoz Top-Left Widget */
+.schnoz-theme .schnoz-corner-tl {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  font-size: 2.5rem;
+  z-index: 100;
+  opacity: 0.6;
+  animation: floatTL 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Schnoz Decors above board */
+.schnoz-theme .schnoz-decors {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  animation: floatTL 3s ease-in-out infinite alternate;
+}
+
+/* Struggle Form */
+.schnoz-theme .task-form {
+  background: rgba(28, 28, 31, 0.8) !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 6px 6px 0px #18181b !important;
+  border-radius: 20px !important;
+}
+
+.schnoz-theme .btn-primary,
+.schnoz-theme #submit-task {
+  background: #27272a !important;
+  color: #fda4af !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 4px 4px 0px #18181b !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+.schnoz-theme .btn-primary:hover,
+.schnoz-theme #submit-task:hover {
+  background: #fda4af !important;
+  color: #18181b !important;
+  box-shadow: 6px 6px 0px #18181b !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Title Header */
+.schnoz-theme .page-title {
+  color: #ffffff !important;
+  text-shadow: 3px 3px 0px #18181b !important;
+}
+
+/* News Section */
+.schnoz-theme .news-section {
+  background: rgba(28, 28, 31, 0.5) !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 6px 6px 0px #18181b !important;
+  border-radius: 16px !important;
+}
+
+.schnoz-theme .news-card {
+  background: #1c1c1f !important;
+  border: 3px solid #3f3f46 !important;
+  box-shadow: 4px 4px 0px #18181b !important;
+  border-radius: 12px !important;
+  color: #e4e4e7 !important;
+}
+
+.schnoz-theme .news-card:hover {
+  border-color: #fda4af !important;
+  box-shadow: 6px 6px 0px #fda4af !important;
+}
+
+.schnoz-theme .news-toggle-form {
+  background: #27272a !important;
+  color: #fda4af !important;
+  border: 2px solid #3f3f46 !important;
+  box-shadow: 3px 3px 0px #18181b !important;
+  font-weight: 700 !important;
+}
+
+.schnoz-theme .news-toggle-form:hover {
+  background: #fda4af !important;
+  color: #18181b !important;
 }
 
 
