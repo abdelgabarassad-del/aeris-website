@@ -7735,6 +7735,447 @@ body.ladybug-theme {
 }
 
 
+/* ==========================================================================
+   🐾 HANNAH'S STITCH THEME (251001377)
+   ========================================================================== */
+body.stitch-theme {
+  --bg-primary: #0b2240; /* Deep galactic space */
+  --bg-secondary: #0a192f;
+  --bg-card: rgba(21, 37, 65, 0.95); /* Stitch blue card */
+  --accent: #4a7bf7; /* Stitch Blue */
+  --accent-dim: #ff7fa5; /* Ear Pink */
+  --accent-glow: rgba(74, 123, 247, 0.4);
+
+  background: #0b2240 !important;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(74, 123, 247, 0.18) 0%, transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(233, 30, 99, 0.12) 0%, transparent 60%) !important;
+  color: #e3effc !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🐾</text></svg>") 2 2, auto !important;
+}
+
+/* Document layout & headers */
+.stitch-theme .page-title {
+  color: #ffffff !important;
+  font-family: 'Fredoka', sans-serif !important;
+  text-shadow: 3px 3px 0px #1a1a2e, 0 0 15px rgba(74, 123, 247, 0.6) !important;
+}
+
+.stitch-theme .dashboard-subtitle {
+  color: #a9c8f0 !important;
+}
+
+/* Task Columns */
+.stitch-theme .task-column {
+  background: rgba(10, 25, 47, 0.85) !important;
+  border: 4px solid #4a7bf7 !important;
+  box-shadow: 8px 8px 0px #1a1a2e !important;
+  border-radius: 24px !important;
+  backdrop-filter: blur(10px);
+}
+
+.stitch-theme .task-column__header {
+  background: linear-gradient(135deg, #4a7bf7 0%, #e91e63 100%) !important;
+  border: 3px solid #1a1a2e !important;
+  box-shadow: 4px 4px 0px #1a1a2e !important;
+  border-radius: 16px !important;
+}
+
+.stitch-theme .task-column__header h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 0px #1a1a2e !important;
+}
+
+/* Task Cards */
+.stitch-theme .task-card {
+  background: rgba(21, 37, 65, 0.95) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 5px 5px 0px #1a1a2e !important;
+  border-radius: 16px !important;
+  color: #ffffff !important;
+  font-family: 'Fredoka', sans-serif !important;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.stitch-theme .task-card:hover {
+  border-color: #ff7fa5 !important;
+  box-shadow: 8px 8px 0px #ff7fa5 !important;
+  transform: translateY(-6px) rotate(1deg) scale(1.02) !important;
+}
+
+.stitch-theme .task-card__title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.stitch-theme .task-card__desc {
+  color: #a9c8f0 !important;
+}
+
+/* Priority Card Accents */
+.stitch-theme .task-card--low { border-left: 6px solid #8bb5ff !important; }
+.stitch-theme .task-card--medium { border-left: 6px solid #ffcc00 !important; }
+.stitch-theme .task-card--high { border-left: 6px solid #ff5722 !important; }
+.stitch-theme .task-card--urgent {
+  border-left: 6px solid #e91e63 !important;
+  border-right: 2px dashed #ff7fa5 !important;
+  animation: stitchUrgentPulse 1.2s infinite alternate !important;
+}
+
+@keyframes stitchUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(233, 30, 99, 0.4), 5px 5px 0px #1a1a2e; }
+  100% { box-shadow: 0 0 20px rgba(233, 30, 99, 0.8), 5px 5px 0px #ff7fa5; }
+}
+
+/* Action Buttons */
+.stitch-theme .task-card__action {
+  background: #4a7bf7 !important;
+  color: #ffffff !important;
+  border: 2px solid #1a1a2e !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 2px 2px 0px #1a1a2e !important;
+}
+
+.stitch-theme .task-card__action:hover {
+  background: #ff7fa5 !important;
+  color: #1a1a2e !important;
+  box-shadow: 3px 3px 0px #1a1a2e !important;
+}
+
+/* Welcome Banner */
+.stitch-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(74, 123, 247, 0.25) 0%, rgba(233, 30, 99, 0.15) 100%) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 6px 6px 0px #1a1a2e !important;
+  border-radius: 20px !important;
+}
+
+.stitch-theme .welcome-banner__icon {
+  background: rgba(74, 123, 247, 0.3) !important;
+  border: 2px solid #ff7fa5 !important;
+}
+
+.stitch-theme .welcome-banner__greeting strong {
+  color: #ff7fa5 !important;
+}
+
+/* Department Tabs */
+.stitch-theme .dept-tab {
+  background: rgba(10, 25, 47, 0.8) !important;
+  border: 2px solid #4a7bf7 !important;
+  color: #a9c8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 2px 2px 0px #1a1a2e !important;
+  font-family: 'Fredoka', sans-serif !important;
+}
+
+.stitch-theme .dept-tab:hover {
+  background: #4a7bf7 !important;
+  color: #ffffff !important;
+}
+
+.stitch-theme .dept-tab.active {
+  background: #ff7fa5 !important;
+  border-color: #1a1a2e !important;
+  color: #1a1a2e !important;
+  box-shadow: 4px 4px 0px #ffffff !important;
+}
+
+/* Modals */
+.stitch-theme .task-modal__content {
+  background: #0b2240 !important;
+  border: 3px solid #ff7fa5 !important;
+  box-shadow: 0 0 35px rgba(74, 123, 247, 0.4), 8px 8px 0px #1a1a2e !important;
+}
+
+.stitch-theme .task-modal__close:hover {
+  color: #ff7fa5 !important;
+}
+
+/* Form inputs & controls */
+.stitch-theme .task-form {
+  background: rgba(10, 25, 47, 0.95) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 8px 8px 0px #ff7fa5 !important;
+  border-radius: 24px !important;
+}
+
+.stitch-theme .task-form label {
+  color: #ff7fa5 !important;
+  font-family: 'Fredoka', sans-serif !important;
+}
+
+.stitch-theme input,
+.stitch-theme textarea,
+.stitch-theme select {
+  background: rgba(21, 37, 65, 0.95) !important;
+  border: 2px solid #4a7bf7 !important;
+  color: #ffffff !important;
+}
+
+.stitch-theme input:focus,
+.stitch-theme textarea:focus,
+.stitch-theme select:focus {
+  border-color: #ff7fa5 !important;
+  box-shadow: 0 0 12px rgba(255, 127, 165, 0.5) !important;
+}
+
+.stitch-theme .btn-primary,
+.stitch-theme #submit-task {
+  background: #4a7bf7 !important;
+  color: #ffffff !important;
+  border: 3px solid #1a1a2e !important;
+  box-shadow: 4px 4px 0px #1a1a2e !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+}
+
+.stitch-theme .btn-primary:hover,
+.stitch-theme #submit-task:hover {
+  background: #ff7fa5 !important;
+  color: #1a1a2e !important;
+  box-shadow: 6px 6px 0px #1a1a2e !important;
+}
+
+.stitch-theme .task-card__approved-pill {
+  background: rgba(74, 123, 247, 0.2) !important;
+  color: #a9c8f0 !important;
+  border: 1px solid #4a7bf7 !important;
+}
+
+/* Custom Scrollbars */
+.stitch-theme::-webkit-scrollbar,
+.stitch-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.stitch-theme::-webkit-scrollbar-track,
+.stitch-theme ::-webkit-scrollbar-track {
+  background: #0a192f;
+}
+.stitch-theme::-webkit-scrollbar-thumb,
+.stitch-theme ::-webkit-scrollbar-thumb {
+  background: #4a7bf7;
+  border: 3px solid #0a192f;
+  border-radius: 6px;
+}
+.stitch-theme::-webkit-scrollbar-thumb:hover,
+.stitch-theme ::-webkit-scrollbar-thumb:hover {
+  background: #ff7fa5;
+}
+
+/* Interactive Stitch Corner Widget */
+.stitch-theme .stitch-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a7bf7 0%, #ff7fa5 100%);
+  border: 3px solid #1a1a2e;
+  box-shadow: 0 8px 24px rgba(74, 123, 247, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.stitch-theme .stitch-corner:hover {
+  transform: scale(1.15) rotate(15deg);
+  box-shadow: 0 12px 30px rgba(255, 127, 165, 0.6);
+}
+
+/* Stitch Speech Bubble */
+.stitch-theme .stitch-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: #0a192f;
+  border: 3px solid #4a7bf7;
+  border-radius: 16px;
+  padding: 12px 18px;
+  max-width: 260px;
+  box-shadow: 4px 4px 0px #1a1a2e;
+  z-index: 999;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffffff;
+  display: none;
+}
+
+.stitch-theme .stitch-bubble.show {
+  display: block;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.stitch-theme .stitch-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: 20px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: #4a7bf7 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Floating top-left ornament */
+.stitch-theme .stitch-corner-tl {
+  position: fixed;
+  top: 95px;
+  left: 24px;
+  font-size: 2.8rem;
+  z-index: 100;
+  opacity: 0.8;
+  animation: floatTL 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Trail of decorations above the board */
+.stitch-theme .stitch-deco-trail {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  animation: floatTL 3s ease-in-out infinite alternate;
+}
+
+.stitch-theme .stitch-deco-trail span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.stitch-theme .stitch-deco-trail span:hover {
+  transform: scale(1.3) rotate(15deg);
+}
+
+/* Stitch SVGs animation */
+@keyframes headBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.stitch-theme .stitch-deco {
+  animation: headBob 3s infinite ease-in-out;
+}
+
+/* News Section Overrides */
+.stitch-theme .news-section {
+  background: rgba(10, 25, 47, 0.85) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 8px 8px 0px #1a1a2e !important;
+  border-radius: 24px !important;
+}
+
+.stitch-theme .news-header__icon {
+  color: #ff7fa5 !important;
+}
+
+.stitch-theme .news-header h2 {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 0px #1a1a2e !important;
+}
+
+.stitch-theme .news-card {
+  background: rgba(21, 37, 65, 0.95) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 4px 4px 0px #1a1a2e !important;
+  border-radius: 16px !important;
+  color: #ffffff !important;
+}
+
+.stitch-theme .news-card:hover {
+  border-color: #ff7fa5 !important;
+  box-shadow: 6px 6px 0px #ff7fa5 !important;
+}
+
+.stitch-theme .news-card__author {
+  color: #ffffff !important;
+}
+
+.stitch-theme .news-card__badge--faculty {
+  background: rgba(233, 30, 99, 0.15) !important;
+  color: #ff7fa5 !important;
+  border: 1.5px solid #e91e63 !important;
+}
+
+.stitch-theme .news-card__badge--head {
+  background: rgba(74, 123, 247, 0.15) !important;
+  color: #8bb5ff !important;
+  border: 1.5px solid #4a7bf7 !important;
+}
+
+.stitch-theme .news-card__content {
+  color: #a9c8f0 !important;
+}
+
+.stitch-theme .news-card__footer {
+  color: #8bb5ff !important;
+}
+
+.stitch-theme .news-card__footer svg {
+  color: #ff7fa5 !important;
+}
+
+.stitch-theme .news-toggle-form {
+  background: #4a7bf7 !important;
+  color: #ffffff !important;
+  border: 3px solid #1a1a2e !important;
+  box-shadow: 3px 3px 0px #1a1a2e !important;
+  font-weight: 700 !important;
+}
+
+.stitch-theme .news-toggle-form:hover {
+  background: #ff7fa5 !important;
+  color: #1a1a2e !important;
+}
+
+.stitch-theme .news-form {
+  background: rgba(10, 25, 47, 0.98) !important;
+  border: 3px solid #4a7bf7 !important;
+  box-shadow: 6px 6px 0px #ff7fa5 !important;
+}
+
+.stitch-theme .news-form__title,
+.stitch-theme .news-form__title svg {
+  color: #ff7fa5 !important;
+}
+
+.stitch-theme .news-form textarea {
+  background: rgba(21, 37, 65, 0.95) !important;
+  border: 2px solid #4a7bf7 !important;
+  color: #ffffff !important;
+}
+
+.stitch-theme .news-form .btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 2px solid #ff7fa5 !important;
+  box-shadow: 2px 2px 0px #1a1a2e !important;
+}
+
+.stitch-theme .news-form .btn-secondary:hover {
+  background: #ff7fa5 !important;
+  color: #1a1a2e !important;
+}
+
+.stitch-theme .news-feed__empty {
+  color: #a9c8f0 !important;
+}
+
+.stitch-theme .news-feed__empty svg {
+  color: #4a7bf7 !important;
+}
+
+
+
 
 
 

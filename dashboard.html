@@ -457,6 +457,7 @@
       if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
       if (sessionReg === '241012132') document.body.classList.add('bloodborne-theme');
       if (sessionReg === '251010151') document.body.classList.add('ladybug-theme');
+      if (sessionReg === '251001377') document.body.classList.add('stitch-theme');
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
@@ -640,6 +641,7 @@
       if (regNum === TOMJERRY_REG) document.body.classList.add('tomjerry-theme');
       if (regNum === BLOODBORNE_REG) document.body.classList.add('bloodborne-theme');
       if (regNum === LADYBUG_REG) document.body.classList.add('ladybug-theme');
+      if (regNum === '251001377') document.body.classList.add('stitch-theme');
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
@@ -1686,10 +1688,115 @@
       }
     }
 
+    const STITCH_REG = '251001377';
+    function isStitchUser() {
+      return safeSession.getItem('aeris_auth_reg') === STITCH_REG;
+    }
+
     function applyStitchTheme() {
-      // Revert/clean up any remaining Stitch elements
-      document.body.classList.remove('stitch-theme');
-      document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
+      if (!isStitchUser()) {
+        document.body.classList.remove('stitch-theme');
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('stitch-theme');
+
+      // Welcome banner icon customization
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = getStitchFaceSVG(24);
+        }
+      }
+
+      // Stitch interactive bottom-right corner widget
+      if (!document.querySelector('.stitch-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'stitch-corner';
+        corner.innerHTML = getStitchFaceSVG(52);
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'stitch-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Ohana means family. Family means nobody gets left behind or forgotten. 🌺❤️",
+          "Ohana signifie famille. Famille signifie que personne ne doit être abandonné, ni oublié. 🌸❤️",
+          "Aloha! Welcome to our tropical task paradise! 🌴🌊",
+          "Aloha ! Bienvenue dans notre paradis des tâches ! 🌴🌊",
+          "Meega naala keesta! (Destroy!) 👽⚡",
+          "Hi! Stitch is cute and fluffy! 🧸🐾",
+          "Salut ! Stitch est mignon et tout doux ! 🧸🐾",
+          "Tristesse de la Terre... 🌍💧",
+          "Experiment 626 is active and ready to work! 🚀💙",
+          "L'Expérience 626 est activée et prête à travailler ! 🚀💙",
+          "Nobody gets left behind. Pas d'abandon. 🤝"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 4000);
+        });
+      }
+
+      // Floating decoration top-left (Hawaiian flower)
+      if (!document.querySelector('.stitch-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'stitch-corner-tl';
+        cornerTL.innerHTML = `🌺`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Trail of decorations above the task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.stitch-deco-trail')) {
+        const trail = document.createElement('div');
+        trail.className = 'stitch-deco-trail';
+        trail.innerHTML = `<span>🌴</span><span>🌺</span><span>🐾</span><span>🛸</span><span>🏄‍♂️</span><span>🎸</span><span>🌺</span>`;
+        taskBoard.parentNode.insertBefore(trail, taskBoard);
+      }
+
+      // Customize task form headers for Stitch
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Enregistrer une Mission Terrestre 🌺');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🐾 Nom de la Mission / Expérience';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🌴 Détails du Projet (Galactique / Terrestre)';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '✨ Niveau de Danger (Méchanceté)';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Sommeil de l\'Expérience (Faible)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🐾 Niveau de Méchanceté 10% (Moyen)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🔥 Niveau de Méchanceté 100% (Élevé)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 ALERTE EXPERIMENT 626 ! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏳ Temps Restant (Alerte Galactique)';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Aloha ! 🌺');
+      }
     }
 
     /* ========== LIGHTNING MCQUEEN THEME (231003934 only) ========== */
@@ -3278,6 +3385,45 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isStitchUser()) {
+         const priorityLabels = { 
+           low: '💤 Expérience Endormie', 
+           medium: '🐾 Méchanceté 10%', 
+           high: '🔥 Méchanceté 100%', 
+           urgent: '🚨 EXPERIMENT 626' 
+         };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Apprivoiser l'expérience">▶ Apprivoiser</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Intégrer à l'Ohana">✓ Ohana</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la tâche">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approuvé</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🐾 ${escapeHtml(task.title)} 🌺</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isSchnozUser()) {
          const priorityLabels = { low: '🪨 Pebble', medium: '⚔️ Struggler', high: '🩸 Apostle Threat', urgent: '👁️ ECLIPSE LEVEL' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -3807,6 +3953,18 @@
           'col-todo': 'À Faire',
           'col-progress': 'En Cours',
           'col-done': 'Terminé'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isStitchUser()) {
+        const colHeaders = {
+          'col-todo': 'Expériences Capturées (To Do) 🛸',
+          'col-progress': 'En Cours d\'Apprivoisement (In Progress) 🐾',
+          'col-done': 'Membres de l\'Ohana (Done) 🌺'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
