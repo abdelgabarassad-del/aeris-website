@@ -457,6 +457,7 @@
       if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
       if (sessionReg === '241012132') document.body.classList.add('vilebloods-theme');
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
+      if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -558,6 +559,7 @@
         applyTomJerryTheme();
         applyVilebloodsTheme();
         applyIronmanTheme();
+        applyPoohTheme();
       }, 600);
     }
 
@@ -632,6 +634,7 @@
       if (regNum === TOMJERRY_REG) document.body.classList.add('tomjerry-theme');
       if (regNum === VILEBLOODS_REG) document.body.classList.add('vilebloods-theme');
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
+      if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -2225,6 +2228,116 @@
       }
     }
 
+    /* ========== WINNIE THE POOH THEME (221011368 only) ========== */
+    const POOH_REG = '221011368';
+
+    function isPoohUser() {
+      return safeSession.getItem('aeris_auth_reg') === POOH_REG;
+    }
+
+    function applyPoohTheme() {
+      if (!isPoohUser()) {
+        document.body.classList.remove('pooh-theme');
+        document.querySelectorAll('.pooh-corner, .pooh-corner-tl, .pooh-bubble, .pooh-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('pooh-theme');
+
+      // Customize welcome banner icon to be a Honey Pot SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="pot-wiggle"><path d="M6 3h12l1 5H5l1-5z"/><path d="M19 8c0 5-2 13-7 13S5 13 5 8h14z"/><path d="M9 12h6v2H9z"/></svg>`;
+        }
+      }
+
+      // Honey pot widget bottom right
+      if (!document.querySelector('.pooh-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'pooh-corner';
+        corner.innerHTML = `<div class="pooh-pot-floater">🍯</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'pooh-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Sometimes the smallest things take up the most room in your heart. ❤️",
+          "A day without a friend is like a pot without a single drop of honey left inside. 🍯",
+          "People say nothing is impossible, but I do nothing every day. 💤",
+          "Think, think, think... 💭",
+          "What about lunch? 🍯",
+          "Oh, Bother! 🐝",
+          "Any day spent with you is my favorite day. 🎈"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Red Balloon top-left
+      if (!document.querySelector('.pooh-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'pooh-corner-tl';
+        cornerTL.innerHTML = `🎈`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Decors above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.pooh-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'pooh-decors';
+        const decorsContent = `<span>🍯</span><span>🐝</span><span>🎈</span><span>🍯</span><span>🐝</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Pooh
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Thought / Adventure');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🍯 Honey Hunt Plan / Task';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🌳 Hundred Acre Wood Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🐝 Bother Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Nap in the Sun (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🎈 Float with Balloon (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🐝 Sticky Situation (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 OH, BOTHER! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏱️ Search Time';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Go Find Honey!');
+      }
+    }
+
     /* ========== IRON MAN THEME (251010536 only) ========== */
     const IRONMAN_REG = '251010536';
 
@@ -2851,6 +2964,40 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isPoohUser()) {
+         const priorityLabels = { low: '💤 Nap in Sun', medium: '🎈 Float High', high: '🐝 Sticky Situation', urgent: '🚨 OH, BOTHER!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start Adventure">▶ Start Adventure</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Gather Honey">✓ Gather Honey</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🍯 ${escapeHtml(task.title)} 🐝</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isIronmanUser()) {
          const priorityLabels = { low: '🔋 Standby Mode', medium: '🚀 Repulsor Charge', high: '⚡ Overcharge', urgent: '🚨 HOUSE PARTY PROTOCOL!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -3317,6 +3464,18 @@
           'col-todo': 'Daily Bugle Alerts (To Do) 📰',
           'col-progress': 'Web-Slinging (In Progress) 🕸️',
           'col-done': 'Saved the Day (Done) 🏆'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isPoohUser()) {
+        const colHeaders = {
+          'col-todo': 'Pooh\'s Corner (To Do) 🏡',
+          'col-progress': 'Honey Hunt (In Progress) 🍯',
+          'col-done': 'Mischief Managed (Done) 🎈'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);

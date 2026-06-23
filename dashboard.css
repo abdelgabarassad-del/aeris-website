@@ -6034,6 +6034,330 @@ body.ironman-theme {
   background: #c8102e;
 }
 
+/* ==========================================================================
+   🍯 WINNIE THE POOH THEME (221011368)
+   ========================================================================== */
+body.pooh-theme {
+  --bg-primary: #fffdf2; /* Soft honey cream */
+  --bg-secondary: #fbf0c8; /* Honeycomb yellow */
+  --bg-card: rgba(253, 245, 230, 0.95); /* Honey jar beige */
+  --accent: #ffb300; /* Honey yellow */
+  --accent-dim: #e53935; /* Pooh t-shirt red */
+  --accent-glow: rgba(255, 179, 0, 0.2);
+  background: #fffdf2 !important;
+  color: #5d4037 !important; /* Bark brown text */
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ctext y='22' font-size='22'%3E🍯%3C/text%3E%3C/svg%3E") 2 2, auto !important;
+}
+
+.pooh-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(255, 179, 0, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(229, 57, 53, 0.08) 0%, transparent 60%),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.pooh-theme h1,
+.pooh-theme h2,
+.pooh-theme h3,
+.pooh-theme .page-title,
+.pooh-theme .welcome-banner__greeting {
+  font-family: 'Luckiest Guy', 'Fredoka', cursive !important;
+  letter-spacing: 1px !important;
+  color: #5d4037 !important;
+  text-shadow: 2px 2px 0px #ffb300, -1px -1px 0px #e53935 !important;
+}
+
+/* Wiggling Welcome icon animation */
+@keyframes potWiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-6deg) scale(1.05); }
+  75% { transform: rotate(6deg) scale(1.05); }
+}
+.pooh-theme .pot-wiggle {
+  animation: potWiggle 2.5s infinite ease-in-out;
+  color: #ffb300 !important;
+  fill: #ffb300 !important;
+}
+
+/* Corner widget / Floater bottom right */
+.pooh-theme .pooh-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb300 0%, #e53935 100%);
+  border: 3px solid #8b5a2b;
+  box-shadow: 0 8px 24px rgba(255, 179, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+}
+
+.pooh-theme .pooh-corner:hover {
+  transform: scale(1.15) rotate(15deg);
+  box-shadow: 0 12px 30px rgba(255, 179, 0, 0.6);
+}
+
+.pooh-theme .pooh-pot-floater {
+  font-size: 30px;
+  animation: floatPot 2s infinite alternate ease-in-out;
+}
+
+@keyframes floatPot {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* Speech bubble bottom right */
+.pooh-theme .pooh-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 35px;
+  background: #fdf5e6;
+  color: #5d4037;
+  padding: 10px 16px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  max-width: 240px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border: 3px solid #8b5a2b;
+}
+
+.pooh-theme .pooh-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.pooh-theme .pooh-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #8b5a2b transparent;
+  display: block;
+  width: 0;
+}
+
+/* Balloon top left corner widget */
+.pooh-theme .pooh-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.45;
+  z-index: 50;
+  font-size: 2.2rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(229, 57, 53, 0.4));
+  animation: balloonSway 4s infinite ease-in-out;
+}
+
+@keyframes balloonSway {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(5deg); }
+}
+
+/* Decors above task board */
+.pooh-theme .pooh-decors {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.5;
+}
+
+.pooh-theme .pooh-decors span {
+  font-size: 1.4rem;
+  display: inline-block;
+  animation: beeBuzz 2.5s ease-in-out infinite alternate;
+}
+
+.pooh-theme .pooh-decors span:nth-child(even) {
+  animation-delay: 0.8s;
+}
+
+@keyframes beeBuzz {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-6px) scale(1.1); }
+}
+
+/* Columns */
+.pooh-theme .task-column {
+  background: #fbf0c8 !important;
+  border: 4px solid #8b5a2b !important; /* Thick wood outline */
+  box-shadow: 8px 8px 0px #e53935 !important; /* Red flat shadow */
+  border-radius: 16px !important;
+}
+
+.pooh-theme .task-column__header {
+  background: linear-gradient(135deg, rgba(255, 179, 0, 0.25) 0%, rgba(229, 57, 53, 0.15) 100%) !important;
+  border: 3px solid #8b5a2b !important;
+  box-shadow: 4px 4px 0px #8b5a2b !important;
+  border-radius: 12px !important;
+}
+
+.pooh-theme .task-column__header h3 {
+  color: #5d4037 !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 0px #ffb300 !important;
+}
+
+/* Task Cards */
+.pooh-theme .task-card {
+  background: #fdf8e2 !important;
+  border: 3px solid #8b5a2b !important;
+  box-shadow: 5px 5px 0px #ffb300 !important;
+  border-radius: 12px !important;
+  color: #5d4037 !important;
+  font-family: 'Fredoka', sans-serif !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.pooh-theme .task-card:hover {
+  border-color: #e53935 !important;
+  box-shadow: 7px 7px 0px #e53935 !important;
+  transform: translateY(-4px) rotate(0.5deg) !important;
+}
+
+.pooh-theme .task-card__title {
+  color: #5d4037 !important;
+  font-weight: 700 !important;
+}
+
+.pooh-theme .task-card__desc {
+  color: #795548 !important;
+}
+
+/* Priority Card Border Accents */
+.pooh-theme .task-card--low { border-left: 6px solid #81c784 !important; }
+.pooh-theme .task-card--medium { border-left: 6px solid #ffb300 !important; }
+.pooh-theme .task-card--high { border-left: 6px solid #ff7043 !important; }
+.pooh-theme .task-card--urgent {
+  border-left: 6px solid #e53935 !important;
+  border-right: 2px dashed #ffb300 !important;
+  animation: poohUrgentPulse 1s infinite alternate !important;
+}
+
+@keyframes poohUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(229, 57, 53, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(229, 57, 53, 0.7); }
+}
+
+/* Buttons and Controls */
+.pooh-theme .task-card__action {
+  background: #ffb300 !important;
+  color: #5d4037 !important;
+  border: 2px solid #8b5a2b !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 8px rgba(255, 179, 0, 0.2) !important;
+}
+
+.pooh-theme .task-card__action:hover {
+  background: #e53935 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4) !important;
+}
+
+/* Welcome Banner */
+.pooh-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(255, 179, 0, 0.15) 0%, rgba(251, 240, 200, 0.9) 100%) !important;
+  border: 3px solid #8b5a2b !important;
+  border-radius: 14px !important;
+}
+
+.pooh-theme .welcome-banner__icon {
+  background: rgba(255, 179, 0, 0.2) !important;
+  color: #5d4037 !important;
+  box-shadow: 0 0 10px rgba(255, 179, 0, 0.3) !important;
+}
+
+.pooh-theme .welcome-banner__greeting strong {
+  color: #e53935 !important;
+}
+
+/* Tabs */
+.pooh-theme .dept-tab.active {
+  background: rgba(255, 179, 0, 0.2) !important;
+  border-color: #8b5a2b !important;
+  color: #5d4037 !important;
+}
+
+/* Modal styling */
+.pooh-theme .task-modal__content {
+  background: #fdf5e6 !important;
+  border: 3px solid #8b5a2b !important;
+  box-shadow: 0 0 35px rgba(255, 179, 0, 0.25) !important;
+}
+
+.pooh-theme .task-modal__close:hover { color: #e53935 !important; }
+
+/* Approved pill */
+.pooh-theme .task-card__approved-pill {
+  background: rgba(255, 179, 0, 0.1) !important;
+  color: #5d4037 !important;
+  border: 1px solid rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Form controls focus */
+.pooh-theme input:focus,
+.pooh-theme textarea:focus,
+.pooh-theme select:focus {
+  border-color: #ffb300 !important;
+  box-shadow: 0 0 12px rgba(255, 179, 0, 0.25) !important;
+}
+
+/* Experimental Banner */
+.pooh-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(255, 179, 0, .12) 0%, rgba(251, 240, 200, .9) 100%) !important;
+  border-bottom: 3px solid #8b5a2b !important;
+}
+
+.pooh-theme .experimental-banner__icon {
+  background: rgba(255, 179, 0, .15) !important;
+  color: #5d4037 !important;
+}
+
+.pooh-theme .experimental-banner__text strong {
+  color: #e53935 !important;
+}
+
+/* Honey Gold/Red scrollbar */
+.pooh-theme::-webkit-scrollbar,
+.pooh-theme ::-webkit-scrollbar {
+  width: 12px;
+}
+.pooh-theme::-webkit-scrollbar-track,
+.pooh-theme ::-webkit-scrollbar-track {
+  background: #fffdf2;
+}
+.pooh-theme::-webkit-scrollbar-thumb,
+.pooh-theme ::-webkit-scrollbar-thumb {
+  background: #ffb300;
+  border: 3px solid #fffdf2;
+  border-radius: 6px;
+}
+.pooh-theme::-webkit-scrollbar-thumb:hover,
+.pooh-theme ::-webkit-scrollbar-thumb:hover {
+  background: #e53935;
+}
+
+
 
 
 
