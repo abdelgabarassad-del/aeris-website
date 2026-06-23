@@ -2343,6 +2343,16 @@ body.love-theme {
 }
 
 .love-theme .experimental-banner__icon {
+  background: rgba(244, 114, 182, .15) !important;
+  color: #f472b6 !important;
+}
+
+.news-card__footer svg {
+  color: var(--white-muted);
+  opacity: 0.7;
+}
+
+/* Mobile responsive fixes */
 @media (max-width: 768px) {
   .news-section {
     padding: 24px 20px;
