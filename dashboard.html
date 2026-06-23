@@ -452,6 +452,8 @@
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
       if (sessionReg === '231003934') document.body.classList.add('mcqueen-theme');
       if (sessionReg === '241003033') document.body.classList.add('batman-theme');
+      if (sessionReg === '251000861') document.body.classList.add('spiderman-theme');
+      if (sessionReg === '251010424') document.body.classList.add('sonic-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -548,6 +550,8 @@
         applySpongebobTheme();
         applyMcQueenTheme();
         applyBatmanTheme();
+        applySpidermanTheme();
+        applySonicTheme();
       }, 600);
     }
 
@@ -617,6 +621,8 @@
       if (regNum === '251003016') document.body.classList.add('spongebob-theme');
       if (regNum === MCQUEEN_REG) document.body.classList.add('mcqueen-theme');
       if (regNum === BATMAN_REG) document.body.classList.add('batman-theme');
+      if (regNum === SPIDERMAN_REG) document.body.classList.add('spiderman-theme');
+      if (regNum === SONIC_REG) document.body.classList.add('sonic-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -1883,6 +1889,224 @@
       }
     }
 
+    /* ========== SPIDER-MAN THEME (251000861 only) ========== */
+    const SPIDERMAN_REG = '251000861';
+
+    function isSpidermanUser() {
+      return safeSession.getItem('aeris_auth_reg') === SPIDERMAN_REG;
+    }
+
+    function applySpidermanTheme() {
+      if (!isSpidermanUser()) {
+        document.body.classList.remove('spiderman-theme');
+        document.querySelectorAll('.spiderman-corner, .spiderman-corner-tl, .spiderman-bubble, .spiderman-webs, .spiderman-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('spiderman-theme');
+
+      // Customize welcome banner icon to be a Spider SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spider-spin"><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5M5 5l4.5 4.5M14.5 14.5L19 19M5 19l4.5-4.5M14.5 9.5L19 5"/></svg>`;
+        }
+      }
+
+      // Spider badge at bottom right
+      if (!document.querySelector('.spiderman-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'spiderman-corner';
+        corner.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 1.84-.63 3.52-1.7 4.93z"/></svg>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'spiderman-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "With great power comes great responsibility. 🕷️",
+          "Your friendly neighborhood Spider-Man! 🕸️",
+          "Go webs go! 🕸️",
+          "Look out! Here comes the Spider-Man! 🕷️",
+          "My Spider-Sense is tingling! ⚡",
+          "Just a kid from Queens saving the day! 🏙️"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Web vector top-left
+      if (!document.querySelector('.spiderman-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'spiderman-corner-tl';
+        cornerTL.innerHTML = `🕸️`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Webs trailing above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.spiderman-webs')) {
+        const webs = document.createElement('div');
+        webs.className = 'spiderman-webs';
+        const websContent = `<span>🕸️</span><span>🕷️</span><span>🕸️</span><span>🕷️</span><span>🕸️</span>`;
+        webs.innerHTML = websContent;
+        taskBoard.parentNode.insertBefore(webs, taskBoard);
+      }
+
+      // Customize task form headers for Spider-Man
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Mission / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🕷️ Mission Objective';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🕸️ Spidey Intel / Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '⚡ Threat Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🏙️ Citizen Duty (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🕸️ Web Practice (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '⚡ Supervillain Threat (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '💥 AVENGERS LEVEL (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '📅 Rescue ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Deploy Spider-Man');
+      }
+    }
+
+    /* ========== SONIC THE HEDGEHOG THEME (251010424 only) ========== */
+    const SONIC_REG = '251010424';
+
+    function isSonicUser() {
+      return safeSession.getItem('aeris_auth_reg') === SONIC_REG;
+    }
+
+    function applySonicTheme() {
+      if (!isSonicUser()) {
+        document.body.classList.remove('sonic-theme');
+        document.querySelectorAll('.sonic-corner, .sonic-corner-tl, .sonic-bubble, .sonic-rings, .sonic-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('sonic-theme');
+
+      // Customize welcome banner icon to be a gold ring
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="ring-spin"><circle cx="12" cy="12" r="8"/></svg>`;
+        }
+      }
+
+      // Golden ring floater bottom right
+      if (!document.querySelector('.sonic-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'sonic-corner';
+        corner.innerHTML = `<div class="sonic-ring-floater">🪙</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'sonic-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Gotta go fast! 🦔💨",
+          "Sonic's the name, speed's my game! ⚡",
+          "You're too slow! 💨",
+          "Super Sonic Style! 🌟",
+          "Blue streak speeds by! 🌀",
+          "I'm feeling like a million bucks! 🪙"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Emerald indicator top-left
+      if (!document.querySelector('.sonic-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'sonic-corner-tl';
+        cornerTL.innerHTML = `💎`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Rings trailing above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.sonic-rings')) {
+        const rings = document.createElement('div');
+        rings.className = 'sonic-rings';
+        const ringsContent = `<span>🪙</span><span>🌀</span><span>🪙</span><span>🌀</span><span>🪙</span>`;
+        rings.innerHTML = ringsContent;
+        taskBoard.parentNode.insertBefore(rings, taskBoard);
+      }
+
+      // Customize task form headers for Sonic
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Zone Directive / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🌀 Zone Mission';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🦊 Tails\' Blueprints / Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '⚡ Speed Class';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '👟 Walk Speed (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '⚡ Speed of Sound (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🌟 Super Sonic (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🦔💨 GOTTA GO FAST! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '🏁 Finish Line ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Spin Dash!');
+      }
+    }
+
     /* ========== MICKEY MOUSE THEME (251011829 only) ========== */
     const MICKEY_REG = '251011829';
 
@@ -2289,6 +2513,74 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isSpidermanUser()) {
+         const priorityLabels = { low: '🏙️ Citizen Duty', medium: '🕸️ Web Practice', high: '⚡ Supervillain Threat', urgent: '💥 AVENGERS LEVEL' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Web swing to location">▶ Go Webs!</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Save the day">✓ Save Day</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🕸️ ${escapeHtml(task.title)} 🕷️</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
+       if (isSonicUser()) {
+         const priorityLabels = { low: '👟 Walk Speed', medium: '⚡ Speed of Sound', high: '🌟 Super Sonic', urgent: '🦔💨 GOTTA GO FAST!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Spin dash!">▶ Spin Dash</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Collect chaos emerald">✓ Clear Zone</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🌀 ${escapeHtml(task.title)} 🪙</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isMcQueenUser()) {
          const priorityLabels = { low: '🐢 Cruising Speed', medium: '🏎️ V8 Power', high: '🚀 Turbo Boost', urgent: '⚡ KA-CHOW!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -2573,6 +2865,30 @@
           'col-todo': 'Pit Stop (To Do) 🔧',
           'col-progress': 'On Track (In Progress) 🏎️',
           'col-done': 'Finish Line (Done) 🏁'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isSpidermanUser()) {
+        const colHeaders = {
+          'col-todo': 'Daily Bugle Alerts (To Do) 📰',
+          'col-progress': 'Web-Slinging (In Progress) 🕸️',
+          'col-done': 'Saved the Day (Done) 🏆'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isSonicUser()) {
+        const colHeaders = {
+          'col-todo': 'Green Hill Zone (To Do) 🟢',
+          'col-progress': 'Spin Dash (In Progress) 🦔',
+          'col-done': 'Chaos Emeralds (Done) 🌟'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);

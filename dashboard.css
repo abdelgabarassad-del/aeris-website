@@ -4294,3 +4294,520 @@ body.batman-theme {
   text-shadow: 0 0 5px rgba(245, 176, 65, 0.4) !important;
 }
 
+/* ==========================================================================
+   🕸️ SPIDER-MAN THEME (251000861)
+   ========================================================================== */
+body.spiderman-theme {
+  --bg-primary: #0a1128;
+  --bg-secondary: #001f54;
+  --bg-card: rgba(10, 25, 47, 0.75);
+  --accent: #e50914; /* Spidey Red */
+  --accent-dim: #1e3d59; /* Spidey Blue */
+  --accent-glow: rgba(229, 9, 20, 0.25);
+  background: #0a1128 !important;
+  color: #f1f5f9 !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🕷️</text></svg>") 2 2, auto !important;
+}
+
+.spiderman-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(229, 9, 20, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(30, 144, 255, 0.06) 0%, transparent 60%),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.spiderman-theme h1,
+.spiderman-theme h2,
+.spiderman-theme h3,
+.spiderman-theme .page-title,
+.spiderman-theme .welcome-banner__greeting {
+  font-family: 'Luckiest Guy', 'Fredoka', cursive !important;
+  letter-spacing: 1px !important;
+  color: #fff !important;
+  text-shadow: 2px 2px 0px #e50914, -1px -1px 0px #001f54 !important;
+}
+
+.spiderman-theme .spiderman-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e50914 0%, #001f54 100%);
+  border: 3px solid #fff;
+  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  color: #fff;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+}
+
+.spiderman-theme .spiderman-corner:hover {
+  transform: scale(1.15) rotate(180deg);
+  box-shadow: 0 12px 30px rgba(229, 9, 20, 0.6);
+}
+
+.spiderman-theme .spiderman-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 35px;
+  background: #fff;
+  color: #111;
+  padding: 10px 16px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  max-width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid #e50914;
+}
+
+.spiderman-theme .spiderman-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.spiderman-theme .spiderman-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #e50914 transparent;
+  display: block;
+  width: 0;
+}
+
+.spiderman-theme .spiderman-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.3;
+  z-index: 50;
+  font-size: 2rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(229, 9, 20, 0.4));
+}
+
+.spiderman-theme .spiderman-webs {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.35;
+}
+
+.spiderman-theme .spiderman-webs span {
+  font-size: 1.3rem;
+  display: inline-block;
+  animation: spidermanSwing 4s ease-in-out infinite alternate;
+}
+
+.spiderman-theme .spiderman-webs span:nth-child(even) {
+  animation-delay: 2s;
+}
+
+@keyframes spidermanSwing {
+  0% { transform: rotate(-10deg) translateY(0); }
+  100% { transform: rotate(10deg) translateY(-6px); }
+}
+
+.spiderman-theme .task-column {
+  background: rgba(10, 25, 47, 0.5) !important;
+  border: 2px solid rgba(229, 9, 20, 0.15) !important;
+  border-radius: 16px !important;
+}
+
+.spiderman-theme .task-column__header {
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.15) 0%, rgba(30, 144, 255, 0.05) 100%) !important;
+  border: 2px solid #e50914 !important;
+  box-shadow: 0 6px 15px rgba(229, 9, 20, 0.1) !important;
+  border-radius: 12px !important;
+}
+
+.spiderman-theme .task-column__header h3 {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 2px #000 !important;
+}
+
+.spiderman-theme .task-card {
+  background: rgba(10, 25, 47, 0.8) !important;
+  border: 1px solid rgba(229, 9, 20, 0.15) !important;
+  border-radius: 12px !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.spiderman-theme .task-card:hover {
+  border-color: #e50914 !important;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+.spiderman-theme .task-card--low { border-left: 4px solid #10b981 !important; }
+.spiderman-theme .task-card--medium { border-left: 4px solid #3090ff !important; }
+.spiderman-theme .task-card--high { border-left: 4px solid #e50914 !important; }
+.spiderman-theme .task-card--urgent {
+  border-left: 4px solid #e50914 !important;
+  border-right: 2px dashed #3090ff !important;
+  animation: spidermanUrgentPulse 1s infinite alternate !important;
+}
+
+@keyframes spidermanUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(229, 9, 20, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(229, 9, 20, 0.6); }
+}
+
+.spiderman-theme .task-card__action {
+  background: #e50914 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 8px rgba(229, 9, 20, 0.2) !important;
+}
+
+.spiderman-theme .task-card__action:hover {
+  background: #3090ff !important;
+  box-shadow: 0 4px 12px rgba(48, 144, 255, 0.4) !important;
+}
+
+.spiderman-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.15) 0%, rgba(10, 25, 47, 0.8) 100%) !important;
+  border: 2px solid rgba(229, 9, 20, 0.3) !important;
+  border-radius: 14px !important;
+}
+
+.spiderman-theme .welcome-banner__icon {
+  background: rgba(229, 9, 20, 0.2) !important;
+  color: #e50914 !important;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.3) !important;
+}
+
+.spiderman-theme .welcome-banner__greeting strong {
+  color: #3090ff !important;
+}
+
+.spiderman-theme .dept-tab.active {
+  background: rgba(229, 9, 20, 0.2) !important;
+  border-color: #e50914 !important;
+  color: #3090ff !important;
+}
+
+.spiderman-theme .task-modal__content {
+  background: rgba(10, 15, 30, 0.98) !important;
+  border: 2px solid rgba(229, 9, 20, 0.3) !important;
+  box-shadow: 0 10px 40px rgba(229, 9, 20, 0.15) !important;
+}
+
+.spiderman-theme .task-modal__close:hover { color: #e50914 !important; }
+
+.spiderman-theme .task-card__approved-pill {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.spiderman-theme input:focus,
+.spiderman-theme textarea:focus,
+.spiderman-theme select:focus {
+  border-color: #e50914 !important;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.25) !important;
+}
+
+.spiderman-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(229, 9, 20, .12) 0%, rgba(10, 25, 47, .6) 100%) !important;
+  border-bottom: 1px solid rgba(229, 9, 20, .25) !important;
+}
+
+.spiderman-theme .experimental-banner__icon {
+  background: rgba(229, 9, 20, .15) !important;
+  color: #e50914 !important;
+}
+
+.spiderman-theme .experimental-banner__text strong {
+  color: #3090ff !important;
+}
+
+/* ==========================================================================
+   🌀 SONIC THE HEDGEHOG THEME (251010424)
+   ========================================================================== */
+body.sonic-theme {
+  --bg-primary: #002244;
+  --bg-secondary: #003366;
+  --bg-card: rgba(0, 44, 88, 0.7);
+  --accent: #ffd700; /* Ring Gold */
+  --accent-dim: #0055a5; /* Sonic Blue */
+  --accent-glow: rgba(0, 85, 165, 0.25);
+  background: #002244 !important;
+  color: #ffd700 !important;
+  font-family: 'Fredoka', 'Nunito', sans-serif !important;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><text y='22' font-size='22'>🦔</text></svg>") 2 2, auto !important;
+}
+
+.sonic-theme .dashboard-page {
+  background: 
+    radial-gradient(ellipse 700px 500px at 50% 20%, rgba(0, 85, 165, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 80%, rgba(76, 175, 80, 0.06) 0%, transparent 60%),
+    var(--bg-primary) !important;
+  background-attachment: fixed;
+}
+
+.sonic-theme h1,
+.sonic-theme h2,
+.sonic-theme h3,
+.sonic-theme .page-title,
+.sonic-theme .welcome-banner__greeting {
+  font-family: 'Luckiest Guy', 'Fredoka', cursive !important;
+  letter-spacing: 1.5px !important;
+  color: #fff !important;
+  text-shadow: 2px 2px 0px #0055a5, -1px -1px 0px #ffd700 !important;
+}
+
+.sonic-theme .sonic-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0055a5 0%, #ffd700 100%);
+  border: 3px solid #fff;
+  box-shadow: 0 8px 24px rgba(0, 85, 165, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+}
+
+.sonic-theme .sonic-corner:hover {
+  transform: scale(1.15) rotate(360deg);
+  box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6);
+}
+
+.sonic-theme .sonic-ring-floater {
+  font-size: 28px;
+  animation: ringGlow 1.5s infinite alternate;
+}
+
+@keyframes ringGlow {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1.1); filter: drop-shadow(0 0 5px #ffd700); }
+}
+
+.sonic-theme .sonic-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 35px;
+  background: #fff;
+  color: #111;
+  padding: 10px 16px;
+  border-radius: 14px 14px 2px 14px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  max-width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid #0055a5;
+}
+
+.sonic-theme .sonic-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.sonic-theme .sonic-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #0055a5 transparent;
+  display: block;
+  width: 0;
+}
+
+.sonic-theme .sonic-corner-tl {
+  position: fixed;
+  top: 90px;
+  left: 24px;
+  opacity: 0.3;
+  z-index: 50;
+  font-size: 2rem;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(0, 85, 165, 0.4));
+}
+
+.sonic-theme .sonic-rings {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0 10px 0;
+  opacity: 0.4;
+}
+
+.sonic-theme .sonic-rings span {
+  font-size: 1.3rem;
+  display: inline-block;
+  animation: sonicDash 2s ease-in-out infinite alternate;
+}
+
+.sonic-theme .sonic-rings span:nth-child(even) {
+  animation-delay: 1s;
+}
+
+@keyframes sonicDash {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-5px) scale(1.1); }
+}
+
+.sonic-theme .task-column {
+  background: rgba(0, 44, 88, 0.5) !important;
+  border: 2px solid rgba(76, 175, 80, 0.2) !important;
+  border-radius: 16px !important;
+}
+
+.sonic-theme .task-column__header {
+  background: linear-gradient(135deg, rgba(0, 85, 165, 0.3) 0%, rgba(76, 175, 80, 0.15) 100%) !important;
+  border: 2px solid #0055a5 !important;
+  box-shadow: 0 6px 15px rgba(0, 85, 165, 0.2) !important;
+  border-radius: 12px !important;
+}
+
+.sonic-theme .task-column__header h3 {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 2px #000 !important;
+}
+
+.sonic-theme .task-card {
+  background: rgba(0, 44, 88, 0.8) !important;
+  border: 1px solid rgba(0, 85, 165, 0.2) !important;
+  border-radius: 12px !important;
+  color: #ffd700 !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.sonic-theme .task-card:hover {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+.sonic-theme .task-card__title {
+  color: #fff !important;
+}
+
+.sonic-theme .task-card__desc {
+  color: #c0c0c0 !important;
+}
+
+.sonic-theme .task-card--low { border-left: 4px solid #10b981 !important; }
+.sonic-theme .task-card--medium { border-left: 4px solid #ffd700 !important; }
+.sonic-theme .task-card--high { border-left: 4px solid #e74c3c !important; }
+.sonic-theme .task-card--urgent {
+  border-left: 4px solid #e74c3c !important;
+  border-right: 2px solid #ffd700 !important;
+  animation: sonicUrgentPulse 1s infinite alternate !important;
+}
+
+@keyframes sonicUrgentPulse {
+  0% { box-shadow: 0 0 5px rgba(231, 76, 60, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(231, 76, 60, 0.6); }
+}
+
+.sonic-theme .task-card__action {
+  background: #0055a5 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+}
+
+.sonic-theme .task-card__action:hover {
+  background: #ffd700 !important;
+  color: #002244 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+}
+
+.sonic-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(0, 85, 165, 0.2) 0%, rgba(0, 44, 88, 0.9) 100%) !important;
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2) !important;
+}
+
+.sonic-theme .welcome-banner__icon {
+  background: rgba(0, 85, 165, 0.2) !important;
+  color: #ffd700 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2) !important;
+}
+
+.sonic-theme .welcome-banner__greeting strong {
+  color: #fff !important;
+  text-shadow: 0 0 6px rgba(0, 85, 165, 0.3) !important;
+}
+
+.sonic-theme .dept-tab.active {
+  background: rgba(0, 85, 165, 0.2) !important;
+  border-color: #0055a5 !important;
+  color: #fff !important;
+}
+
+.sonic-theme .task-modal__content {
+  background: rgba(0, 22, 44, 0.98) !important;
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.25) !important;
+}
+
+.sonic-theme .task-modal__close:hover { color: #ffd700 !important; }
+
+.sonic-theme .task-card__approved-pill {
+  background: rgba(255, 215, 0, 0.1) !important;
+  color: #ffd700 !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.sonic-theme input:focus,
+.sonic-theme textarea:focus,
+.sonic-theme select:focus {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.25) !important;
+}
+
+.sonic-theme .experimental-banner {
+  background: linear-gradient(135deg, rgba(0, 85, 165, .12) 0%, rgba(0, 22, 44, .9) 100%) !important;
+  border-bottom: 1px solid rgba(0, 85, 165, .25) !important;
+}
+
+.sonic-theme .experimental-banner__icon {
+  background: rgba(0, 85, 165, .15) !important;
+  color: #ffd700 !important;
+}
+
+.sonic-theme .experimental-banner__text strong {
+  color: #fff !important;
+  text-shadow: 0 0 5px rgba(0, 85, 165, 0.4) !important;
+}
+
+
