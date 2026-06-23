@@ -450,6 +450,8 @@
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
+      if (sessionReg === '231003934') document.body.classList.add('mcqueen-theme');
+      if (sessionReg === '241003033') document.body.classList.add('batman-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -544,6 +546,8 @@
         applyMickeyTheme();
         applyLoveTheme();
         applySpongebobTheme();
+        applyMcQueenTheme();
+        applyBatmanTheme();
       }, 600);
     }
 
@@ -611,6 +615,8 @@
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
       if (regNum === '251003016') document.body.classList.add('spongebob-theme');
+      if (regNum === MCQUEEN_REG) document.body.classList.add('mcqueen-theme');
+      if (regNum === BATMAN_REG) document.body.classList.add('batman-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -1659,6 +1665,224 @@
       document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble').forEach(el => el.remove());
     }
 
+    /* ========== LIGHTNING MCQUEEN THEME (231003934 only) ========== */
+    const MCQUEEN_REG = '231003934';
+
+    function isMcQueenUser() {
+      return safeSession.getItem('aeris_auth_reg') === MCQUEEN_REG;
+    }
+
+    function applyMcQueenTheme() {
+      if (!isMcQueenUser()) {
+        document.body.classList.remove('mcqueen-theme');
+        document.querySelectorAll('.mcqueen-corner, .mcqueen-corner-tl, .mcqueen-bubble, .mcqueen-track, .mcqueen-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('mcqueen-theme');
+
+      // Customize welcome banner icon to be a racing car SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="car-spin"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`;
+        }
+      }
+
+      // 95 Badge float at bottom right
+      if (!document.querySelector('.mcqueen-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'mcqueen-corner';
+        corner.innerHTML = `<div class="mcqueen-badge-95">95</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'mcqueen-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Ka-chow! ⚡",
+          "I am speed. One winner, two losers. I eat losers for breakfast. 🏎️",
+          "Float like a Cadillac, sting like a Beemer! 🐝",
+          "Turn right to go left! 🏁",
+          "Ka-chow! Speed, speed, speed! ⚡",
+          "Speed? I am speed. 🏎️"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Racing flags decoration top-left
+      if (!document.querySelector('.mcqueen-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'mcqueen-corner-tl';
+        cornerTL.innerHTML = `🏁⚡🏁`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Racing tire track trail above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.mcqueen-track')) {
+        const track = document.createElement('div');
+        track.className = 'mcqueen-track';
+        const trackContent = `<span>🏎️💨</span><span>⚡</span><span>🏎️💨</span><span>⚡</span><span>🏎️💨</span>`;
+        track.innerHTML = trackContent;
+        taskBoard.parentNode.insertBefore(track, taskBoard);
+      }
+
+      // Customize task form headers for McQueen
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Pit Stop / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🏎️ Race Goal';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🔧 Pit Crew Instructions';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '⚡ Engine RPM';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🐢 Cruising Speed (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🏎️ V8 Power (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🚀 Turbo Boost (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '⚡ KA-CHOW! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '🏁 Finish Line ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Start Engines!');
+      }
+    }
+
+    /* ========== BATMAN THEME (241003033 only) ========== */
+    const BATMAN_REG = '241003033';
+
+    function isBatmanUser() {
+      return safeSession.getItem('aeris_auth_reg') === BATMAN_REG;
+    }
+
+    function applyBatmanTheme() {
+      if (!isBatmanUser()) {
+        document.body.classList.remove('batman-theme');
+        document.querySelectorAll('.batman-corner, .batman-corner-tl, .batman-bubble, .batman-signal, .batman-bats, .batman-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('batman-theme');
+
+      // Customize welcome banner icon to be a Bat SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="bat-logo"><path d="M12 2c-.5.8-1.5 1.5-2.5 2C8.5 4.5 7 5 5.5 5 4 5 2.5 4.5 1 4c.5 1.8 1.5 3.5 3 4.5C2.5 9 1 10.5 1 12.5c0 2 1.5 3.5 3 3.5-1.5 1-2.5 2.7-3 4.5 1.5-.5 3-1 4.5-1 1.5 0 3 .5 4 1 1-.5 2-1.2 2.5-2 .5.8 1.5 1.5 2.5 2 1-.5 2.5-1 4-1 1.5 0 3 .5 4.5 1-.5-1.8-1.5-3.5-3-4.5 1.5 0 3-1.5 3-3.5 0-2-1.5-3.5-3-4.5 1.5-1 2.5-2.7 3-4.5-1.5.5-3 1-4.5 1-1.5 0-3-.5-4-1-.5-.5-1.5-1.2-2.5-2z"/></svg>`;
+        }
+      }
+
+      // Bat-signal projection at bottom right
+      if (!document.querySelector('.batman-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'batman-corner';
+        corner.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.5.8-1.5 1.5-2.5 2C8.5 4.5 7 5 5.5 5 4 5 2.5 4.5 1 4c.5 1.8 1.5 3.5 3 4.5C2.5 9 1 10.5 1 12.5c0 2 1.5 3.5 3 3.5-1.5 1-2.5 2.7-3 4.5 1.5-.5 3-1 4.5-1 1.5 0 3 .5 4 1 1-.5 2-1.2 2.5-2 .5.8 1.5 1.5 2.5 2 1-.5 2.5-1 4-1 1.5 0 3 .5 4.5 1-.5-1.8-1.5-3.5-3-4.5 1.5 0 3-1.5 3-3.5 0-2-1.5-3.5-3-4.5 1.5-1 2.5-2.7 3-4.5-1.5.5-3 1-4.5 1-1.5 0-3-.5-4-1-.5-.5-1.5-1.2-2.5-2z"/></svg>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'batman-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "I am vengeance. I am the night. I am Batman. 🦇",
+          "It's not who I am underneath, but what I do that defines me.",
+          "Why do we fall? So that we can learn to pick ourselves up.",
+          "A hero can be anyone. 🌃",
+          "I have one rule. 🦇",
+          "The night is darkest just before the dawn."
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Glowing bat-signal projection on the wall/header
+      if (!document.querySelector('.batman-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'batman-corner-tl';
+        cornerTL.innerHTML = `🦇`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Bats flying decoration trail above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.batman-bats')) {
+        const bats = document.createElement('div');
+        bats.className = 'batman-bats';
+        const batsContent = `<span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span>`;
+        bats.innerHTML = batsContent;
+        taskBoard.parentNode.insertBefore(bats, taskBoard);
+      }
+
+      // Customize task form headers for Batman
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Case / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🦇 Case Title';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '💻 Batcomputer Intel';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '💥 Threat Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🦇 Street Crime (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🃏 Rogue Gallery (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '❄️ Threat Level Red (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '💥 Gotham Protocol (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⌛ Resolution ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Dispatch Batman');
+      }
+    }
+
     /* ========== MICKEY MOUSE THEME (251011829 only) ========== */
     const MICKEY_REG = '251011829';
 
@@ -2065,6 +2289,74 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isMcQueenUser()) {
+         const priorityLabels = { low: '🐢 Cruising Speed', medium: '🏎️ V8 Power', high: '🚀 Turbo Boost', urgent: '⚡ KA-CHOW!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start engines">▶ Start Engines</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Cross finish line">✓ Cross Finish</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">⚡ ${escapeHtml(task.title)} 🏎️</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
+       if (isBatmanUser()) {
+         const priorityLabels = { low: 'Street Crime 🦇', medium: 'Rogue Gallery 🃏', high: 'Threat Level Red ❄️', urgent: 'Gotham Protocol 💥' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Investigate case">▶ Investigate</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Close case">✓ Close Case</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🦇 ${escapeHtml(task.title)} 🌃</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
+
        if (isSpongebobUser()) {
          const priorityLabels = { low: '⭐ Patrick Level', medium: '🦑 Squidward Level', high: '🧽 SpongeBob Level', urgent: '🦀 Mr. Krabs Level' };
          const priorityAvatars = {
@@ -2269,6 +2561,30 @@
           'col-todo': 'Jellyfish Fields (To Catch) 🪱',
           'col-progress': 'Krusty Krab Kitchen (Flipping) 🍔',
           'col-done': 'Sweet Victory! (Done) 🏆'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isMcQueenUser()) {
+        const colHeaders = {
+          'col-todo': 'Pit Stop (To Do) 🔧',
+          'col-progress': 'On Track (In Progress) 🏎️',
+          'col-done': 'Finish Line (Done) 🏁'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isBatmanUser()) {
+        const colHeaders = {
+          'col-todo': 'Gotham\'s Problems (To Do) 🦇',
+          'col-progress': 'Investigating (In Progress) 🔎',
+          'col-done': 'Cases Closed (Done) 🏆'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
