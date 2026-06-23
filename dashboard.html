@@ -458,6 +458,7 @@
       if (sessionReg === '241012132') document.body.classList.add('vilebloods-theme');
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
+      if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -560,6 +561,7 @@
         applyVilebloodsTheme();
         applyIronmanTheme();
         applyPoohTheme();
+        applyTweetyTheme();
       }, 600);
     }
 
@@ -635,6 +637,7 @@
       if (regNum === VILEBLOODS_REG) document.body.classList.add('vilebloods-theme');
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
+      if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -2228,6 +2231,116 @@
       }
     }
 
+    /* ========== TWEETY BIRD THEME (251012364 only) ========== */
+    const TWEETY_REG = '251012364';
+
+    function isTweetyUser() {
+      return safeSession.getItem('aeris_auth_reg') === TWEETY_REG;
+    }
+
+    function applyTweetyTheme() {
+      if (!isTweetyUser()) {
+        document.body.classList.remove('tweety-theme');
+        document.querySelectorAll('.tweety-corner, .tweety-corner-tl, .tweety-bubble, .tweety-decors').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('tweety-theme');
+
+      // Customize welcome banner icon to be a Bird / wing SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="tweety-chirp"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
+        }
+      }
+
+      // Tweety widget bottom right
+      if (!document.querySelector('.tweety-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'tweety-corner';
+        corner.innerHTML = `<div class="tweety-bird-floater">🐤</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'tweety-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "I tawt I taw a puddy tat! 🐱",
+          "I did! I did taw a puddy tat! 🐤💨",
+          "Bad ol' puddy tat! 🐱💥",
+          "Aw, the poor puddy tat... he fall down and go boom! 💥",
+          "Hmm... I wonder what that puddy tat is up to now? 💭",
+          "Hello, puddy tat! 🐥",
+          "Spread thy wings and chirp! 🪶"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Bird cage top-left
+      if (!document.querySelector('.tweety-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'tweety-corner-tl';
+        cornerTL.innerHTML = `☁️`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Decors above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.tweety-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'tweety-decors';
+        const decorsContent = `<span>🐤</span><span>☁️</span><span>🪶</span><span>🐤</span><span>☁️</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Tweety
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Log New Chirp / Flight Plan');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🐤 Chirp Plan / Task';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🌳 Nest / Cage Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🐱 Puddy Tat Threat';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Safe in Cage (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🪶 Flying High (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🐱 Puddy Tat Alert (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 I TAWT I TAW A PUDDY TAT! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏱️ Flight ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Spread Wings!');
+      }
+    }
+
     /* ========== WINNIE THE POOH THEME (221011368 only) ========== */
     const POOH_REG = '221011368';
 
@@ -2964,6 +3077,39 @@
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
      taskCard = function(task) {
+       if (isTweetyUser()) {
+         const priorityLabels = { low: '💤 Safe in Cage', medium: '🪶 Flying High', high: '🐱 Puddy Tat Alert', urgent: '🚨 I TAWT I TAW A PUDDY TAT!' };
+         const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+         const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+         let actions = '';
+         if (task.status === 'todo') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start Flight">▶ Start Flight</button>`;
+         } else if (task.status === 'progress') {
+           actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Outsmart Sylvester">✓ Outsmarted Sylvester</button>`;
+         }
+
+         const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
+
+         return `
+           <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+             <div class="task-card__top">
+               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
+               ${deleteBtn}
+             </div>
+             <h4 class="task-card__title">🐤 ${escapeHtml(task.title)} 🪶</h4>
+             ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+             <div class="task-card__footer">
+               ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 ${deadlineStr}
+               </span>` : ''}
+               ${actions}
+             </div>
+           </div>
+         `;
+       }
        if (isPoohUser()) {
          const priorityLabels = { low: '💤 Nap in Sun', medium: '🎈 Float High', high: '🐝 Sticky Situation', urgent: '🚨 OH, BOTHER!' };
          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -3536,6 +3682,18 @@
           'col-todo': 'Gotham\'s Problems (To Do) 🦇',
           'col-progress': 'Investigating (In Progress) 🔎',
           'col-done': 'Cases Closed (Done) 🏆'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      }
+      if (isTweetyUser()) {
+        const colHeaders = {
+          'col-todo': 'Tweety\'s Cage (To Do) 🐤',
+          'col-progress': 'Flight Path (In Progress) ☁️',
+          'col-done': 'Outsmarted Sylvester (Done) 🐱💥'
         };
         Object.entries(colHeaders).forEach(([id, label]) => {
           const colEl = document.getElementById(id);
