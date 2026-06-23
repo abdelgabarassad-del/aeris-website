@@ -1696,11 +1696,28 @@
     function applyStitchTheme() {
       if (!isStitchUser()) {
         document.body.classList.remove('stitch-theme');
-        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail').forEach(el => el.remove());
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements').forEach(el => el.remove());
         return;
       }
 
       document.body.classList.add('stitch-theme');
+
+      // Inject custom animated background elements
+      if (!document.querySelector('.stitch-bg-elements')) {
+        const bgElements = document.createElement('div');
+        bgElements.className = 'stitch-bg-elements';
+        bgElements.innerHTML = `
+          <div class="stitch-bg-item stitch-bg-flower1">🌺</div>
+          <div class="stitch-bg-item stitch-bg-flower2">🌺</div>
+          <div class="stitch-bg-item stitch-bg-leaf1">🌿</div>
+          <div class="stitch-bg-item stitch-bg-leaf2">🌿</div>
+          <div class="stitch-bg-item stitch-bg-wave1">🌊</div>
+          <div class="stitch-bg-item stitch-bg-wave2">🌊</div>
+          <div class="stitch-bg-item stitch-bg-star1">✨</div>
+          <div class="stitch-bg-item stitch-bg-star2">✨</div>
+        `;
+        document.body.appendChild(bgElements);
+      }
 
       // Welcome banner icon customization
       const welcomeBanner = document.getElementById('welcome-banner');

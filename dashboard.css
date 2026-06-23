@@ -8174,6 +8174,97 @@ body.stitch-theme {
   color: #4a7bf7 !important;
 }
 
+/* Stitch Background Floating Elements */
+.stitch-theme .stitch-bg-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.stitch-theme .stitch-bg-item {
+  position: absolute;
+  font-size: 5.5rem;
+  opacity: 0.08;
+  filter: blur(1.5px);
+  user-select: none;
+}
+
+.stitch-theme .stitch-bg-flower1 {
+  top: 15%;
+  left: 8%;
+  animation: floatSway 9s infinite alternate ease-in-out;
+}
+
+.stitch-theme .stitch-bg-flower2 {
+  top: 72%;
+  right: 10%;
+  animation: floatSway 11s infinite alternate-reverse ease-in-out;
+}
+
+.stitch-theme .stitch-bg-leaf1 {
+  top: 42%;
+  left: 82%;
+  animation: floatSway 10s infinite alternate ease-in-out;
+}
+
+.stitch-theme .stitch-bg-leaf2 {
+  top: 80%;
+  left: 18%;
+  animation: floatSway 12s infinite alternate-reverse ease-in-out;
+}
+
+.stitch-theme .stitch-bg-wave1 {
+  bottom: 8%;
+  left: 6%;
+  font-size: 6.5rem;
+  opacity: 0.06;
+  animation: waveDrift 16s infinite linear;
+}
+
+.stitch-theme .stitch-bg-wave2 {
+  bottom: 15%;
+  right: 6%;
+  font-size: 6.5rem;
+  opacity: 0.05;
+  animation: waveDrift 20s infinite linear reverse;
+}
+
+.stitch-theme .stitch-bg-star1 {
+  top: 25%;
+  right: 25%;
+  font-size: 3.5rem;
+  animation: starTwinkle 3.5s infinite alternate;
+}
+
+.stitch-theme .stitch-bg-star2 {
+  top: 60%;
+  left: 45%;
+  font-size: 3.5rem;
+  animation: starTwinkle 4.5s infinite alternate;
+}
+
+@keyframes floatSway {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-25px) rotate(18deg); }
+}
+
+@keyframes waveDrift {
+  0% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(35px) scaleY(1.15); }
+  100% { transform: translateX(0) scaleY(1); }
+}
+
+@keyframes starTwinkle {
+  0% { opacity: 0.03; transform: scale(0.85); }
+  100% { opacity: 0.18; transform: scale(1.25); }
+}
+
+
 
 
 
