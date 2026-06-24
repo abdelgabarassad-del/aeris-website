@@ -465,6 +465,191 @@
       grantAccess(sessionRole, sessionReg);
     }
 
+    /* ========== HANNAH'S MUSIC CARD LOGIC (TAKE ME TO CHURCH) ========== */
+    function playHannahSong() {
+      if (document.getElementById('hannah-music-card')) return;
+
+      const musicCardHTML = `
+        <div class="hannah-music-card" id="hannah-music-card">
+          <div class="hmc-album-art">
+            <div class="hmc-vinyl-wrapper">
+              <svg class="hmc-vinyl" viewBox="0 0 100 100">
+                <!-- Vinyl base -->
+                <circle cx="50" cy="50" r="48" fill="#111" stroke="#222" stroke-width="2"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="2 1"/>
+                <circle cx="50" cy="50" r="32" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="3 2"/>
+                <!-- Label -->
+                <circle cx="50" cy="50" r="18" fill="#ff7fa5"/>
+                <text x="50" y="47" font-size="6" font-family="'Fredoka', sans-serif" font-weight="bold" fill="#0b2240" text-anchor="middle">HOZIER</text>
+                <text x="50" y="55" font-size="4" font-family="'Fredoka', sans-serif" fill="#0b2240" text-anchor="middle">TMTC</text>
+                <!-- Center hole -->
+                <circle cx="50" cy="50" r="3" fill="#0b2240"/>
+              </svg>
+            </div>
+            <div class="hmc-music-note">🎵</div>
+          </div>
+          
+          <div class="hmc-info">
+            <div class="hmc-track-title">Take Me to Church</div>
+            <div class="hmc-artist">Hozier — Stitch Mix 🌺</div>
+            
+            <div class="hmc-controls-row">
+              <!-- Equalizer / Visualizer -->
+              <div class="hmc-visualizer" id="hmc-visualizer">
+                <span class="hmc-bar hmc-bar-1"></span>
+                <span class="hmc-bar hmc-bar-2"></span>
+                <span class="hmc-bar hmc-bar-3"></span>
+                <span class="hmc-bar hmc-bar-4"></span>
+              </div>
+              
+              <!-- Buttons -->
+              <div class="hmc-buttons">
+                <button class="hmc-btn" id="hmc-play-pause" title="Play/Pause">
+                  <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="hmc-btn hmc-close-btn" id="hmc-close" title="Dismiss">&times;</button>
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="hmc-progress-container">
+              <div class="hmc-progress-bar" id="hmc-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = musicCardHTML;
+      const cardEl = tempDiv.firstElementChild;
+      document.body.appendChild(cardEl);
+
+      const audio = new Audio('images/take_me_to_church.mp3');
+      audio.volume = 0.5;
+
+      const playPauseBtn = document.getElementById('hmc-play-pause');
+      const closeBtn = document.getElementById('hmc-close');
+      const progressBar = document.getElementById('hmc-progress-bar');
+      const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
+      const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
+
+      let isPlaying = false;
+      let playDuration = 15; // plays for 15 seconds
+      let progressInterval = null;
+      let startTime = 0;
+      let elapsedTime = 0;
+      let fadeInterval = null;
+
+      function updateUI(playing) {
+        isPlaying = playing;
+        if (playing) {
+          cardEl.classList.add('playing');
+          iconPause.style.display = 'block';
+          iconPlay.style.display = 'none';
+        } else {
+          cardEl.classList.remove('playing');
+          iconPause.style.display = 'none';
+          iconPlay.style.display = 'block';
+        }
+      }
+
+      function startProgress() {
+        clearInterval(progressInterval);
+        startTime = Date.now() - (elapsedTime * 1000);
+        progressInterval = setInterval(() => {
+          if (!isPlaying) return;
+          const currentElapsed = (Date.now() - startTime) / 1000;
+          elapsedTime = currentElapsed;
+          const percentage = Math.min((elapsedTime / playDuration) * 100, 100);
+          progressBar.style.width = percentage + '%';
+          
+          if (elapsedTime >= playDuration) {
+            clearInterval(progressInterval);
+            fadeOutAndStop();
+          }
+        }, 100);
+      }
+
+      function pauseProgress() {
+        clearInterval(progressInterval);
+      }
+
+      function playAudio() {
+        if (fadeInterval) clearInterval(fadeInterval);
+        audio.volume = 0.5;
+        audio.play().then(() => {
+          updateUI(true);
+          startProgress();
+        }).catch(err => {
+          console.warn("Autoplay blocked, waiting for user click/interaction.", err);
+          updateUI(false);
+        });
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        updateUI(false);
+        pauseProgress();
+      }
+
+      function fadeOutAndStop() {
+        clearInterval(progressInterval);
+        if (fadeInterval) clearInterval(fadeInterval);
+        
+        fadeInterval = setInterval(() => {
+          if (audio.volume > 0.05) {
+            audio.volume -= 0.05;
+          } else {
+            clearInterval(fadeInterval);
+            audio.pause();
+            audio.currentTime = 0;
+            elapsedTime = 0;
+            progressBar.style.width = '0%';
+            updateUI(false);
+          }
+        }, 100);
+      }
+
+      playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          pauseAudio();
+        } else {
+          if (elapsedTime >= playDuration) {
+            elapsedTime = 0;
+            progressBar.style.width = '0%';
+            audio.currentTime = 0;
+          }
+          playAudio();
+        }
+      });
+
+      closeBtn.addEventListener('click', () => {
+        audio.pause();
+        clearInterval(progressInterval);
+        if (fadeInterval) clearInterval(fadeInterval);
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'translateX(120%) scale(0.9)';
+        setTimeout(() => {
+          cardEl.remove();
+        }, 500);
+      });
+
+      // Try autoplaying on load
+      playAudio();
+
+      // Fallback: Play on first document interaction
+      const autoplayFallback = () => {
+        if (!isPlaying && elapsedTime === 0) {
+          playAudio();
+        }
+        document.removeEventListener('click', autoplayFallback);
+        document.removeEventListener('keydown', autoplayFallback);
+      };
+      document.addEventListener('click', autoplayFallback);
+      document.addEventListener('keydown', autoplayFallback);
+    }
+
     function grantAccess(role, regNum) {
       authGate.classList.add('auth-gate--granted');
       setTimeout(() => {
@@ -567,6 +752,11 @@
         applyPoohTheme();
         applyTweetyTheme();
         applySchnozTheme();
+
+        // Kick off Hannah's custom music player
+        if (regNum === '251001377') {
+          playHannahSong();
+        }
       }, 600);
     }
 
