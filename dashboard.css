@@ -8521,36 +8521,36 @@ body.stitch-theme {
    ========================================================================== */
 
 .soviet-theme {
-  --soviet-red: #cc1111;
-  --soviet-gold: #ffcc00;
-  --soviet-dark: #121212;
-  --soviet-grey: #3e3e3e;
-  --soviet-border: #cc1111;
+  --soviet-blue: #2c3e50;
+  --soviet-cyan: #00d2ff;
+  --soviet-dark: #10151f;
+  --soviet-grey: #4e5d6c;
+  --soviet-border: #2b4c7e;
   
   font-family: 'Courier New', Courier, monospace !important;
   font-weight: bold !important;
-  color: #f0f0f0 !important;
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px;'><text y='24'>☭</text></svg>") 12 24, auto !important;
+  color: #d1d8e0 !important;
+  cursor: default !important;
 }
 
 .soviet-theme .dashboard-page {
   background: 
-    linear-gradient(rgba(204, 17, 17, 0.05), rgba(0, 0, 0, 0.85)),
-    radial-gradient(circle at 50% 30%, #2b1111 0%, #121212 100%) !important;
+    linear-gradient(rgba(43, 76, 126, 0.08), rgba(16, 21, 31, 0.95)),
+    radial-gradient(circle at 50% 30%, #1e2d3e 0%, #10151f 100%) !important;
   background-attachment: fixed;
 }
 
 .soviet-theme .welcome-banner {
-  background: #1e1e1e !important;
-  border: 3px solid var(--soviet-red) !important;
-  box-shadow: 0 0 20px rgba(204, 17, 17, 0.3) !important;
+  background: #151b26 !important;
+  border: 3px solid var(--soviet-border) !important;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.2) !important;
   border-radius: 0px !important;
 }
 
 .soviet-theme .welcome-banner__greeting {
   font-family: 'Courier New', Courier, monospace !important;
   text-transform: uppercase;
-  color: var(--soviet-gold) !important;
+  color: var(--soviet-cyan) !important;
 }
 
 .soviet-theme .welcome-banner__role {
@@ -8560,14 +8560,14 @@ body.stitch-theme {
 }
 
 .soviet-theme .task-column {
-  background: #181818 !important;
+  background: #131a24 !important;
   border: 2px solid var(--soviet-grey) !important;
   border-radius: 0px !important;
 }
 
 .soviet-theme .task-column__header {
-  background: var(--soviet-red) !important;
-  color: var(--soviet-gold) !important;
+  background: var(--soviet-border) !important;
+  color: var(--soviet-cyan) !important;
   text-transform: uppercase;
   border-radius: 0px !important;
   padding: 8px !important;
@@ -8575,13 +8575,13 @@ body.stitch-theme {
 }
 
 .soviet-theme .task-column__count {
-  background: var(--soviet-gold) !important;
+  background: var(--soviet-cyan) !important;
   color: #000 !important;
   border-radius: 0px !important;
 }
 
 .soviet-theme .task-card {
-  background: #252525 !important;
+  background: #1a2332 !important;
   border: 2px solid var(--soviet-grey) !important;
   border-radius: 0px !important;
   box-shadow: none !important;
@@ -8589,54 +8589,62 @@ body.stitch-theme {
 }
 
 .soviet-theme .task-card:hover {
-  border-color: var(--soviet-red) !important;
-  background: #2d2d2d !important;
+  border-color: var(--soviet-cyan) !important;
+  background: #202b3d !important;
 }
 
 .soviet-theme .task-card--low { border-left: 5px solid var(--soviet-grey) !important; }
-.soviet-theme .task-card--medium { border-left: 5px solid var(--soviet-gold) !important; }
-.soviet-theme .task-card--high { border-left: 5px solid var(--soviet-red) !important; }
+.soviet-theme .task-card--medium { border-left: 5px solid #2980b9 !important; }
+.soviet-theme .task-card--high { border-left: 5px solid var(--soviet-cyan) !important; }
 .soviet-theme .task-card--urgent { 
-  border-left: 5px solid var(--soviet-red) !important; 
-  border-right: 2px solid var(--soviet-gold) !important;
+  border-left: 5px solid var(--soviet-cyan) !important; 
+  border-right: 2px solid var(--soviet-border) !important;
   animation: sovietUrgentPulse 1s infinite alternate !important; 
 }
 
 @keyframes sovietUrgentPulse {
-  0% { box-shadow: inset 0 0 5px rgba(204, 17, 17, 0.4); }
-  100% { box-shadow: inset 0 0 15px rgba(204, 17, 17, 0.8), 0 0 10px rgba(204, 17, 17, 0.5); }
+  0% { box-shadow: inset 0 0 5px rgba(0, 210, 255, 0.3); }
+  100% { box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.7), 0 0 10px rgba(0, 210, 255, 0.4); }
 }
 
 .soviet-theme .task-modal__content {
-  background: #1a1a1a !important;
-  border: 3px solid var(--soviet-red) !important;
+  background: #151b26 !important;
+  border: 3px solid var(--soviet-border) !important;
   border-radius: 0px !important;
   font-family: 'Courier New', Courier, monospace !important;
 }
 
 .soviet-theme .task-form-wrapper {
-  background: #1c1c1c !important;
-  border: 3px solid var(--soviet-red) !important;
+  background: #161e2b !important;
+  border: 3px solid var(--soviet-border) !important;
   border-radius: 0px !important;
 }
 
 .soviet-theme input, .soviet-theme textarea, .soviet-theme select {
-  background: #121212 !important;
+  box-sizing: border-box !important;
+  background: #0f151f !important;
   border: 2px solid var(--soviet-grey) !important;
   color: #fff !important;
   font-family: 'Courier New', Courier, monospace !important;
   border-radius: 0px !important;
+  padding: 12px 16px !important;
+  font-size: .95rem !important;
+}
+
+.soviet-theme input[type="date"],
+.soviet-theme select {
+  height: 48px !important;
 }
 
 .soviet-theme input:focus, .soviet-theme textarea:focus, .soviet-theme select:focus {
-  border-color: var(--soviet-gold) !important;
+  border-color: var(--soviet-cyan) !important;
   outline: none !important;
 }
 
 .soviet-theme .btn-primary, .soviet-theme button {
-  background: var(--soviet-red) !important;
-  color: var(--soviet-gold) !important;
-  border: 2px solid var(--soviet-gold) !important;
+  background: var(--soviet-border) !important;
+  color: var(--soviet-cyan) !important;
+  border: 2px solid var(--soviet-cyan) !important;
   text-transform: uppercase;
   font-family: 'Courier New', Courier, monospace !important;
   font-weight: bold;
@@ -8645,13 +8653,13 @@ body.stitch-theme {
 }
 
 .soviet-theme .btn-primary:hover, .soviet-theme button:hover {
-  background: var(--soviet-gold) !important;
+  background: var(--soviet-cyan) !important;
   color: #000 !important;
-  border-color: var(--soviet-red) !important;
+  border-color: var(--soviet-border) !important;
 }
 
 .soviet-theme .dept-tab {
-  background: #252525 !important;
+  background: #182230 !important;
   border: 2px solid var(--soviet-grey) !important;
   color: #888 !important;
   border-radius: 0px !important;
@@ -8660,24 +8668,24 @@ body.stitch-theme {
 }
 
 .soviet-theme .dept-tab:hover {
-  border-color: var(--soviet-gold) !important;
+  border-color: var(--soviet-cyan) !important;
   color: #fff !important;
 }
 
 .soviet-theme .dept-tab.active {
-  background: var(--soviet-red) !important;
-  color: var(--soviet-gold) !important;
-  border-color: var(--soviet-gold) !important;
+  background: var(--soviet-border) !important;
+  color: var(--soviet-cyan) !important;
+  border-color: var(--soviet-cyan) !important;
 }
 
 .soviet-theme .site-header {
-  background: #121212 !important;
-  border-bottom: 3px solid var(--soviet-red) !important;
+  background: #0f151f !important;
+  border-bottom: 3px solid var(--soviet-border) !important;
 }
 
 .soviet-theme .site-header__logo {
-  color: var(--soviet-red) !important;
-  text-shadow: 0 0 10px rgba(204, 17, 17, 0.5);
+  color: var(--soviet-cyan) !important;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
 }
 
 .soviet-theme .duck-scanline { display: none !important; }
@@ -8685,10 +8693,8 @@ body.stitch-theme {
 .soviet-theme .soviet-scanline {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%),
-    linear-gradient(90deg, rgba(204, 17, 17, 0.02), rgba(0, 0, 0, 0.02), rgba(255, 204, 0, 0.02));
-  background-size: 100% 4px, 6px 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.15) 50%, transparent 50%);
+  background-size: 100% 4px;
   z-index: 99999;
   pointer-events: none;
 }
@@ -8698,18 +8704,18 @@ body.stitch-theme {
   bottom: 24px;
   right: 24px;
   font-size: 28px;
-  color: var(--soviet-gold);
-  background: var(--soviet-red);
+  color: var(--soviet-cyan);
+  background: var(--soviet-border);
   width: 44px;
   height: 44px;
-  border: 2px solid var(--soviet-gold);
+  border: 2px solid var(--soviet-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   z-index: 999;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(204, 17, 17, 0.8);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
   transition: transform 0.2s ease;
 }
 
@@ -8721,9 +8727,9 @@ body.stitch-theme {
   position: fixed;
   bottom: 80px;
   right: 32px;
-  background: #1c1c1c;
-  border: 2px solid var(--soviet-red);
-  color: var(--soviet-gold);
+  background: #151b26;
+  border: 2px solid var(--soviet-border);
+  color: var(--soviet-cyan);
   padding: 10px 14px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.85rem;
@@ -8745,12 +8751,12 @@ body.stitch-theme {
 .soviet-theme .soviet-telemetry-right {
   position: fixed;
   bottom: 20px;
-  background: rgba(18, 18, 18, 0.9);
-  border: 2px solid var(--soviet-red);
+  background: rgba(15, 21, 31, 0.9);
+  border: 2px solid var(--soviet-border);
   padding: 8px 12px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.7rem;
-  color: #aaa;
+  color: #8892b0;
   z-index: 98;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
@@ -8764,7 +8770,7 @@ body.stitch-theme {
 }
 
 .soviet-theme .tape-val {
-  color: var(--soviet-gold);
+  color: var(--soviet-cyan);
   font-weight: bold;
 }
 
@@ -8779,14 +8785,14 @@ body.stitch-theme {
   top: 95px;
   right: 24px;
   width: 320px;
-  background: rgba(26, 26, 26, 0.9) !important;
-  border: 2.5px solid var(--soviet-red) !important;
+  background: rgba(21, 27, 38, 0.9) !important;
+  border: 2.5px solid var(--soviet-border) !important;
   border-radius: 0px !important;
   padding: 14px 16px;
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 12px 32px rgba(204, 17, 17, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 12px 32px rgba(0, 210, 255, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(12px);
   z-index: 1001;
   font-family: 'Courier New', Courier, monospace;
@@ -8805,7 +8811,7 @@ body.stitch-theme {
   font-size: 14px;
   animation: hmcFloatNote 2.5s infinite ease-in-out;
   opacity: 0;
-  color: var(--soviet-gold);
+  color: var(--soviet-cyan);
 }
 
 .soviet-music-card.playing .hmc-music-note {
@@ -8814,7 +8820,7 @@ body.stitch-theme {
 
 .soviet-music-card .hmc-bar {
   width: 3px;
-  background: var(--soviet-gold);
+  background: var(--soviet-cyan);
   border-radius: 0px !important;
   height: 3px;
   transition: height 0.15s ease;
@@ -8826,23 +8832,24 @@ body.stitch-theme {
 .soviet-music-card.playing .hmc-bar-4 { animation: hmcBounce 0.6s ease-in-out infinite alternate 0.05s; }
 
 .soviet-music-card .hmc-btn {
-  border: 1.5px solid rgba(255, 204, 0, 0.35) !important;
+  border: 1.5px solid rgba(0, 210, 255, 0.35) !important;
   border-radius: 0px !important;
 }
 
 .soviet-music-card .hmc-btn:hover {
-  background: var(--soviet-gold) !important;
-  border-color: var(--soviet-gold) !important;
+  background: var(--soviet-cyan) !important;
+  border-color: var(--soviet-cyan) !important;
   color: #000000 !important;
   transform: scale(1.1) !important;
 }
 
 .soviet-music-card .hmc-progress-bar {
-  background: var(--soviet-gold);
+  background: var(--soviet-cyan);
   border-radius: 0px !important;
 }
 
 .soviet-music-card .hmc-progress-container {
   border-radius: 0px !important;
 }
+
 
