@@ -880,6 +880,9 @@
                   <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                   <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </button>
+                <button class="hmc-btn" id="smc-minimize" title="Minimize">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
                 <button class="hmc-btn hmc-close-btn" id="smc-close" title="Dismiss">&times;</button>
               </div>
             </div>
@@ -887,6 +890,12 @@
             <!-- Progress Bar -->
             <div class="hmc-progress-container">
               <div class="hmc-progress-bar" id="smc-progress-bar"></div>
+            </div>
+
+            <!-- Volume Slider -->
+            <div class="smc-volume-row" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span class="smc-volume-icon" style="font-size: 14px; color: var(--soviet-cyan); font-family: 'Courier New', monospace; line-height: 1;">VOL</span>
+              <input type="range" id="smc-volume" class="smc-volume-slider" min="0" max="1" step="0.05" value="0.5" style="flex: 1; accent-color: var(--soviet-cyan); cursor: pointer; background: #0a0302; border: 1px solid var(--soviet-border); height: 8px; border-radius: 0px; -webkit-appearance: none;">
             </div>
           </div>
         </div>
@@ -902,7 +911,9 @@
       audio.loop = true; // Loops indefinitely
 
       const playPauseBtn = document.getElementById('smc-play-pause');
+      const minimizeBtn = document.getElementById('smc-minimize');
       const closeBtn = document.getElementById('smc-close');
+      const volumeSlider = document.getElementById('smc-volume');
       const progressBar = document.getElementById('smc-progress-bar');
       const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
       const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
@@ -953,7 +964,8 @@
         pauseProgress();
       }
 
-      playPauseBtn.addEventListener('click', () => {
+      playPauseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (isPlaying) {
           pauseAudio();
         } else {
@@ -961,7 +973,21 @@
         }
       });
 
-      closeBtn.addEventListener('click', () => {
+      minimizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        cardEl.classList.add('minimized');
+        cardEl.setAttribute('title', 'Click to expand');
+      });
+
+      cardEl.addEventListener('click', () => {
+        if (cardEl.classList.contains('minimized')) {
+          cardEl.classList.remove('minimized');
+          cardEl.removeAttribute('title');
+        }
+      });
+
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         audio.pause();
         clearInterval(progressInterval);
         cardEl.style.opacity = '0';
@@ -969,6 +995,14 @@
         setTimeout(() => {
           cardEl.remove();
         }, 500);
+      });
+
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+      });
+
+      volumeSlider.addEventListener('click', (e) => {
+        e.stopPropagation();
       });
 
       // Try autoplaying on load
@@ -4104,52 +4138,130 @@
             <rect x="10" y="10" width="1180" height="780" fill="none" stroke="var(--soviet-cyan)" stroke-width="1" opacity="0.12"/>
             
             <!-- Top-Left compass/telemetry and propeller aircraft (Tu-95 Bear) -->
-            <g transform="translate(160, 180) rotate(-15)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
-              <!-- Concentric circles -->
+            <g transform="translate(160, 180) rotate(-15) scale(0.95)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
+              <!-- Grid circles/telemetry -->
               <circle cx="0" cy="0" r="90" stroke-dasharray="2 3"/>
-              <circle cx="0" cy="0" r="80"/>
-              <circle cx="0" cy="0" r="60"/>
-              <circle cx="0" cy="0" r="35" stroke-dasharray="4 2"/>
-              <!-- Crosshairs -->
+              <circle cx="0" cy="0" r="75"/>
+              <circle cx="0" cy="0" r="50" stroke-dasharray="4 2"/>
               <line x1="-110" y1="0" x2="110" y2="0" stroke-dasharray="5 5"/>
               <line x1="0" y1="-110" x2="0" y2="110" stroke-dasharray="5 5"/>
-              <!-- Degree marks -->
-              <path d="M 0 -80 L 0 -75 M 80 0 L 75 0 M 0 80 L 0 75 M -80 0 L -75 0" stroke-width="1"/>
-              <path d="M -56 -56 L -53 -53 M 56 -56 L 53 -53 M 56 56 L 53 53 M -56 56 L -53 53" stroke-width="1"/>
               
               <!-- Propeller bomber plane (top-down) -->
               <g transform="scale(0.4) rotate(45)">
-                <!-- Fuselage -->
-                <path d="M 0,-150 C 12,-120 15,100 12,140 C 8,160 -8,160 -12,140 C -15,100 -12,-120 0,-150 Z" fill="none"/>
-                <!-- Canopy and nose detail -->
-                <path d="M -5,-100 L 5,-100" />
-                <path d="M -8,-60 Q 0,-80 8,-60 Z" />
-                <!-- Wings -->
-                <path d="M 0,-30 L 190,40 L 180,60 L 50,45 L 0,40 L -50,45 L -180,60 L -190,40 Z"/>
-                <!-- 4 engines with propellers -->
-                <!-- Inner Right Engine -->
-                <rect x="45" y="10" width="10" height="40" />
-                <line x1="40" y1="10" x2="60" y2="10" /> <!-- Propeller hub -->
-                <ellipse cx="50" cy="5" rx="15" ry="1.5" /> <!-- Spinning propeller arc -->
-                <!-- Outer Right Engine -->
-                <rect x="95" y="25" width="8" height="30" />
-                <line x1="91" y1="25" x2="107" y2="25" />
-                <ellipse cx="99" cy="21" rx="12" ry="1.5" />
-                <!-- Inner Left Engine -->
-                <rect x="-55" y="10" width="10" height="40" />
-                <line x1="-60" y1="10" x2="-40" y2="10" />
-                <ellipse cx="-50" cy="5" rx="15" ry="1.5" />
-                <!-- Outer Left Engine -->
-                <rect x="-103" y="25" width="8" height="30" />
-                <line x1="-107" y1="25" x2="-91" y2="25" />
-                <ellipse cx="-99" cy="21" rx="12" ry="1.5" />
-                <!-- Tailplane -->
-                <path d="M 0,115 L 60,145 L 55,155 L 0,140 L -55,155 L -60,145 Z"/>
-                <ellipse cx="0" cy="150" rx="3" ry="8"/>
+                <!-- Centerline -->
+                <line x1="0" y1="-180" x2="0" y2="185" stroke-dasharray="2 2" opacity="0.7"/>
+                
+                <!-- Refueling Probe (extends from nose left side) -->
+                <path d="M -3,-145 L -8,-185 L -3,-185" />
+                
+                <!-- Fuselage Outline -->
+                <path d="M 0,-165 
+                         C 6,-150 10,-80 10,130 
+                         C 10,150 5,160 0,165 
+                         C -5,160 -10,150 -10,130 
+                         C -10,-80 -6,-150 0,-165 Z" stroke-width="1"/>
+                         
+                <!-- Cockpit & Navigator Glass Nose detailing -->
+                <path d="M -8,-142 C 0,-155 0,-155 8,-142" />
+                <line x1="-6" y1="-115" x2="6" y2="-115" />
+                <line x1="-8" y1="-95" x2="8" y2="-95" />
+                <!-- Window panel divisions -->
+                <line x1="0" y1="-165" x2="0" y2="-142" />
+                <line x1="-4" y1="-155" x2="-2" y2="-142" />
+                <line x1="4" y1="-155" x2="2" y2="-142" />
+                
+                <!-- Wings Swept (35 degrees) -->
+                <!-- Right Wing with cranked trailing edge and landing gear pod -->
+                <path d="M 10,-10 L 230,105 L 220,118 L 105,75 L 75,70 L 10,50 Z" stroke-width="1"/>
+                <!-- Left Wing -->
+                <path d="M -10,-10 L -230,105 L -220,118 L -105,75 L -75,70 L -10,50 Z" stroke-width="1"/>
+                
+                <!-- Landing gear pods on the wing -->
+                <!-- Left Pod -->
+                <path d="M -78,50 L -78,110 C -78,115 -72,115 -72,110 L -72,50 Z" />
+                <!-- Right Pod -->
+                <path d="M 72,50 L 72,110 C 72,115 78,115 78,110 L 78,50 Z" />
+                
+                <!-- 4 Turboprop Engine Nacelles & Contra-rotating Propellers -->
+                <!-- Engine 1 (Left Inner) -->
+                <g transform="translate(-75, 30)">
+                  <rect x="-6" y="-55" width="12" height="85" />
+                  <path d="M -5,-55 Q 0,-70 5,-55 Z" />
+                  <!-- Propeller 1: Front set -->
+                  <line x1="0" y1="-62" x2="-35" y2="-62" />
+                  <line x1="0" y1="-62" x2="35" y2="-62" />
+                  <line x1="0" y1="-62" x2="0" y2="-97" />
+                  <line x1="0" y1="-62" x2="0" y2="-27" />
+                  <!-- Propeller 1: Rear set (contra-rotating) -->
+                  <line x1="0" y1="-59" x2="-25" y2="-84" />
+                  <line x1="0" y1="-59" x2="25" y2="-34" />
+                  <line x1="0" y1="-59" x2="-25" y2="-34" />
+                  <line x1="0" y1="-59" x2="25" y2="-84" />
+                  <path d="M -5,30 Q 0,40 5,30 Z"/>
+                </g>
+                <!-- Engine 2 (Left Outer) -->
+                <g transform="translate(-150, 68)">
+                  <rect x="-5" y="-45" width="10" height="65" />
+                  <path d="M -4,-45 Q 0,-58 4,-45 Z" />
+                  <line x1="0" y1="-51" x2="-25" y2="-51" />
+                  <line x1="0" y1="-51" x2="25" y2="-51" />
+                  <line x1="0" y1="-51" x2="0" y2="-76" />
+                  <line x1="0" y1="-51" x2="0" y2="-26" />
+                  <!-- Propeller 2: Rear set -->
+                  <line x1="0" y1="-48" x2="-18" y2="-66" />
+                  <line x1="0" y1="-48" x2="18" y2="-30" />
+                  <line x1="0" y1="-48" x2="-18" y2="-30" />
+                  <line x1="0" y1="-48" x2="18" y2="-66" />
+                  <path d="M -4,20 Q 0,28 4,20 Z"/>
+                </g>
+                <!-- Engine 3 (Right Inner) -->
+                <g transform="translate(75, 30)">
+                  <rect x="-6" y="-55" width="12" height="85" />
+                  <path d="M -5,-55 Q 0,-70 5,-55 Z" />
+                  <line x1="0" y1="-62" x2="-35" y2="-62" />
+                  <line x1="0" y1="-62" x2="35" y2="-62" />
+                  <line x1="0" y1="-62" x2="0" y2="-97" />
+                  <line x1="0" y1="-62" x2="0" y2="-27" />
+                  <!-- Propeller 3: Rear set -->
+                  <line x1="0" y1="-59" x2="-25" y2="-84" />
+                  <line x1="0" y1="-59" x2="25" y2="-34" />
+                  <line x1="0" y1="-59" x2="-25" y2="-34" />
+                  <line x1="0" y1="-59" x2="25" y2="-84" />
+                  <path d="M -5,30 Q 0,40 5,30 Z"/>
+                </g>
+                <!-- Engine 4 (Right Outer) -->
+                <g transform="translate(150, 68)">
+                  <rect x="-5" y="-45" width="10" height="65" />
+                  <path d="M -4,-45 Q 0,-58 4,-45 Z" />
+                  <line x1="0" y1="-51" x2="-25" y2="-51" />
+                  <line x1="0" y1="-51" x2="25" y2="-51" />
+                  <line x1="0" y1="-51" x2="0" y2="-76" />
+                  <line x1="0" y1="-51" x2="0" y2="-26" />
+                  <!-- Propeller 4: Rear set -->
+                  <line x1="0" y1="-48" x2="-18" y2="-66" />
+                  <line x1="0" y1="-48" x2="18" y2="-30" />
+                  <line x1="0" y1="-48" x2="-18" y2="-30" />
+                  <line x1="0" y1="-48" x2="18" y2="-66" />
+                  <path d="M -4,20 Q 0,28 4,20 Z"/>
+                </g>
+                
+                <!-- Wing structure / Panel lines -->
+                <line x1="75" y1="70" x2="218" y2="114" stroke-dasharray="3 3" />
+                <line x1="-75" y1="70" x2="-218" y2="114" stroke-dasharray="3 3" />
+                
+                <!-- Tailplane (Swept Horizontal Stabilizers) -->
+                <path d="M 10,130 L 70,162 L 63,172 L 10,152 L -10,152 L -63,172 L -70,162 L -10,130 Z" stroke-width="1"/>
+                <line x1="10" y1="145" x2="62" y2="167" stroke-dasharray="2 2" />
+                <line x1="-10" y1="145" x2="-62" y2="167" stroke-dasharray="2 2" />
+                
+                <!-- Tail Gun Turret & Twin cannons -->
+                <circle cx="0" cy="165" r="4.5" />
+                <line x1="-2" y1="165" x2="-2" y2="186" stroke-width="1.2" />
+                <line x1="2" y1="165" x2="2" y2="186" stroke-width="1.2" />
               </g>
               
               <!-- Labels -->
-              <text x="85" y="-15" font-size="7" fill="var(--soviet-cyan)" stroke="none" opacity="0.8">TU-95 BEAR</text>
+              <text x="85" y="-15" font-size="7" fill="var(--soviet-cyan)" stroke="none" opacity="0.8" font-weight="bold">TU-95 BEAR</text>
               <text x="-95" y="85" font-size="7" fill="var(--soviet-cyan)" stroke="none" opacity="0.8">COORDS: 55.7558 N</text>
               <circle cx="-15" cy="55" r="5" stroke-width="0.8"/>
               <text x="-18" y="58" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">1</text>
@@ -4204,28 +4316,77 @@
               <line x1="600" y1="380" x2="500" y2="420" stroke-dasharray="2 2" opacity="0.6"/>
             </g>
 
-            <!-- MiG-25 Profile Schematic (Top-Right) -->
-            <g transform="translate(1020, 200) rotate(-25) scale(0.75)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
-              <!-- Fuselage profile line -->
-              <path d="M -150,0 C -120,-10 -60,-12 0,-12 C 40,-12 90,-8 110,-4 C 130,-4 150,-10 160,-15 C 165,-18 170,-18 172,-15 L 175,-5 C 172,5 150,15 130,17 C 80,17 30,12 0,10 C -40,10 -100,5 -150,0 Z"/>
-              <!-- Canopy -->
-              <path d="M -70,-11 C -65,-22 -50,-22 -40,-11 Z"/>
-              <!-- Intake -->
-              <path d="M -100,-10 L -40,-8 L -40,6 L -100,4 Z"/>
-              <!-- Wing (Profile aspect) -->
-              <path d="M -10,-12 L 40,-45 L 65,-45 L 30,-10 L -10,-12 Z"/>
-              <!-- Tail fins -->
-              <path d="M 80,-10 L 130,-70 L 145,-70 L 125,-8 Z"/>
-              <!-- Missile under fuselage -->
-              <g transform="translate(10, 15) scale(0.8)">
-                <path d="M -30,0 L 25,0 L 30,2 L 25,4 L -30,4 Z"/>
-                <path d="M -25,2 L -28,8 L -20,8 L -22,2 M 15,2 L 12,8 L 19,8 L 17,2" stroke-width="0.6"/>
-              </g>
+            <!-- MiG-25 Foxbat Top-Down (Top-Right) -->
+            <g transform="translate(1020, 200) rotate(-25) scale(0.9)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
+              <!-- Centerline -->
+              <line x1="0" y1="-120" x2="0" y2="110" stroke-dasharray="2 2" opacity="0.5"/>
+              
+              <!-- Pitot Tube -->
+              <line x1="0" y1="-100" x2="0" y2="-125" stroke-width="0.8"/>
+              
+              <!-- Main Fuselage Silhouette & Intakes -->
+              <path d="M 0,-100 
+                       C 3,-85 5,-75 5,-60 
+                       L 13,-60 L 14,-72 L 20,-72 L 18,-30 
+                       L 15,-10 
+                       L 70,30 L 70,38 L 15,35 
+                       L 15,70 
+                       L 45,95 L 40,102 L 12,94 
+                       L 10,105 L 2,105 L 0,102
+                       L -2,105 L -10,105 L -12,94
+                       L -40,102 L -45,95 L -15,70
+                       L -15,35 L -70,38 L -70,30
+                       L -15,-10
+                       L -18,-30 L -20,-72 L -14,-72 L -13,-60
+                       C -5,-60 -3,-85 0,-100 Z" stroke-width="1"/>
+              
+              <!-- Cockpit & Canopy Details -->
+              <path d="M -4,-55 C -4,-65 4,-65 4,-55 Z" />
+              <path d="M -4,-55 L 4,-55 L 4,-35 L -4,-35 Z" />
+              <line x1="0" y1="-55" x2="0" y2="-35" stroke-dasharray="1 1" />
+              
+              <!-- Air Intake ramp lines -->
+              <line x1="14" y1="-72" x2="14" y2="-30" />
+              <line x1="-14" y1="-72" x2="-14" y2="-30" />
+              <line x1="17" y1="-72" x2="17" y2="-30" />
+              <line x1="-17" y1="-72" x2="-17" y2="-30" />
+              
+              <!-- Wing panel details -->
+              <line x1="15,10" x2="52,32" />
+              <line x1="-15,10" x2="-52,32" />
+              <line x1="15,22" x2="62,34" stroke-dasharray="2 2" />
+              <line x1="-15,22" x2="-62,34" stroke-dasharray="2 2" />
+              
+              <!-- Wingtip Pods (Balance weights) -->
+              <rect x="68" y="26" width="3" height="15" />
+              <rect x="-71" y="26" width="3" height="15" />
+              
+              <!-- Twin Tail Fins (Top projection) -->
+              <line x1="11" y1="40" x2="11" y2="92" stroke-width="1.2" />
+              <line x1="-11" y1="40" x2="-11" y2="92" stroke-width="1.2" />
+              <line x1="8" y1="45" x2="8" y2="92" stroke-dasharray="2 2" />
+              <line x1="-8" y1="45" x2="-8" y2="92" stroke-dasharray="2 2" />
+              
+              <!-- Horizontal tailplanes details -->
+              <line x1="15,80" x2="35,92" />
+              <line x1="-15,80" x2="-35,92" />
+              
+              <!-- Engine Nozzles ribs -->
+              <line x1="3" y1="94" x2="3" y2="105" />
+              <line x1="7" y1="94" x2="7" y2="105" />
+              <line x1="-3" y1="94" x2="-3" y2="105" />
+              <line x1="-7" y1="94" x2="-7" y2="105" />
+              
+              <!-- Panel lines across the boxy fuselage -->
+              <line x1="-13" y1="-10" x2="13" y2="-10" />
+              <line x1="-15" y1="15" x2="15" y2="15" />
+              <line x1="-15" y1="40" x2="15" y2="40" />
+              <line x1="-15" y1="65" x2="15" y2="65" />
+              
               <!-- Labels -->
-              <text x="-30" y="-55" font-size="10" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">MIG-25</text>
-              <!-- Number marker -->
-              <circle cx="100" cy="25" r="6"/>
-              <text x="97" y="28" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">1</text>
+              <text x="35" y="-45" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">MIG-25 FOXBAT</text>
+              <circle cx="50" cy="75" r="5" stroke-width="0.8"/>
+              <text x="47" y="78" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">2</text>
             </g>
 
             <!-- MiG-21 Fishbed Top-Down (Bottom-Left) -->
@@ -4261,39 +4422,85 @@
             </g>
 
             <!-- Su-27 Flanker Top-Down (Center-Right) -->
-            <g transform="translate(750, 520) rotate(-10) scale(0.95)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
+            <g transform="translate(800, 520) rotate(-10) scale(0.95)" stroke="var(--soviet-cyan)" stroke-width="0.8" fill="none" opacity="0.25">
               <!-- Centerline -->
-              <line x1="0" y1="-100" x2="0" y2="120" stroke-dasharray="2 2"/>
-              <!-- Nose cone -->
-              <path d="M 0,-95 C 4,-75 5,-60 5,-40 C 5,-20 0,0 0,40" />
-              <path d="M 0,-95 C -4,-75 -5,-60 -5,-40 C -5,-20 0,0 0,40" />
-              <!-- Canopy -->
-              <ellipse cx="0" cy="-55" rx="3.5" ry="12"/>
-              <!-- LERX and Fuselage -->
-              <path d="M -5,-40 C -15,-20 -20,-5 -22,10 L -22,70 L -18,100 L 0,95 L 18,100 L 22,70 L 22,10 L 20,-5 C 15,-20 5,-40 0,-40 Z"/>
-              <!-- Twin engines & Exhausts -->
-              <rect x="-17" y="60" width="10" height="42"/>
-              <rect x="7" y="60" width="10" height="42"/>
-              <path d="M -17,102 L -7,102 L -9,112 L -15,112 Z"/> <!-- Nozzle left -->
-              <path d="M 7,102 L 17,102 L 15,112 L 9,112 Z"/> <!-- Nozzle right -->
-              <!-- Tail Sting (Boom) -->
-              <path d="M -7,85 L -3,115 L 3,115 L 7,85 Z"/>
-              <!-- Wings -->
-              <path d="M -22,10 L -95,65 L -92,72 L -22,55 Z"/>
-              <path d="M 22,10 L 95,65 L 92,72 L 22,55 Z"/>
-              <!-- Wingtip Missile Rails -->
-              <line x1="-95" y1="60" x2="-95" y2="70"/>
-              <line x1="95" y1="60" x2="95" y2="70"/>
-              <!-- Horizontal Stabilizers -->
-              <path d="M -18,80 L -60,105 L -56,112 L -18,100"/>
-              <path d="M 18,80 L 60,105 L 56,112 L 18,100"/>
-              <!-- Twin Vertical Tails (offset) -->
-              <line x1="-15" y1="50" x2="-19" y2="95"/>
-              <line x1="15" y1="50" x2="19" y2="95"/>
+              <line x1="0" y1="-120" x2="0" y2="130" stroke-dasharray="3 5" opacity="0.6"/>
+              
+              <!-- Nose Pitot -->
+              <line x1="0" y1="-105" x2="0" y2="-120" stroke-width="0.8"/>
+              
+              <!-- Main Silhouette: LERX, Wings, Tail Sting, Tailplanes -->
+              <path d="M 0,-105 
+                       C 2,-90 4,-75 5,-50 
+                       C 6,-35 15,-20 24,-5 
+                       L 25,12 
+                       L 92,52 L 92,60 L 89,62
+                       L 23,45 
+                       L 21,78 
+                       L 55,102 L 53,108 
+                       L 18,95 
+                       L 14,99 L 8,99 
+                       L 4,124 L -4,124 
+                       L -8,99 L -14,99 
+                       L -18,95 
+                       L -53,108 L -55,102 
+                       L -21,78 
+                       L -23,45 
+                       L -89,62 L -92,60 L -92,52
+                       L -25,12 
+                       C -15,-20 -6,-35 -5,-50
+                       C -4,-75 -2,-90 0,-105 Z" stroke-width="1"/>
+              
+              <!-- Canopy and Nose Radome Panel -->
+              <ellipse cx="0" cy="-60" rx="3.5" ry="14"/>
+              <line x1="-3.5" y1="-80" x2="3.5" y2="-80"/> <!-- Radome line -->
+              <circle cx="0" cy="-44" r="1.5" /> <!-- IRST Sensor in front of canopy -->
+              
+              <!-- Engine Nacelles on Left and Right -->
+              <path d="M -16,25 L -16,98 M -6,25 L -6,98" />
+              <path d="M 6,25 L 6,98 M 16,25 L 16,98" />
+              <!-- Engine Exhaust Nozzle Ribs -->
+              <path d="M -16,88 L -6,88 M -16,92 L -6,92 M -16,96 L -6,96" />
+              <path d="M 6,88 L 16,88 M 6,92 L 16,92 M 6,96 L 16,96" />
+              
+              <!-- Wing Panels: Flaps, Slats, Ailerons -->
+              <line x1="25,20" x2="86,52" stroke-dasharray="2 2" /> <!-- Leading edge slat line -->
+              <line x1="-25,20" x2="-86,52" stroke-dasharray="2 2" />
+              <line x1="23,38" x2="80,54" /> <!-- Flap / Aileron line -->
+              <line x1="-23,38" x2="-80,54" />
+              <line x1="52,48" x2="52,58" /> <!-- Actuator fairing -->
+              <line x1="-52,48" x2="-52,58" />
+              
+              <!-- Wingtip Launcher Rails for missiles -->
+              <rect x="91" y="44" width="2.5" height="12" />
+              <rect x="-93.5" y="44" width="2.5" height="12" />
+              
+              <!-- Twin Vertical Stabilizers -->
+              <line x1="18,50" x2="18,94" stroke-width="1.2" />
+              <line x1="-18,50" x2="-18,94" stroke-width="1.2" />
+              <line x1="20,55" x2="20,94" stroke-dasharray="2 2" />
+              <line x1="-20,55" x2="-20,94" stroke-dasharray="2 2" />
+              
+              <!-- Horizontal Tailplane panels -->
+              <line x1="21,84" x2="48,98" />
+              <line x1="-21,84" x2="-48,98" />
+              
+              <!-- Central Tail Sting detailing -->
+              <line x1="-4" y1="99" x2="-4" y2="120" stroke-dasharray="1 1"/>
+              <line x1="4" y1="99" x2="4" y2="120" stroke-dasharray="1 1"/>
+              
+              <!-- Auxiliary Intake louvers on the LERX -->
+              <line x1="-10" y1="-8" x2="-14" y2="-8" />
+              <line x1="-10" y1="-5" x2="-14" y2="-5" />
+              <line x1="-10" y1="-2" x2="-14" y2="-2" />
+              <line x1="10" y1="-8" x2="14" y2="-8" />
+              <line x1="10" y1="-5" x2="14" y2="-5" />
+              <line x1="10" y1="-2" x2="14" y2="-2" />
+              
               <!-- Labels -->
-              <text x="40" y="25" font-size="7" fill="var(--soviet-cyan)" stroke="none" opacity="0.8">SU-27 FLANKER</text>
-              <circle cx="-15" cy="25" r="5" stroke-width="0.8"/>
-              <text x="-18" y="28" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">8</text>
+              <text x="45" y="15" font-size="8" fill="var(--soviet-cyan)" stroke="none" opacity="0.8" font-weight="bold">SU-27 FLANKER</text>
+              <circle cx="-35" cy="20" r="5" stroke-width="0.8"/>
+              <text x="-38" y="23" font-size="8" fill="var(--soviet-cyan)" stroke="none" font-weight="bold">4</text>
             </g>
 
             <!-- Brutalist Structures (Bottom-Right) -->

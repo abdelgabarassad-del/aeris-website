@@ -9128,4 +9128,83 @@ body.stitch-theme {
   outline: none !important;
 }
 
+.soviet-theme .site-footer {
+  background: #0a0302 !important;
+  border-top: 3px solid var(--soviet-cyan) !important;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.5) !important;
+}
+
+.soviet-theme .site-footer a {
+  color: var(--soviet-grey) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.2rem !important;
+}
+
+.soviet-theme .site-footer a:hover {
+  color: var(--soviet-cyan) !important;
+}
+
+.soviet-theme .site-footer p, 
+.soviet-theme .site-footer span {
+  color: #888 !important;
+  font-family: 'VT323', monospace !important;
+}
+
+/* Minimized Soviet Music Card Style */
+.soviet-music-card.minimized {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 20px var(--soviet-cyan) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.soviet-music-card.minimized .hmc-info {
+  display: none !important;
+}
+
+.soviet-music-card.minimized .hmc-album-art {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Custom retro styling for volume range slider */
+.soviet-music-card .smc-volume-slider {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 100% !important;
+  height: 6px !important;
+  background: #0a0302 !important;
+  border: 1px solid var(--soviet-border) !important;
+  outline: none !important;
+}
+
+.soviet-music-card .smc-volume-slider::-webkit-slider-runnable-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+.soviet-music-card .smc-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 12px !important;
+  height: 12px !important;
+  background: var(--soviet-cyan) !important;
+  border: 1px solid #000 !important;
+  cursor: pointer !important;
+}
+
+.soviet-music-card .smc-volume-slider::-moz-range-thumb {
+  width: 12px !important;
+  height: 12px !important;
+  background: var(--soviet-cyan) !important;
+  border: 1px solid #000 !important;
+  cursor: pointer !important;
+  border-radius: 0px !important;
+}
+
+
 
