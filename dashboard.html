@@ -368,7 +368,7 @@
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
       '251001377', '241012132', '251002119',
-      '231012588', '251011829', '231012318', '241003033', '231002350'
+      '231012588', '251011829', '231012318', '241003033', '231002350', '2006'
     ]);
 
     const ALL_MEMBERS = new Set([
@@ -377,7 +377,7 @@
       '251001377', '251010151', '241003033', '251001035',
       '251002119', '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002350'
+      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002350', '2006'
     ]);
 
     const ADVISORS = {
@@ -388,10 +388,11 @@
     };
 
     const AUTHORIZED_REVIEWERS = new Set([
-      '8383', '9749', '5970', '5550', '231002350'
+      '8383', '9749', '5970', '5550', '231002350', '2006'
     ]);
 
     const PERSONAL_GREETINGS = {
+      '2006': { name: 'Hanah', lang: 'fr', greeting: 'Bienvenue sur l\'île de Berk', emoji: '🐉' },
       '251001377': { name: 'Hannah Ahmed', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
       '251011829': { name: 'hala farouk', lang: 'fr', greeting: 'Bienvenue', emoji: '✨' },
       '251000861': { name: 'Hazem walid', message: 'would you mind ya hazem el tasks' },
@@ -447,6 +448,7 @@
     if (sessionRole && sessionReg && (ALL_MEMBERS.has(sessionReg) || ADVISORS[sessionReg])) {
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('soviet-theme');
+      if (sessionReg === '2006') document.body.classList.add('dragon-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
@@ -971,6 +973,7 @@
         applyTweetyTheme();
         applySchnozTheme();
         applySovietTheme();
+        applyDragonTheme();
 
         // Kick off Hannah's custom music player
         if (regNum === '251001377') {
@@ -980,6 +983,11 @@
         // Kick off Soviet custom music player
         if (regNum === '231002350') {
           playSovietSong();
+        }
+
+        // Kick off Dragon custom music player
+        if (regNum === '2006') {
+          playDragonSong();
         }
       }, 600);
     }
@@ -1046,6 +1054,7 @@
       safeSession.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
       if (regNum === SOVIET_REG) document.body.classList.add('soviet-theme');
+      if (regNum === '2006') document.body.classList.add('dragon-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
       if (regNum === '251003016') document.body.classList.add('spongebob-theme');
@@ -1703,7 +1712,7 @@
     });
 
     /* ========== FRENCH LOCALIZATION ========== */
-    const FRENCH_REGS = new Set(['251001377', '251011829']);
+    const FRENCH_REGS = new Set(['251001377', '251011829', '2006']);
 
     function isFrenchUser() {
       return FRENCH_REGS.has(safeSession.getItem('aeris_auth_reg'));
@@ -4318,9 +4327,365 @@
       initSovietWidgets();
     }
 
-     /* Override taskCard to use French or Jet labels depending on logged-in user */
-     const _originalTaskCard = taskCard;
+    function isDragonUser() {
+      return safeSession.getItem('aeris_auth_reg') === '2006';
+    }
+
+    function applyDragonTheme() {
+      if (!isDragonUser()) {
+        document.body.classList.remove('dragon-theme');
+        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card').forEach(el => el.remove());
+        
+        // Restore elements modified in applyDragonTheme
+        const formTitle = document.querySelector('.task-form__title');
+        if (formTitle && formTitle.textContent.includes('Directive d\'Entraînement')) {
+          const svg = formTitle.querySelector('svg');
+          formTitle.textContent = '';
+          if (svg) formTitle.appendChild(svg);
+          formTitle.append(' Upload New Task');
+        }
+        
+        const labelTaskTitle = document.querySelector('label[for="task-title"]');
+        if (labelTaskTitle && labelTaskTitle.textContent.includes('Nom du Dragon')) labelTaskTitle.textContent = 'Task Title';
+        
+        const labelTaskDesc = document.querySelector('label[for="task-description"]');
+        if (labelTaskDesc && labelTaskDesc.textContent.includes('Détails de l\'entraînement')) labelTaskDesc.textContent = 'Description';
+        
+        const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+        if (labelTaskPriority && labelTaskPriority.textContent.includes('Classe du Dragon')) labelTaskPriority.textContent = 'Priority';
+        
+        const prioritySelect = document.getElementById('task-priority');
+        if (prioritySelect) {
+          const optLow = prioritySelect.querySelector('option[value="low"]');
+          if (optLow && optLow.textContent.includes('Classe Barda')) optLow.textContent = 'Low';
+          const optMed = prioritySelect.querySelector('option[value="medium"]');
+          if (optMed && optMed.textContent.includes('Classe Choc')) optMed.textContent = 'Medium';
+          const optHigh = prioritySelect.querySelector('option[value="high"]');
+          if (optHigh && optHigh.textContent.includes('Classe Mystère')) optHigh.textContent = 'High';
+          const optUrgent = prioritySelect.querySelector('option[value="urgent"]');
+          if (optUrgent && optUrgent.textContent.includes('FURIE NOCTURNE')) optUrgent.textContent = 'Urgent';
+        }
+        
+        const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+        if (labelTaskDeadline && labelTaskDeadline.textContent.includes('Date limite de dressage')) labelTaskDeadline.textContent = 'Deadline';
+        
+        const submitTaskBtn = document.getElementById('submit-task');
+        if (submitTaskBtn && submitTaskBtn.textContent.includes('Ajouter Directive')) {
+          const svg = submitTaskBtn.querySelector('svg');
+          submitTaskBtn.textContent = '';
+          if (svg) submitTaskBtn.appendChild(svg);
+          submitTaskBtn.append(' Add Task');
+        }
+        return;
+      }
+
+      // Application block
+      document.body.classList.add('dragon-theme');
+
+      // Task Upload Form customizations (if head)
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Directive d\'Entraînement 🐉');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🐉 Nom du Dragon / Tâche';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '📜 Détails de l\'entraînement / Description';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🔥 Classe du Dragon (Priorité)';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🟢 Classe Barda (Basse)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🟡 Classe Choc (Moyenne)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🔴 Classe Mystère (Haute)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '⚡ FURIE NOCTURNE ! (Urgente)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏳ Date limite de dressage (Date Limite)';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Ajouter Directive');
+      }
+
+      // Inject interactive corner decoration (flying Toothless SVG / silhouette)
+      initDragonWidgets();
+    }
+
+    function initDragonWidgets() {
+      if (!document.querySelector('.dragon-corner-br')) {
+        const dragonCorner = document.createElement('div');
+        dragonCorner.className = 'dragon-corner-br';
+        dragonCorner.innerHTML = `
+          <svg viewBox="0 0 100 100" width="80" height="80">
+            <path d="M 50,20 
+                     C 42,30 35,35 15,30 
+                     C 30,42 42,45 45,55 
+                     C 38,62 30,68 35,78 
+                     C 42,75 48,70 50,65 
+                     C 52,70 58,75 65,78 
+                     C 70,68 62,62 55,55 
+                     C 58,45 70,42 85,30 
+                     C 65,35 58,30 50,20 Z 
+                     M 50,15 C 47,10 47,5 50,0 C 53,5 53,10 50,15 Z" fill="#0c111a" stroke="#39ff14" stroke-width="1.5" />
+          </svg>
+        `;
+        document.body.appendChild(dragonCorner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'dragon-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Berk, le seul village avec des animaux de compagnie uniques ! 🛡️",
+          "Un dragon n'est pas un ennemi, Krokmou ! 🐉",
+          "Puisse Thor veiller sur notre entraînement aujourd'hui ! ⚡",
+          "Un bon dresseur de dragons n'utilise jamais la force, mais l'amitié. 🤝",
+          "Les Furies Nocturnes ne ratent jamais leur cible ! 💥",
+          "Vers Berk et au-delà des nuages ! ☁️",
+          "Krokmou, prépare un tir de plasma ! 🔥",
+          "Le grand livre des dragons a besoin d'être mis à jour ! 📜"
+        ];
+
+        dragonCorner.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 4000);
+        });
+      }
+    }
+
+    function playDragonSong() {
+      if (document.getElementById('dragon-music-card')) return;
+
+      const musicCardHTML = `
+        <div class="dragon-music-card" id="dragon-music-card">
+          <div class="hmc-album-art">
+            <div class="hmc-vinyl-wrapper">
+              <svg class="hmc-vinyl" viewBox="0 0 100 100" style="width: 100%; height: 100%; border-radius: 50%; animation: hmcSpin 8s linear infinite; animation-play-state: paused;">
+                <circle cx="50" cy="50" r="48" fill="#24140a" stroke="#78350f" stroke-width="3"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="3 3"/>
+                <circle cx="50" cy="50" r="28" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <circle cx="50" cy="50" r="16" fill="#130a04"/>
+                <text x="50" y="47" font-size="5" font-family="'MedievalSharp', cursive, sans-serif" font-weight="bold" fill="#39ff14" text-anchor="middle">BERK</text>
+                <text x="50" y="55" font-size="4" font-family="'MedievalSharp', cursive, sans-serif" fill="#d97706" text-anchor="middle">DRAGON</text>
+                <circle cx="50" cy="50" r="3.5" fill="#39ff14"/>
+              </svg>
+            </div>
+            <div class="hmc-music-note">🐉</div>
+          </div>
+          
+          <div class="hmc-info" style="flex: 1; min-width: 0;">
+            <div class="hmc-track-title" style="font-size: 0.95rem; font-weight: bold; color: #fef3c7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Thème de Berk</div>
+            <div class="hmc-artist" style="font-size: 0.75rem; color: #39ff14; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">John Powell — Samuel Kim Suite</div>
+            
+            <div class="hmc-controls-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+              <div class="hmc-visualizer" id="dmc-visualizer" style="display: flex; gap: 3px; align-items: flex-end; height: 18px; width: 40px;">
+                <span class="hmc-bar hmc-bar-1" style="width: 3px; height: 3px; border-radius: 1px;"></span>
+                <span class="hmc-bar hmc-bar-2" style="width: 3px; height: 3px; border-radius: 1px;"></span>
+                <span class="hmc-bar hmc-bar-3" style="width: 3px; height: 3px; border-radius: 1px;"></span>
+                <span class="hmc-bar hmc-bar-4" style="width: 3px; height: 3px; border-radius: 1px;"></span>
+              </div>
+              
+              <div class="hmc-buttons" style="display: flex; gap: 6px;">
+                <button class="hmc-btn" id="dmc-play-pause" title="Play/Pause" style="background: none; padding: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px;">
+                  <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="hmc-btn" id="dmc-minimize" title="Minimize" style="background: none; padding: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="hmc-btn hmc-close-btn" id="dmc-close" title="Dismiss" style="background: none; padding: 0 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; font-size: 16px;">&times;</button>
+              </div>
+            </div>
+            
+            <div class="hmc-progress-container" style="background: rgba(0,0,0,0.3); height: 5px; border-radius: 2.5px; margin-top: 8px; overflow: hidden; cursor: pointer;">
+              <div class="hmc-progress-bar" id="dmc-progress-bar" style="width: 0%; height: 100%;"></div>
+            </div>
+
+            <div class="dmc-volume-row" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span class="dmc-volume-icon" style="font-size: 11px; color: #fef3c7; line-height: 1;">SON</span>
+              <input type="range" id="dmc-volume" class="dmc-volume-slider" min="0" max="1" step="0.05" value="0.5" style="flex: 1; accent-color: #39ff14; cursor: pointer; background: rgba(0,0,0,0.4); border: 1px solid #78350f; height: 6px; border-radius: 3px; -webkit-appearance: none;">
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = musicCardHTML;
+      const cardEl = tempDiv.firstElementChild;
+      document.body.appendChild(cardEl);
+
+      const audio = new Audio('images/dragon_theme.webm');
+      audio.volume = 0.5;
+      audio.loop = true;
+
+      const playPauseBtn = document.getElementById('dmc-play-pause');
+      const minimizeBtn = document.getElementById('dmc-minimize');
+      const closeBtn = document.getElementById('dmc-close');
+      const volumeSlider = document.getElementById('dmc-volume');
+      const progressBar = document.getElementById('dmc-progress-bar');
+      const vinylSVG = cardEl.querySelector('.hmc-vinyl');
+      const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
+      const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
+
+      let isPlaying = false;
+      let progressInterval = null;
+
+      function updateUI(playing) {
+        isPlaying = playing;
+        if (playing) {
+          cardEl.classList.add('playing');
+          vinylSVG.style.animationPlayState = 'running';
+          iconPause.style.display = 'block';
+          iconPlay.style.display = 'none';
+        } else {
+          cardEl.classList.remove('playing');
+          vinylSVG.style.animationPlayState = 'paused';
+          iconPause.style.display = 'none';
+          iconPlay.style.display = 'block';
+        }
+      }
+
+      function startProgress() {
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+          if (!isPlaying) return;
+          const duration = audio.duration || 201;
+          const percentage = Math.min((audio.currentTime / duration) * 100, 100);
+          progressBar.style.width = percentage + '%';
+        }, 200);
+      }
+
+      function pauseProgress() {
+        clearInterval(progressInterval);
+      }
+
+      function playAudio() {
+        audio.play().then(() => {
+          updateUI(true);
+          startProgress();
+        }).catch(err => {
+          console.warn("Autoplay blocked, waiting for user click/interaction.", err);
+          updateUI(false);
+        });
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        updateUI(false);
+        pauseProgress();
+      }
+
+      playPauseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isPlaying) {
+          pauseAudio();
+        } else {
+          playAudio();
+        }
+      });
+
+      minimizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        cardEl.classList.add('minimized');
+        cardEl.setAttribute('title', 'Cliquer pour agrandir');
+      });
+
+      cardEl.addEventListener('click', () => {
+        if (cardEl.classList.contains('minimized')) {
+          cardEl.classList.remove('minimized');
+          cardEl.removeAttribute('title');
+        }
+      });
+
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        audio.pause();
+        clearInterval(progressInterval);
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'translateX(120%) scale(0.9)';
+        setTimeout(() => {
+          cardEl.remove();
+        }, 500);
+      });
+
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+      });
+
+      volumeSlider.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      playAudio();
+
+      const autoplayFallback = () => {
+        if (!isPlaying && audio.currentTime === 0) {
+          playAudio();
+        }
+        document.removeEventListener('click', autoplayFallback);
+        document.removeEventListener('keydown', autoplayFallback);
+      };
+      document.addEventListener('click', autoplayFallback);
+      document.addEventListener('keydown', autoplayFallback);
+    }
+
+      /* Override taskCard to use French or Jet labels depending on logged-in user */
+      const _originalTaskCard = taskCard;
       taskCard = function(task) {
+        if (isDragonUser()) {
+          const priorityLabels = {
+            low: '🟢 Classe Barda (Basse)',
+            medium: '🟡 Classe Choc (Moyenne)',
+            high: '🔴 Classe Mystère (Haute)',
+            urgent: '⚡ FURIE NOCTURNE ! (Urgente)'
+          };
+          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+          let actions = '';
+          if (task.status === 'todo') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Dresser le dragon">▶ Dresser</button>`;
+          } else if (task.status === 'progress') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Apprivoiser le dragon">✓ Apprivoiser</button>`;
+          }
+
+          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Supprimer la directive">&times;</button>` : '';
+
+          return `
+            <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+              <div class="task-card__top">
+                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+                ${task.isApproved ? `<span class="task-card__approved-pill">✓ Apprivoisé</span>` : ''}
+                ${deleteBtn}
+              </div>
+              <h4 class="task-card__title">🐉 ${escapeHtml(task.title)}</h4>
+              ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+              <div class="task-card__footer">
+                ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ${deadlineStr}
+                </span>` : ''}
+                ${actions}
+              </div>
+            </div>
+          `;
+        }
+
         if (isSovietUser()) {
           const priorityLabels = { 
             low: '💤 Production Target (Low)', 
@@ -4888,8 +5253,19 @@
     const _origRenderTasks = renderTasks;
     renderTasks = function() {
       _origRenderTasks();
-      // After rendering, re-apply French column headers (since they are static HTML)
-      if (isFrenchUser()) {
+      // After rendering, re-apply French or Dragon column headers (since they are static HTML)
+      if (isDragonUser()) {
+        const colHeaders = {
+          'col-todo': 'Œufs à Couver 🥚',
+          'col-progress': 'Entraînement en Cours 🐉',
+          'col-done': 'Dragons Apprivoisés 🔥'
+        };
+        Object.entries(colHeaders).forEach(([id, label]) => {
+          const colEl = document.getElementById(id);
+          const h3 = colEl ? colEl.querySelector('.task-column__header h3') : null;
+          if (h3) h3.textContent = label;
+        });
+      } else if (isFrenchUser()) {
         const colHeaders = {
           'col-todo': 'À Faire',
           'col-progress': 'En Cours',

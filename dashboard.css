@@ -8916,3 +8916,350 @@ body.stitch-theme {
   color: #ffffff;
   box-shadow: 0 0 10px rgba(204, 68, 42, 0.4);
 }
+
+
+
+/* ==========================================================================
+   ========== HOW TO TRAIN YOUR DRAGON THEME (2006 only) ==========
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@600;800&display=swap');
+
+.dragon-theme {
+  font-family: 'MedievalSharp', 'Cinzel', serif !important;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M16 4 L28 16 L16 28 L4 16 Z' fill='none' stroke='%2339ff14' stroke-width='1.5'/><circle cx='16' cy='16' r='4' fill='%2339ff14'/></svg>") 16 16, auto !important;
+}
+
+/* Page background: Deep night sky with animated scale overlay */
+.dragon-theme .dashboard-page {
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(249, 115, 22, 0.08) 0%, transparent 40%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='24' viewBox='0 0 40 24' fill='none' stroke='rgba(16,185,129,0.05)' stroke-width='1.2'><path d='M0 0 C10 12, 30 12, 40 0 M20 12 C30 24, 50 24, 60 12 M0 12 C10 24, 30 24, 40 12 M-20 12 C-10 24, 10 24, 20 12'/></svg>"),
+    #05070a !important;
+  background-attachment: fixed;
+}
+
+/* Header style override */
+.dragon-theme .site-header {
+  background: rgba(8, 12, 17, 0.9) !important;
+  border-bottom: 2px solid rgba(16, 185, 129, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
+}
+
+.dragon-theme .site-header__logo {
+  color: #39ff14 !important;
+  font-family: 'Cinzel', serif !important;
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.6) !important;
+}
+
+.dragon-theme .page-title {
+  color: #10b981 !important;
+  font-family: 'Cinzel', serif !important;
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+  letter-spacing: 2px !important;
+}
+
+.dragon-theme .dashboard-subtitle {
+  color: rgba(209, 213, 219, 0.7) !important;
+}
+
+/* Welcome Banner styled like a Viking map header */
+.dragon-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(46, 29, 15, 0.9) 0%, rgba(27, 15, 6, 0.95) 100%) !important;
+  border: 2.5px solid #d97706 !important; /* Bronze/Copper frame */
+  box-shadow: 0 8px 32px rgba(217, 119, 6, 0.15) !important;
+  border-radius: 4px !important;
+}
+
+.dragon-theme .welcome-banner::before {
+  background: linear-gradient(90deg, transparent, #39ff14, #f97316, transparent) !important;
+  height: 3px !important;
+}
+
+.dragon-theme .welcome-banner__icon {
+  background: #d97706 !important;
+  color: #1b0f06 !important;
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.3) !important;
+  border-radius: 0px !important;
+}
+
+.dragon-theme .welcome-banner__greeting strong,
+.dragon-theme .welcome-banner__role strong {
+  color: #39ff14 !important;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.4) !important;
+}
+
+/* Dragon Columns (Viking Training Board) */
+.dragon-theme .task-column {
+  background: rgba(14, 20, 27, 0.8) !important;
+  border: 2px solid rgba(16, 185, 129, 0.25) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dragon-theme .task-column__header {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #39ff14 !important;
+  border-bottom: 2px solid rgba(16, 185, 129, 0.5) !important;
+  font-family: 'Cinzel', serif !important;
+  border-radius: 2px 2px 0 0 !important;
+  padding: 12px !important;
+}
+
+.dragon-theme .task-column__count {
+  background: #39ff14 !important;
+  color: #05070a !important;
+  border-radius: 2px !important;
+  font-weight: bold !important;
+}
+
+.dragon-theme .task-column__dot--todo { background: #6b7280 !important; }
+.dragon-theme .task-column__dot--progress { background: #f97316 !important; box-shadow: 0 0 8px #f97316 !important; }
+.dragon-theme .task-column__dot--done { background: #39ff14 !important; box-shadow: 0 0 8px #39ff14 !important; }
+
+/* Dragon Training Tasks Cards */
+.dragon-theme .task-card {
+  background: rgba(8, 12, 17, 0.95) !important;
+  border: 1.5px solid rgba(16, 185, 129, 0.18) !important;
+  border-radius: 4px !important;
+}
+
+.dragon-theme .task-card:hover {
+  border-color: #39ff14 !important;
+  box-shadow: 0 4px 16px rgba(57, 255, 20, 0.18) !important;
+  transform: translateY(-2px);
+}
+
+.dragon-theme .task-card__title {
+  color: #10b981 !important;
+}
+
+.dragon-theme .task-card__desc {
+  color: rgba(209, 213, 219, 0.8) !important;
+}
+
+.dragon-theme .task-card--low { border-left: 4px solid #10b981 !important; }
+.dragon-theme .task-card--medium { border-left: 4px solid #f59e0b !important; }
+.dragon-theme .task-card--high { border-left: 4px solid #f97316 !important; }
+.dragon-theme .task-card--urgent {
+  border-left: 4px solid #ef4444 !important;
+  border-right: 1.5px solid #ef4444 !important;
+  animation: dragonUrgentPulse 1.2s infinite alternate !important;
+}
+
+@keyframes dragonUrgentPulse {
+  0% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.2); }
+  100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+}
+
+.dragon-theme .task-card__action {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  color: #39ff14 !important;
+  border-radius: 2px !important;
+  font-family: 'MedievalSharp', cursive, sans-serif !important;
+}
+
+.dragon-theme .task-card__action:hover {
+  background: #39ff14 !important;
+  color: #05070a !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
+}
+
+/* Viking Task Form */
+.dragon-theme .task-form {
+  background: linear-gradient(135deg, rgba(46, 29, 15, 0.95), rgba(27, 15, 6, 0.95)) !important;
+  border: 2px solid #d97706 !important;
+  border-radius: 4px !important;
+}
+
+.dragon-theme .task-form__title {
+  color: #d97706 !important;
+  font-family: 'Cinzel', serif !important;
+  border-bottom: 1.5px solid rgba(217, 119, 6, 0.3) !important;
+}
+
+.dragon-theme .task-form__title svg {
+  color: #d97706 !important;
+}
+
+.dragon-theme .form-group input,
+.dragon-theme .form-group textarea,
+.dragon-theme .form-group select {
+  background: rgba(13, 8, 4, 0.9) !important;
+  border: 1px solid #78350f !important;
+  color: #fef3c7 !important;
+  border-radius: 2px !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+}
+
+.dragon-theme .form-group input:focus,
+.dragon-theme .form-group textarea:focus,
+.dragon-theme .form-group select:focus {
+  border-color: #39ff14 !important;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.35) !important;
+}
+
+.dragon-theme .task-form__submit {
+  background: linear-gradient(135deg, #d97706, #b45309) !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #1b0f06 !important;
+  font-weight: bold !important;
+  border-radius: 2px !important;
+}
+
+.dragon-theme .task-form__submit:hover {
+  background: #39ff14 !important;
+  border-color: #39ff14 !important;
+  color: #05070a !important;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.45) !important;
+}
+
+/* Dragon Music Player (Shield Style) */
+.dragon-music-card {
+  position: fixed;
+  top: 95px;
+  right: 24px;
+  width: 320px;
+  background: linear-gradient(135deg, #24140a, #130a04) !important;
+  border: 3px solid #78350f !important;
+  border-radius: 12px !important;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(12px);
+  z-index: 1001;
+  font-family: 'MedievalSharp', cursive, sans-serif;
+  animation: hmcSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.dragon-music-card.playing .hmc-vinyl {
+  animation-play-state: running;
+}
+
+.dragon-music-card .hmc-vinyl {
+  background: radial-gradient(circle, #78350f 30%, #1b0f06 31%) !important;
+  border: 2px solid #d97706 !important;
+}
+
+.dragon-music-card .hmc-music-note {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 14px;
+  animation: hmcFloatNote 2.5s infinite ease-in-out;
+  opacity: 0;
+  color: #39ff14;
+}
+
+.dragon-music-card.playing .hmc-music-note {
+  opacity: 1;
+}
+
+.dragon-music-card .hmc-bar {
+  background: #39ff14 !important;
+}
+
+.dragon-music-card.playing .hmc-bar-1 { animation: hmcBounce 0.8s ease-in-out infinite alternate; }
+.dragon-music-card.playing .hmc-bar-2 { animation: hmcBounce 0.5s ease-in-out infinite alternate 0.15s; }
+.dragon-music-card.playing .hmc-bar-3 { animation: hmcBounce 0.7s ease-in-out infinite alternate 0.3s; }
+.dragon-music-card.playing .hmc-bar-4 { animation: hmcBounce 0.6s ease-in-out infinite alternate 0.05s; }
+
+.dragon-music-card .hmc-btn {
+  border: 1.5px solid #78350f !important;
+  color: #fef3c7 !important;
+}
+
+.dragon-music-card .hmc-btn:hover {
+  background: #39ff14 !important;
+  border-color: #39ff14 !important;
+  color: #05070a !important;
+  transform: scale(1.1) !important;
+}
+
+.dragon-music-card .hmc-progress-bar {
+  background: linear-gradient(90deg, #10b981, #39ff14) !important;
+}
+
+.dragon-music-card.minimized {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.5) !important;
+  border-color: #39ff14 !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dragon-music-card.minimized .hmc-info {
+  display: none !important;
+}
+
+.dragon-music-card.minimized .hmc-album-art {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Floating Toothless Corner Decor */
+.dragon-corner-br {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  z-index: 999;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  filter: drop-shadow(0 0 5px rgba(57, 255, 20, 0.2));
+}
+
+.dragon-corner-br:hover {
+  opacity: 1;
+  transform: scale(1.15) rotate(-5deg);
+  filter: drop-shadow(0 0 12px rgba(57, 255, 20, 0.5));
+}
+
+/* French speech bubble for Toothless */
+.dragon-bubble {
+  position: fixed;
+  bottom: 90px;
+  right: 35px;
+  background: rgba(14, 20, 27, 0.95);
+  border: 2px solid #39ff14;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: 'MedievalSharp', sans-serif;
+  font-size: 0.85rem;
+  max-width: 260px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  pointer-events: none;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dragon-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 25px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #39ff14 transparent;
+  display: block;
+  width: 0;
+}
+
+.dragon-bubble.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
