@@ -4334,7 +4334,7 @@
     function applyDragonTheme() {
       if (!isDragonUser()) {
         document.body.classList.remove('dragon-theme');
-        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card').forEach(el => el.remove());
+        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide').forEach(el => el.remove());
         
         // Restore elements modified in applyDragonTheme
         const formTitle = document.querySelector('.task-form__title');
@@ -4376,11 +4376,26 @@
           if (svg) submitTaskBtn.appendChild(svg);
           submitTaskBtn.append(' Add Task');
         }
+
+        const pageTitle = document.querySelector('.page-title');
+        if (pageTitle && pageTitle.innerHTML.includes('Académie de Dressage')) {
+          pageTitle.textContent = isFrenchUser() ? 'Tableau de Bord' : 'Team Dashboard';
+        }
+        const pageSub = document.querySelector('.dashboard-subtitle');
+        if (pageSub && pageSub.innerHTML.includes('dressage')) {
+          pageSub.textContent = isFrenchUser() ? 'Gérer et suivre les tâches de tous les départements' : 'Manage and track tasks across all departments';
+        }
         return;
       }
 
       // Application block
       document.body.classList.add('dragon-theme');
+
+      // Customize title & subtitle for HTTYD Academy
+      const pageTitle = document.querySelector('.page-title');
+      if (pageTitle) pageTitle.innerHTML = '🐲 Académie de Dressage de Berk 🐲';
+      const pageSub = document.querySelector('.dashboard-subtitle');
+      if (pageSub) pageSub.innerHTML = 'Gérer, dresser et apprivoiser vos dragons de l\'île de Berk';
 
       // Task Upload Form customizations (if head)
       const formTitle = document.querySelector('.task-form__title');
@@ -4424,6 +4439,39 @@
     }
 
     function initDragonWidgets() {
+      // Background gliding dragons
+      if (!document.querySelector('.dragon-bg-glide')) {
+        // Glider 1: Toothless
+        const glider1 = document.createElement('div');
+        glider1.className = 'dragon-bg-glide dragon-bg-glide1';
+        glider1.innerHTML = `
+          <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <path d="M 50,20 C 42,30 35,35 15,30 C 30,42 42,45 45,55 C 38,62 30,68 35,78 C 42,75 48,70 50,65 C 52,70 58,75 65,78 C 70,68 62,62 55,55 C 58,45 70,42 85,30 C 65,35 58,30 50,20 Z" />
+          </svg>
+        `;
+        document.body.appendChild(glider1);
+
+        // Glider 2: Deadly Nadder
+        const glider2 = document.createElement('div');
+        glider2.className = 'dragon-bg-glide dragon-bg-glide2';
+        glider2.innerHTML = `
+          <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <path d="M 50,15 C 38,25 25,25 5,15 C 20,32 38,35 42,48 C 35,58 20,60 28,75 C 38,70 45,62 50,55 C 55,62 62,70 72,75 C 80,60 65,58 58,48 C 62,35 80,32 95,15 C 75,25 62,25 50,15 Z" />
+          </svg>
+        `;
+        document.body.appendChild(glider2);
+
+        // Glider 3: Monstrous Nightmare
+        const glider3 = document.createElement('div');
+        glider3.className = 'dragon-bg-glide dragon-bg-glide3';
+        glider3.innerHTML = `
+          <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <path d="M 50,10 C 40,25 20,25 0,25 C 22,35 38,40 40,55 C 32,68 15,75 25,85 C 38,78 45,68 50,58 C 55,68 62,78 75,85 C 85,75 68,68 60,55 C 62,40 78,35 100,25 C 80,25 60,25 50,10 Z" />
+          </svg>
+        `;
+        document.body.appendChild(glider3);
+      }
+
       if (!document.querySelector('.dragon-corner-br')) {
         const dragonCorner = document.createElement('div');
         dragonCorner.className = 'dragon-corner-br';
