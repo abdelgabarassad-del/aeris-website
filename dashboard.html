@@ -1176,7 +1176,7 @@
         newsFeed.innerHTML = `
           <div class="news-feed__empty">
             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
-            <p>${isFrenchUser() ? "Aucune annonce n'a été publiée pour le moment." : "No announcements have been published yet."}</p>
+            <p>${isDragonUser() ? "Aucun message n'a été gravé sur la pierre de Berk pour le moment." : (isFrenchUser() ? "Aucune annonce n'a été publiée pour le moment." : "No announcements have been published yet.")}</p>
           </div>
         `;
         return;
@@ -1250,12 +1250,12 @@
       newsToggleFormBtn.addEventListener('click', () => {
         if (newsFormWrapper.style.display === 'none') {
           newsFormWrapper.style.display = 'block';
-          newsToggleFormBtn.querySelector('span').textContent = isFrenchUser() ? 'Masquer le formulaire' : 'Hide Form';
+          newsToggleFormBtn.querySelector('span').textContent = isDragonUser() ? 'Masquer le Formulaire' : (isFrenchUser() ? 'Masquer le formulaire' : 'Hide Form');
           newsToggleFormBtn.classList.add('active');
           newsContent.focus();
         } else {
           newsFormWrapper.style.display = 'none';
-          newsToggleFormBtn.querySelector('span').textContent = isFrenchUser() ? 'Publier une annonce' : 'Publish Announcement';
+          newsToggleFormBtn.querySelector('span').textContent = isDragonUser() ? 'Publier Message de Berk' : (isFrenchUser() ? 'Publier une annonce' : 'Publish Announcement');
           newsToggleFormBtn.classList.remove('active');
         }
       });
@@ -1265,7 +1265,7 @@
       newsCancelBtn.addEventListener('click', () => {
         newsFormWrapper.style.display = 'none';
         if (newsToggleFormBtn) {
-          newsToggleFormBtn.querySelector('span').textContent = isFrenchUser() ? 'Publier une annonce' : 'Publish Announcement';
+          newsToggleFormBtn.querySelector('span').textContent = isDragonUser() ? 'Publier Message de Berk' : (isFrenchUser() ? 'Publier une annonce' : 'Publish Announcement');
           newsToggleFormBtn.classList.remove('active');
         }
         newsContent.value = '';
@@ -4385,6 +4385,42 @@
         if (pageSub && pageSub.innerHTML.includes('dressage')) {
           pageSub.textContent = isFrenchUser() ? 'Gérer et suivre les tâches de tous les départements' : 'Manage and track tasks across all departments';
         }
+
+        // Restore News Section elements modified in applyDragonTheme
+        const newsHeading = document.querySelector('.news-header__left h2');
+        if (newsHeading && newsHeading.textContent.includes('Messages de Berk')) {
+          newsHeading.textContent = isFrenchUser() ? "Tableau d'Annonces Officiel" : "Official News Board";
+        }
+        const newsToggleSpan = document.querySelector('#news-toggle-form span');
+        if (newsToggleSpan && (newsToggleSpan.textContent.includes('Message de Berk') || newsToggleSpan.textContent.includes('Formulaire'))) {
+          const formWrapper = document.getElementById('news-form-wrapper');
+          const isVisible = formWrapper && formWrapper.style.display !== 'none';
+          newsToggleSpan.textContent = isVisible 
+            ? (isFrenchUser() ? 'Masquer le formulaire' : 'Hide Form')
+            : (isFrenchUser() ? 'Publier une annonce' : 'Publish Announcement');
+        }
+        const newsFormTitle = document.querySelector('.news-form__title');
+        if (newsFormTitle && newsFormTitle.textContent.includes('Message de Berk')) {
+          const svg = newsFormTitle.querySelector('svg');
+          newsFormTitle.textContent = '';
+          if (svg) newsFormTitle.appendChild(svg);
+          newsFormTitle.append(isFrenchUser() ? ' Rédiger une annonce' : ' Compose Announcement');
+        }
+        const newsFormLabel = document.querySelector('label[for="news-content"]');
+        if (newsFormLabel && newsFormLabel.textContent.includes('Message pour Berk')) {
+          newsFormLabel.textContent = isFrenchUser() ? "Détails de l'annonce" : "Announcement Details";
+        }
+        const newsFormTextarea = document.getElementById('news-content');
+        if (newsFormTextarea && newsFormTextarea.placeholder.includes('dressage')) {
+          newsFormTextarea.placeholder = isFrenchUser() ? "Rédiger un message pour l'équipe..." : "Compose message to the team...";
+        }
+        const newsSubmitBtnEl = document.getElementById('news-submit');
+        if (newsSubmitBtnEl && newsSubmitBtnEl.textContent.includes('Envoyer')) {
+          const svg = newsSubmitBtnEl.querySelector('svg');
+          newsSubmitBtnEl.textContent = '';
+          if (svg) newsSubmitBtnEl.appendChild(svg);
+          newsSubmitBtnEl.append(isFrenchUser() ? ' Publier' : ' Publish');
+        }
         return;
       }
 
@@ -4396,6 +4432,39 @@
       if (pageTitle) pageTitle.innerHTML = '🐲 Académie de Dressage de Berk 🐲';
       const pageSub = document.querySelector('.dashboard-subtitle');
       if (pageSub) pageSub.innerHTML = 'Gérer, dresser et apprivoiser vos dragons de l\'île de Berk';
+
+      // Customize News Board section titles/placeholders
+      const newsHeading = document.querySelector('.news-header__left h2');
+      if (newsHeading) newsHeading.textContent = '📜 Messages de Berk';
+
+      const newsToggleSpan = document.querySelector('#news-toggle-form span');
+      if (newsToggleSpan) {
+        const formWrapper = document.getElementById('news-form-wrapper');
+        const isVisible = formWrapper && formWrapper.style.display !== 'none';
+        newsToggleSpan.textContent = isVisible ? 'Masquer le Formulaire' : 'Publier Message de Berk';
+      }
+
+      const newsFormTitle = document.querySelector('.news-form__title');
+      if (newsFormTitle) {
+        const svg = newsFormTitle.querySelector('svg');
+        newsFormTitle.textContent = '';
+        if (svg) newsFormTitle.appendChild(svg);
+        newsFormTitle.append(' Écrire un Message de Berk');
+      }
+
+      const newsFormLabel = document.querySelector('label[for="news-content"]');
+      if (newsFormLabel) newsFormLabel.textContent = '🐉 Détails du Message pour Berk';
+
+      const newsFormTextarea = document.getElementById('news-content');
+      if (newsFormTextarea) newsFormTextarea.placeholder = "Rédiger un message de dressage pour l'île de Berk...";
+
+      const newsSubmitBtnEl = document.getElementById('news-submit');
+      if (newsSubmitBtnEl) {
+        const svg = newsSubmitBtnEl.querySelector('svg');
+        newsSubmitBtnEl.textContent = '';
+        if (svg) newsSubmitBtnEl.appendChild(svg);
+        newsSubmitBtnEl.append(' Envoyer');
+      }
 
       // Task Upload Form customizations (if head)
       const formTitle = document.querySelector('.task-form__title');

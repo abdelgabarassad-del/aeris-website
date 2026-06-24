@@ -9314,3 +9314,179 @@ body.stitch-theme {
   100% { transform: translateX(calc(100vw + 200px)) translateY(0px) rotate(10deg) scaleX(1); }
 }
 
+/* Dragon news board overrides */
+.dragon-theme .news-section {
+  background: linear-gradient(135deg, rgba(36, 20, 10, 0.95), rgba(19, 10, 4, 0.98)) !important;
+  border: 3px solid #78350f !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(217, 119, 6, 0.1) !important;
+  border-radius: 8px !important;
+  font-family: 'MedievalSharp', cursive, sans-serif !important;
+}
+
+.dragon-theme .news-header {
+  border-bottom: 2px solid rgba(217, 119, 6, 0.3) !important;
+  padding-bottom: 12px !important;
+}
+
+.dragon-theme .news-header__icon {
+  color: #39ff14 !important;
+  filter: drop-shadow(0 0 8px rgba(57, 255, 20, 0.4)) !important;
+}
+
+.dragon-theme .news-header h2 {
+  color: #fef3c7 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.6rem !important;
+  text-shadow: 0 0 12px rgba(254, 243, 199, 0.3) !important;
+}
+
+.dragon-theme .news-header__publish-btn {
+  background: #78350f !important;
+  border: 1.5px solid #d97706 !important;
+  color: #fef3c7 !important;
+  font-family: 'MedievalSharp', cursive, sans-serif !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.dragon-theme .news-header__publish-btn:hover {
+  background: #39ff14 !important;
+  border-color: #39ff14 !important;
+  color: #05070a !important;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.45) !important;
+}
+
+.dragon-theme .news-card {
+  background: rgba(19, 10, 4, 0.6) !important;
+  border: 2px solid #78350f !important;
+  border-radius: 6px !important;
+  color: #fef3c7 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dragon-theme .news-card:hover {
+  border-color: #39ff14 !important;
+  background: rgba(36, 20, 10, 0.7) !important;
+  box-shadow: 0 6px 20px rgba(57, 255, 20, 0.15) !important;
+}
+
+.dragon-theme .news-card__author {
+  color: #fef3c7 !important;
+  font-family: 'Cinzel', serif !important;
+}
+
+.dragon-theme .news-card__role {
+  color: #d97706 !important;
+}
+
+.dragon-theme .news-card__content {
+  color: #e5e7eb !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+  font-size: 0.95rem !important;
+}
+
+.dragon-theme .news-card__date {
+  color: #a1a1aa !important;
+}
+
+.dragon-theme .news-card__badge--faculty,
+.dragon-theme .news-card__badge--head {
+  background: rgba(217, 119, 6, 0.1) !important;
+  color: #39ff14 !important;
+  border: 1.5px solid #39ff14 !important;
+  border-radius: 4px !important;
+  font-size: 0.75rem !important;
+}
+
+.dragon-theme .news-form-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dragon-theme .news-form {
+  background: rgba(27, 15, 6, 0.95) !important;
+  border: 2.5px solid #78350f !important;
+  border-radius: 6px !important;
+  padding: 16px !important;
+}
+
+.dragon-theme .news-form__title {
+  color: #fef3c7 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.3rem !important;
+  border-bottom: 1.5px solid rgba(217, 119, 6, 0.3) !important;
+  padding-bottom: 8px !important;
+}
+
+.dragon-theme .news-form label {
+  color: #d97706 !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+}
+
+.dragon-theme .news-form textarea {
+  background: rgba(19, 10, 4, 0.7) !important;
+  border: 2px solid #78350f !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+}
+
+.dragon-theme .news-form textarea:focus {
+  border-color: #39ff14 !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
+  outline: none !important;
+}
+
+/* News Form Buttons */
+.dragon-theme .news-form__buttons .btn-secondary {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid #78350f !important;
+  color: #fef3c7 !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+}
+
+.dragon-theme .news-form__buttons .btn-secondary:hover {
+  background: rgba(255,255,255,0.1) !important;
+}
+
+.dragon-theme .news-form__buttons .btn-primary {
+  background: #78350f !important;
+  border: 1.5px solid #d97706 !important;
+  color: #fef3c7 !important;
+  font-family: 'MedievalSharp', sans-serif !important;
+}
+
+.dragon-theme .news-form__buttons .btn-primary:hover {
+  background: #39ff14 !important;
+  border-color: #39ff14 !important;
+  color: #05070a !important;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.45) !important;
+}
+
+/* Dragon site footer (bottom strip) overrides */
+.dragon-theme .site-footer {
+  background: linear-gradient(180deg, rgba(8, 12, 17, 0.95), #05070a) !important;
+  border-top: 3px solid #78350f !important;
+  box-shadow: 0 -8px 24px rgba(0,0,0,0.6) !important;
+  font-family: 'MedievalSharp', cursive, sans-serif !important;
+  padding: 24px 0 !important;
+}
+
+.dragon-theme .site-footer a {
+  color: #d97706 !important;
+  transition: all 0.3s ease !important;
+}
+
+.dragon-theme .site-footer a:hover {
+  color: #39ff14 !important;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.4) !important;
+  text-decoration: none !important;
+}
+
+.dragon-theme .site-footer p, 
+.dragon-theme .site-footer span {
+  color: #a1a1aa !important;
+}
+
+
