@@ -9206,5 +9206,64 @@ body.stitch-theme {
   border-radius: 0px !important;
 }
 
+/* Minimized Hannah Music Card Style */
+.hannah-music-card.minimized {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 20px rgba(255, 127, 165, 0.6) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.hannah-music-card.minimized .hmc-info {
+  display: none !important;
+}
+
+.hannah-music-card.minimized .hmc-album-art {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Custom styling for Hannah's volume range slider */
+.hannah-music-card .hmc-volume-slider {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 100% !important;
+  height: 6px !important;
+  background: rgba(10, 25, 47, 0.6) !important;
+  border: 1px solid rgba(255, 127, 165, 0.3) !important;
+  border-radius: 4px !important;
+  outline: none !important;
+}
+
+.hannah-music-card .hmc-volume-slider::-webkit-slider-runnable-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+.hannah-music-card .hmc-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 12px !important;
+  height: 12px !important;
+  background: #ff7fa5 !important;
+  border: 1px solid #0b2240 !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+.hannah-music-card .hmc-volume-slider::-moz-range-thumb {
+  width: 12px !important;
+  height: 12px !important;
+  background: #ff7fa5 !important;
+  border: 1px solid #0b2240 !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+
 
 
