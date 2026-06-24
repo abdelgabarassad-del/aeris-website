@@ -367,17 +367,17 @@
 
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
-      '251001377', '231002350', '241012132', '251002119',
-      '231012588', '251011829', '231012318', '241003033', '231002500'
+      '251001377', '241012132', '251002119',
+      '231012588', '251011829', '231012318', '241003033', '231002350'
     ]);
 
     const ALL_MEMBERS = new Set([
       '251000861', '251012364', '221011368', '251001249', '251010424',
       '251000305', '241012132', '231003934', '251001767', '251000553',
-      '251001377', '251010151', '241003033', '231002350', '251001035',
+      '251001377', '251010151', '241003033', '251001035',
       '251002119', '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002500'
+      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002350'
     ]);
 
     const ADVISORS = {
@@ -388,7 +388,7 @@
     };
 
     const AUTHORIZED_REVIEWERS = new Set([
-      '8383', '9749', '5970', '5550', '231002350', '231002500'
+      '8383', '9749', '5970', '5550', '231002350'
     ]);
 
     const PERSONAL_GREETINGS = {
@@ -406,8 +406,7 @@
       '251000553': { name: 'Khalid Ahmed Mohamed', message: 'malk el computer vision' },
       '251010151': { name: 'Sherry George Youssef', message: '4ofy tasks eh el nahrdah ya 7aga' },
       '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
-      '231002350': { name: 'Abduljabar asaad', message: 'el tomyah 4a5syan' },
-      '231002500': { name: 'Abduljabar asaad', message: 'Greetings, CGS!' },
+      '231002350': { name: 'Abduljabar asaad', message: 'Greetings, CGS!' },
       '251001035': { name: 'Yousef Ashraf Sakr', message: 'malk el need for speed irl' },
       '251002119': { name: 'Absher Sorour', message: 'sba7 el btats' },
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
@@ -447,8 +446,7 @@
     const sessionReg = safeSession.getItem('aeris_auth_reg');
     if (sessionRole && sessionReg && (ALL_MEMBERS.has(sessionReg) || ADVISORS[sessionReg])) {
       // Apply theme class early for instant styling
-      if (sessionReg === '231002350') document.body.classList.add('duck-theme');
-      if (sessionReg === '231002500') document.body.classList.add('soviet-theme');
+      if (sessionReg === '231002350') document.body.classList.add('soviet-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
@@ -669,191 +667,6 @@
 
       volumeSlider.addEventListener('click', (e) => {
         e.stopPropagation();
-      });
-
-      // Try autoplaying on load
-      playAudio();
-
-      // Fallback: Play on first document interaction
-      const autoplayFallback = () => {
-        if (!isPlaying && elapsedTime === 0) {
-          playAudio();
-        }
-        document.removeEventListener('click', autoplayFallback);
-        document.removeEventListener('keydown', autoplayFallback);
-      };
-      document.addEventListener('click', autoplayFallback);
-      document.addEventListener('keydown', autoplayFallback);
-    }
-
-    /* ========== ABDULJABAR'S MUSIC CARD LOGIC (KINO - CALM NIGHT) ========== */
-    function playDuckSong() {
-      if (document.getElementById('duck-music-card')) return;
-
-      const musicCardHTML = `
-        <div class="duck-music-card" id="duck-music-card">
-          <div class="hmc-album-art">
-            <div class="hmc-vinyl-wrapper">
-              <svg class="hmc-vinyl" viewBox="0 0 100 100">
-                <!-- Vinyl base -->
-                <circle cx="50" cy="50" r="48" fill="#111" stroke="#222" stroke-width="2"/>
-                <circle cx="50" cy="50" r="40" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="2 1"/>
-                <circle cx="50" cy="50" r="32" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="3 2"/>
-                <!-- Label (Duck Theme orange) -->
-                <circle cx="50" cy="50" r="18" fill="#f97316"/>
-                <text x="50" y="47" font-size="6" font-family="'Fredoka', sans-serif" font-weight="bold" fill="#0b2240" text-anchor="middle">KINO</text>
-                <text x="50" y="55" font-size="4" font-family="'Fredoka', sans-serif" fill="#0b2240" text-anchor="middle">CALM NIGHT</text>
-                <!-- Center hole -->
-                <circle cx="50" cy="50" r="3" fill="#0b2240"/>
-              </svg>
-            </div>
-            <div class="hmc-music-note">🦆</div>
-          </div>
-          
-          <div class="hmc-info">
-            <div class="hmc-track-title">Спокойная ночь</div>
-            <div class="hmc-artist">Кино — Calm Night [Outro] 💤</div>
-            
-            <div class="hmc-controls-row">
-              <!-- Equalizer / Visualizer -->
-              <div class="hmc-visualizer" id="dmc-visualizer">
-                <span class="hmc-bar hmc-bar-1"></span>
-                <span class="hmc-bar hmc-bar-2"></span>
-                <span class="hmc-bar hmc-bar-3"></span>
-                <span class="hmc-bar hmc-bar-4"></span>
-              </div>
-              
-              <!-- Buttons -->
-              <div class="hmc-buttons">
-                <button class="hmc-btn" id="dmc-play-pause" title="Play/Pause">
-                  <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                  <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </button>
-                <button class="hmc-btn hmc-close-btn" id="dmc-close" title="Dismiss">&times;</button>
-              </div>
-            </div>
-            
-            <!-- Progress Bar -->
-            <div class="hmc-progress-container">
-              <div class="hmc-progress-bar" id="dmc-progress-bar"></div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = musicCardHTML;
-      const cardEl = tempDiv.firstElementChild;
-      document.body.appendChild(cardEl);
-
-      const audio = new Audio('images/calm_night.webm');
-      audio.volume = 0.5;
-
-      const playPauseBtn = document.getElementById('dmc-play-pause');
-      const closeBtn = document.getElementById('dmc-close');
-      const progressBar = document.getElementById('dmc-progress-bar');
-      const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
-      const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
-
-      let isPlaying = false;
-      let playDuration = 60; // plays for 60 seconds
-      let progressInterval = null;
-      let startTime = 0;
-      let elapsedTime = 0;
-      let fadeInterval = null;
-
-      function updateUI(playing) {
-        isPlaying = playing;
-        if (playing) {
-          cardEl.classList.add('playing');
-          iconPause.style.display = 'block';
-          iconPlay.style.display = 'none';
-        } else {
-          cardEl.classList.remove('playing');
-          iconPause.style.display = 'none';
-          iconPlay.style.display = 'block';
-        }
-      }
-
-      function startProgress() {
-        clearInterval(progressInterval);
-        startTime = Date.now() - (elapsedTime * 1000);
-        progressInterval = setInterval(() => {
-          if (!isPlaying) return;
-          const currentElapsed = (Date.now() - startTime) / 1000;
-          elapsedTime = currentElapsed;
-          const percentage = Math.min((elapsedTime / playDuration) * 100, 100);
-          progressBar.style.width = percentage + '%';
-          
-          if (elapsedTime >= playDuration) {
-            clearInterval(progressInterval);
-            fadeOutAndStop();
-          }
-        }, 100);
-      }
-
-      function pauseProgress() {
-        clearInterval(progressInterval);
-      }
-
-      function playAudio() {
-        if (fadeInterval) clearInterval(fadeInterval);
-        audio.volume = 0.5;
-        audio.play().then(() => {
-          updateUI(true);
-          startProgress();
-        }).catch(err => {
-          console.warn("Autoplay blocked, waiting for user click/interaction.", err);
-          updateUI(false);
-        });
-      }
-
-      function pauseAudio() {
-        audio.pause();
-        updateUI(false);
-        pauseProgress();
-      }
-
-      function fadeOutAndStop() {
-        clearInterval(progressInterval);
-        if (fadeInterval) clearInterval(fadeInterval);
-        
-        fadeInterval = setInterval(() => {
-          if (audio.volume > 0.05) {
-            audio.volume -= 0.05;
-          } else {
-            clearInterval(fadeInterval);
-            audio.pause();
-            audio.currentTime = 0;
-            elapsedTime = 0;
-            progressBar.style.width = '0%';
-            updateUI(false);
-          }
-        }, 100);
-      }
-
-      playPauseBtn.addEventListener('click', () => {
-        if (isPlaying) {
-          pauseAudio();
-        } else {
-          if (elapsedTime >= playDuration) {
-            elapsedTime = 0;
-            progressBar.style.width = '0%';
-            audio.currentTime = 0;
-          }
-          playAudio();
-        }
-      });
-
-      closeBtn.addEventListener('click', () => {
-        audio.pause();
-        clearInterval(progressInterval);
-        if (fadeInterval) clearInterval(fadeInterval);
-        cardEl.style.opacity = '0';
-        cardEl.style.transform = 'translateX(120%) scale(0.9)';
-        setTimeout(() => {
-          cardEl.remove();
-        }, 500);
       });
 
       // Try autoplaying on load
@@ -1100,7 +913,7 @@
               </div>
             `;
           } else {
-            const isCEO = regNum === '231002350' || regNum === '231002500';
+            const isCEO = regNum === '231002350';
             const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
             bannerHTML = `
               <div class="welcome-banner__icon">${roleIcon}</div>
@@ -1111,7 +924,7 @@
             `;
           }
         } else {
-          const isCEO = regNum === '231002350' || regNum === '231002500';
+          const isCEO = regNum === '231002350';
           const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
           bannerHTML = `
             <div class="welcome-banner__icon">${roleIcon}</div>
@@ -1143,7 +956,6 @@
         // Apply per-user themes
         applyFrenchUI();
         applyStitchTheme();
-        applyDuckTheme();
         applyMickeyTheme();
         applyLoveTheme();
         applySpongebobTheme();
@@ -1165,13 +977,8 @@
           playHannahSong();
         }
 
-        // Kick off Abduljabar's custom music player
-        if (regNum === '231002350') {
-          playDuckSong();
-        }
-
         // Kick off Soviet custom music player
-        if (regNum === '231002500') {
+        if (regNum === '231002350') {
           playSovietSong();
         }
       }, 600);
@@ -1203,7 +1010,7 @@
           welcomeText = `Access granted — ${person.message}`;
         }
       } else {
-        const isCEO = regNum === '231002350' || regNum === '231002500';
+        const isCEO = regNum === '231002350';
         const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
         welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
       }
@@ -1238,7 +1045,6 @@
       safeSession.setItem('aeris_auth_role', role);
       safeSession.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
-      if (regNum === DUCK_REG) document.body.classList.add('duck-theme');
       if (regNum === SOVIET_REG) document.body.classList.add('soviet-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
@@ -1552,7 +1358,6 @@
 
       // Flash success
       const isFr = isFrenchUser();
-      const isDuck = isDuckUser();
       const isMickey = isMickeyUser();
       let successText = '✓ Added!';
       let defaultText = ' Add Task';
@@ -1562,13 +1367,10 @@
       } else if (isFr) {
         successText = '✓ Ajoutée !';
         defaultText = ' Ajouter la Tâche';
-      } else if (isDuck) {
-        successText = '✓ Quack Logged! 🦆';
-        defaultText = ' Log Quack';
       }
       submitBtn.textContent = successText;
-      submitBtn.style.background = isDuck ? '#fbbf24' : '#7dd3a8';
-      submitBtn.style.color = isDuck ? '#111' : '';
+      submitBtn.style.background = '#7dd3a8';
+      submitBtn.style.color = '';
       setTimeout(() => {
         submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + defaultText;
         submitBtn.style.background = '';
@@ -1856,7 +1658,7 @@
       if (advisor) {
         authorName = advisor.name;
         authorRole = advisor.title;
-      } else if (regNum === '231002350' || regNum === '231002500') {
+      } else if (regNum === '231002350') {
         authorName = 'Abduljabar Asaad';
         authorRole = 'Project Founder & CEO';
       }
@@ -3612,309 +3414,7 @@
       return safeSession.getItem('aeris_auth_reg') === MICKEY_REG;
     }
 
-    /* ========== DUCK THEME (231002350 only) ========== */
-    const DUCK_REG = '231002350';
 
-    function isDuckUser() {
-      return safeSession.getItem('aeris_auth_reg') === DUCK_REG;
-    }
-
-    function getDuckSilhouetteSVG(w = 80, h = 40) {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" width="${w}" height="${h}" class="duck-deco">
-        <!-- Cute duck swimming -->
-        <g fill="#fbbf24">
-          <!-- Body -->
-          <path d="M 20,25 C 20,35 45,45 65,40 C 75,37 85,28 85,20 C 85,15 70,18 65,18 C 50,18 45,20 40,25 C 32,25 25,22 20,25 Z" />
-          <!-- Head -->
-          <circle cx="35" cy="15" r="10" />
-          <!-- Eye -->
-          <circle cx="32" cy="13" r="1.5" fill="#111" />
-          <!-- Beak -->
-          <path d="M 25,14 C 20,13 18,17 25,18 Z" fill="#f97316" />
-          <!-- Wing -->
-          <path d="M 45,28 C 45,28 55,22 62,28 C 65,31 55,35 45,28 Z" fill="#f59e0b" />
-          <!-- Tail feathers -->
-          <path d="M 85,20 C 90,16 93,12 90,20 Z" />
-        </g>
-      </svg>`;
-    }
-
-    function getBreadRadarSVG(size = 90) {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="duck-radar">
-        <!-- Radar circles -->
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#14b8a6" stroke-width=".5" opacity=".4"/>
-        <circle cx="50" cy="50" r="30" fill="none" stroke="#14b8a6" stroke-width=".5" opacity=".3"/>
-        <circle cx="50" cy="50" r="15" fill="none" stroke="#14b8a6" stroke-width=".5" opacity=".2"/>
-        <!-- Crosshairs -->
-        <line x1="50" y1="5" x2="50" y2="95" stroke="#14b8a6" stroke-width=".3" opacity=".3"/>
-        <line x1="5" y1="50" x2="95" y2="50" stroke="#14b8a6" stroke-width=".3" opacity=".3"/>
-        <!-- Center duck footprint / dot -->
-        <circle cx="50" cy="50" r="2" fill="#fbbf24" opacity=".8"/>
-        <!-- Sweep line -->
-        <g class="duck-radar-sweep">
-          <line x1="50" y1="50" x2="50" y2="5" stroke="#14b8a6" stroke-width="1" opacity=".6"/>
-          <path d="M50 50 L47 8 A45 45 0 0 1 50 5 Z" fill="url(#radarTealGrad)" opacity=".3"/>
-        </g>
-        <defs>
-          <linearGradient id="radarTealGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#14b8a6" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#14b8a6" stop-opacity=".4"/>
-          </linearGradient>
-        </defs>
-        <!-- Bread crumb blips -->
-        <g opacity=".6">
-          <circle cx="32" cy="23" r="1.5" fill="#fbbf24">
-            <animate attributeName="opacity" values=".6;.1;.6" dur="2.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="66" cy="36" r="1.5" fill="#fbbf24">
-            <animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-      </svg>`;
-    }
-
-    function getQuackScopeSVG(size = 70) {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}" class="duck-hud">
-        <!-- Outer ring -->
-        <circle cx="50" cy="50" r="40" fill="none" stroke="#fbbf24" stroke-width=".8" opacity=".4" stroke-dasharray="5 3"/>
-        <!-- Inner ring -->
-        <circle cx="50" cy="50" r="25" fill="none" stroke="#14b8a6" stroke-width=".5" opacity=".3"/>
-        <!-- Crosshair lines -->
-        <line x1="50" y1="10" x2="50" y2="35" stroke="#fbbf24" stroke-width=".8" opacity=".5"/>
-        <line x1="50" y1="65" x2="50" y2="90" stroke="#fbbf24" stroke-width=".8" opacity=".5"/>
-        <line x1="10" y1="50" x2="35" y2="50" stroke="#fbbf24" stroke-width=".8" opacity=".5"/>
-        <line x1="65" y1="50" x2="90" y2="50" stroke="#fbbf24" stroke-width=".8" opacity=".5"/>
-        <!-- Center duck beak shape target -->
-        <polygon points="50,45 54,53 46,53" fill="none" stroke="#f97316" stroke-width="1" opacity=".7"/>
-        <!-- Corner brackets -->
-        <path d="M15 25 L15 15 L25 15" fill="none" stroke="#14b8a6" stroke-width=".6" opacity=".3"/>
-        <path d="M75 15 L85 15 L85 25" fill="none" stroke="#14b8a6" stroke-width=".6" opacity=".3"/>
-        <path d="M85 75 L85 85 L75 85" fill="none" stroke="#14b8a6" stroke-width=".6" opacity=".3"/>
-        <path d="M25 85 L15 85 L15 75" fill="none" stroke="#14b8a6" stroke-width=".6" opacity=".3"/>
-        <text x="82" y="32" fill="#fbbf24" font-size="5" opacity=".3" font-family="monospace">QUK</text>
-        <text x="5" y="80" fill="#14b8a6" font-size="5" opacity=".3" font-family="monospace">PND</text>
-      </svg>`;
-    }
-
-    function applyDuckTheme() {
-      if (!isDuckUser()) {
-        document.body.classList.remove('duck-theme');
-        document.querySelectorAll('.duck-radar, .duck-hud, .duck-bubbles, .duck-telemetry-left, .duck-telemetry-right, .duck-scanline, .duck-master-caution, .duck-compass-tape, .duck-hud-fpm').forEach(el => el.remove());
-        if (window.duckTelemetryInterval) {
-          clearInterval(window.duckTelemetryInterval);
-          window.duckTelemetryInterval = null;
-        }
-        return;
-      }
-
-      // Add theme class
-      document.body.classList.add('duck-theme');
-
-      // Inject duck silhouette into welcome banner
-      const welcomeBanner = document.getElementById('welcome-banner');
-      if (welcomeBanner) {
-        if (!welcomeBanner.querySelector('.duck-deco')) {
-          welcomeBanner.insertAdjacentHTML('beforeend', getDuckSilhouetteSVG(80, 40));
-        }
-        // Replace welcome banner icon with a duck icon SVG
-        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
-        if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 2a5 5 0 0 0-5 5c0 1.5.5 3 1.5 4a8 8 0 0 0-4.5 7h16a8 8 0 0 0-4.5-7c1-1 1.5-2.5 1.5-4a5 5 0 0 0-5-5z"/><circle cx="12" cy="7" r="1" fill="currentColor"/></svg>`;
-        }
-      }
-
-      // Inject duck into empty state
-      const emptyState = document.getElementById('empty-state');
-      if (emptyState && !emptyState.querySelector('.duck-empty-deco')) {
-        const duckEmpty = document.createElement('div');
-        duckEmpty.className = 'duck-empty-deco';
-        duckEmpty.innerHTML = getDuckSilhouetteSVG(100, 50);
-        const emptyH3 = emptyState.querySelector('h3');
-        if (emptyH3) {
-          emptyState.insertBefore(duckEmpty, emptyH3);
-          const defaultSvg = emptyState.querySelector(':scope > svg');
-          if (defaultSvg) defaultSvg.style.display = 'none';
-        }
-      }
-
-      // Radar sweep — bottom left
-      if (!document.querySelector('.duck-radar')) {
-        const temp = document.createElement('div');
-        temp.innerHTML = getBreadRadarSVG(90);
-        document.body.appendChild(temp.firstElementChild);
-      }
-
-      // HUD crosshair — bottom right
-      if (!document.querySelector('.duck-hud')) {
-        const temp = document.createElement('div');
-        temp.innerHTML = getQuackScopeSVG(70);
-        document.body.appendChild(temp.firstElementChild);
-      }
-
-      // Bubbles
-      if (!document.querySelector('.duck-bubbles')) {
-        const bubbles = document.createElement('div');
-        bubbles.className = 'duck-bubbles';
-        for(let i=0; i<15; i++) {
-          const b = document.createElement('span');
-          b.style.left = Math.random() * 100 + '%';
-          b.style.width = Math.random() * 16 + 8 + 'px';
-          b.style.height = b.style.width;
-          b.style.animationDelay = Math.random() * 8 + 's';
-          b.style.animationDuration = Math.random() * 6 + 4 + 's';
-          bubbles.appendChild(b);
-        }
-        document.body.appendChild(bubbles);
-      }
-
-      // Side tapes (Telemetry displays)
-      if (!document.querySelector('.duck-telemetry-left')) {
-        const leftTape = document.createElement('div');
-        leftTape.className = 'duck-telemetry-left';
-        leftTape.innerHTML = `
-          <div class="tape-depth">DEPTH <span class="tape-val">4.2m</span></div>
-          <div class="tape-swim">SWIM <span class="tape-val">1.8 KTS</span></div>
-          <div class="tape-quack">QUACK <span class="tape-val">4.2 Q/m</span></div>
-          <div class="tape-temp">TEMP <span class="tape-val">18.2°C</span></div>
-        `;
-        document.body.appendChild(leftTape);
-      }
-
-      if (!document.querySelector('.duck-telemetry-right')) {
-        const rightTape = document.createElement('div');
-        rightTape.className = 'duck-telemetry-right';
-        rightTape.innerHTML = `
-          <div class="flock-status">FLOCK: ACTIVE</div>
-          <div class="bread-status">BREAD: TARGETED</div>
-          <div class="radar-scan">TGT: LOCKED</div>
-          <div class="flock-size">FLOCK SIZE: 12</div>
-        `;
-        document.body.appendChild(rightTape);
-      }
-
-      // Scanline overlay (faint water ripples)
-      if (!document.querySelector('.duck-scanline')) {
-        const scanline = document.createElement('div');
-        scanline.className = 'duck-scanline';
-        document.body.appendChild(scanline);
-      }
-
-      // Blinking warning banner
-      if (!document.querySelector('.duck-master-caution')) {
-        const caution = document.createElement('div');
-        caution.className = 'duck-master-caution';
-        caution.innerHTML = '<span>🚨 QUACK WARNING: FEED BREAD</span>';
-        document.body.appendChild(caution);
-      }
-
-      // Horizontal compass tape
-      const dashboardPage = document.getElementById('dashboard-page');
-      const container = dashboardPage ? dashboardPage.querySelector('.container') : null;
-      if (container && !document.querySelector('.duck-compass-tape')) {
-        const compass = document.createElement('div');
-        compass.className = 'duck-compass-tape';
-        compass.innerHTML = `
-          <span>W</span> <span>🦆</span> <span>SW</span> <span>🦆</span> <span>S</span> <span>🦆</span> <span class="active-hdg">🦆 FLOW</span> <span>🦆</span> <span>E</span> <span>🦆</span> <span>NE</span> <span>🦆</span> <span>N</span>
-        `;
-        container.insertBefore(compass, container.firstChild);
-      }
-
-      // Fixed Flight Path Marker HUD Vector
-      if (!document.querySelector('.duck-hud-fpm')) {
-        const fpm = document.createElement('div');
-        fpm.className = 'duck-hud-fpm';
-        fpm.innerHTML = `
-          <svg viewBox="0 0 100 100" width="40" height="40">
-            <circle cx="50" cy="50" r="12" fill="none" stroke="#fbbf24" stroke-width="1"/>
-            <line x1="10" y1="50" x2="38" y2="50" stroke="#fbbf24" stroke-width="1"/>
-            <line x1="62" y1="50" x2="90" y2="50" stroke="#fbbf24" stroke-width="1"/>
-            <path d="M45,45 Q50,35 55,45 Z" fill="none" stroke="#f97316" stroke-width="1.2"/>
-          </svg>
-        `;
-        document.body.appendChild(fpm);
-      }
-
-      // Real-time telemetry simulation interval
-      if (window.duckTelemetryInterval) clearInterval(window.duckTelemetryInterval);
-      
-      const leftTapeEl = document.querySelector('.duck-telemetry-left');
-      const rightTapeEl = document.querySelector('.duck-telemetry-right');
-      
-      if (leftTapeEl && rightTapeEl) {
-        window.duckTelemetryInterval = setInterval(() => {
-          // Depth fluctuates
-          const depthVal = leftTapeEl.querySelector('.tape-depth .tape-val');
-          if (depthVal) {
-            const currentDepth = parseFloat(depthVal.textContent.replace('m', ''));
-            const diff = (Math.random() * 0.4 - 0.2); // -0.2 to +0.2
-            depthVal.textContent = Math.max(0.5, currentDepth + diff).toFixed(1) + 'm';
-          }
-          
-          // Swim Speed fluctuates
-          const swimVal = leftTapeEl.querySelector('.tape-swim .tape-val');
-          if (swimVal) {
-            const currentSwim = parseFloat(swimVal.textContent.replace(' KTS', ''));
-            const diff = (Math.random() * 0.3 - 0.15); // -0.15 to +0.15
-            swimVal.textContent = Math.max(0.1, currentSwim + diff).toFixed(2) + ' KTS';
-          }
-
-          // Quack rate fluctuates
-          const quackVal = leftTapeEl.querySelector('.tape-quack .tape-val');
-          if (quackVal) {
-            const currentQuack = parseFloat(quackVal.textContent.replace(' Q/m', ''));
-            const diff = (Math.random() * 1.0 - 0.5); // -0.5 to +0.5
-            quackVal.textContent = Math.max(1.0, currentQuack + diff).toFixed(1) + ' Q/m';
-          }
-          
-          // Flock size fluctuates
-          const sizeVal = rightTapeEl.querySelector('.flock-size');
-          if (sizeVal) {
-            const currentSize = parseInt(sizeVal.textContent.replace('FLOCK SIZE: ', ''));
-            const diff = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
-            sizeVal.textContent = 'FLOCK SIZE: ' + Math.max(1, currentSize + diff);
-          }
-        }, 1200);
-      }
-
-      // Customize task form for Duck user
-      const formTitle = document.querySelector('.task-form__title');
-      if (formTitle) {
-        const svg = formTitle.querySelector('svg');
-        formTitle.textContent = '';
-        if (svg) formTitle.appendChild(svg);
-        formTitle.append(' Log New Quack / Task');
-      }
-      const labelTaskTitle = document.querySelector('label[for="task-title"]');
-      if (labelTaskTitle) labelTaskTitle.textContent = 'Activity / Feed Directive';
-      const inputTaskTitle = document.getElementById('task-title');
-      if (inputTaskTitle) inputTaskTitle.placeholder = 'Bread retrieval or pond maintenance...';
-
-      const labelTaskDesc = document.querySelector('label[for="task-description"]');
-      if (labelTaskDesc) labelTaskDesc.textContent = 'Duck Parameters / Instructions';
-      const inputTaskDesc = document.getElementById('task-description');
-      if (inputTaskDesc) inputTaskDesc.placeholder = 'Provide detailed specifications for the flock...';
-
-      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
-      if (labelTaskPriority) labelTaskPriority.textContent = 'Quack Intensity / Urgency';
-      const prioritySelect = document.getElementById('task-priority');
-      if (prioritySelect) {
-        prioritySelect.querySelector('option[value="low"]').textContent = '🦆 Float (Low)';
-        prioritySelect.querySelector('option[value="medium"]').textContent = '🦆 Paddle (Med)';
-        prioritySelect.querySelector('option[value="high"]').textContent = '🦆 Dive (High)';
-        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 QUACK STRIKE (Urgent)';
-      }
-
-      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
-      if (labelTaskDeadline) labelTaskDeadline.textContent = 'Target Feed Time / ETA';
-
-      const submitTaskBtn = document.getElementById('submit-task');
-      if (submitTaskBtn) {
-        const svg = submitTaskBtn.querySelector('svg');
-        submitTaskBtn.textContent = '';
-        if (svg) submitTaskBtn.appendChild(svg);
-        submitTaskBtn.append(' Log Quack');
-      }
-    }
 
     function applyMickeyTheme() {
       if (!isMickeyUser()) {
@@ -4008,8 +3508,8 @@
       }
     }
 
-    /* ========== RETRO SOVIET THEME (231002500 only) ========== */
-    const SOVIET_REG = '231002500';
+    /* ========== RETRO SOVIET THEME (231002350 only) ========== */
+    const SOVIET_REG = '231002350';
 
     function isSovietUser() {
       return safeSession.getItem('aeris_auth_reg') === SOVIET_REG;
@@ -5362,40 +4862,6 @@
             <div class="task-card__top">
               <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approuvé</span>` : ''}
-              ${deleteBtn}
-            </div>
-            <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
-            ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
-            <div class="task-card__footer">
-              ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                ${deadlineStr}
-              </span>` : ''}
-              ${actions}
-            </div>
-          </div>
-        `;
-      }
-
-      if (isDuckUser()) {
-        const priorityLabels = { low: '🦆 Float', medium: '🦆 Paddle', high: '🦆 Dive', urgent: '🚨 QUACK STRIKE' };
-        const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-        const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
-
-        let actions = '';
-        if (task.status === 'todo') {
-          actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Paddle task">▶ Paddle</button>`;
-        } else if (task.status === 'progress') {
-          actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Quack task">✓ Quacked</button>`;
-        }
-
-        const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Delete task">&times;</button>` : '';
-
-        return `
-          <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
-            <div class="task-card__top">
-              <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
-              ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
               ${deleteBtn}
             </div>
             <h4 class="task-card__title">${escapeHtml(task.title)}</h4>
