@@ -368,7 +368,7 @@
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
       '251001377', '231002350', '241012132', '251002119',
-      '231012588', '251011829', '231012318', '241003033'
+      '231012588', '251011829', '231012318', '241003033', '231002500'
     ]);
 
     const ALL_MEMBERS = new Set([
@@ -377,7 +377,7 @@
       '251001377', '251010151', '241003033', '231002350', '251001035',
       '251002119', '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829', '7676767766'
+      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002500'
     ]);
 
     const ADVISORS = {
@@ -388,7 +388,7 @@
     };
 
     const AUTHORIZED_REVIEWERS = new Set([
-      '8383', '9749', '5970', '5550', '231002350'
+      '8383', '9749', '5970', '5550', '231002350', '231002500'
     ]);
 
     const PERSONAL_GREETINGS = {
@@ -407,6 +407,7 @@
       '251010151': { name: 'Sherry George Youssef', message: '4ofy tasks eh el nahrdah ya 7aga' },
       '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
       '231002350': { name: 'Abduljabar asaad', message: 'el tomyah 4a5syan' },
+      '231002500': { name: 'Abduljabar asaad', message: 'Greetings, Comrade General Secretary! ☭' },
       '251001035': { name: 'Yousef Ashraf Sakr', message: 'malk el need for speed irl' },
       '251002119': { name: 'Absher Sorour', message: 'sba7 el btats' },
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
@@ -447,6 +448,7 @@
     if (sessionRole && sessionReg && (ALL_MEMBERS.has(sessionReg) || ADVISORS[sessionReg])) {
       // Apply theme class early for instant styling
       if (sessionReg === '231002350') document.body.classList.add('duck-theme');
+      if (sessionReg === '231002500') document.body.classList.add('soviet-theme');
       if (sessionReg === '251011829') document.body.classList.add('mickey-theme');
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
@@ -835,6 +837,191 @@
       document.addEventListener('keydown', autoplayFallback);
     }
 
+    /* ========== SOVIET MUSIC CARD LOGIC (KINO - CALM NIGHT) ========== */
+    function playSovietSong() {
+      if (document.getElementById('soviet-music-card')) return;
+
+      const musicCardHTML = `
+        <div class="soviet-music-card" id="soviet-music-card">
+          <div class="hmc-album-art">
+            <div class="hmc-vinyl-wrapper">
+              <svg class="hmc-vinyl" viewBox="0 0 100 100">
+                <!-- Vinyl base -->
+                <circle cx="50" cy="50" r="48" fill="#111" stroke="#222" stroke-width="2"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="2 1"/>
+                <circle cx="50" cy="50" r="32" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="3 2"/>
+                <!-- Label (Soviet Red / Gold) -->
+                <circle cx="50" cy="50" r="18" fill="#cc1111"/>
+                <text x="50" y="47" font-size="6" font-family="'Courier New', monospace" font-weight="bold" fill="#ffcc00" text-anchor="middle">КИНО</text>
+                <text x="50" y="55" font-size="4" font-family="'Courier New', monospace" fill="#ffcc00" text-anchor="middle">СПОКОЙНАЯ НОЧЬ</text>
+                <!-- Center hole -->
+                <circle cx="50" cy="50" r="3" fill="#ffcc00"/>
+              </svg>
+            </div>
+            <div class="hmc-music-note">☭</div>
+          </div>
+          
+          <div class="hmc-info">
+            <div class="hmc-track-title" style="font-family: 'Courier New', monospace; font-weight: bold; text-transform: uppercase;">Спокойная ночь</div>
+            <div class="hmc-artist" style="font-family: 'Courier New', monospace; color: #ffcc00;">Кино — Soviet Outro Loop ☭</div>
+            
+            <div class="hmc-controls-row">
+              <!-- Equalizer / Visualizer -->
+              <div class="hmc-visualizer" id="smc-visualizer">
+                <span class="hmc-bar hmc-bar-1"></span>
+                <span class="hmc-bar hmc-bar-2"></span>
+                <span class="hmc-bar hmc-bar-3"></span>
+                <span class="hmc-bar hmc-bar-4"></span>
+              </div>
+              
+              <!-- Buttons -->
+              <div class="hmc-buttons">
+                <button class="hmc-btn" id="smc-play-pause" title="Play/Pause">
+                  <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="hmc-btn hmc-close-btn" id="smc-close" title="Dismiss">&times;</button>
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="hmc-progress-container">
+              <div class="hmc-progress-bar" id="smc-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = musicCardHTML;
+      const cardEl = tempDiv.firstElementChild;
+      document.body.appendChild(cardEl);
+
+      const audio = new Audio('images/calm_night.webm');
+      audio.volume = 0.5;
+
+      const playPauseBtn = document.getElementById('smc-play-pause');
+      const closeBtn = document.getElementById('smc-close');
+      const progressBar = document.getElementById('smc-progress-bar');
+      const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
+      const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
+
+      let isPlaying = false;
+      let playDuration = 60; // plays for 60 seconds
+      let progressInterval = null;
+      let startTime = 0;
+      let elapsedTime = 0;
+      let fadeInterval = null;
+
+      function updateUI(playing) {
+        isPlaying = playing;
+        if (playing) {
+          cardEl.classList.add('playing');
+          iconPause.style.display = 'block';
+          iconPlay.style.display = 'none';
+        } else {
+          cardEl.classList.remove('playing');
+          iconPause.style.display = 'none';
+          iconPlay.style.display = 'block';
+        }
+      }
+
+      function startProgress() {
+        clearInterval(progressInterval);
+        startTime = Date.now() - (elapsedTime * 1000);
+        progressInterval = setInterval(() => {
+          if (!isPlaying) return;
+          const currentElapsed = (Date.now() - startTime) / 1000;
+          elapsedTime = currentElapsed;
+          const percentage = Math.min((elapsedTime / playDuration) * 100, 100);
+          progressBar.style.width = percentage + '%';
+          
+          if (elapsedTime >= playDuration) {
+            clearInterval(progressInterval);
+            fadeOutAndStop();
+          }
+        }, 100);
+      }
+
+      function pauseProgress() {
+        clearInterval(progressInterval);
+      }
+
+      function playAudio() {
+        if (fadeInterval) clearInterval(fadeInterval);
+        audio.volume = 0.5;
+        audio.play().then(() => {
+          updateUI(true);
+          startProgress();
+        }).catch(err => {
+          console.warn("Autoplay blocked, waiting for user click/interaction.", err);
+          updateUI(false);
+        });
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        updateUI(false);
+        pauseProgress();
+      }
+
+      function fadeOutAndStop() {
+        clearInterval(progressInterval);
+        if (fadeInterval) clearInterval(fadeInterval);
+        
+        fadeInterval = setInterval(() => {
+          if (audio.volume > 0.05) {
+            audio.volume -= 0.05;
+          } else {
+            clearInterval(fadeInterval);
+            audio.pause();
+            audio.currentTime = 0;
+            elapsedTime = 0;
+            progressBar.style.width = '0%';
+            updateUI(false);
+          }
+        }, 100);
+      }
+
+      playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          pauseAudio();
+        } else {
+          if (elapsedTime >= playDuration) {
+            elapsedTime = 0;
+            progressBar.style.width = '0%';
+            audio.currentTime = 0;
+          }
+          playAudio();
+        }
+      });
+
+      closeBtn.addEventListener('click', () => {
+        audio.pause();
+        clearInterval(progressInterval);
+        if (fadeInterval) clearInterval(fadeInterval);
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'translateX(120%) scale(0.9)';
+        setTimeout(() => {
+          cardEl.remove();
+        }, 500);
+      });
+
+      // Try autoplaying on load
+      playAudio();
+
+      // Fallback: Play on first document interaction
+      const autoplayFallback = () => {
+        if (!isPlaying && elapsedTime === 0) {
+          playAudio();
+        }
+        document.removeEventListener('click', autoplayFallback);
+        document.removeEventListener('keydown', autoplayFallback);
+      };
+      document.addEventListener('click', autoplayFallback);
+      document.addEventListener('keydown', autoplayFallback);
+    }
+
     function grantAccess(role, regNum) {
       authGate.classList.add('auth-gate--granted');
       setTimeout(() => {
@@ -937,6 +1124,7 @@
         applyPoohTheme();
         applyTweetyTheme();
         applySchnozTheme();
+        applySovietTheme();
 
         // Kick off Hannah's custom music player
         if (regNum === '251001377') {
@@ -946,6 +1134,11 @@
         // Kick off Abduljabar's custom music player
         if (regNum === '231002350') {
           playDuckSong();
+        }
+
+        // Kick off Soviet custom music player
+        if (regNum === '231002500') {
+          playSovietSong();
         }
       }, 600);
     }
@@ -1011,6 +1204,7 @@
       safeSession.setItem('aeris_auth_reg', regNum);
       // Apply theme early so auth success has themed styling
       if (regNum === DUCK_REG) document.body.classList.add('duck-theme');
+      if (regNum === SOVIET_REG) document.body.classList.add('soviet-theme');
       if (regNum === MICKEY_REG) document.body.classList.add('mickey-theme');
       if (regNum === '7676767766') document.body.classList.add('love-theme');
       if (regNum === '251003016') document.body.classList.add('spongebob-theme');
@@ -1627,7 +1821,7 @@
       if (advisor) {
         authorName = advisor.name;
         authorRole = advisor.title;
-      } else if (regNum === '231002350') {
+      } else if (regNum === '231002350' || regNum === '231002500') {
         authorName = 'Abduljabar Asaad';
         authorRole = 'Project Founder & CEO';
       }
@@ -3779,10 +3973,244 @@
       }
     }
 
+    /* ========== RETRO SOVIET THEME (231002500 only) ========== */
+    const SOVIET_REG = '231002500';
+
+    function isSovietUser() {
+      return safeSession.getItem('aeris_auth_reg') === SOVIET_REG;
+    }
+
+    function applySovietTheme() {
+      if (!isSovietUser()) {
+        document.body.classList.remove('soviet-theme');
+        document.querySelectorAll('.soviet-star, .soviet-corner, .soviet-corner-tl, .soviet-bubble, .soviet-telemetry-left, .soviet-telemetry-right, .soviet-scanline, .soviet-emblem-deco').forEach(el => el.remove());
+        if (window.sovietTelemetryInterval) {
+          clearInterval(window.sovietTelemetryInterval);
+          window.sovietTelemetryInterval = null;
+        }
+        return;
+      }
+
+      // Add theme class
+      document.body.classList.add('soviet-theme');
+
+      // Inject red star/emblem into welcome banner
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        if (!welcomeBanner.querySelector('.soviet-emblem-deco')) {
+          welcomeBanner.insertAdjacentHTML('beforeend', `
+            <svg class="soviet-emblem-deco" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="80" height="40" fill="#cc1111" opacity="0.15" style="position: absolute; right: 20px; bottom: 5px; pointer-events: none;">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          `);
+        }
+        // Replace welcome icon with a golden hammer & sickle / star SVG
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="#ffcc00">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          `;
+        }
+      }
+
+      // Soviet Satellite Sputnik corner widget — bottom left
+      if (!document.querySelector('.soviet-corner-tl')) {
+        const satellite = document.createElement('div');
+        satellite.className = 'soviet-corner-tl';
+        satellite.innerHTML = `
+          <svg viewBox="0 0 100 100" width="80" height="80" style="position: fixed; bottom: 20px; left: 20px; z-index: 999; animation: sputnikFloat 6s ease-in-out infinite;">
+            <!-- Sputnik body -->
+            <circle cx="50" cy="50" r="16" fill="#7a7a7a" stroke="#dcdcdc" stroke-width="2"/>
+            <circle cx="46" cy="46" r="3" fill="#a6a6a6"/>
+            <!-- Antennae -->
+            <line x1="36" y1="36" x2="5" y2="5" stroke="#dcdcdc" stroke-width="1.5" />
+            <line x1="34" y1="52" x2="2" y2="60" stroke="#dcdcdc" stroke-width="1.5" />
+            <line x1="52" y1="34" x2="60" y2="2" stroke="#dcdcdc" stroke-width="1.5" />
+            <!-- Beep signal waves -->
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#ffcc00" stroke-width="1" opacity="0">
+              <animate attributeName="r" values="16;50" dur="2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        `;
+        document.body.appendChild(satellite);
+      }
+
+      // Soviet Kremlin Star bottom-right clickable widget
+      if (!document.querySelector('.soviet-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'soviet-corner';
+        corner.innerHTML = `⭐`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'soviet-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "Поехали! (Let's go!) — Юрий Гагарин 🚀",
+          "Спутник-1: Бип... Бип... Бип... 🛰️",
+          "Земля в иллюминаторе... 🌍",
+          "Восток-1 на орбите! 📡",
+          "Дорога к звездам открыта! ✨",
+          "Выполним пятилетку в четыре года! 🛠️",
+          "Космос наш! 🌌",
+          "Труд облагораживает человека! 🔨"
+        ];
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // Side Telemetry Displays (Soviet/Cyrillic Space telemetries)
+      if (!document.querySelector('.soviet-telemetry-left')) {
+        const leftTape = document.createElement('div');
+        leftTape.className = 'soviet-telemetry-left';
+        leftTape.innerHTML = `
+          <div class="space-height">ОРБИТА <span class="tape-val">327 КМ</span></div>
+          <div class="space-speed">СКОРОСТЬ <span class="tape-val">7.9 КМ/С</span></div>
+          <div class="space-temp">ТЕМП. <span class="tape-val">+22.4°C</span></div>
+          <div class="space-press">ДАВЛЕНИЕ <span class="tape-val">1.2 АТМ</span></div>
+        `;
+        document.body.appendChild(leftTape);
+      }
+
+      if (!document.querySelector('.soviet-telemetry-right')) {
+        const rightTape = document.createElement('div');
+        rightTape.className = 'soviet-telemetry-right';
+        rightTape.innerHTML = `
+          <div class="sputnik-status">СПУТНИК-1: АКТИВЕН</div>
+          <div class="signal-frequency">ЧАСТОТА: 20.005 МГц</div>
+          <div class="telemetry-mode">РЕЖИМ: ПЕРЕДАЧА</div>
+          <div class="ussr-time">МОСКВА: UTC+3</div>
+        `;
+        document.body.appendChild(rightTape);
+      }
+
+      // CRT Scanline Overlay
+      if (!document.querySelector('.soviet-scanline')) {
+        const scanline = document.createElement('div');
+        scanline.className = 'soviet-scanline';
+        document.body.appendChild(scanline);
+      }
+
+      // Soviet Telemetry interval simulation
+      if (window.sovietTelemetryInterval) clearInterval(window.sovietTelemetryInterval);
+      const leftTapeEl = document.querySelector('.soviet-telemetry-left');
+      
+      if (leftTapeEl) {
+        window.sovietTelemetryInterval = setInterval(() => {
+          // Orbit fluctuates
+          const orbVal = leftTapeEl.querySelector('.space-height .tape-val');
+          if (orbVal) {
+            const currentOrb = parseFloat(orbVal.textContent.replace(' КМ', ''));
+            const diff = (Math.random() * 2 - 1); // -1 to +1 km
+            orbVal.textContent = Math.max(200, Math.min(450, currentOrb + diff)).toFixed(0) + ' КМ';
+          }
+          // Speed fluctuates slightly
+          const speedVal = leftTapeEl.querySelector('.space-speed .tape-val');
+          if (speedVal) {
+            const currentSpeed = parseFloat(speedVal.textContent.replace(' КМ/С', ''));
+            const diff = (Math.random() * 0.04 - 0.02);
+            speedVal.textContent = Math.max(7.5, Math.min(8.2, currentSpeed + diff)).toFixed(2) + ' КМ/С';
+          }
+          // Temp fluctuates
+          const tempVal = leftTapeEl.querySelector('.space-temp .tape-val');
+          if (tempVal) {
+            const currentTemp = parseFloat(tempVal.textContent.replace('°C', ''));
+            const diff = (Math.random() * 0.6 - 0.3);
+            tempVal.textContent = (currentTemp + diff).toFixed(1) + '°C';
+          }
+        }, 1200);
+      }
+
+      // Customize task board headers for Soviet Style
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' FIVE-YEAR PLAN DIRECTIVE (Add Task)');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🛠️ Directive Name (Task Title)';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '📜 Directive Contents (Description)';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🚩 Execution Priority';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Standard Production (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🛠️ Shock Brigade Work (Medium)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🚩 Five-Year Plan in Four Years! (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 RED SHOCK WORKER! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏳ Target Completion Date (Deadline)';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Approve & Log Directive');
+      }
+    }
+
      /* Override taskCard to use French or Jet labels depending on logged-in user */
      const _originalTaskCard = taskCard;
-     taskCard = function(task) {
-       if (isStitchUser()) {
+      taskCard = function(task) {
+        if (isSovietUser()) {
+          const priorityLabels = { 
+            low: '💤 Production Target (Low)', 
+            medium: '🛠️ Shock Brigade Work', 
+            high: '🚩 Five-Year Plan in 4 Years!', 
+            urgent: '🚨 RED SHOCK WORKER!' 
+          };
+          const deadlineStr = task.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+          const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'done';
+
+          let actions = '';
+          if (task.status === 'todo') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="Start Work">▶ Start Work</button>`;
+          } else if (task.status === 'progress') {
+            actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="Fulfill Target">✓ Fulfill</button>`;
+          }
+
+          const deleteBtn = currentRole === 'head' ? `<button class="task-card__delete" data-id="${task.id}" title="Remove Directive">&times;</button>` : '';
+
+          return `
+            <div class="task-card task-card--${task.priority}" data-id="${task.id}" id="task-${task.id}">
+              <div class="task-card__top">
+                <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+                ${task.isApproved ? `<span class="task-card__approved-pill">✓ Fulfilled & Approved</span>` : ''}
+                ${deleteBtn}
+              </div>
+              <h4 class="task-card__title">⭐ ${escapeHtml(task.title)} ☭</h4>
+              ${task.description ? `<p class="task-card__desc">${escapeHtml(task.description)}</p>` : ''}
+              <div class="task-card__footer">
+                ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ${deadlineStr}
+                </span>` : ''}
+                ${actions}
+              </div>
+            </div>
+          `;
+        }
+
+        if (isStitchUser()) {
          const priorityLabels = { 
            low: '💤 Expérience Endormie', 
            medium: '🐾 Méchanceté 10%', 

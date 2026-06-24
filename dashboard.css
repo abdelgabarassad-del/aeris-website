@@ -8515,3 +8515,334 @@ body.stitch-theme {
 .duck-music-card .hmc-progress-bar {
   background: linear-gradient(90deg, #14b8a6, #fbbf24);
 }
+
+/* ==========================================================================
+   ========== RETRO SOVIET THEME (231002500 only) ==========
+   ========================================================================== */
+
+.soviet-theme {
+  --soviet-red: #cc1111;
+  --soviet-gold: #ffcc00;
+  --soviet-dark: #121212;
+  --soviet-grey: #3e3e3e;
+  --soviet-border: #cc1111;
+  
+  font-family: 'Courier New', Courier, monospace !important;
+  font-weight: bold !important;
+  color: #f0f0f0 !important;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px;'><text y='24'>☭</text></svg>") 12 24, auto !important;
+}
+
+.soviet-theme .dashboard-page {
+  background: 
+    linear-gradient(rgba(204, 17, 17, 0.05), rgba(0, 0, 0, 0.85)),
+    radial-gradient(circle at 50% 30%, #2b1111 0%, #121212 100%) !important;
+  background-attachment: fixed;
+}
+
+.soviet-theme .welcome-banner {
+  background: #1e1e1e !important;
+  border: 3px solid var(--soviet-red) !important;
+  box-shadow: 0 0 20px rgba(204, 17, 17, 0.3) !important;
+  border-radius: 0px !important;
+}
+
+.soviet-theme .welcome-banner__greeting {
+  font-family: 'Courier New', Courier, monospace !important;
+  text-transform: uppercase;
+  color: var(--soviet-gold) !important;
+}
+
+.soviet-theme .welcome-banner__role {
+  font-family: 'Courier New', Courier, monospace !important;
+  text-transform: uppercase;
+  color: #ffffff !important;
+}
+
+.soviet-theme .task-column {
+  background: #181818 !important;
+  border: 2px solid var(--soviet-grey) !important;
+  border-radius: 0px !important;
+}
+
+.soviet-theme .task-column__header {
+  background: var(--soviet-red) !important;
+  color: var(--soviet-gold) !important;
+  text-transform: uppercase;
+  border-radius: 0px !important;
+  padding: 8px !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+.soviet-theme .task-column__count {
+  background: var(--soviet-gold) !important;
+  color: #000 !important;
+  border-radius: 0px !important;
+}
+
+.soviet-theme .task-card {
+  background: #252525 !important;
+  border: 2px solid var(--soviet-grey) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease;
+}
+
+.soviet-theme .task-card:hover {
+  border-color: var(--soviet-red) !important;
+  background: #2d2d2d !important;
+}
+
+.soviet-theme .task-card--low { border-left: 5px solid var(--soviet-grey) !important; }
+.soviet-theme .task-card--medium { border-left: 5px solid var(--soviet-gold) !important; }
+.soviet-theme .task-card--high { border-left: 5px solid var(--soviet-red) !important; }
+.soviet-theme .task-card--urgent { 
+  border-left: 5px solid var(--soviet-red) !important; 
+  border-right: 2px solid var(--soviet-gold) !important;
+  animation: sovietUrgentPulse 1s infinite alternate !important; 
+}
+
+@keyframes sovietUrgentPulse {
+  0% { box-shadow: inset 0 0 5px rgba(204, 17, 17, 0.4); }
+  100% { box-shadow: inset 0 0 15px rgba(204, 17, 17, 0.8), 0 0 10px rgba(204, 17, 17, 0.5); }
+}
+
+.soviet-theme .task-modal__content {
+  background: #1a1a1a !important;
+  border: 3px solid var(--soviet-red) !important;
+  border-radius: 0px !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+.soviet-theme .task-form-wrapper {
+  background: #1c1c1c !important;
+  border: 3px solid var(--soviet-red) !important;
+  border-radius: 0px !important;
+}
+
+.soviet-theme input, .soviet-theme textarea, .soviet-theme select {
+  background: #121212 !important;
+  border: 2px solid var(--soviet-grey) !important;
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  border-radius: 0px !important;
+}
+
+.soviet-theme input:focus, .soviet-theme textarea:focus, .soviet-theme select:focus {
+  border-color: var(--soviet-gold) !important;
+  outline: none !important;
+}
+
+.soviet-theme .btn-primary, .soviet-theme button {
+  background: var(--soviet-red) !important;
+  color: var(--soviet-gold) !important;
+  border: 2px solid var(--soviet-gold) !important;
+  text-transform: uppercase;
+  font-family: 'Courier New', Courier, monospace !important;
+  font-weight: bold;
+  border-radius: 0px !important;
+  cursor: pointer;
+}
+
+.soviet-theme .btn-primary:hover, .soviet-theme button:hover {
+  background: var(--soviet-gold) !important;
+  color: #000 !important;
+  border-color: var(--soviet-red) !important;
+}
+
+.soviet-theme .dept-tab {
+  background: #252525 !important;
+  border: 2px solid var(--soviet-grey) !important;
+  color: #888 !important;
+  border-radius: 0px !important;
+  text-transform: uppercase;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+.soviet-theme .dept-tab:hover {
+  border-color: var(--soviet-gold) !important;
+  color: #fff !important;
+}
+
+.soviet-theme .dept-tab.active {
+  background: var(--soviet-red) !important;
+  color: var(--soviet-gold) !important;
+  border-color: var(--soviet-gold) !important;
+}
+
+.soviet-theme .site-header {
+  background: #121212 !important;
+  border-bottom: 3px solid var(--soviet-red) !important;
+}
+
+.soviet-theme .site-header__logo {
+  color: var(--soviet-red) !important;
+  text-shadow: 0 0 10px rgba(204, 17, 17, 0.5);
+}
+
+.soviet-theme .duck-scanline { display: none !important; }
+
+.soviet-theme .soviet-scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%),
+    linear-gradient(90deg, rgba(204, 17, 17, 0.02), rgba(0, 0, 0, 0.02), rgba(255, 204, 0, 0.02));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.soviet-theme .soviet-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  font-size: 28px;
+  color: var(--soviet-gold);
+  background: var(--soviet-red);
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--soviet-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 999;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(204, 17, 17, 0.8);
+  transition: transform 0.2s ease;
+}
+
+.soviet-theme .soviet-corner:hover {
+  transform: scale(1.15) rotate(144deg);
+}
+
+.soviet-theme .soviet-bubble {
+  position: fixed;
+  bottom: 80px;
+  right: 32px;
+  background: #1c1c1c;
+  border: 2px solid var(--soviet-red);
+  color: var(--soviet-gold);
+  padding: 10px 14px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  max-width: 280px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.soviet-theme .soviet-bubble.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.soviet-theme .soviet-telemetry-left,
+.soviet-theme .soviet-telemetry-right {
+  position: fixed;
+  bottom: 20px;
+  background: rgba(18, 18, 18, 0.9);
+  border: 2px solid var(--soviet-red);
+  padding: 8px 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  color: #aaa;
+  z-index: 98;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.soviet-theme .soviet-telemetry-left { left: 120px; }
+.soviet-theme .soviet-telemetry-right { right: 90px; }
+
+.soviet-theme .soviet-telemetry-left div,
+.soviet-theme .soviet-telemetry-right div {
+  margin-bottom: 2px;
+}
+
+.soviet-theme .tape-val {
+  color: var(--soviet-gold);
+  font-weight: bold;
+}
+
+@keyframes sputnikFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* ========== SOVIET MUSIC CARD OVERRIDES ========== */
+.soviet-music-card {
+  position: fixed;
+  top: 95px;
+  right: 24px;
+  width: 320px;
+  background: rgba(26, 26, 26, 0.9) !important;
+  border: 2.5px solid var(--soviet-red) !important;
+  border-radius: 0px !important;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 32px rgba(204, 17, 17, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(12px);
+  z-index: 1001;
+  font-family: 'Courier New', Courier, monospace;
+  animation: hmcSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.soviet-music-card.playing .hmc-vinyl {
+  animation-play-state: running;
+}
+
+.soviet-music-card .hmc-music-note {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 14px;
+  animation: hmcFloatNote 2.5s infinite ease-in-out;
+  opacity: 0;
+  color: var(--soviet-gold);
+}
+
+.soviet-music-card.playing .hmc-music-note {
+  opacity: 1;
+}
+
+.soviet-music-card .hmc-bar {
+  width: 3px;
+  background: var(--soviet-gold);
+  border-radius: 0px !important;
+  height: 3px;
+  transition: height 0.15s ease;
+}
+
+.soviet-music-card.playing .hmc-bar-1 { animation: hmcBounce 0.8s ease-in-out infinite alternate; }
+.soviet-music-card.playing .hmc-bar-2 { animation: hmcBounce 0.5s ease-in-out infinite alternate 0.15s; }
+.soviet-music-card.playing .hmc-bar-3 { animation: hmcBounce 0.7s ease-in-out infinite alternate 0.3s; }
+.soviet-music-card.playing .hmc-bar-4 { animation: hmcBounce 0.6s ease-in-out infinite alternate 0.05s; }
+
+.soviet-music-card .hmc-btn {
+  border: 1.5px solid rgba(255, 204, 0, 0.35) !important;
+  border-radius: 0px !important;
+}
+
+.soviet-music-card .hmc-btn:hover {
+  background: var(--soviet-gold) !important;
+  border-color: var(--soviet-gold) !important;
+  color: #000000 !important;
+  transform: scale(1.1) !important;
+}
+
+.soviet-music-card .hmc-progress-bar {
+  background: var(--soviet-gold);
+  border-radius: 0px !important;
+}
+
+.soviet-music-card .hmc-progress-container {
+  border-radius: 0px !important;
+}
+
