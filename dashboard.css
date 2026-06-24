@@ -9007,4 +9007,125 @@ body.stitch-theme {
   border-radius: 0px !important;
 }
 
+/* Soviet news board overrides */
+.soviet-theme .news-section {
+  background: #120504 !important;
+  border: 3px solid var(--soviet-cyan) !important;
+  box-shadow: 0 0 25px rgba(163, 45, 23, 0.25) !important;
+  border-radius: 0px !important;
+  font-family: 'VT323', monospace !important;
+}
+
+.soviet-theme .news-header {
+  border-bottom: 2px solid var(--soviet-border) !important;
+}
+
+.soviet-theme .news-header__icon {
+  color: var(--soviet-cyan) !important;
+  filter: drop-shadow(0 0 8px rgba(163, 45, 23, 0.45)) !important;
+}
+
+.soviet-theme .news-header h2 {
+  color: var(--soviet-cyan) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 2rem !important;
+  text-shadow: 0 0 10px rgba(163, 45, 23, 0.45) !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-card {
+  background: #190806 !important;
+  border: 2px solid var(--soviet-border) !important;
+  border-radius: 0px !important;
+  color: #d1d8e0 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.soviet-theme .news-card:hover {
+  border-color: var(--soviet-cyan) !important;
+  background: #210b08 !important;
+  box-shadow: 0 0 15px rgba(163, 45, 23, 0.25) !important;
+}
+
+.soviet-theme .news-card__author {
+  color: #ffffff !important;
+  font-size: 1.4rem !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-card__role {
+  color: var(--soviet-cyan) !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-card__content {
+  color: #d1d8e0 !important;
+  font-size: 1.25rem !important;
+}
+
+.soviet-theme .news-card__date {
+  color: #888 !important;
+  font-size: 1rem !important;
+}
+
+.soviet-theme .news-card__badge--faculty {
+  background: rgba(163, 45, 23, 0.1) !important;
+  color: var(--soviet-cyan) !important;
+  border: 1.5px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-card__badge--head {
+  background: rgba(163, 45, 23, 0.1) !important;
+  color: var(--soviet-cyan) !important;
+  border: 1.5px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-form-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.soviet-theme .news-form {
+  background: #0f0504 !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  padding: 20px !important;
+}
+
+.soviet-theme .news-form__title {
+  color: var(--soviet-cyan) !important;
+  font-size: 1.8rem !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 10px rgba(163, 45, 23, 0.4) !important;
+  margin-bottom: 15px !important;
+}
+
+.soviet-theme .news-form label {
+  color: var(--soviet-cyan) !important;
+  text-transform: uppercase !important;
+}
+
+.soviet-theme .news-form textarea {
+  background: #0a0302 !important;
+  border: 2px solid var(--soviet-border) !important;
+  color: #fff !important;
+  border-radius: 0px !important;
+  font-size: 1.25rem !important;
+}
+
+.soviet-theme .news-form textarea:focus {
+  border-color: var(--soviet-cyan) !important;
+  box-shadow: 0 0 10px rgba(163, 45, 23, 0.3) !important;
+  outline: none !important;
+}
+
 
