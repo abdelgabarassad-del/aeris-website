@@ -206,6 +206,19 @@
         </div>
       </div>
 
+
+      <!-- View Switcher Tabs (Only visible to authorized roles: Head, Vice Head, CEO, Advisor) -->
+      <div class="view-tabs fade-in" id="view-tabs" style="display: none; margin-top: 24px;">
+        <button class="view-tab active" data-view="kanban" id="view-kanban-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Kanban Board</span>
+        </button>
+        <button class="view-tab" data-view="tracker" id="view-tracker-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z M3 9h18 M3 15h18 M9 3v18 M15 3v18"/></svg>
+          <span>Progress Tracker (Excel)</span>
+        </button>
+      </div>
+
       <!-- Task Board -->
       <div class="task-board fade-in" id="task-board">
         <!-- Columns: To Do, In Progress, Done -->
@@ -241,6 +254,34 @@
         <h3>No Tasks Yet</h3>
         <p>Tasks uploaded by team heads will appear here. Switch to <strong>Team Head</strong> role to create tasks.</p>
       </div>
+
+      <!-- Excel Progress Tracker Section -->
+      <div class="tracker-section fade-in" id="tracker-section" style="display: none;">
+        <div class="tracker-card">
+          <div class="tracker-card__header">
+            <div class="tracker-card__title-group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <h2>Member Progress Matrix</h2>
+            </div>
+            <div class="tracker-card__actions">
+              <button class="btn-secondary" id="tracker-settings-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Mailer Config</span>
+              </button>
+              <button class="btn-primary" id="tracker-export-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export CSV</span>
+              </button>
+            </div>
+          </div>
+          <div class="tracker-table-container">
+            <table class="tracker-table" id="tracker-table">
+              <!-- Rendered Dynamically -->
+            </table>
+          </div>
+        </div>
+      </div>
+
 
       <!-- ========== TASK DETAILS & FEEDBACK MODAL ========== -->
       <div class="task-modal" id="task-modal" style="display: none;">
@@ -380,6 +421,50 @@
       '241002229', '231004251', '241000881', '251011829', '7676767766', '231002350', '2006'
     ]);
 
+    // Structured Database mapping members to names, roles, departments, and emails
+    const MEMBERS_DATABASE = {
+      // CEO
+      '231002350': { name: 'Abduljabar Asaad', dept: 'all', role: 'ceo', email: 'abdelgabarassad@gmail.com' },
+      
+      // Mechanical Division
+      '231012318': { name: 'Omar Atwan', dept: 'mechanical', role: 'head', email: 'omar.atwan@aeris-team.org' },
+      '241003033': { name: 'Ammar Yasser', dept: 'mechanical', role: 'vice_head', email: 'ammar.yasser@aeris-team.org' },
+      '251001249': { name: 'Omar Moataz Shaaban', dept: 'mechanical', role: 'member', email: 'omar.moataz@aeris-team.org' },
+      '251000305': { name: 'Abdelrahman Ehab Elsayed', dept: 'mechanical', role: 'member', email: 'abdelrahman.ehab@aeris-team.org' },
+      '251001035': { name: 'Yousef Ashraf Sakr', dept: 'mechanical', role: 'member', email: 'yousef.ashraf@aeris-team.org' },
+      '241002278': { name: 'Marwan Mohamed Elghazaly', dept: 'mechanical', role: 'member', email: 'marwan.ghazaly@aeris-team.org' },
+      
+      // Electrical Division
+      '241012132': { name: 'Bassem Toulan', dept: 'electrical', role: 'head', email: 'bassem.toulan@aeris-team.org' },
+      '251001377': { name: 'Hannah Ahmed', dept: 'electrical', role: 'vice_head', email: 'hannah.ahmed@aeris-team.org' },
+      '231003934': { name: 'Ibrahim Hassan Ibrahim', dept: 'electrical', role: 'member', email: 'ibrahim.hassan@aeris-team.org' },
+      '251010151': { name: 'Sherry George Youssef', dept: 'electrical', role: 'member', email: 'sherry.george@aeris-team.org' },
+      '251010536': { name: 'Baraa Ibrahim', dept: 'electrical', role: 'member', email: 'baraa.ibrahim@aeris-team.org' },
+      '241002229': { name: 'Amir Abbas', dept: 'electrical', role: 'member', email: 'amir.abbas@aeris-team.org' },
+      
+      // Software Division
+      '251002119': { name: 'Absher Sorour', dept: 'software', role: 'head', email: 'absher.sorour@aeris-team.org' },
+      '2006': { name: 'Hanah', dept: 'software', role: 'vice_head', email: 'hanah@aeris-team.org' },
+      '251000861': { name: 'Hazem Walid', dept: 'software', role: 'member', email: 'hazem.walid@aeris-team.org' },
+      '251010424': { name: 'Sara Ahmed', dept: 'software', role: 'member', email: 'sara.ahmed@aeris-team.org' },
+      '251000553': { name: 'Khalid Ahmed Mohamed', dept: 'software', role: 'member', email: 'khalid.ahmed@aeris-team.org' },
+      '251001982': { name: 'Ahmad Aziz', dept: 'software', role: 'member', email: 'ahmad.aziz@aeris-team.org' },
+      '241000881': { name: 'Omar Hossam Elbanan', dept: 'software', role: 'member', email: 'omar.hossam@aeris-team.org' },
+      '251003016': { name: 'Hana Moataz', dept: 'software', role: 'member', email: 'hana.moataz@aeris-team.org' },
+      
+      // Non-Technical affairs
+      '231012588': { name: 'Judy Samer', dept: 'non-technical', role: 'head', email: 'judy.samer@aeris-team.org' },
+      '251011829': { name: 'Hala Farouk', dept: 'non-technical', role: 'head', email: 'hala.farouk@aeris-team.org' },
+      '251012364': { name: 'Mahinor Harb', dept: 'non-technical', role: 'member', email: 'mahinor.harb@aeris-team.org' },
+      '221011368': { name: 'Sara Abdo', dept: 'non-technical', role: 'member', email: 'sara.abdo@aeris-team.org' },
+      '251001767': { name: 'Esraa Mohammed', dept: 'non-technical', role: 'member', email: 'esraa.mohammed@aeris-team.org' },
+      '231003587': { name: 'Amr Mohamed El Ghazaly', dept: 'non-technical', role: 'member', email: 'amr.ghazaly@aeris-team.org' },
+      '231010429': { name: 'Abdelrahman Aly', dept: 'non-technical', role: 'member', email: 'abdelrahman.aly@aeris-team.org' },
+      '221003996': { name: 'Ahmed Tarek', dept: 'non-technical', role: 'member', email: 'ahmed.tarek@aeris-team.org' },
+      '231004251': { name: 'Adham Ahmed', dept: 'non-technical', role: 'member', email: 'adham.ahmed@aeris-team.org' },
+      '7676767766': { name: 'Aries Aguilar', dept: 'non-technical', role: 'member', email: 'aries.aguilar@aeris-team.org' }
+    };
+
     const ADVISORS = {
       '8383': { name: 'Professor Aly Haridi', title: 'Professor & Academic Advisor' },
       '9749': { name: 'Professor Ahmad El Safty', title: 'Professor & Academic Advisor' },
@@ -390,6 +475,176 @@
     const AUTHORIZED_REVIEWERS = new Set([
       '8383', '9749', '5970', '5550', '231002350', '2006'
     ]);
+
+    /* ========== AUTOMATED MAILER LOGIC ========== */
+    const MAILER_SETTINGS_KEY = 'aeris_mailer_settings';
+
+    function getMailerSettings() {
+      try {
+        return JSON.parse(safeLocal.getItem(MAILER_SETTINGS_KEY)) || {
+          provider: 'simulation',
+          teamSender: 'aeris.aast.team@gmail.com',
+          emailjs: { publicKey: '', serviceId: '', templateId: '' },
+          smtpjs: { host: '', username: '', password: '', port: 2525 }
+        };
+      } catch (e) {
+        return { provider: 'simulation', teamSender: 'aeris.aast.team@gmail.com' };
+      }
+    }
+
+    function saveMailerSettings(settings) {
+      safeLocal.setItem(MAILER_SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function logToMailerConsole(message, type = 'sys') {
+      const consoleEl = document.getElementById('mock-mailer-console');
+      const logsEl = document.getElementById('mailer-console-logs');
+      if (!consoleEl || !logsEl) return;
+      
+      consoleEl.style.display = 'flex';
+      consoleEl.classList.remove('minimized');
+      
+      const timestamp = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.className = `console-line console-line--${type}`;
+      line.textContent = `[${timestamp}] ${message}`;
+      logsEl.appendChild(line);
+      logsEl.scrollTop = logsEl.scrollHeight;
+    }
+
+    async function sendMailerEmail(toEmail, toName, subject, body, isWarning = false) {
+      const settings = getMailerSettings();
+      const provider = settings.provider;
+      const fromEmail = settings.teamSender || 'aeris.aast.team@gmail.com';
+      
+      logToMailerConsole(`Preparing outgoing mail to ${toName}...`, 'sys');
+      logToMailerConsole(`To: ${toEmail} | From: ${fromEmail}`, 'mail');
+      logToMailerConsole(`Subject: ${subject}`, 'mail');
+      
+      if (provider === 'simulation') {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            logToMailerConsole(`[SIMULATOR] SUCCESS: Message sent from <${fromEmail}> to <${toEmail}>`, 'success');
+            if (isWarning) {
+              logToMailerConsole(`⚠️ DISCIPLINARY NOTICE LOGGED FOR ${toName.toUpperCase()}`, 'warn');
+            }
+            resolve(true);
+          }, 800);
+        });
+      } else if (provider === 'emailjs') {
+        try {
+          if (typeof emailjs === 'undefined') {
+            logToMailerConsole(`Loading EmailJS library dynamically...`, 'sys');
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+              script.onload = resolve;
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+            emailjs.init(settings.emailjs.publicKey);
+          }
+          
+          const templateParams = {
+            to_email: toEmail,
+            to_name: toName,
+            from_email: fromEmail,
+            subject: subject,
+            message: body
+          };
+          
+          await emailjs.send(settings.emailjs.serviceId, settings.emailjs.templateId, templateParams);
+          logToMailerConsole(`EmailJS Success: Email sent to ${toEmail}`, 'success');
+          return true;
+        } catch (err) {
+          logToMailerConsole(`EmailJS Failed: ${err.message || err}`, 'warn');
+          return false;
+        }
+      } else if (provider === 'smtpjs') {
+        try {
+          if (typeof Email === 'undefined') {
+            logToMailerConsole(`Loading SMTPJS library dynamically...`, 'sys');
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'https://smtpjs.com/v3/smtp.js';
+              script.onload = resolve;
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+          }
+          
+          const response = await Email.send({
+            Host: settings.smtpjs.host,
+            Username: settings.smtpjs.username,
+            Password: settings.smtpjs.password,
+            Port: settings.smtpjs.port,
+            To: toEmail,
+            From: fromEmail,
+            Subject: subject,
+            Body: body.replace(/\n/g, '<br>')
+          });
+          
+          if (response === 'OK') {
+            logToMailerConsole(`SMTPJS Success: Email sent to ${toEmail}`, 'success');
+            return true;
+          } else {
+            logToMailerConsole(`SMTPJS Rejected: ${response}`, 'warn');
+            return false;
+          }
+        } catch (err) {
+          logToMailerConsole(`SMTPJS Failed: ${err.message || err}`, 'warn');
+          return false;
+        }
+      }
+    }
+
+    function getDepartmentHead(dept) {
+      const headId = Object.keys(MEMBERS_DATABASE).find(key => MEMBERS_DATABASE[key].dept === dept && MEMBERS_DATABASE[key].role === 'head');
+      if (headId) {
+        return { id: headId, ...MEMBERS_DATABASE[headId] };
+      }
+      return null;
+    }
+
+    async function checkMemberMissedTasks(memberId) {
+      const member = MEMBERS_DATABASE[memberId];
+      if (!member) return;
+      
+      const tasks = getTasks();
+      let missedTasks = [];
+      
+      tasks.forEach(t => {
+        if (t.memberProgress && t.memberProgress[memberId] === 'not_done') {
+          missedTasks.push(t);
+        }
+      });
+      
+      logToMailerConsole(`Performance check: ${member.name} has missed ${missedTasks.length} tasks in total.`, 'sys');
+      
+      if (missedTasks.length === 3) {
+        const taskListText = missedTasks.map((t, idx) => `${idx + 1}. "${t.title}" (${t.department} department)`).join('\n');
+        
+        // 1. Send warning email to member
+        const memberSubject = `⚠️ FINAL WARNING: Repeated Missed Tasks Notification`;
+        const memberBody = `Dear ${member.name},\n\nThis is an official warning from the A.E.R.I.S. team leadership. You have failed to complete 3 tasks assigned to you:\n\n${taskListText}\n\nConsistent failure to complete task targets impacts the entire team and violates team guidelines. Continued negligence will result in immediate review of your membership.\n\nBest regards,\nA.E.R.I.S. Board of Directors`;
+        
+        await sendMailerEmail(member.email, member.name, memberSubject, memberBody, true);
+        
+        // 2. Send copy to CEO, Vice Head, and Department Head
+        const ceo = MEMBERS_DATABASE['231002350'];
+        const viceHead = MEMBERS_DATABASE['2006'];
+        const deptHead = getDepartmentHead(member.dept);
+        
+        const leadershipSubject = `🚨 NOTICE: Member ${member.name} has missed 3 tasks`;
+        const leadershipBody = `Dear Leadership Board,\n\nThis is an automated notification to inform you that member ${member.name} (Registration: ${memberId}) has missed 3 tasks in total:\n\n${taskListText}\n\nA formal warning has been dispatched to the member. Please review their performance status.\n\nBest regards,\nA.E.R.I.S. Progress Tracker Service`;
+        
+        if (ceo) await sendMailerEmail(ceo.email, ceo.name, leadershipSubject, leadershipBody);
+        if (viceHead) await sendMailerEmail(viceHead.email, viceHead.name, leadershipSubject, leadershipBody);
+        if (deptHead && deptHead.id !== '231002350' && deptHead.id !== '2006') {
+          await sendMailerEmail(deptHead.email, deptHead.name, leadershipSubject, leadershipBody);
+        }
+      }
+    }
 
     const PERSONAL_GREETINGS = {
       '2006': { name: 'Hanah', lang: 'fr', greeting: 'Bienvenue sur l\'île de Berk', emoji: '🐉' },
@@ -941,6 +1196,13 @@
 
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
+        
+        // Show view switcher tabs for authorized roles
+        const viewTabs = document.getElementById('view-tabs');
+        if (viewTabs) {
+          viewTabs.style.display = (role === 'head' || role === 'advisor' || ALL_MEMBERS.has(regNum)) ? 'flex' : 'none';
+        }
+        
         renderTasks();
 
         // Show news board section
@@ -6344,9 +6606,474 @@
       };
     }
 
+    }
+
+    /* ========== PROGRESS TRACKER CONTROLLER & EXCEL VIEW ========== */
+    let currentView = 'kanban';
+
+    // Renders the spreadsheet grid dynamically based on the current department
+    function renderProgressTracker() {
+      const trackerTable = document.getElementById('tracker-table');
+      if (!trackerTable) return;
+      
+      const tasks = getTasks().filter(t => t.department === currentDept);
+      
+      // Filter the members belonging to the current department
+      const deptMembers = Object.entries(MEMBERS_DATABASE)
+        .filter(([id, m]) => m.dept === currentDept)
+        .map(([id, m]) => ({ id, ...m }));
+        
+      if (deptMembers.length === 0) {
+        trackerTable.innerHTML = `<tr><td style="text-align: center; padding: 30px; color: var(--white-muted);">No members registered in this department database.</td></tr>`;
+        return;
+      }
+      
+      // 1. Build table headers
+      let headerHTML = '<thead><tr>';
+      headerHTML += '<th>Member Name</th>';
+      
+      tasks.forEach(t => {
+        const titleStr = isDragonUser() ? `🐲 ${t.title}` : (isSovietUser() ? `⭐ ${t.title}` : t.title);
+        headerHTML += `<th title="${escapeHtml(t.description || '')}">${escapeHtml(titleStr)}</th>`;
+      });
+      
+      headerHTML += '<th style="text-align: center; min-width: 80px;">Total Done</th>';
+      headerHTML += '<th style="text-align: center; min-width: 80px; color: #10b981;">Done Well</th>';
+      headerHTML += '<th style="text-align: center; min-width: 80px; color: #f59e0b;">Done Poorly</th>';
+      headerHTML += '<th style="text-align: center; min-width: 80px; color: #ef4444;">Missed</th>';
+      headerHTML += '</tr></thead>';
+      
+      // 2. Build table rows for members
+      let bodyHTML = '<tbody>';
+      
+      deptMembers.forEach(member => {
+        let rowHTML = '<tr>';
+        
+        let roleBadge = '';
+        if (member.role === 'ceo') {
+          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--ceo">CEO</span>';
+        } else if (member.role === 'head') {
+          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head">Head</span>';
+        } else if (member.role === 'vice_head') {
+          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--vice_head">Vice Head</span>';
+        }
+        
+        rowHTML += `
+          <td>
+            <span class="tracker-table__member-name">${escapeHtml(member.name)}</span>
+            <span class="tracker-table__member-id">${member.id}</span>
+            ${roleBadge}
+          </td>
+        `;
+        
+        let totalDone = 0;
+        let doneWell = 0;
+        let donePoorly = 0;
+        let notDone = 0;
+        
+        // Add cells for each task in current department
+        tasks.forEach(t => {
+          const progress = (t.memberProgress && t.memberProgress[member.id]) || 'unmarked';
+          
+          if (progress === 'well') { totalDone++; doneWell++; }
+          else if (progress === 'poorly') { totalDone++; donePoorly++; }
+          else if (progress === 'not_done') { notDone++; }
+          
+          // Check editor permission
+          const currentReg = safeSession.getItem('aeris_auth_reg');
+          const activeUser = MEMBERS_DATABASE[currentReg];
+          const canEdit = activeUser && (
+            activeUser.role === 'ceo' || 
+            activeUser.role === 'vice_head' || 
+            (activeUser.role === 'head' && activeUser.dept === currentDept)
+          );
+          
+          if (canEdit) {
+            rowHTML += `
+              <td>
+                <select class="eval-select eval-select--${progress}" data-task-id="${t.id}" data-member-id="${member.id}">
+                  <option value="unmarked" ${progress === 'unmarked' ? 'selected' : ''}>Not Marked</option>
+                  <option value="well" ${progress === 'well' ? 'selected' : ''}>Done Well</option>
+                  <option value="poorly" ${progress === 'poorly' ? 'selected' : ''}>Done Poorly</option>
+                  <option value="not_done" ${progress === 'not_done' ? 'selected' : ''}>Not Done</option>
+                </select>
+              </td>
+            `;
+          } else {
+            let label = 'Not Marked';
+            if (progress === 'well') label = 'Done Well';
+            else if (progress === 'poorly') label = 'Done Poorly';
+            else if (progress === 'not_done') label = 'Not Done';
+            
+            rowHTML += `
+              <td>
+                <span class="eval-select eval-select--${progress}" style="pointer-events: none; display: inline-block;">${label}</span>
+              </td>
+            `;
+          }
+        });
+        
+        // Summary metrics
+        const isAlert = notDone >= 3;
+        const metricClass = isAlert ? 'tracker-metric tracker-metric--missed-alert' : 'tracker-metric';
+        const alertIcon = isAlert ? '⚠️ ' : '';
+        
+        rowHTML += `
+          <td class="tracker-metric">${totalDone}</td>
+          <td class="tracker-metric" style="color: #10b981;">${doneWell}</td>
+          <td class="tracker-metric" style="color: #f59e0b;">${donePoorly}</td>
+          <td class="${metricClass}">${alertIcon}${notDone}</td>
+        `;
+        
+        rowHTML += '</tr>';
+        bodyHTML += rowHTML;
+      });
+      
+      bodyHTML += '</tbody>';
+      trackerTable.innerHTML = headerHTML + bodyHTML;
+      
+      // Bind select change handlers
+      trackerTable.querySelectorAll('.eval-select').forEach(select => {
+        select.addEventListener('change', handleEvalChange);
+      });
+    }
+
+    // Handles evaluation changes and triggers email alerts
+    async function handleEvalChange(e) {
+      const select = e.target;
+      const taskId = select.dataset.taskId;
+      const memberId = select.dataset.memberId;
+      const newProgress = select.value;
+      
+      const tasks = getTasks();
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      task.memberProgress = task.memberProgress || {};
+      const oldProgress = task.memberProgress[memberId] || 'unmarked';
+      
+      // Update local storage representation
+      task.memberProgress[memberId] = newProgress;
+      
+      // If changed to not_done and was not already marked not_done, trigger emails
+      if (newProgress === 'not_done' && oldProgress !== 'not_done') {
+        const member = MEMBERS_DATABASE[memberId];
+        if (member) {
+          task.notifiedMembers = task.notifiedMembers || [];
+          if (!task.notifiedMembers.includes(memberId)) {
+            task.notifiedMembers.push(memberId);
+            
+            // Save state immediately
+            saveTasks(tasks);
+            
+            // 1. Send automated missed task email to member
+            const memberSubject = `Notice of Missed Task Target: "${task.title}"`;
+            const memberBody = `Dear ${member.name},\n\nThis email is sent to inform you that your work on the task "${task.title}" in the ${task.department} department has been marked as Not Done by team leadership.\n\nPlease ensure you maintain timely progress on all assigned team targets. Contact your department head if you have any questions.\n\nBest regards,\nA.E.R.I.S. Team Administration`;
+            
+            await sendMailerEmail(member.email, member.name, memberSubject, memberBody);
+            
+            // 2. Perform 3 missed tasks warning logic
+            await checkMemberMissedTasks(memberId);
+          }
+        }
+      } else {
+        saveTasks(tasks);
+      }
+      
+      // Re-render Excel view
+      renderProgressTracker();
+    }
+
+    /* ========== BIND EVENTS AND ACTIONS ========== */
+    // Patches to department selectors to update excel grid
+    deptTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (currentView === 'tracker') {
+          renderProgressTracker();
+        }
+      });
+    });
+
+    // Patch to task submit button to update excel columns dynamically
+    const originalSubmitAction = submitBtn.onclick;
+    submitBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        if (currentView === 'tracker') {
+          renderProgressTracker();
+        }
+      }, 200);
+    });
+
+    // Switch view tabs click handlers
+    const viewKanbanBtn = document.getElementById('view-kanban-btn');
+    const viewTrackerBtn = document.getElementById('view-tracker-btn');
+    
+    if (viewKanbanBtn && viewTrackerBtn) {
+      viewKanbanBtn.addEventListener('click', () => {
+        currentView = 'kanban';
+        viewKanbanBtn.classList.add('active');
+        viewTrackerBtn.classList.remove('active');
+        document.getElementById('task-board').style.display = 'grid';
+        document.getElementById('tracker-section').style.display = 'none';
+        renderTasks();
+      });
+      
+      viewTrackerBtn.addEventListener('click', () => {
+        currentView = 'tracker';
+        viewTrackerBtn.classList.add('active');
+        viewKanbanBtn.classList.remove('active');
+        document.getElementById('task-board').style.display = 'none';
+        document.getElementById('tracker-section').style.display = 'block';
+        renderProgressTracker();
+      });
+    }
+
+    // CSV Exporter Action
+    const exportBtn = document.getElementById('tracker-export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const tasks = getTasks().filter(t => t.department === currentDept);
+        const deptMembers = Object.entries(MEMBERS_DATABASE)
+          .filter(([id, m]) => m.dept === currentDept)
+          .map(([id, m]) => ({ id, ...m }));
+          
+        let csvContent = 'data:text/csv;charset=utf-8,';
+        
+        let headers = ['Member Name', 'Registration ID', 'Department', 'Team Role'];
+        tasks.forEach(t => headers.push(t.title));
+        headers.push('Total Done', 'Done Well', 'Done Poorly', 'Missed Tasks');
+        
+        csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',') + '\n';
+        
+        deptMembers.forEach(member => {
+          let row = [member.name, member.id, member.dept, member.role];
+          let totalDone = 0, doneWell = 0, donePoorly = 0, notDone = 0;
+          
+          tasks.forEach(t => {
+            const progress = (t.memberProgress && t.memberProgress[member.id]) || 'unmarked';
+            if (progress === 'well') { totalDone++; doneWell++; }
+            else if (progress === 'poorly') { totalDone++; donePoorly++; }
+            else if (progress === 'not_done') { notDone++; }
+            
+            row.push(progress);
+          });
+          
+          row.push(totalDone, doneWell, donePoorly, notDone);
+          csvContent += row.map(r => `"${String(r).replace(/"/g, '""')}"`).join(',') + '\n';
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `aeris_progress_${currentDept}_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        logToMailerConsole(`Progress tracker CSV sheet generated & exported.`, 'sys');
+      });
+    }
+
+    // Mailer configuration modal display and actions
+    const settingsBtn = document.getElementById('tracker-settings-btn');
+    const settingsModal = document.getElementById('mailer-settings-modal');
+    const settingsClose = document.getElementById('mailer-settings-close');
+    const settingsOverlay = document.getElementById('mailer-settings-modal-overlay');
+    const mailerProviderSelect = document.getElementById('mailer-provider');
+    const saveSettingsBtn = document.getElementById('save-mailer-settings');
+    
+    function toggleSettingsGroups(provider) {
+      document.getElementById('settings-group-emailjs').style.display = provider === 'emailjs' ? 'block' : 'none';
+      document.getElementById('settings-group-smtpjs').style.display = provider === 'smtpjs' ? 'block' : 'none';
+    }
+
+    if (settingsBtn && settingsModal) {
+      settingsBtn.addEventListener('click', () => {
+        const settings = getMailerSettings();
+        mailerProviderSelect.value = settings.provider;
+        
+        document.getElementById('emailjs-public-key').value = settings.emailjs?.publicKey || '';
+        document.getElementById('emailjs-service-id').value = settings.emailjs?.serviceId || '';
+        document.getElementById('emailjs-template-id').value = settings.emailjs?.templateId || '';
+        
+        document.getElementById('smtp-host').value = settings.smtpjs?.host || '';
+        document.getElementById('smtp-username').value = settings.smtpjs?.username || '';
+        document.getElementById('smtp-password').value = settings.smtpjs?.password || '';
+        document.getElementById('smtp-port').value = settings.smtpjs?.port || 2525;
+        
+        document.getElementById('team-sender-email').value = settings.teamSender || 'aeris.aast.team@gmail.com';
+        
+        toggleSettingsGroups(settings.provider);
+        
+        settingsModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      });
+    }
+    
+    if (mailerProviderSelect) {
+      mailerProviderSelect.addEventListener('change', () => {
+        toggleSettingsGroups(mailerProviderSelect.value);
+      });
+    }
+    
+    const closeSettings = () => {
+      if (settingsModal) {
+        settingsModal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    };
+    
+    if (settingsClose) settingsClose.addEventListener('click', closeSettings);
+    if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
+    
+    if (saveSettingsBtn) {
+      saveSettingsBtn.addEventListener('click', () => {
+        const settings = {
+          provider: mailerProviderSelect.value,
+          teamSender: document.getElementById('team-sender-email').value.trim(),
+          emailjs: {
+            publicKey: document.getElementById('emailjs-public-key').value.trim(),
+            serviceId: document.getElementById('emailjs-service-id').value.trim(),
+            templateId: document.getElementById('emailjs-template-id').value.trim()
+          },
+          smtpjs: {
+            host: document.getElementById('smtp-host').value.trim(),
+            username: document.getElementById('smtp-username').value.trim(),
+            password: document.getElementById('smtp-password').value.trim(),
+            port: parseInt(document.getElementById('smtp-port').value) || 2525
+          }
+        };
+        
+        saveMailerSettings(settings);
+        logToMailerConsole(`Mailer config saved. Active provider: ${settings.provider.toUpperCase()}`, 'sys');
+        closeSettings();
+      });
+    }
+
+    // Mock mailer log console minimizing and closing actions
+    const minConsoleBtn = document.getElementById('mailer-console-min-btn');
+    const closeConsoleBtn = document.getElementById('mailer-console-close-btn');
+    const consolePanelEl = document.getElementById('mock-mailer-console');
+    const consoleHeader = document.getElementById('mailer-console-header');
+    
+    if (minConsoleBtn && consolePanelEl) {
+      minConsoleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        consolePanelEl.classList.toggle('minimized');
+        minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
+      });
+    }
+    
+    if (closeConsoleBtn && consolePanelEl) {
+      closeConsoleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        consolePanelEl.style.display = 'none';
+      });
+    }
+    
+    if (consoleHeader && consolePanelEl) {
+      consoleHeader.addEventListener('click', () => {
+        consolePanelEl.classList.toggle('minimized');
+        if (minConsoleBtn) {
+          minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
+        }
+      });
+    }
+
     // Initial render
     renderTasks();
+    if (currentView === 'tracker') {
+      renderProgressTracker();
+    }
   </script>
+
+  <!-- ========== MAILER SETTINGS MODAL ========== -->
+  <div class="task-modal" id="mailer-settings-modal" style="display: none; z-index: 10060;">
+    <div class="task-modal__overlay" id="mailer-settings-modal-overlay"></div>
+    <div class="task-modal__content task-modal__content--settings">
+      <button class="task-modal__close" id="mailer-settings-close" aria-label="Close modal">&times;</button>
+      
+      <div class="task-modal__header" style="margin-bottom: 12px;">
+        <span class="task-modal__dept-badge task-modal__dept-badge--software">Configuration</span>
+      </div>
+      
+      <h2 class="task-modal__title" style="margin-bottom: 8px;">AERIS Mailer Settings</h2>
+      <p class="task-modal__desc" style="font-size: 0.9rem; margin-bottom: 20px;">Configure how warnings and notifications are sent to members who miss tasks.</p>
+      
+      <div class="settings-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label for="mailer-provider" style="display:block; margin-bottom:6px; font-weight:600;">Email Provider / Method</label>
+          <select id="mailer-provider" class="form-input" style="width:100%; box-sizing:border-box;">
+            <option value="simulation" selected>🔌 Simulation / Mock Mode (Default)</option>
+            <option value="emailjs">✉️ EmailJS API (Client-side)</option>
+            <option value="smtpjs">📨 SMTPJS (Direct SMTP)</option>
+          </select>
+        </div>
+        
+        <!-- EmailJS Config -->
+        <div id="settings-group-emailjs" class="settings-group-fields" style="display: none; margin-bottom: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="emailjs-public-key" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Public Key</label>
+            <input type="text" id="emailjs-public-key" class="form-input" placeholder="user_xxxxxxxxxxxxxx" style="width:100%; box-sizing:border-box;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="emailjs-service-id" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Service ID</label>
+            <input type="text" id="emailjs-service-id" class="form-input" placeholder="service_xxxxxxx" style="width:100%; box-sizing:border-box;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 4px;">
+            <label for="emailjs-template-id" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Template ID</label>
+            <input type="text" id="emailjs-template-id" class="form-input" placeholder="template_xxxxxxx" style="width:100%; box-sizing:border-box;" />
+          </div>
+        </div>
+
+        <!-- SMTPJS Config -->
+        <div id="settings-group-smtpjs" class="settings-group-fields" style="display: none; margin-bottom: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="smtp-host" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Host</label>
+            <input type="text" id="smtp-host" class="form-input" placeholder="smtp.elasticemail.com" style="width:100%; box-sizing:border-box;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="smtp-username" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Username / Email</label>
+            <input type="text" id="smtp-username" class="form-input" placeholder="your-email@example.com" style="width:100%; box-sizing:border-box;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="smtp-password" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Password / Token</label>
+            <input type="password" id="smtp-password" class="form-input" placeholder="••••••••••••••••" style="width:100%; box-sizing:border-box;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 4px;">
+            <label for="smtp-port" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Port</label>
+            <input type="number" id="smtp-port" class="form-input" placeholder="2525" value="2525" style="width:100%; box-sizing:border-box;" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="team-sender-email" style="display:block; margin-bottom:6px; font-weight:600;">Team Sender Address</label>
+          <input type="email" id="team-sender-email" class="form-input" value="aeris.aast.team@gmail.com" placeholder="team@aeris-team.org" style="width:100%; box-sizing:border-box;" />
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-primary" id="save-mailer-settings" style="width: 100%; padding: 12px; font-weight: bold; text-transform: uppercase;">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MOCK MAILER LOG PANEL ========== -->
+  <div class="mock-mailer-console" id="mock-mailer-console" style="display: none;">
+    <div class="mock-mailer-console__header" id="mailer-console-header">
+      <div class="mock-mailer-console__title-group">
+        <span class="mock-mailer-console__indicator blinking"></span>
+        <span>AERIS Mailer Dispatch Console</span>
+      </div>
+      <div class="mock-mailer-console__controls">
+        <button class="mock-mailer-console__min" id="mailer-console-min-btn">-</button>
+        <button class="mock-mailer-console__close" id="mailer-console-close-btn">&times;</button>
+      </div>
+    </div>
+    <div class="mock-mailer-console__body" id="mailer-console-logs">
+      <div class="console-line console-line--sys">[SYS] Mailer system standing by...</div>
+    </div>
+  </div>
 
 </body>
 </html>
