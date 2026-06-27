@@ -418,51 +418,57 @@
       '251001377', '251010151', '241003033', '251001035',
       '251002119', '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829', '7676767766', '231002350', '2006'
+      '241002229', '231004251', '241000881', '251011829', '231002350', '2006'
     ]);
 
     // Structured Database mapping members to names, roles, departments, and emails
     const MEMBERS_DATABASE = {
       // CEO
-      '231002350': { name: 'Abduljabar Asaad', dept: 'all', role: 'ceo', email: 'abdelgabarassad@gmail.com' },
+      '231002350': { name: 'Abduljabar Asaad', depts: ['mechanical', 'electrical', 'software', 'non-technical'], role: 'ceo', email: 'abdelgabarassad@gmail.com' },
       
-      // Mechanical Division
-      '231012318': { name: 'Omar Atwan', dept: 'mechanical', role: 'head', email: 'omar.atwan@aeris-team.org' },
-      '241003033': { name: 'Ammar Yasser', dept: 'mechanical', role: 'vice_head', email: 'ammar.yasser@aeris-team.org' },
-      '251001249': { name: 'Omar Moataz Shaaban', dept: 'mechanical', role: 'member', email: 'omar.moataz@aeris-team.org' },
-      '251000305': { name: 'Abdelrahman Ehab Elsayed', dept: 'mechanical', role: 'member', email: 'abdelrahman.ehab@aeris-team.org' },
-      '251001035': { name: 'Yousef Ashraf Sakr', dept: 'mechanical', role: 'member', email: 'yousef.ashraf@aeris-team.org' },
-      '241002278': { name: 'Marwan Mohamed Elghazaly', dept: 'mechanical', role: 'member', email: 'marwan.ghazaly@aeris-team.org' },
+      // Exclude from tables
+      '2006': { name: 'Hanah', depts: [], role: 'vice_head', email: 'hanah@aeris-team.org', hide: true },
       
-      // Electrical Division
-      '241012132': { name: 'Bassem Toulan', dept: 'electrical', role: 'head', email: 'bassem.toulan@aeris-team.org' },
-      '251001377': { name: 'Hannah Ahmed', dept: 'electrical', role: 'vice_head', email: 'hannah.ahmed@aeris-team.org' },
-      '231003934': { name: 'Ibrahim Hassan Ibrahim', dept: 'electrical', role: 'member', email: 'ibrahim.hassan@aeris-team.org' },
-      '251010151': { name: 'Sherry George Youssef', dept: 'electrical', role: 'member', email: 'sherry.george@aeris-team.org' },
-      '251010536': { name: 'Baraa Ibrahim', dept: 'electrical', role: 'member', email: 'baraa.ibrahim@aeris-team.org' },
-      '241002229': { name: 'Amir Abbas', dept: 'electrical', role: 'member', email: 'amir.abbas@aeris-team.org' },
+      // Software Division (Pure SW)
+      '251002119': { name: 'Absher Sorour', depts: ['software'], role: 'head', email: 'absher.sorour@aeris-team.org' },
+      '251010424': { name: 'Sara Ahmed', depts: ['software'], role: 'member', email: 'sara.ahmed@aeris-team.org' },
+      '251000553': { name: 'Khalid Ahmed Mohamed', depts: ['software'], role: 'member', email: 'khalid.ahmed@aeris-team.org' },
+      '251000861': { name: 'Hazem Walid', depts: ['software'], role: 'member', email: 'hazem.walid@aeris-team.org' },
+      '251001982': { name: 'Ahmad Aziz', depts: ['software'], role: 'member', email: 'ahmad.aziz@aeris-team.org' },
+      '241000881': { name: 'Omar Hossam Elbanan', depts: ['software'], role: 'member', email: 'omar.hossam@aeris-team.org' },
+      '251003016': { name: 'Hana Moataz', depts: ['software'], role: 'member', email: 'hana.moataz@aeris-team.org' },
       
-      // Software Division
-      '251002119': { name: 'Absher Sorour', dept: 'software', role: 'head', email: 'absher.sorour@aeris-team.org' },
-      '2006': { name: 'Hanah', dept: 'software', role: 'vice_head', email: 'hanah@aeris-team.org' },
-      '251000861': { name: 'Hazem Walid', dept: 'software', role: 'member', email: 'hazem.walid@aeris-team.org' },
-      '251010424': { name: 'Sara Ahmed', dept: 'software', role: 'member', email: 'sara.ahmed@aeris-team.org' },
-      '251000553': { name: 'Khalid Ahmed Mohamed', dept: 'software', role: 'member', email: 'khalid.ahmed@aeris-team.org' },
-      '251001982': { name: 'Ahmad Aziz', dept: 'software', role: 'member', email: 'ahmad.aziz@aeris-team.org' },
-      '241000881': { name: 'Omar Hossam Elbanan', dept: 'software', role: 'member', email: 'omar.hossam@aeris-team.org' },
-      '251003016': { name: 'Hana Moataz', dept: 'software', role: 'member', email: 'hana.moataz@aeris-team.org' },
+      // Mechanical Division (Pure Mech)
+      '231012318': { name: 'Omar Atwan', depts: ['mechanical'], role: 'head', email: 'omar.atwan@aeris-team.org' },
+      '241003033': { name: 'Ammar Yasser', depts: ['mechanical'], role: 'vice_head', email: 'ammar.yasser@aeris-team.org' },
+      '251001249': { name: 'Omar Moataz Shaaban', depts: ['mechanical'], role: 'member', email: 'omar.moataz@aeris-team.org' },
+      '251000305': { name: 'Abdelrahman Ehab Elsayed', depts: ['mechanical'], role: 'member', email: 'abdelrahman.ehab@aeris-team.org' },
+      '251001035': { name: 'Yousef Ashraf Sakr', depts: ['mechanical'], role: 'member', email: 'yousef.ashraf@aeris-team.org' },
+      '241002278': { name: 'Marwan Mohamed Elghazaly', depts: ['mechanical'], role: 'member', email: 'marwan.ghazaly@aeris-team.org' },
+      
+      // Electrical Division (Pure Elec)
+      '241012132': { name: 'Bassem Toulan', depts: ['electrical'], role: 'head', email: 'bassem.toulan@aeris-team.org' },
+      '251010151': { name: 'Sherry George Youssef', depts: ['electrical'], role: 'member', email: 'sherry.george@aeris-team.org' },
+      '251010536': { name: 'Baraa Ibrahim', depts: ['electrical'], role: 'member', email: 'baraa.ibrahim@aeris-team.org' },
+      '241002229': { name: 'Amir Abbas', depts: ['electrical'], role: 'member', email: 'amir.abbas@aeris-team.org' },
       
       // Non-Technical affairs
-      '231012588': { name: 'Judy Samer', dept: 'non-technical', role: 'head', email: 'judy.samer@aeris-team.org' },
-      '251011829': { name: 'Hala Farouk', dept: 'non-technical', role: 'head', email: 'hala.farouk@aeris-team.org' },
-      '251012364': { name: 'Mahinor Harb', dept: 'non-technical', role: 'member', email: 'mahinor.harb@aeris-team.org' },
-      '221011368': { name: 'Sara Abdo', dept: 'non-technical', role: 'member', email: 'sara.abdo@aeris-team.org' },
-      '251001767': { name: 'Esraa Mohammed', dept: 'non-technical', role: 'member', email: 'esraa.mohammed@aeris-team.org' },
-      '231003587': { name: 'Amr Mohamed El Ghazaly', dept: 'non-technical', role: 'member', email: 'amr.ghazaly@aeris-team.org' },
-      '231010429': { name: 'Abdelrahman Aly', dept: 'non-technical', role: 'member', email: 'abdelrahman.aly@aeris-team.org' },
-      '221003996': { name: 'Ahmed Tarek', dept: 'non-technical', role: 'member', email: 'ahmed.tarek@aeris-team.org' },
-      '231004251': { name: 'Adham Ahmed', dept: 'non-technical', role: 'member', email: 'adham.ahmed@aeris-team.org' },
-      '7676767766': { name: 'Aries Aguilar', dept: 'non-technical', role: 'member', email: 'aries.aguilar@aeris-team.org' }
+      '231012588': { name: 'Judy Samer', depts: ['non-technical'], role: 'head', email: 'judy.samer@aeris-team.org' },
+      '251011829': { name: 'Hala Farouk', depts: ['non-technical'], role: 'head', email: 'hala.farouk@aeris-team.org' },
+      '251012364': { name: 'Mahinor Harb', depts: ['non-technical'], role: 'member', email: 'mahinor.harb@aeris-team.org' },
+      '221011368': { name: 'Sara Abdo', depts: ['non-technical'], role: 'member', email: 'sara.abdo@aeris-team.org' },
+      '251001767': { name: 'Esraa Mohammed', depts: ['non-technical'], role: 'member', email: 'esraa.mohammed@aeris-team.org' },
+      '231010429': { name: 'Abdelrahman Aly', depts: ['non-technical'], role: 'member', email: 'abdelrahman.aly@aeris-team.org' },
+      '221003996': { name: 'Ahmed Tarek', depts: ['non-technical'], role: 'member', email: 'ahmed.tarek@aeris-team.org' },
+      '231004251': { name: 'Adham Ahmed', depts: ['non-technical'], role: 'member', email: 'adham.ahmed@aeris-team.org' },
+      
+      // Overlapping mappings
+      // Hannah Ahmed: electrical and mechanical
+      '251001377': { name: 'Hannah Ahmed', depts: ['electrical', 'mechanical'], role: 'vice_head', email: 'hannah.ahmed@aeris-team.org' },
+      // Ibrahim Hassan: software and mechanical
+      '231003934': { name: 'Ibrahim Hassan Ibrahim', depts: ['software', 'mechanical'], role: 'member', email: 'ibrahim.hassan@aeris-team.org' },
+      // Amr Mohamed: software, mechanical, electrical
+      '231003587': { name: 'Amr Mohamed El Ghazaly', depts: ['software', 'mechanical', 'electrical'], role: 'member', email: 'amr.ghazaly@aeris-team.org' }
     };
 
     const ADVISORS = {
@@ -474,6 +480,21 @@
 
     const AUTHORIZED_REVIEWERS = new Set([
       '8383', '9749', '5970', '5550', '231002350', '2006'
+    ]);
+
+    // Set of users authorized to view all member excels (CEO, heads, vice heads, Alaa Ossman, Mohamad Ashraf)
+    const TRACKER_FULL_VIEWERS = new Set([
+      '231002350', // CEO
+      '5550',      // Eng. Mohamad Ashraf
+      '5970',      // Professor Alaa Ossman
+      '251002119', // Software Head
+      '231012318', // Mechanical Head
+      '241012132', // Electrical Head
+      '231012588', // Non-Tech Head
+      '251011829', // Non-Tech Co-Head
+      '241003033', // Mechanical Vice Head
+      '251001377', // Electrical Vice Head
+      '2006'       // Software Vice Head
     ]);
 
     /* ========== AUTOMATED MAILER LOGIC ========== */
@@ -720,8 +741,7 @@
       '221003996': { name: 'ahmed tarek', message: 'malk el gym kolo' },
       '241002229': { name: 'amir abbas', message: 'sba7 el fol' },
       '231004251': { name: 'Adham Ahmed', message: 'bobos 3aml ehhh' },
-      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' },
-      '7676767766': { name: 'Aries Aguilar', message: 'Welcome back, my love Aries 💜✨' }
+      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' }
     };
 
     /* ========== AUTH GATE LOGIC ========== */
@@ -1241,10 +1261,11 @@
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
         
-        // Show view switcher tabs for authorized roles
+        // Show view switcher tabs for authorized roles (exclude Aly Haridi 8383 and Ahmad El Safty 9749)
         const viewTabs = document.getElementById('view-tabs');
         if (viewTabs) {
-          viewTabs.style.display = (role === 'head' || role === 'advisor' || ALL_MEMBERS.has(regNum)) ? 'flex' : 'none';
+          const hasAccess = TRACKER_FULL_VIEWERS.has(regNum) || ALL_MEMBERS.has(regNum);
+          viewTabs.style.display = hasAccess ? 'flex' : 'none';
         }
         
         renderTasks();
@@ -6659,12 +6680,19 @@
       if (!trackerTable) return;
       
       const tasks = getTasks().filter(t => t.department === currentDept);
+      const currentReg = safeSession.getItem('aeris_auth_reg');
+      const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
       
-      // Filter the members belonging to the current department
-      const deptMembers = Object.entries(MEMBERS_DATABASE)
-        .filter(([id, m]) => m.dept === currentDept)
+      // Filter out hidden members (Aries and Hanah) and map by department array membership
+      let deptMembers = Object.entries(MEMBERS_DATABASE)
+        .filter(([id, m]) => !m.hide && m.depts.includes(currentDept))
         .map(([id, m]) => ({ id, ...m }));
         
+      if (!isFullViewer) {
+        // Standard members can only track their own progress row
+        deptMembers = deptMembers.filter(m => m.id === currentReg);
+      }
+      
       if (deptMembers.length === 0) {
         trackerTable.innerHTML = `<tr><td style="text-align: center; padding: 30px; color: var(--white-muted);">No members registered in this department database.</td></tr>`;
         return;
@@ -6689,10 +6717,8 @@
       headerHTML += '<th style="text-align: center; min-width: 80px; color: #ef4444;">Net Missed</th>';
       headerHTML += '</tr></thead>';
       
-      // 2. Build table rows for members
-      let bodyHTML = '<tbody>';
-      
-      deptMembers.forEach(member => {
+      // Helper function to build member row HTML
+      function getMemberRowHTML(member) {
         let rowHTML = '<tr>';
         
         let roleBadge = '';
@@ -6717,7 +6743,6 @@
         let donePoorly = 0;
         let notDone = 0;
         
-        // Add cells for each task in current department
         tasks.forEach(t => {
           const progress = (t.memberProgress && t.memberProgress[member.id]) || 'unmarked';
           
@@ -6725,13 +6750,12 @@
           else if (progress === 'poorly') { totalDone++; donePoorly++; }
           else if (progress === 'not_done') { notDone++; }
           
-          // Check editor permission
-          const currentReg = safeSession.getItem('aeris_auth_reg');
+          // Check editor permission: CEO, Vice Head, and Department Heads can edit
           const activeUser = MEMBERS_DATABASE[currentReg];
           const canEdit = activeUser && (
             activeUser.role === 'ceo' || 
             activeUser.role === 'vice_head' || 
-            (activeUser.role === 'head' && activeUser.dept === currentDept)
+            (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
           );
           
           if (canEdit) {
@@ -6759,16 +6783,14 @@
           }
         });
         
-        // Lookup member bonus count
         const memberBonus = bonuses[member.id] || 0;
         
         // Check edit permission for bonuses counter
-        const currentReg = safeSession.getItem('aeris_auth_reg');
         const activeUser = MEMBERS_DATABASE[currentReg];
         const canEditBonus = activeUser && (
           activeUser.role === 'ceo' || 
           activeUser.role === 'vice_head' || 
-          (activeUser.role === 'head' && activeUser.dept === currentDept)
+          (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
         );
         
         let bonusCellHTML = '';
@@ -6786,7 +6808,6 @@
           bonusCellHTML = `<td style="text-align: center; font-weight: bold; color: #60a5fa;">🏅 ${memberBonus}</td>`;
         }
         
-        // Summary metrics
         const netMissed = Math.max(0, notDone - memberBonus);
         const isAlert = netMissed >= 3;
         const metricClass = isAlert ? 'tracker-metric tracker-metric--missed-alert' : 'tracker-metric';
@@ -6802,8 +6823,49 @@
         `;
         
         rowHTML += '</tr>';
-        bodyHTML += rowHTML;
-      });
+        return rowHTML;
+      }
+      
+      // 2. Build table rows segmented into Core and Cross-Division for leaders
+      let bodyHTML = '<tbody>';
+      
+      if (isFullViewer) {
+        // Group 1: Core Sub-team (only in this department)
+        const coreMembers = deptMembers.filter(m => m.depts.length === 1);
+        // Group 2: Cross-Division (in multiple departments)
+        const crossMembers = deptMembers.filter(m => m.depts.length > 1);
+        
+        if (coreMembers.length > 0) {
+          bodyHTML += `
+            <tr class="tracker-divider-row">
+              <td colspan="${tasks.length + 7}" style="background: rgba(30, 59, 45, 0.45); font-weight: bold; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
+                📂 Core ${escapeHtml(currentDept)} Division
+              </td>
+            </tr>
+          `;
+          coreMembers.forEach(member => {
+            bodyHTML += getMemberRowHTML(member);
+          });
+        }
+        
+        if (crossMembers.length > 0) {
+          bodyHTML += `
+            <tr class="tracker-divider-row">
+              <td colspan="${tasks.length + 7}" style="background: rgba(22, 43, 33, 0.7); font-weight: bold; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
+                🔄 Cross-Division &amp; Shared Members
+              </td>
+            </tr>
+          `;
+          crossMembers.forEach(member => {
+            bodyHTML += getMemberRowHTML(member);
+          });
+        }
+      } else {
+        // Standard member: just render their single row
+        deptMembers.forEach(member => {
+          bodyHTML += getMemberRowHTML(member);
+        });
+      }
       
       bodyHTML += '</tbody>';
       trackerTable.innerHTML = headerHTML + bodyHTML;
@@ -6936,14 +6998,21 @@
       });
     }
 
-    // CSV Exporter Action
+    // CSV Exporter Action (Applies same member segmentation and permissions)
     const exportBtn = document.getElementById('tracker-export-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
         const tasks = getTasks().filter(t => t.department === currentDept);
-        const deptMembers = Object.entries(MEMBERS_DATABASE)
-          .filter(([id, m]) => m.dept === currentDept)
+        const currentReg = safeSession.getItem('aeris_auth_reg');
+        const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
+        
+        let deptMembers = Object.entries(MEMBERS_DATABASE)
+          .filter(([id, m]) => !m.hide && m.depts.includes(currentDept))
           .map(([id, m]) => ({ id, ...m }));
+          
+        if (!isFullViewer) {
+          deptMembers = deptMembers.filter(m => m.id === currentReg);
+        }
           
         let csvContent = 'data:text/csv;charset=utf-8,';
         
@@ -6986,111 +7055,126 @@
       });
     }
 
-    // Mailer configuration modal display and actions
-    const settingsBtn = document.getElementById('tracker-settings-btn');
-    const settingsModal = document.getElementById('mailer-settings-modal');
-    const settingsClose = document.getElementById('mailer-settings-close');
-    const settingsOverlay = document.getElementById('mailer-settings-modal-overlay');
-    const mailerProviderSelect = document.getElementById('mailer-provider');
-    const saveSettingsBtn = document.getElementById('save-mailer-settings');
-    
-    function toggleSettingsGroups(provider) {
-      document.getElementById('settings-group-emailjs').style.display = provider === 'emailjs' ? 'block' : 'none';
-      document.getElementById('settings-group-smtpjs').style.display = provider === 'smtpjs' ? 'block' : 'none';
-    }
-
-    if (settingsBtn && settingsModal) {
-      settingsBtn.addEventListener('click', () => {
-        const settings = getMailerSettings();
-        mailerProviderSelect.value = settings.provider;
-        
-        document.getElementById('emailjs-public-key').value = settings.emailjs?.publicKey || '';
-        document.getElementById('emailjs-service-id').value = settings.emailjs?.serviceId || '';
-        document.getElementById('emailjs-template-id').value = settings.emailjs?.templateId || '';
-        
-        document.getElementById('smtp-host').value = settings.smtpjs?.host || '';
-        document.getElementById('smtp-username').value = settings.smtpjs?.username || '';
-        document.getElementById('smtp-password').value = settings.smtpjs?.password || '';
-        document.getElementById('smtp-port').value = settings.smtpjs?.port || 2525;
-        
-        document.getElementById('team-sender-email').value = settings.teamSender || 'aeris.aast.team@gmail.com';
-        
-        toggleSettingsGroups(settings.provider);
-        
-        settingsModal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      });
-    }
-    
-    if (mailerProviderSelect) {
-      mailerProviderSelect.addEventListener('change', () => {
-        toggleSettingsGroups(mailerProviderSelect.value);
-      });
-    }
-    
-    const closeSettings = () => {
-      if (settingsModal) {
-        settingsModal.style.display = 'none';
-        document.body.style.overflow = '';
+    // Mailer configuration modal display and actions (wrapped in DOMContentLoaded to prevent null bindings)
+    window.addEventListener('DOMContentLoaded', () => {
+      const settingsBtn = document.getElementById('tracker-settings-btn');
+      const settingsModal = document.getElementById('mailer-settings-modal');
+      const settingsClose = document.getElementById('mailer-settings-close');
+      const settingsOverlay = document.getElementById('mailer-settings-modal-overlay');
+      const mailerProviderSelect = document.getElementById('mailer-provider');
+      const saveSettingsBtn = document.getElementById('save-mailer-settings');
+      
+      function toggleSettingsGroups(provider) {
+        const emailjsGroup = document.getElementById('settings-group-emailjs');
+        const smtpjsGroup = document.getElementById('settings-group-smtpjs');
+        if (emailjsGroup) emailjsGroup.style.display = provider === 'emailjs' ? 'block' : 'none';
+        if (smtpjsGroup) smtpjsGroup.style.display = provider === 'smtpjs' ? 'block' : 'none';
       }
-    };
-    
-    if (settingsClose) settingsClose.addEventListener('click', closeSettings);
-    if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
-    
-    if (saveSettingsBtn) {
-      saveSettingsBtn.addEventListener('click', () => {
-        const settings = {
-          provider: mailerProviderSelect.value,
-          teamSender: document.getElementById('team-sender-email').value.trim(),
-          emailjs: {
-            publicKey: document.getElementById('emailjs-public-key').value.trim(),
-            serviceId: document.getElementById('emailjs-service-id').value.trim(),
-            templateId: document.getElementById('emailjs-template-id').value.trim()
-          },
-          smtpjs: {
-            host: document.getElementById('smtp-host').value.trim(),
-            username: document.getElementById('smtp-username').value.trim(),
-            password: document.getElementById('smtp-password').value.trim(),
-            port: parseInt(document.getElementById('smtp-port').value) || 2525
-          }
-        };
-        
-        saveMailerSettings(settings);
-        logToMailerConsole(`Mailer config saved. Active provider: ${settings.provider.toUpperCase()}`, 'sys');
-        closeSettings();
-      });
-    }
 
-    // Mock mailer log console minimizing and closing actions
-    const minConsoleBtn = document.getElementById('mailer-console-min-btn');
-    const closeConsoleBtn = document.getElementById('mailer-console-close-btn');
-    const consolePanelEl = document.getElementById('mock-mailer-console');
-    const consoleHeader = document.getElementById('mailer-console-header');
-    
-    if (minConsoleBtn && consolePanelEl) {
-      minConsoleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        consolePanelEl.classList.toggle('minimized');
-        minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
-      });
-    }
-    
-    if (closeConsoleBtn && consolePanelEl) {
-      closeConsoleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        consolePanelEl.style.display = 'none';
-      });
-    }
-    
-    if (consoleHeader && consolePanelEl) {
-      consoleHeader.addEventListener('click', () => {
-        consolePanelEl.classList.toggle('minimized');
-        if (minConsoleBtn) {
-          minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
+      if (settingsBtn && settingsModal) {
+        settingsBtn.addEventListener('click', () => {
+          const settings = getMailerSettings();
+          if (mailerProviderSelect) mailerProviderSelect.value = settings.provider;
+          
+          const pubKeyEl = document.getElementById('emailjs-public-key');
+          const svcIdEl = document.getElementById('emailjs-service-id');
+          const tempIdEl = document.getElementById('emailjs-template-id');
+          if (pubKeyEl) pubKeyEl.value = settings.emailjs?.publicKey || '';
+          if (svcIdEl) svcIdEl.value = settings.emailjs?.serviceId || '';
+          if (tempIdEl) tempIdEl.value = settings.emailjs?.templateId || '';
+          
+          const hostEl = document.getElementById('smtp-host');
+          const userEl = document.getElementById('smtp-username');
+          const passEl = document.getElementById('smtp-password');
+          const portEl = document.getElementById('smtp-port');
+          if (hostEl) hostEl.value = settings.smtpjs?.host || '';
+          if (userEl) userEl.value = settings.smtpjs?.username || '';
+          if (passEl) passEl.value = settings.smtpjs?.password || '';
+          if (portEl) portEl.value = settings.smtpjs?.port || 2525;
+          
+          const senderEl = document.getElementById('team-sender-email');
+          if (senderEl) senderEl.value = settings.teamSender || 'aeris.aast.team@gmail.com';
+          
+          toggleSettingsGroups(settings.provider);
+          
+          settingsModal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        });
+      }
+      
+      if (mailerProviderSelect) {
+        mailerProviderSelect.addEventListener('change', () => {
+          toggleSettingsGroups(mailerProviderSelect.value);
+        });
+      }
+      
+      const closeSettings = () => {
+        if (settingsModal) {
+          settingsModal.style.display = 'none';
+          document.body.style.overflow = '';
         }
-      });
-    }
+      };
+      
+      if (settingsClose) settingsClose.addEventListener('click', closeSettings);
+      if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
+      
+      if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener('click', () => {
+          const providerVal = mailerProviderSelect ? mailerProviderSelect.value : 'simulation';
+          const teamSenderVal = document.getElementById('team-sender-email') ? document.getElementById('team-sender-email').value.trim() : 'aeris.aast.team@gmail.com';
+          
+          const settings = {
+            provider: providerVal,
+            teamSender: teamSenderVal,
+            emailjs: {
+              publicKey: document.getElementById('emailjs-public-key') ? document.getElementById('emailjs-public-key').value.trim() : '',
+              serviceId: document.getElementById('emailjs-service-id') ? document.getElementById('emailjs-service-id').value.trim() : '',
+              templateId: document.getElementById('emailjs-template-id') ? document.getElementById('emailjs-template-id').value.trim() : ''
+            },
+            smtpjs: {
+              host: document.getElementById('smtp-host') ? document.getElementById('smtp-host').value.trim() : '',
+              username: document.getElementById('smtp-username') ? document.getElementById('smtp-username').value.trim() : '',
+              password: document.getElementById('smtp-password') ? document.getElementById('smtp-password').value.trim() : '',
+              port: document.getElementById('smtp-port') ? (parseInt(document.getElementById('smtp-port').value) || 2525) : 2525
+            }
+          };
+          
+          saveMailerSettings(settings);
+          logToMailerConsole(`Mailer config saved. Active provider: ${settings.provider.toUpperCase()}`, 'sys');
+          closeSettings();
+        });
+      }
+
+      // Mock mailer log console minimizing and closing actions
+      const minConsoleBtn = document.getElementById('mailer-console-min-btn');
+      const closeConsoleBtn = document.getElementById('mailer-console-close-btn');
+      const consolePanelEl = document.getElementById('mock-mailer-console');
+      const consoleHeader = document.getElementById('mailer-console-header');
+      
+      if (minConsoleBtn && consolePanelEl) {
+        minConsoleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          consolePanelEl.classList.toggle('minimized');
+          minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
+        });
+      }
+      
+      if (closeConsoleBtn && consolePanelEl) {
+        closeConsoleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          consolePanelEl.style.display = 'none';
+        });
+      }
+      
+      if (consoleHeader && consolePanelEl) {
+        consoleHeader.addEventListener('click', () => {
+          consolePanelEl.classList.toggle('minimized');
+          if (minConsoleBtn) {
+            minConsoleBtn.textContent = consolePanelEl.classList.contains('minimized') ? '+' : '-';
+          }
+        });
+      }
+    });
 
     // Initial render
     renderTasks();
