@@ -369,6 +369,10 @@
   </footer>
 
   <script>
+    // State (initialized early to prevent TDZ errors in session restore calls)
+    let currentRole = 'member';
+    let currentDept = 'mechanical';
+
     // Safe storage access wrapper to prevent SecurityErrors on file:// protocol or disabled cookies
     const safeSession = {
       getItem(key) {
@@ -1270,8 +1274,8 @@
 
         // Filter department tabs based on user depts to only show their own sub-team Excel/Kanban
         const isGlobalViewer = regNum === '231002350' || regNum === '5550' || regNum === '5970';
-        const person = MEMBERS_DATABASE[regNum] || ADVISORS[regNum];
-        const depts = isGlobalViewer ? ['mechanical', 'electrical', 'software', 'non-technical'] : (person ? (person.depts || []) : []);
+        const personObj = MEMBERS_DATABASE[regNum] || ADVISORS[regNum];
+        const depts = isGlobalViewer ? ['mechanical', 'electrical', 'software', 'non-technical'] : (personObj ? (personObj.depts || []) : []);
         
         if (document.getElementById('tab-mechanical')) document.getElementById('tab-mechanical').style.display = depts.includes('mechanical') ? 'inline-flex' : 'none';
         if (document.getElementById('tab-electrical')) document.getElementById('tab-electrical').style.display = depts.includes('electrical') ? 'inline-flex' : 'none';
@@ -1469,9 +1473,7 @@
     /* ========== Dashboard Logic ========== */
     const STORAGE_KEY = 'aeris_dashboard_tasks';
 
-    // State
-    let currentRole = 'member';
-    let currentDept = 'mechanical';
+    // State (declared at top of script)
 
     // DOM elements
     const roleBtns = document.querySelectorAll('.role-btn');
