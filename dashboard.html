@@ -606,6 +606,33 @@
       return null;
     }
 
+    const MEMBER_BONUSES_KEY = 'aeris_member_bonuses';
+    const WARNINGS_SENT_KEY = 'aeris_warnings_sent';
+
+    function getMemberBonuses() {
+      try {
+        return JSON.parse(safeLocal.getItem(MEMBER_BONUSES_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveMemberBonuses(bonuses) {
+      safeLocal.setItem(MEMBER_BONUSES_KEY, JSON.stringify(bonuses));
+    }
+
+    function getWarningsSentState() {
+      try {
+        return JSON.parse(safeLocal.getItem(WARNINGS_SENT_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveWarningsSentState(state) {
+      safeLocal.setItem(WARNINGS_SENT_KEY, JSON.stringify(state));
+    }
+
     async function checkMemberMissedTasks(memberId) {
       const member = MEMBERS_DATABASE[memberId];
       if (!member) return;
@@ -619,29 +646,46 @@
         }
       });
       
-      logToMailerConsole(`Performance check: ${member.name} has missed ${missedTasks.length} tasks in total.`, 'sys');
+      const bonuses = getMemberBonuses();
+      const memberBonus = bonuses[memberId] || 0;
+      const netMissedCount = Math.max(0, missedTasks.length - memberBonus);
       
-      if (missedTasks.length === 3) {
-        const taskListText = missedTasks.map((t, idx) => `${idx + 1}. "${t.title}" (${t.department} department)`).join('\n');
-        
-        // 1. Send warning email to member
-        const memberSubject = `⚠️ FINAL WARNING: Repeated Missed Tasks Notification`;
-        const memberBody = `Dear ${member.name},\n\nThis is an official warning from the A.E.R.I.S. team leadership. You have failed to complete 3 tasks assigned to you:\n\n${taskListText}\n\nConsistent failure to complete task targets impacts the entire team and violates team guidelines. Continued negligence will result in immediate review of your membership.\n\nBest regards,\nA.E.R.I.S. Board of Directors`;
-        
-        await sendMailerEmail(member.email, member.name, memberSubject, memberBody, true);
-        
-        // 2. Send copy to CEO, Vice Head, and Department Head
-        const ceo = MEMBERS_DATABASE['231002350'];
-        const viceHead = MEMBERS_DATABASE['2006'];
-        const deptHead = getDepartmentHead(member.dept);
-        
-        const leadershipSubject = `🚨 NOTICE: Member ${member.name} has missed 3 tasks`;
-        const leadershipBody = `Dear Leadership Board,\n\nThis is an automated notification to inform you that member ${member.name} (Registration: ${memberId}) has missed 3 tasks in total:\n\n${taskListText}\n\nA formal warning has been dispatched to the member. Please review their performance status.\n\nBest regards,\nA.E.R.I.S. Progress Tracker Service`;
-        
-        if (ceo) await sendMailerEmail(ceo.email, ceo.name, leadershipSubject, leadershipBody);
-        if (viceHead) await sendMailerEmail(viceHead.email, viceHead.name, leadershipSubject, leadershipBody);
-        if (deptHead && deptHead.id !== '231002350' && deptHead.id !== '2006') {
-          await sendMailerEmail(deptHead.email, deptHead.name, leadershipSubject, leadershipBody);
+      logToMailerConsole(`Performance check: ${member.name} has missed ${missedTasks.length} tasks raw, ${memberBonus} bonuses. Net missed: ${netMissedCount}.`, 'sys');
+      
+      const warningsSent = getWarningsSentState();
+      
+      if (netMissedCount === 3) {
+        if (warningsSent[memberId] !== 3) {
+          warningsSent[memberId] = 3;
+          saveWarningsSentState(warningsSent);
+          
+          const taskListText = missedTasks.map((t, idx) => `${idx + 1}. "${t.title}" (${t.department} department)`).join('\n');
+          
+          // 1. Send warning email to member
+          const memberSubject = `⚠️ FINAL WARNING: Repeated Missed Tasks Notification (Adjusted for Bonuses)`;
+          const memberBody = `Dear ${member.name},\n\nThis is an official warning from the A.E.R.I.S. team leadership. You have missed ${missedTasks.length} tasks, with ${memberBonus} bonus(es) applied. Your net missed task count is now ${netMissedCount}:\n\n${taskListText}\n\nConsistent failure to complete task targets impacts the entire team and violates team guidelines. Continued negligence will result in immediate review of your membership.\n\nBest regards,\nA.E.R.I.S. Board of Directors`;
+          
+          await sendMailerEmail(member.email, member.name, memberSubject, memberBody, true);
+          
+          // 2. Send copy to CEO, Vice Head, and Department Head
+          const ceo = MEMBERS_DATABASE['231002350'];
+          const viceHead = MEMBERS_DATABASE['2006'];
+          const deptHead = getDepartmentHead(member.dept);
+          
+          const leadershipSubject = `🚨 NOTICE: Member ${member.name} has reached 3 Net Missed Tasks`;
+          const leadershipBody = `Dear Leadership Board,\n\nThis is an automated notification to inform you that member ${member.name} (Registration: ${memberId}) has reached a net missed task count of 3 (${missedTasks.length} missed, ${memberBonus} bonuses applied):\n\n${taskListText}\n\nA formal warning has been dispatched to the member. Please review their performance status.\n\nBest regards,\nA.E.R.I.S. Progress Tracker Service`;
+          
+          if (ceo) await sendMailerEmail(ceo.email, ceo.name, leadershipSubject, leadershipBody);
+          if (viceHead) await sendMailerEmail(viceHead.email, viceHead.name, leadershipSubject, leadershipBody);
+          if (deptHead && deptHead.id !== '231002350' && deptHead.id !== '2006') {
+            await sendMailerEmail(deptHead.email, deptHead.name, leadershipSubject, leadershipBody);
+          }
+        }
+      } else if (netMissedCount < 3) {
+        if (warningsSent[memberId] === 3) {
+          delete warningsSent[memberId];
+          saveWarningsSentState(warningsSent);
+          logToMailerConsole(`Performance warning cleared for ${member.name} (Net missed count: ${netMissedCount}).`, 'sys');
         }
       }
     }
@@ -6626,6 +6670,8 @@
         return;
       }
       
+      const bonuses = getMemberBonuses();
+      
       // 1. Build table headers
       let headerHTML = '<thead><tr>';
       headerHTML += '<th>Member Name</th>';
@@ -6638,7 +6684,9 @@
       headerHTML += '<th style="text-align: center; min-width: 80px;">Total Done</th>';
       headerHTML += '<th style="text-align: center; min-width: 80px; color: #10b981;">Done Well</th>';
       headerHTML += '<th style="text-align: center; min-width: 80px; color: #f59e0b;">Done Poorly</th>';
-      headerHTML += '<th style="text-align: center; min-width: 80px; color: #ef4444;">Missed</th>';
+      headerHTML += '<th style="text-align: center; min-width: 80px; color: #f87171;">Raw Missed</th>';
+      headerHTML += '<th style="text-align: center; min-width: 100px; color: #60a5fa;">🏅 Bonuses</th>';
+      headerHTML += '<th style="text-align: center; min-width: 80px; color: #ef4444;">Net Missed</th>';
       headerHTML += '</tr></thead>';
       
       // 2. Build table rows for members
@@ -6711,8 +6759,36 @@
           }
         });
         
+        // Lookup member bonus count
+        const memberBonus = bonuses[member.id] || 0;
+        
+        // Check edit permission for bonuses counter
+        const currentReg = safeSession.getItem('aeris_auth_reg');
+        const activeUser = MEMBERS_DATABASE[currentReg];
+        const canEditBonus = activeUser && (
+          activeUser.role === 'ceo' || 
+          activeUser.role === 'vice_head' || 
+          (activeUser.role === 'head' && activeUser.dept === currentDept)
+        );
+        
+        let bonusCellHTML = '';
+        if (canEditBonus) {
+          bonusCellHTML = `
+            <td>
+              <div class="bonus-counter" style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <button class="bonus-btn bonus-btn--minus" data-member-id="${member.id}" style="width: 20px; height: 20px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; line-height: 1;">-</button>
+                <span class="bonus-val" id="bonus-val-${member.id}" style="font-weight: bold; min-width: 16px; text-align: center;">${memberBonus}</span>
+                <button class="bonus-btn bonus-btn--plus" data-member-id="${member.id}" style="width: 20px; height: 20px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; line-height: 1;">+</button>
+              </div>
+            </td>
+          `;
+        } else {
+          bonusCellHTML = `<td style="text-align: center; font-weight: bold; color: #60a5fa;">🏅 ${memberBonus}</td>`;
+        }
+        
         // Summary metrics
-        const isAlert = notDone >= 3;
+        const netMissed = Math.max(0, notDone - memberBonus);
+        const isAlert = netMissed >= 3;
         const metricClass = isAlert ? 'tracker-metric tracker-metric--missed-alert' : 'tracker-metric';
         const alertIcon = isAlert ? '⚠️ ' : '';
         
@@ -6720,7 +6796,9 @@
           <td class="tracker-metric">${totalDone}</td>
           <td class="tracker-metric" style="color: #10b981;">${doneWell}</td>
           <td class="tracker-metric" style="color: #f59e0b;">${donePoorly}</td>
-          <td class="${metricClass}">${alertIcon}${notDone}</td>
+          <td class="tracker-metric" style="color: #f87171;">${notDone}</td>
+          ${bonusCellHTML}
+          <td class="${metricClass}">${alertIcon}${netMissed}</td>
         `;
         
         rowHTML += '</tr>';
@@ -6733,6 +6811,11 @@
       // Bind select change handlers
       trackerTable.querySelectorAll('.eval-select').forEach(select => {
         select.addEventListener('change', handleEvalChange);
+      });
+      
+      // Bind bonus button clicks
+      trackerTable.querySelectorAll('.bonus-btn').forEach(btn => {
+        btn.addEventListener('click', handleBonusChange);
       });
     }
 
@@ -6779,6 +6862,33 @@
       }
       
       // Re-render Excel view
+      renderProgressTracker();
+    }
+
+    // Handles bonus count adjustments
+    async function handleBonusChange(e) {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      const memberId = btn.dataset.memberId;
+      const isPlus = btn.classList.contains('bonus-btn--plus');
+      
+      const bonuses = getMemberBonuses();
+      let currentBonus = bonuses[memberId] || 0;
+      
+      if (isPlus) {
+        currentBonus++;
+      } else {
+        currentBonus = Math.max(0, currentBonus - 1);
+      }
+      
+      bonuses[memberId] = currentBonus;
+      saveMemberBonuses(bonuses);
+      
+      logToMailerConsole(`Bonus update: ${MEMBERS_DATABASE[memberId]?.name} now has ${currentBonus} active bonuses.`, 'sys');
+      
+      // Trigger performance checks to see if warnings should be sent or cleared
+      await checkMemberMissedTasks(memberId);
+      
       renderProgressTracker();
     }
 
@@ -6839,9 +6949,11 @@
         
         let headers = ['Member Name', 'Registration ID', 'Department', 'Team Role'];
         tasks.forEach(t => headers.push(t.title));
-        headers.push('Total Done', 'Done Well', 'Done Poorly', 'Missed Tasks');
+        headers.push('Total Done', 'Done Well', 'Done Poorly', 'Raw Missed', 'Applied Bonuses', 'Net Missed');
         
         csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',') + '\n';
+        
+        const bonuses = getMemberBonuses();
         
         deptMembers.forEach(member => {
           let row = [member.name, member.id, member.dept, member.role];
@@ -6856,7 +6968,9 @@
             row.push(progress);
           });
           
-          row.push(totalDone, doneWell, donePoorly, notDone);
+          const memberBonus = bonuses[member.id] || 0;
+          const netMissed = Math.max(0, notDone - memberBonus);
+          row.push(totalDone, doneWell, donePoorly, notDone, memberBonus, netMissed);
           csvContent += row.map(r => `"${String(r).replace(/"/g, '""')}"`).join(',') + '\n';
         });
         
