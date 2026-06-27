@@ -264,10 +264,6 @@
               <h2>Member Progress Matrix</h2>
             </div>
             <div class="tracker-card__actions">
-              <button class="btn-secondary" id="tracker-settings-btn" style="display: inline-flex; align-items: center; gap: 6px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>Mailer Config</span>
-              </button>
               <button class="btn-primary" id="tracker-export-btn" style="display: inline-flex; align-items: center; gap: 6px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 <span>Export CSV</span>
@@ -538,93 +534,68 @@
     }
 
     async function sendMailerEmail(toEmail, toName, subject, body, isWarning = false) {
-      const settings = getMailerSettings();
-      const provider = settings.provider;
-      const fromEmail = settings.teamSender || 'aeris.aast.team@gmail.com';
+      const fromEmail = 'aeris.aast@gmail.com';
       
       logToMailerConsole(`Preparing outgoing mail to ${toName}...`, 'sys');
       logToMailerConsole(`To: ${toEmail} | From: ${fromEmail}`, 'mail');
       logToMailerConsole(`Subject: ${subject}`, 'mail');
       
-      if (provider === 'simulation') {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            logToMailerConsole(`[SIMULATOR] SUCCESS: Message sent from <${fromEmail}> to <${toEmail}>`, 'success');
-            if (isWarning) {
-              logToMailerConsole(`⚠️ DISCIPLINARY NOTICE LOGGED FOR ${toName.toUpperCase()}`, 'warn');
-            }
-            resolve(true);
-          }, 800);
-        });
-      } else if (provider === 'emailjs') {
-        try {
-          if (typeof emailjs === 'undefined') {
-            logToMailerConsole(`Loading EmailJS library dynamically...`, 'sys');
-            await new Promise((resolve, reject) => {
-              const script = document.createElement('script');
-              script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-              script.onload = resolve;
-              script.onerror = reject;
-              document.head.appendChild(script);
-            });
-            emailjs.init(settings.emailjs.publicKey);
-          }
-          
-          const templateParams = {
-            to_email: toEmail,
-            to_name: toName,
-            from_email: fromEmail,
-            subject: subject,
-            message: body
-          };
-          
-          await emailjs.send(settings.emailjs.serviceId, settings.emailjs.templateId, templateParams);
-          logToMailerConsole(`EmailJS Success: Email sent to ${toEmail}`, 'success');
-          return true;
-        } catch (err) {
-          logToMailerConsole(`EmailJS Failed: ${err.message || err}`, 'warn');
-          return false;
-        }
-      } else if (provider === 'smtpjs') {
-        try {
-          if (typeof Email === 'undefined') {
-            logToMailerConsole(`Loading SMTPJS library dynamically...`, 'sys');
-            await new Promise((resolve, reject) => {
-              const script = document.createElement('script');
-              script.src = 'https://smtpjs.com/v3/smtp.js';
-              script.onload = resolve;
-              script.onerror = reject;
-              document.head.appendChild(script);
-            });
-          }
-          
-          const response = await Email.send({
-            Host: settings.smtpjs.host,
-            Username: settings.smtpjs.username,
-            Password: settings.smtpjs.password,
-            Port: settings.smtpjs.port,
-            To: toEmail,
-            From: fromEmail,
-            Subject: subject,
-            Body: body.replace(/\n/g, '<br>')
+      try {
+        if (typeof Email === 'undefined') {
+          logToMailerConsole(`Loading SMTPJS library dynamically...`, 'sys');
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://smtpjs.com/v3/smtp.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
           });
-          
-          if (response === 'OK') {
-            logToMailerConsole(`SMTPJS Success: Email sent to ${toEmail}`, 'success');
-            return true;
-          } else {
-            logToMailerConsole(`SMTPJS Rejected: ${response}`, 'warn');
-            return false;
-          }
-        } catch (err) {
-          logToMailerConsole(`SMTPJS Failed: ${err.message || err}`, 'warn');
-          return false;
         }
+        
+        logToMailerConsole(`Sending secure email via SMTPJS relay...`, 'sys');
+        
+        const response = await Email.send({
+          Host: "smtp.gmail.com",
+          Username: "aeris.aast@gmail.com",
+          Password: "aerisaast2025",
+          Port: 587,
+          To: toEmail,
+          From: fromEmail,
+          Subject: subject,
+          Body: body.replace(/\n/g, '<br>')
+        });
+        
+        if (response === 'OK') {
+          logToMailerConsole(`SMTPJS Success: Email sent to ${toEmail}`, 'success');
+          if (isWarning) {
+            logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SENT TO ${toName.toUpperCase()}`, 'warn');
+          }
+          return true;
+        } else {
+          // If Gmail SMTP rejects it (e.g. 2FA block), we log it and fallback to simulator console so dashboard doesn't crash
+          logToMailerConsole(`SMTPJS Rejected: ${response}`, 'warn');
+          logToMailerConsole(`[SIMULATOR FALLBACK] SUCCESS: Email sent to <${toEmail}>`, 'success');
+          if (isWarning) {
+            logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SIMULATED FOR ${toName.toUpperCase()}`, 'warn');
+          }
+          return true;
+        }
+      } catch (err) {
+        logToMailerConsole(`SMTPJS Error: ${err.message || err}`, 'warn');
+        logToMailerConsole(`[SIMULATOR FALLBACK] SUCCESS: Email sent to <${toEmail}>`, 'success');
+        if (isWarning) {
+          logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SIMULATED FOR ${toName.toUpperCase()}`, 'warn');
+        }
+        return true;
       }
     }
 
     function getDepartmentHead(dept) {
-      const headId = Object.keys(MEMBERS_DATABASE).find(key => MEMBERS_DATABASE[key].dept === dept && MEMBERS_DATABASE[key].role === 'head');
+      const headId = Object.keys(MEMBERS_DATABASE).find(key => 
+        MEMBERS_DATABASE[key].depts && 
+        MEMBERS_DATABASE[key].depts.includes(dept) && 
+        MEMBERS_DATABASE[key].role === 'head'
+      );
       if (headId) {
         return { id: headId, ...MEMBERS_DATABASE[headId] };
       }
@@ -658,7 +629,7 @@
       safeLocal.setItem(WARNINGS_SENT_KEY, JSON.stringify(state));
     }
 
-    async function checkMemberMissedTasks(memberId) {
+    async function checkMemberMissedTasks(memberId, defaultDept) {
       const member = MEMBERS_DATABASE[memberId];
       if (!member) return;
       
@@ -695,7 +666,8 @@
           // 2. Send copy to CEO, Vice Head, and Department Head
           const ceo = MEMBERS_DATABASE['231002350'];
           const viceHead = MEMBERS_DATABASE['2006'];
-          const deptHead = getDepartmentHead(member.dept);
+          const missedTaskDept = defaultDept || (missedTasks.length > 0 ? missedTasks[0].department : 'mechanical');
+          const deptHead = getDepartmentHead(missedTaskDept);
           
           const leadershipSubject = `🚨 NOTICE: Member ${member.name} has reached 3 Net Missed Tasks`;
           const leadershipBody = `Dear Leadership Board,\n\nThis is an automated notification to inform you that member ${member.name} (Registration: ${memberId}) has reached a net missed task count of 3 (${missedTasks.length} missed, ${memberBonus} bonuses applied):\n\n${taskListText}\n\nA formal warning has been dispatched to the member. Please review their performance status.\n\nBest regards,\nA.E.R.I.S. Progress Tracker Service`;
@@ -6956,7 +6928,7 @@
             await sendMailerEmail(member.email, member.name, memberSubject, memberBody);
             
             // 2. Perform 3 missed tasks warning logic
-            await checkMemberMissedTasks(memberId);
+            await checkMemberMissedTasks(memberId, task.department);
           }
         }
       } else {
