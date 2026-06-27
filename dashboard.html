@@ -448,9 +448,9 @@
       
       // Electrical Division (Pure Elec)
       '241012132': { name: 'Bassem Toulan', depts: ['electrical'], role: 'head', email: 'bassem.toulan@aeris-team.org' },
-      '251010151': { name: 'Sherry George Youssef', depts: ['electrical'], role: 'member', email: 'sherry.george@aeris-team.org' },
-      '251010536': { name: 'Baraa Ibrahim', depts: ['electrical'], role: 'member', email: 'baraa.ibrahim@aeris-team.org' },
-      '241002229': { name: 'Amir Abbas', depts: ['electrical'], role: 'member', email: 'amir.abbas@aeris-team.org' },
+      '251010151': { name: 'Sherry George Youssef', depts: [], role: 'member', email: 'sherry.george@aeris-team.org' },
+      '251010536': { name: 'Baraa Ibrahim', depts: [], role: 'member', email: 'baraa.ibrahim@aeris-team.org' },
+      '241002229': { name: 'Amir Abbas', depts: [], role: 'member', email: 'amir.abbas@aeris-team.org' },
       
       // Non-Technical affairs
       '231012588': { name: 'Judy Samer', depts: ['non-technical'], role: 'head', email: 'judy.samer@aeris-team.org' },
@@ -6679,16 +6679,27 @@
       const trackerTable = document.getElementById('tracker-table');
       if (!trackerTable) return;
       
-      const tasks = getTasks().filter(t => t.department === currentDept);
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
+      const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
+      const isGlobalViewer = currentReg === '231002350' || currentReg === '5550' || currentReg === '5970';
+      const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
+      
+      if (!hasDeptPermission) {
+        trackerTable.innerHTML = `<tr><td style="text-align: center; padding: 40px; color: #ef4444; font-weight: bold; font-size: 1.1rem;">🚫 Access Denied: You do not have permission to view the ${escapeHtml(currentDept)} division tracker.</td></tr>`;
+        return;
+      }
+      
+      const tasks = getTasks().filter(t => t.department === currentDept);
       
       // Filter out hidden members (Aries and Hanah) and map by department array membership
       let deptMembers = Object.entries(MEMBERS_DATABASE)
         .filter(([id, m]) => !m.hide && m.depts.includes(currentDept))
         .map(([id, m]) => ({ id, ...m }));
         
-      if (!isFullViewer) {
+      const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
+      const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
+      
+      if (!isLeadership) {
         // Standard members can only track their own progress row
         deptMembers = deptMembers.filter(m => m.id === currentReg);
       }
@@ -7002,15 +7013,26 @@
     const exportBtn = document.getElementById('tracker-export-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
-        const tasks = getTasks().filter(t => t.department === currentDept);
         const currentReg = safeSession.getItem('aeris_auth_reg');
-        const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
+        const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
+        const isGlobalViewer = currentReg === '231002350' || currentReg === '5550' || currentReg === '5970';
+        const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
+        
+        if (!hasDeptPermission) {
+          alert("Access Denied: You do not have permission to export this department's data.");
+          return;
+        }
+        
+        const tasks = getTasks().filter(t => t.department === currentDept);
         
         let deptMembers = Object.entries(MEMBERS_DATABASE)
           .filter(([id, m]) => !m.hide && m.depts.includes(currentDept))
           .map(([id, m]) => ({ id, ...m }));
           
-        if (!isFullViewer) {
+        const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
+        const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
+        
+        if (!isLeadership) {
           deptMembers = deptMembers.filter(m => m.id === currentReg);
         }
           
@@ -7025,7 +7047,7 @@
         const bonuses = getMemberBonuses();
         
         deptMembers.forEach(member => {
-          let row = [member.name, member.id, member.dept, member.role];
+          let row = [member.name, member.id, member.depts.join(' & '), member.role];
           let totalDone = 0, doneWell = 0, donePoorly = 0, notDone = 0;
           
           tasks.forEach(t => {
