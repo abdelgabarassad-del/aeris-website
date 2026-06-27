@@ -1267,6 +1267,33 @@
           const hasAccess = TRACKER_FULL_VIEWERS.has(regNum) || ALL_MEMBERS.has(regNum);
           viewTabs.style.display = hasAccess ? 'flex' : 'none';
         }
+
+        // Filter department tabs based on user depts to only show their own sub-team Excel/Kanban
+        const isGlobalViewer = regNum === '231002350' || regNum === '5550' || regNum === '5970';
+        const person = MEMBERS_DATABASE[regNum] || ADVISORS[regNum];
+        const depts = isGlobalViewer ? ['mechanical', 'electrical', 'software', 'non-technical'] : (person ? (person.depts || []) : []);
+        
+        if (document.getElementById('tab-mechanical')) document.getElementById('tab-mechanical').style.display = depts.includes('mechanical') ? 'inline-flex' : 'none';
+        if (document.getElementById('tab-electrical')) document.getElementById('tab-electrical').style.display = depts.includes('electrical') ? 'inline-flex' : 'none';
+        if (document.getElementById('tab-software')) document.getElementById('tab-software').style.display = depts.includes('software') ? 'inline-flex' : 'none';
+        if (document.getElementById('tab-non-technical')) document.getElementById('tab-non-technical').style.display = depts.includes('non-technical') ? 'inline-flex' : 'none';
+        
+        // Select the first available department if the current one is not in their allowed depts
+        if (!depts.includes(currentDept) && depts.length > 0) {
+          currentDept = depts[0];
+          // Update active class on tab buttons
+          const deptTabsList = ['mechanical', 'electrical', 'software', 'non-technical'];
+          deptTabsList.forEach(d => {
+            const btn = document.getElementById(`tab-${d}`);
+            if (btn) {
+              if (d === currentDept) {
+                btn.classList.add('active');
+              } else {
+                btn.classList.remove('active');
+              }
+            }
+          });
+        }
         
         renderTasks();
 
