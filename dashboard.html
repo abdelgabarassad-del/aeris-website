@@ -91,6 +91,41 @@
       <!-- Welcome Banner (populated after auth) -->
       <div class="welcome-banner" id="welcome-banner" style="display: none;"></div>
 
+      <!-- Email Notification Section -->
+      <div class="email-settings-section fade-in" id="email-settings-section" style="display: none;">
+        <div class="email-card">
+          <div class="email-card__header">
+            <svg class="email-card__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <h3>Notification Email Address</h3>
+          </div>
+          <p class="email-card__subtitle">Specify the email address where you will receive automated progress reports and performance alerts.</p>
+          <div class="email-card__body">
+            <div id="email-display-container" style="display: none;">
+              <div class="email-display-container__inner">
+                <span class="email-display-label">Registered Address:</span>
+                <span id="registered-email-value" class="email-display-value"></span>
+                <span class="email-lock-badge">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Locked
+                </span>
+              </div>
+            </div>
+            <div id="email-input-container" style="display: none;">
+              <div class="email-input-group">
+                <input type="email" id="custom-email-input" class="email-input" placeholder="e.g. member@gmail.com" required />
+                <button id="save-email-btn" class="btn-primary email-save-btn">
+                  <span>Register Email</span>
+                </button>
+              </div>
+              <p class="email-input-hint">⚠️ One-time configuration. Once set, you cannot change or delete this email.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- News Section -->
       <div class="news-section fade-in" id="news-section" style="display: none;">
         <div class="news-header">
@@ -477,6 +512,98 @@
       '5970': { name: 'Professor Alaa Ossman', title: 'Professor & Academic Advisor' },
       '5550': { name: 'Eng. Mohamad Ashraf', title: 'Mentor & Engineering Advisor' }
     };
+
+    // Initialize custom member emails from localStorage
+    function initCustomEmails() {
+      try {
+        const customEmails = JSON.parse(safeLocal.getItem('aeris_custom_member_emails') || '{}');
+        for (const reg in customEmails) {
+          if (MEMBERS_DATABASE[reg]) {
+            MEMBERS_DATABASE[reg].email = customEmails[reg];
+          } else if (ADVISORS[reg]) {
+            ADVISORS[reg].email = customEmails[reg];
+          } else {
+            MEMBERS_DATABASE[reg] = { 
+              name: 'Member ' + reg, 
+              email: customEmails[reg], 
+              depts: [], 
+              role: 'member' 
+            };
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to parse custom emails:", e);
+      }
+    }
+    initCustomEmails();
+
+    // Render email registration UI card
+    function renderEmailSettings(regNum) {
+      const section = document.getElementById('email-settings-section');
+      if (!section) return;
+
+      const emailInputContainer = document.getElementById('email-input-container');
+      const emailDisplayContainer = document.getElementById('email-display-container');
+      const registeredEmailValue = document.getElementById('registered-email-value');
+      const customEmailInput = document.getElementById('custom-email-input');
+      const saveBtn = document.getElementById('save-email-btn');
+
+      // Get current registered email
+      const customEmails = JSON.parse(safeLocal.getItem('aeris_custom_member_emails') || '{}');
+      const savedEmail = customEmails[regNum];
+
+      if (savedEmail) {
+        // If email is already saved, show display and hide input
+        registeredEmailValue.textContent = savedEmail;
+        emailDisplayContainer.style.display = 'block';
+        emailInputContainer.style.display = 'none';
+      } else {
+        // Otherwise, show input and hide display
+        const dbEmail = (MEMBERS_DATABASE[regNum] && MEMBERS_DATABASE[regNum].email) || '';
+        customEmailInput.value = dbEmail;
+        emailDisplayContainer.style.display = 'none';
+        emailInputContainer.style.display = 'block';
+
+        // Add event listener to the save button
+        saveBtn.onclick = () => {
+          const emailValue = customEmailInput.value.trim();
+          if (!emailValue) {
+            alert('Please enter a valid email address.');
+            return;
+          }
+          // Basic email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(emailValue)) {
+            alert('Please enter a valid email address format.');
+            return;
+          }
+
+          // Confirm save (since it cannot be changed or deleted)
+          const confirmSave = confirm(`Are you sure you want to register ${emailValue}?\n\n⚠️ This is a one-time configuration and cannot be changed or deleted later.`);
+          if (confirmSave) {
+            // Save to localStorage
+            const updatedEmails = JSON.parse(safeLocal.getItem('aeris_custom_member_emails') || '{}');
+            updatedEmails[regNum] = emailValue;
+            safeLocal.setItem('aeris_custom_member_emails', JSON.stringify(updatedEmails));
+
+            // Update database in-memory
+            if (MEMBERS_DATABASE[regNum]) {
+              MEMBERS_DATABASE[regNum].email = emailValue;
+            } else if (ADVISORS[regNum]) {
+              ADVISORS[regNum].email = emailValue;
+            } else {
+              MEMBERS_DATABASE[regNum] = { name: 'Member ' + regNum, email: emailValue, depts: [], role: 'member' };
+            }
+
+            // Re-render UI
+            renderEmailSettings(regNum);
+            logToMailerConsole(`Email updated for registration ${regNum}: ${emailValue}`, 'sys');
+          }
+        };
+      }
+
+      section.style.display = 'block';
+    }
 
     const AUTHORIZED_REVIEWERS = new Set([
       '8383', '9749', '5970', '5550', '231002350', '2006'
@@ -1319,6 +1446,9 @@
         if (regNum === '2006') {
           playDragonSong();
         }
+
+        // Render notification email configuration card
+        renderEmailSettings(regNum);
       }, 600);
     }
 
