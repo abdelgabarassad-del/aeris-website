@@ -400,6 +400,38 @@
   </footer>
 
   <script>
+    // Inline definition of Email to bypass Brave ad-blocker script blocks of smtpjs.com
+    const Email = {
+      send: function (a) {
+        return new Promise(function (resolve, reject) {
+          a.nocors = a.nocors || false;
+          let t = "SecureToken=" + (a.SecureToken || '') + "&To=" + encodeURIComponent(a.To) + "&From=" + encodeURIComponent(a.From) + "&Subject=" + encodeURIComponent(a.Subject) + "&Body=" + encodeURIComponent(a.Body);
+          if (a.Host) {
+            t = "Host=" + encodeURIComponent(a.Host) + "&Username=" + encodeURIComponent(a.Username) + "&Password=" + encodeURIComponent(a.Password) + "&To=" + encodeURIComponent(a.To) + "&From=" + encodeURIComponent(a.From) + "&Subject=" + encodeURIComponent(a.Subject) + "&Body=" + encodeURIComponent(a.Body);
+          }
+          if (a.Attachments) {
+            for (let e = 0; e < a.Attachments.length; e++) {
+              t += "&Attachment=" + encodeURIComponent(a.Attachments[e]);
+            }
+          }
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://smtpjs.com/v3/smtpjs.aspx", true);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              resolve(xhr.responseText);
+            } else {
+              reject(xhr.statusText);
+            }
+          };
+          xhr.onerror = function () {
+            reject("Network Error or Blocked Request");
+          };
+          xhr.send(t);
+        });
+      }
+    };
+
     // State (initialized early to prevent TDZ errors in session restore calls)
     let currentRole = 'member';
     let currentDept = 'mechanical';
@@ -651,17 +683,6 @@
       logToMailerConsole(`Subject: ${subject}`, 'mail');
       
       try {
-        if (typeof Email === 'undefined') {
-          logToMailerConsole(`Loading SMTPJS library dynamically...`, 'sys');
-          await new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://smtpjs.com/v3/smtp.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-          });
-        }
-        
         logToMailerConsole(`Sending secure email via SMTPJS relay...`, 'sys');
         
         const response = await Email.send({
