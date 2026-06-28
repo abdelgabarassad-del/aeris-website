@@ -375,6 +375,34 @@
     const errorBanner = document.getElementById('errorBanner');
     const WEB3FORMS_ACCESS_KEY = 'ed7e61fe-5464-4969-a145-5c822d547e8b';
     
+    // Send copy of form submissions to CEO
+    async function sendCeoNotification(subject, body) {
+      try {
+        if (typeof Email === 'undefined') {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://smtpjs.com/v3/smtp.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+        await Email.send({
+          Host: "smtp.gmail.com",
+          Username: "aeris.aast@gmail.com",
+          Password: "aerisaast2025",
+          Port: 587,
+          To: "abdelgabarassad@gmail.com",
+          From: "aeris.aast@gmail.com",
+          Subject: subject,
+          Body: body.replace(/\n/g, '<br>')
+        });
+        console.log("CEO email notification sent successfully.");
+      } catch (err) {
+        console.error("Failed to send CEO email notification:", err);
+      }
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -405,6 +433,15 @@
         const result = await response.json();
         
         if (result.success) {
+          // Send email to CEO
+          let emailBody = `A new FAQ question has been submitted:\n\n`;
+          for (const [key, value] of formData.entries()) {
+            if (key !== 'access_key' && key !== 'botcheck') {
+              emailBody += `**${key}**: ${value}\n`;
+            }
+          }
+          sendCeoNotification(`New FAQ Submission`, emailBody);
+
           form.style.display = 'none';
           successMsg.style.display = 'block';
           successMsg.style.opacity = '0';

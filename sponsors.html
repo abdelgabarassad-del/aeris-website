@@ -906,6 +906,34 @@
     // Get one free at https://web3forms.com (enter aeris.aast@gmail.com)
     const WEB3FORMS_ACCESS_KEY = 'ed7e61fe-5464-4969-a145-5c822d547e8b';
 
+    // Send copy of form submissions to CEO
+    async function sendCeoNotification(subject, body) {
+      try {
+        if (typeof Email === 'undefined') {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://smtpjs.com/v3/smtp.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+        await Email.send({
+          Host: "smtp.gmail.com",
+          Username: "aeris.aast@gmail.com",
+          Password: "aerisaast2025",
+          Port: 587,
+          To: "abdelgabarassad@gmail.com",
+          From: "aeris.aast@gmail.com",
+          Subject: subject,
+          Body: body.replace(/\n/g, '<br>')
+        });
+        console.log("CEO email notification sent successfully.");
+      } catch (err) {
+        console.error("Failed to send CEO email notification:", err);
+      }
+    }
+
     sponsorForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -953,6 +981,15 @@
         const result = await response.json();
 
         if (response.ok && result.success) {
+          // Send email to CEO
+          let emailBody = `A new sponsorship proposal has been submitted:\n\n`;
+          for (const key in payload) {
+            if (key !== 'access_key' && key !== 'botcheck') {
+              emailBody += `**${key}**: ${payload[key]}\n`;
+            }
+          }
+          sendCeoNotification(`New Sponsorship Proposal: ${payload['Contact Name']}`, emailBody);
+
           // Success — show the HUD
           formPanel.style.display = 'none';
           successHud.style.display = 'block';
