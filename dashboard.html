@@ -625,24 +625,7 @@
     ]);
 
     /* ========== AUTOMATED MAILER LOGIC ========== */
-    const MAILER_SETTINGS_KEY = 'aeris_mailer_settings';
 
-    function getMailerSettings() {
-      try {
-        return JSON.parse(safeLocal.getItem(MAILER_SETTINGS_KEY)) || {
-          provider: 'simulation',
-          teamSender: 'aeris.aast.team@gmail.com',
-          emailjs: { publicKey: '', serviceId: '', templateId: '' },
-          smtpjs: { host: '', username: '', password: '', port: 2525 }
-        };
-      } catch (e) {
-        return { provider: 'simulation', teamSender: 'aeris.aast.team@gmail.com' };
-      }
-    }
-
-    function saveMailerSettings(settings) {
-      safeLocal.setItem(MAILER_SETTINGS_KEY, JSON.stringify(settings));
-    }
 
     function logToMailerConsole(message, type = 'sys') {
       const consoleEl = document.getElementById('mock-mailer-console');
@@ -699,21 +682,12 @@
           }
           return true;
         } else {
-          // If Gmail SMTP rejects it (e.g. 2FA block), we log it and fallback to simulator console so dashboard doesn't crash
           logToMailerConsole(`SMTPJS Rejected: ${response}`, 'warn');
-          logToMailerConsole(`[SIMULATOR FALLBACK] SUCCESS: Email sent to <${toEmail}>`, 'success');
-          if (isWarning) {
-            logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SIMULATED FOR ${toName.toUpperCase()}`, 'warn');
-          }
-          return true;
+          return false;
         }
       } catch (err) {
         logToMailerConsole(`SMTPJS Error: ${err.message || err}`, 'warn');
-        logToMailerConsole(`[SIMULATOR FALLBACK] SUCCESS: Email sent to <${toEmail}>`, 'success');
-        if (isWarning) {
-          logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SIMULATED FOR ${toName.toUpperCase()}`, 'warn');
-        }
-        return true;
+        return false;
       }
     }
 
@@ -7208,96 +7182,8 @@
       });
     }
 
-    // Mailer configuration modal display and actions (wrapped in DOMContentLoaded to prevent null bindings)
+    // Mailer console display and actions (wrapped in DOMContentLoaded to prevent null bindings)
     window.addEventListener('DOMContentLoaded', () => {
-      const settingsBtn = document.getElementById('tracker-settings-btn');
-      const settingsModal = document.getElementById('mailer-settings-modal');
-      const settingsClose = document.getElementById('mailer-settings-close');
-      const settingsOverlay = document.getElementById('mailer-settings-modal-overlay');
-      const mailerProviderSelect = document.getElementById('mailer-provider');
-      const saveSettingsBtn = document.getElementById('save-mailer-settings');
-      
-      function toggleSettingsGroups(provider) {
-        const emailjsGroup = document.getElementById('settings-group-emailjs');
-        const smtpjsGroup = document.getElementById('settings-group-smtpjs');
-        if (emailjsGroup) emailjsGroup.style.display = provider === 'emailjs' ? 'block' : 'none';
-        if (smtpjsGroup) smtpjsGroup.style.display = provider === 'smtpjs' ? 'block' : 'none';
-      }
-
-      if (settingsBtn && settingsModal) {
-        settingsBtn.addEventListener('click', () => {
-          const settings = getMailerSettings();
-          if (mailerProviderSelect) mailerProviderSelect.value = settings.provider;
-          
-          const pubKeyEl = document.getElementById('emailjs-public-key');
-          const svcIdEl = document.getElementById('emailjs-service-id');
-          const tempIdEl = document.getElementById('emailjs-template-id');
-          if (pubKeyEl) pubKeyEl.value = settings.emailjs?.publicKey || '';
-          if (svcIdEl) svcIdEl.value = settings.emailjs?.serviceId || '';
-          if (tempIdEl) tempIdEl.value = settings.emailjs?.templateId || '';
-          
-          const hostEl = document.getElementById('smtp-host');
-          const userEl = document.getElementById('smtp-username');
-          const passEl = document.getElementById('smtp-password');
-          const portEl = document.getElementById('smtp-port');
-          if (hostEl) hostEl.value = settings.smtpjs?.host || '';
-          if (userEl) userEl.value = settings.smtpjs?.username || '';
-          if (passEl) passEl.value = settings.smtpjs?.password || '';
-          if (portEl) portEl.value = settings.smtpjs?.port || 2525;
-          
-          const senderEl = document.getElementById('team-sender-email');
-          if (senderEl) senderEl.value = settings.teamSender || 'aeris.aast.team@gmail.com';
-          
-          toggleSettingsGroups(settings.provider);
-          
-          settingsModal.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-        });
-      }
-      
-      if (mailerProviderSelect) {
-        mailerProviderSelect.addEventListener('change', () => {
-          toggleSettingsGroups(mailerProviderSelect.value);
-        });
-      }
-      
-      const closeSettings = () => {
-        if (settingsModal) {
-          settingsModal.style.display = 'none';
-          document.body.style.overflow = '';
-        }
-      };
-      
-      if (settingsClose) settingsClose.addEventListener('click', closeSettings);
-      if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
-      
-      if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', () => {
-          const providerVal = mailerProviderSelect ? mailerProviderSelect.value : 'simulation';
-          const teamSenderVal = document.getElementById('team-sender-email') ? document.getElementById('team-sender-email').value.trim() : 'aeris.aast.team@gmail.com';
-          
-          const settings = {
-            provider: providerVal,
-            teamSender: teamSenderVal,
-            emailjs: {
-              publicKey: document.getElementById('emailjs-public-key') ? document.getElementById('emailjs-public-key').value.trim() : '',
-              serviceId: document.getElementById('emailjs-service-id') ? document.getElementById('emailjs-service-id').value.trim() : '',
-              templateId: document.getElementById('emailjs-template-id') ? document.getElementById('emailjs-template-id').value.trim() : ''
-            },
-            smtpjs: {
-              host: document.getElementById('smtp-host') ? document.getElementById('smtp-host').value.trim() : '',
-              username: document.getElementById('smtp-username') ? document.getElementById('smtp-username').value.trim() : '',
-              password: document.getElementById('smtp-password') ? document.getElementById('smtp-password').value.trim() : '',
-              port: document.getElementById('smtp-port') ? (parseInt(document.getElementById('smtp-port').value) || 2525) : 2525
-            }
-          };
-          
-          saveMailerSettings(settings);
-          logToMailerConsole(`Mailer config saved. Active provider: ${settings.provider.toUpperCase()}`, 'sys');
-          closeSettings();
-        });
-      }
-
       // Mock mailer log console minimizing and closing actions
       const minConsoleBtn = document.getElementById('mailer-console-min-btn');
       const closeConsoleBtn = document.getElementById('mailer-console-close-btn');
@@ -7336,76 +7222,6 @@
     }
   </script>
 
-  <!-- ========== MAILER SETTINGS MODAL ========== -->
-  <div class="task-modal" id="mailer-settings-modal" style="display: none; z-index: 10060;">
-    <div class="task-modal__overlay" id="mailer-settings-modal-overlay"></div>
-    <div class="task-modal__content task-modal__content--settings">
-      <button class="task-modal__close" id="mailer-settings-close" aria-label="Close modal">&times;</button>
-      
-      <div class="task-modal__header" style="margin-bottom: 12px;">
-        <span class="task-modal__dept-badge task-modal__dept-badge--software">Configuration</span>
-      </div>
-      
-      <h2 class="task-modal__title" style="margin-bottom: 8px;">AERIS Mailer Settings</h2>
-      <p class="task-modal__desc" style="font-size: 0.9rem; margin-bottom: 20px;">Configure how warnings and notifications are sent to members who miss tasks.</p>
-      
-      <div class="settings-form">
-        <div class="form-group" style="margin-bottom: 16px;">
-          <label for="mailer-provider" style="display:block; margin-bottom:6px; font-weight:600;">Email Provider / Method</label>
-          <select id="mailer-provider" class="form-input" style="width:100%; box-sizing:border-box;">
-            <option value="simulation" selected>🔌 Simulation / Mock Mode (Default)</option>
-            <option value="emailjs">✉️ EmailJS API (Client-side)</option>
-            <option value="smtpjs">📨 SMTPJS (Direct SMTP)</option>
-          </select>
-        </div>
-        
-        <!-- EmailJS Config -->
-        <div id="settings-group-emailjs" class="settings-group-fields" style="display: none; margin-bottom: 16px;">
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="emailjs-public-key" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Public Key</label>
-            <input type="text" id="emailjs-public-key" class="form-input" placeholder="user_xxxxxxxxxxxxxx" style="width:100%; box-sizing:border-box;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="emailjs-service-id" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Service ID</label>
-            <input type="text" id="emailjs-service-id" class="form-input" placeholder="service_xxxxxxx" style="width:100%; box-sizing:border-box;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 4px;">
-            <label for="emailjs-template-id" style="display:block; margin-bottom:4px; font-size:0.85rem;">EmailJS Template ID</label>
-            <input type="text" id="emailjs-template-id" class="form-input" placeholder="template_xxxxxxx" style="width:100%; box-sizing:border-box;" />
-          </div>
-        </div>
-
-        <!-- SMTPJS Config -->
-        <div id="settings-group-smtpjs" class="settings-group-fields" style="display: none; margin-bottom: 16px;">
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="smtp-host" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Host</label>
-            <input type="text" id="smtp-host" class="form-input" placeholder="smtp.elasticemail.com" style="width:100%; box-sizing:border-box;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="smtp-username" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Username / Email</label>
-            <input type="text" id="smtp-username" class="form-input" placeholder="your-email@example.com" style="width:100%; box-sizing:border-box;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="smtp-password" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Password / Token</label>
-            <input type="password" id="smtp-password" class="form-input" placeholder="••••••••••••••••" style="width:100%; box-sizing:border-box;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 4px;">
-            <label for="smtp-port" style="display:block; margin-bottom:4px; font-size:0.85rem;">SMTP Port</label>
-            <input type="number" id="smtp-port" class="form-input" placeholder="2525" value="2525" style="width:100%; box-sizing:border-box;" />
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 20px;">
-          <label for="team-sender-email" style="display:block; margin-bottom:6px; font-weight:600;">Team Sender Address</label>
-          <input type="email" id="team-sender-email" class="form-input" value="aeris.aast.team@gmail.com" placeholder="team@aeris-team.org" style="width:100%; box-sizing:border-box;" />
-        </div>
-
-        <div class="settings-actions">
-          <button class="btn-primary" id="save-mailer-settings" style="width: 100%; padding: 12px; font-weight: bold; text-transform: uppercase;">Save Settings</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ========== MOCK MAILER LOG PANEL ========== -->
   <div class="mock-mailer-console" id="mock-mailer-console" style="display: none;">
