@@ -678,7 +678,7 @@
             document.head.appendChild(script);
           });
         }
-        await Email.send({
+        const res = await Email.send({
           Host: "smtp.gmail.com",
           Username: "aeris.aast@gmail.com",
           Password: "bjrylrqdbjwuyuio",
@@ -688,7 +688,12 @@
           Subject: subject,
           Body: body.replace(/\n/g, '<br>')
         });
-        console.log("CEO email notification sent successfully.");
+        console.log("SMTPJS Response:", res);
+        if (res === 'OK') {
+          console.log("CEO email notification sent successfully.");
+        } else {
+          console.warn("CEO email notification failed:", res);
+        }
       } catch (err) {
         console.error("Failed to send CEO email notification:", err);
       }
