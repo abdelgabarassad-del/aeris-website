@@ -400,37 +400,6 @@
   </footer>
 
   <script>
-    // Inline definition of Email to bypass Brave ad-blocker script blocks of smtpjs.com
-    const Email = {
-      send: function (a) {
-        return new Promise(function (resolve, reject) {
-          a.nocors = a.nocors || false;
-          let t = "SecureToken=" + (a.SecureToken || '') + "&To=" + encodeURIComponent(a.To) + "&From=" + encodeURIComponent(a.From) + "&Subject=" + encodeURIComponent(a.Subject) + "&Body=" + encodeURIComponent(a.Body);
-          if (a.Host) {
-            t = "Host=" + encodeURIComponent(a.Host) + "&Username=" + encodeURIComponent(a.Username) + "&Password=" + encodeURIComponent(a.Password) + "&To=" + encodeURIComponent(a.To) + "&From=" + encodeURIComponent(a.From) + "&Subject=" + encodeURIComponent(a.Subject) + "&Body=" + encodeURIComponent(a.Body);
-          }
-          if (a.Attachments) {
-            for (let e = 0; e < a.Attachments.length; e++) {
-              t += "&Attachment=" + encodeURIComponent(a.Attachments[e]);
-            }
-          }
-          const xhr = new XMLHttpRequest();
-          xhr.open("POST", "https://smtpjs.com/v3/smtpjs.aspx", true);
-          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-          xhr.onload = function () {
-            if (xhr.status === 200) {
-              resolve(xhr.responseText);
-            } else {
-              reject(xhr.statusText);
-            }
-          };
-          xhr.onerror = function () {
-            reject("Network Error or Blocked Request");
-          };
-          xhr.send(t);
-        });
-      }
-    };
 
     // State (initialized early to prevent TDZ errors in session restore calls)
     let currentRole = 'member';
@@ -677,37 +646,37 @@
 
     async function sendMailerEmail(toEmail, toName, subject, body, isWarning = false) {
       const fromEmail = 'aeris.aast@gmail.com';
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbwhJBeQL91cCpvvLTMDkkvyE-SZcNVgWMlta8HEBhZzZB6eTqpTxnVgVWdUi92bcH5F/exec';
       
       logToMailerConsole(`Preparing outgoing mail to ${toName}...`, 'sys');
       logToMailerConsole(`To: ${toEmail} | From: ${fromEmail}`, 'mail');
       logToMailerConsole(`Subject: ${subject}`, 'mail');
       
       try {
-        logToMailerConsole(`Sending secure email via SMTPJS relay...`, 'sys');
+        logToMailerConsole(`Sending secure email via Google Apps Script relay...`, 'sys');
         
-        const response = await Email.send({
-          Host: "smtp.gmail.com",
-          Username: "aeris.aast@gmail.com",
-          Password: "bjrylrqdbjwuyuio",
-          Port: 587,
-          To: toEmail,
-          From: fromEmail,
-          Subject: subject,
-          Body: body.replace(/\n/g, '<br>')
+        const params = new URLSearchParams();
+        params.append("action", "sendEmail");
+        params.append("to", toEmail);
+        params.append("subject", subject);
+        params.append("body", body);
+        
+        await fetch(scriptUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params.toString()
         });
         
-        if (response === 'OK') {
-          logToMailerConsole(`SMTPJS Success: Email sent to ${toEmail}`, 'success');
-          if (isWarning) {
-            logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SENT TO ${toName.toUpperCase()}`, 'warn');
-          }
-          return true;
-        } else {
-          logToMailerConsole(`SMTPJS Rejected: ${response}`, 'warn');
-          return false;
+        logToMailerConsole(`Google Sheets Success: Email sent to ${toEmail}`, 'success');
+        if (isWarning) {
+          logToMailerConsole(`⚠️ DISCIPLINARY NOTICE SENT TO ${toName.toUpperCase()}`, 'warn');
         }
+        return true;
       } catch (err) {
-        logToMailerConsole(`SMTPJS Error: ${err.message || err}`, 'warn');
+        logToMailerConsole(`Mailer Error: ${err.message || err}`, 'warn');
         return false;
       }
     }
