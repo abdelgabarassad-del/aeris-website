@@ -666,6 +666,34 @@
     const GOOGLE_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhJBeQL91cCpvvLTMDkkvyE-SZcNVgWMlta8HEBhZzZB6eTqpTxnVgVWdUi92bcH5F/exec';
     // ----------------------------------------------------
 
+    // Send copy of form submissions to CEO
+    async function sendCeoNotification(subject, body) {
+      try {
+        if (typeof Email === 'undefined') {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://smtpjs.com/v3/smtp.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+        await Email.send({
+          Host: "smtp.gmail.com",
+          Username: "aeris.aast@gmail.com",
+          Password: "aerisaast2025",
+          Port: 587,
+          To: "abdelgabarassad@gmail.com",
+          From: "aeris.aast@gmail.com",
+          Subject: subject,
+          Body: body.replace(/\n/g, '<br>')
+        });
+        console.log("CEO email notification sent successfully.");
+      } catch (err) {
+        console.error("Failed to send CEO email notification:", err);
+      }
+    }
+
     /* Toggle instructions card visibility */
     const setupCard = document.getElementById('setupCard');
     if (GOOGLE_SHEET_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' && GOOGLE_SHEET_SCRIPT_URL !== '') {
@@ -719,6 +747,14 @@
       // If URL placeholder is unchanged, simulate submission for demo purposes
       if (GOOGLE_SHEET_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' || GOOGLE_SHEET_SCRIPT_URL === '') {
         console.warn("A.E.R.I.S. Info: Simulating submission because GOOGLE_SHEET_SCRIPT_URL is not set.");
+        
+        // Build email body and notify CEO
+        let emailBody = `A new recruitment application has been submitted (Simulated):\n\n`;
+        for (const [key, value] of formData.entries()) {
+          emailBody += `**${key}**: ${value}\n`;
+        }
+        sendCeoNotification(`New Recruitment Submission: ${formData.get('fullName')}`, emailBody);
+
         setTimeout(() => {
           submitBtn.classList.remove('is-loading');
           formCard.style.display = 'none';
@@ -743,6 +779,13 @@
           },
           body: params.toString()
         });
+
+        // Build email body and notify CEO
+        let emailBody = `A new recruitment application has been submitted:\n\n`;
+        for (const [key, value] of formData.entries()) {
+          emailBody += `**${key}**: ${value}\n`;
+        }
+        sendCeoNotification(`New Recruitment Submission: ${formData.get('fullName')}`, emailBody);
 
         // Since 'no-cors' mode returns opaque response, we can transition to success
         submitBtn.classList.remove('is-loading');
