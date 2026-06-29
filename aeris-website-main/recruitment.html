@@ -549,10 +549,15 @@
                 <input type="url" id="portfolioLink" name="portfolioLink" placeholder="e.g., https://github.com/yourprofile or Google Drive link" required />
               </div>
 
-              <!-- Submit Button -->
-              <button type="submit" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px;">
-                <span class="btn-text">Submit Application &#9656;</span>
-                <span class="btn-loader"></span>
+              <!-- Recruitment Closed Alert -->
+              <div class="info-banner" style="border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); color: #fca5a5; margin-bottom: 20px;">
+                <strong>Recruitment Season Closed</strong>
+                Applications are currently unavailable. Kindly wait for our upcoming recruitment season announcements!
+              </div>
+
+              <!-- Submit Button (Disabled) -->
+              <button type="button" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px; background: rgba(30, 59, 45, 0.6); color: var(--white-muted); cursor: not-allowed; box-shadow: none; pointer-events: none;" disabled>
+                <span class="btn-text">Recruitment Closed</span>
               </button>
 
             </form>
