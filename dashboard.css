@@ -10094,5 +10094,246 @@ body.stitch-theme .view-tab.active {
   }
 }
 
+/* ========== DASHBOARD REFERENCE/PATCH NOTES GUIDE ========== */
+.dashboard-guide-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.dashboard-guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dashboard-guide-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--white);
+  font-family: var(--font-sub);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.dashboard-guide-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.dashboard-guide-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--white-muted) !important;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 1.2rem;
+  padding: 0 6px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none !important;
+  transition: color 0.2s ease;
+}
+
+.dashboard-guide-toggle-btn:hover {
+  color: var(--accent) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.dashboard-guide-close-btn {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0 4px !important;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none !important;
+  transition: color 0.2s ease;
+}
+
+.dashboard-guide-close-btn:hover {
+  color: #ff4d4d !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.dashboard-guide-header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-guide-body {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--white-muted);
+  line-height: 1.6;
+}
+
+.dashboard-guide-welcome {
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-guide-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.dashboard-guide-list li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.dashboard-guide-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.dashboard-guide-list strong {
+  color: var(--white);
+}
+
+/* Theme overrides */
+
+/* Soviet Theme */
+.soviet-theme .dashboard-guide-card {
+  background: #120504 !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 0 15px rgba(163, 45, 23, 0.4) !important;
+}
+.soviet-theme .dashboard-guide-title-group {
+  color: var(--soviet-cyan) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.4rem !important;
+}
+.soviet-theme .dashboard-guide-body {
+  border-top-color: var(--soviet-border) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.15rem !important;
+  color: #ccc !important;
+}
+.soviet-theme .dashboard-guide-list li::before {
+  content: "★" !important;
+  color: var(--soviet-cyan) !important;
+}
+.soviet-theme .dashboard-guide-welcome {
+  color: #fff !important;
+}
+
+/* Batman Theme */
+.batman-theme .dashboard-guide-card {
+  background: #141414 !important;
+  border: 1px solid #ffe600 !important;
+  box-shadow: 0 0 15px rgba(255, 230, 0, 0.2) !important;
+}
+.batman-theme .dashboard-guide-title-group {
+  color: #ffe600 !important;
+}
+.batman-theme .dashboard-guide-list li::before {
+  content: "🦇" !important;
+}
+
+/* Stitch Theme */
+.stitch-theme .dashboard-guide-card {
+  background: rgba(14, 28, 54, 0.85) !important;
+  border: 2px dashed #4da6ff !important;
+}
+.stitch-theme .dashboard-guide-list li::before {
+  content: "🌺" !important;
+}
+
+/* Spongebob Theme */
+.spongebob-theme .dashboard-guide-card {
+  background: rgba(253, 224, 71, 0.1) !important;
+  border: 2px solid #fde047 !important;
+}
+.spongebob-theme .dashboard-guide-list li::before {
+  content: "🍍" !important;
+}
+
+/* Sonic Theme */
+.sonic-theme .dashboard-guide-card {
+  background: rgba(30, 58, 138, 0.2) !important;
+  border: 2px solid #1d4ed8 !important;
+  box-shadow: 0 0 15px rgba(29, 78, 216, 0.4) !important;
+}
+.sonic-theme .dashboard-guide-list li::before {
+  content: "🌀" !important;
+}
+
+/* Lightning McQueen Theme */
+.mcqueen-theme .dashboard-guide-card {
+  background: rgba(220, 38, 38, 0.15) !important;
+  border: 2px solid #dc2626 !important;
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.4) !important;
+}
+.mcqueen-theme .dashboard-guide-list li::before {
+  content: "⚡" !important;
+}
+
+/* Bloodborne Theme */
+.bloodborne-theme .dashboard-guide-card {
+  background: #0d0c0c !important;
+  border: 1px solid #8c1c1c !important;
+  box-shadow: 0 0 20px rgba(140, 28, 28, 0.3) !important;
+}
+.bloodborne-theme .dashboard-guide-title-group {
+  color: #8c1c1c !important;
+}
+.bloodborne-theme .dashboard-guide-list li::before {
+  content: "🩸" !important;
+}
+
+/* Dragon Theme */
+.dragon-theme .dashboard-guide-card {
+  background: #141712 !important;
+  border: 2px solid #5a6e4d !important;
+  box-shadow: 0 0 15px rgba(90, 110, 77, 0.3) !important;
+}
+.dragon-theme .dashboard-guide-list li::before {
+  content: "🐉" !important;
+}
+
+/* Ironman Theme */
+.ironman-theme .dashboard-guide-card {
+  background: rgba(185, 28, 28, 0.1) !important;
+  border: 1px solid #eab308 !important;
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.25) !important;
+}
+.ironman-theme .dashboard-guide-list li::before {
+  content: "🚀" !important;
+}
+
+
 
 

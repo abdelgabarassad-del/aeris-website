@@ -91,6 +91,29 @@
       <!-- Welcome Banner (populated after auth) -->
       <div class="welcome-banner" id="welcome-banner" style="display: none;"></div>
 
+      <!-- Dashboard Guide Card (collapsible & customizable) -->
+      <div class="dashboard-guide-card fade-in" id="dashboard-guide-card" style="display: none;">
+        <div class="dashboard-guide-header" id="dashboard-guide-header">
+          <div class="dashboard-guide-title-group">
+            <svg class="dashboard-guide-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span id="dashboard-guide-title">📋 Dashboard Guide &amp; Reference</span>
+          </div>
+          <div class="dashboard-guide-header-actions">
+            <button class="dashboard-guide-toggle-btn" id="dashboard-guide-toggle" title="Toggle Guide">[+]</button>
+            <button class="dashboard-guide-close-btn" id="dashboard-guide-close" title="Dismiss Guide">&times;</button>
+          </div>
+        </div>
+        <div class="dashboard-guide-body" id="dashboard-guide-body" style="display: none;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
 
 
       <!-- News Section -->
@@ -505,7 +528,306 @@
     }
     initCustomEmails();
 
+    // Render dashboard guide/reference card (collapsible & role/theme customized)
+    function renderDashboardGuide(regNum, role) {
+      const card = document.getElementById('dashboard-guide-card');
+      const body = document.getElementById('dashboard-guide-body');
+      const toggleBtn = document.getElementById('dashboard-guide-toggle');
+      const closeBtn = document.getElementById('dashboard-guide-close');
+      const titleTextEl = document.getElementById('dashboard-guide-title');
 
+      if (!card || !body || !toggleBtn || !closeBtn || !titleTextEl) return;
+
+      // Check session dismissal
+      if (safeSession.getItem('aeris_dashboard_guide_dismissed') === 'true') {
+        card.style.display = 'none';
+        return;
+      }
+
+      // Check if it's the first time displaying it in this session to auto-expand
+      let isExpanded = safeLocal.getItem('aeris_dashboard_guide_expanded') === 'true';
+      body.style.display = isExpanded ? 'block' : 'none';
+      toggleBtn.textContent = isExpanded ? '[-]' : '[+]';
+
+      // Set up click handlers
+      const header = document.getElementById('dashboard-guide-header');
+      if (header) {
+        header.onclick = (e) => {
+          if (e.target.closest('#dashboard-guide-close') || e.target.closest('#dashboard-guide-toggle')) return;
+          toggleExpanded();
+        };
+      }
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        toggleExpanded();
+      };
+
+      function toggleExpanded() {
+        isExpanded = !isExpanded;
+        body.style.display = isExpanded ? 'block' : 'none';
+        toggleBtn.textContent = isExpanded ? '[-]' : '[+]';
+        safeLocal.setItem('aeris_dashboard_guide_expanded', isExpanded);
+      }
+
+      closeBtn.onclick = (e) => {
+        e.stopPropagation();
+        const confirmMsg = "Are you sure you want to dismiss the Guide for this session? You can restore it by re-logging.";
+        if (confirm(confirmMsg)) {
+          card.style.display = 'none';
+          safeSession.setItem('aeris_dashboard_guide_dismissed', 'true');
+        }
+      };
+
+      // Retrieve user information
+      const member = MEMBERS_DATABASE[regNum];
+      const advisor = ADVISORS[regNum];
+      let name = (member && member.name) || (advisor && advisor.name) || 'Member ' + regNum;
+
+      // Determine active theme
+      let activeTheme = "default";
+      if (regNum === '231002350') activeTheme = "soviet";
+      else if (regNum === '251003016') activeTheme = "spongebob";
+      else if (regNum === '251001377') activeTheme = "stitch";
+      else if (regNum === '231003934') activeTheme = "mcqueen";
+      else if (regNum === '241003033') activeTheme = "batman";
+      else if (regNum === '251000861') activeTheme = "spiderman";
+      else if (regNum === '251010424') activeTheme = "sonic";
+      else if (regNum === '231003587') activeTheme = "tomjerry";
+      else if (regNum === '251012364') activeTheme = "tweety";
+      else if (regNum === '251002119') activeTheme = "schnoz";
+      else if (regNum === '221011368') activeTheme = "pooh";
+      else if (regNum === '251010536') activeTheme = "ironman";
+      else if (regNum === '241012132') activeTheme = "bloodborne";
+      else if (regNum === '251010151') activeTheme = "ladybug";
+      else if (regNum === '251011829') activeTheme = "mickey";
+      else if (regNum === '2006') activeTheme = "dragon";
+      else if (regNum === '231012318') activeTheme = "existential"; // Omar Atwan
+
+      // Guide content generation based on role and theme
+      let title = "📋 Dashboard Guide & Reference";
+      let welcome = "";
+      let items = [];
+
+      if (role === 'advisor' || advisor) {
+        // Faculty / Advisors
+        if (activeTheme === 'soviet') {
+          title = "☭ COMMISSAR FACULTY TELEMETRY HANDBOOK";
+          welcome = "⚒️ Greetings, Comrade Advisor " + name + ". The collective relies on your strategic wisdom. Direct our progress on the red front:";
+          items = [
+            "<strong>Collective Audit:</strong> Monitor all fronts of labor by toggling division tabs (Mechanical, Electrical, Software, Non-Tech).",
+            "<strong>Plan Verification Matrix:</strong> Switch from the Kanban board to the <strong>Progress Tracker (Excel)</strong> to verify production quotas.",
+            "<strong>AUTHORIZED REVIEWERS:</strong> Select individual directives (tasks) to write evaluation notes and approve completions.",
+            "<strong>Official Decrees:</strong> Dispatch commands and updates using the <strong>Publish Announcement</strong> control deck."
+          ];
+        } else if (activeTheme === 'dragon') {
+          title = "🐉 Guide d'Entraînement pour Conseillers";
+          welcome = "🐉 Bienvenue, Conseiller " + name + ". Guidez les dresseurs de dragons dans leurs entraînements quotidiens :";
+          items = [
+            "<strong>Surveillance de l'Île :</strong> Utilisez les onglets pour observer les tâches de chaque division.",
+            "<strong>L'Œil de Berk :</strong> Examinez les performances globales dans le <strong>Tracker de Progrès (Excel)</strong>.",
+            "<strong>Évaluation des Directives :</strong> Cliquez sur une tâche pour ajouter vos conseils techniques et valider l'achèvement.",
+            "<strong>Annonces du Conseil :</strong> Publiez des messages importants sur le tableau officiel."
+          ];
+        } else {
+          title = "📋 Faculty & Advisory Management Guide";
+          welcome = "🎓 Welcome, Advisor " + name + ". The dashboard provides the following tools to monitor branch operations:";
+          items = [
+            "<strong>Multi-Department Audit:</strong> Switch between the Mechanical, Electrical, Software, and Non-Technical tabs to inspect task columns.",
+            "<strong>Member Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> view to see a full performance matrix of all members.",
+            "<strong>Advisory Evaluations (AUTHORIZED_REVIEWERS):</strong> Click any task card to open the technical review portal, write evaluations, and authorize completions.",
+            "<strong>Directives & Announcements:</strong> Use the <strong>Publish Announcement</strong> button to post official announcements to the news feed."
+          ];
+        }
+      } else if (role === 'ceo' || (member && member.role === 'ceo')) {
+        // CEO - Soviet Theme default
+        title = "⚒️ SOVIET COMMAND TELEMETRY DIRECTIVES";
+        welcome = "☭ Welcome, Comrade CEO Abduljabar Asaad. Command our collective's labor and coordinate division directives:";
+        items = [
+          "<strong>Administrative Directives:</strong> Switch department tabs to inspect task progress in each front of the collective.",
+          "<strong>Strategic Switcher:</strong> Switch views to inspect the <strong>Progress Matrix</strong> (Excel Tracker) and audit all department achievements.",
+          "<strong>Advisory Evaluations:</strong> As a supreme reviewer, click any task card to issue evaluation notes and approve completions.",
+          "<strong>Mobilization Announcements:</strong> Use the <strong>Publish Announcement</strong> panel to dispatch declarations to all members."
+        ];
+      } else if (role === 'head' || (member && member.role === 'head')) {
+        // Division Heads
+        if (activeTheme === 'schnoz') {
+          title = "🌑 Eclipse Battle Command HUD";
+          welcome = "⚔️ Welcome, Commander Absher Sorour. The software division struggles against the darkness. Command your band of hawks:";
+          items = [
+            "<strong>Beast Directives:</strong> Compose and upload new software tasks using the <strong>Task Upload Form</strong>.",
+            "<strong>Eclipse Matrix:</strong> Switch views to the <strong>Progress Tracker (Excel)</strong> to monitor the fate of all members.",
+            "<strong>Purge Directives:</strong> Delete obsolete tasks directly using the delete option on cards.",
+            "<strong>Announcements:</strong> Publish announcements to guide the software division."
+          ];
+        } else if (activeTheme === 'bloodborne') {
+          title = "🩸 Hunter's Dream Workshop Reference";
+          welcome = "🕯️ Ah, Bassem Toulan. The electrical hunt begins anew. Do not let the beastly tasks consume you. Guide your fellow hunters:";
+          items = [
+            "<strong>Workshop Blueprints:</strong> Upload electrical directives (tasks) using the <strong>Task Upload Form</strong>.",
+            "<strong>Hunter's Ledger:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to scan the fate of all members in the nightmare.",
+            "<strong>Purge Beasts:</strong> Click &times; on task cards to banish obsolete directives from existence.",
+            "<strong>Dream Broadcasts:</strong> Write notes on the news board to alert the hunters."
+          ];
+        } else if (activeTheme === 'existential') {
+          title = "⏳ Existential Project Survival Guide";
+          welcome = "⏱️ Welcome, Head Omar Atwan. Remember, kolha fi el a5r 62 sanah. Let's manage these mechanical tasks before time runs out:";
+          items = [
+            "<strong>Meaningless Tasks:</strong> Create and upload new mechanical directives using the **Task Upload Form**.",
+            "<strong>Survival Ledger:</strong> Switch to the **Progress Tracker (Excel)** view to see if members are doing their chores.",
+            "<strong>Delete direct:</strong> Remove tasks with &times; once they are no longer relevant in this timeline.",
+            "<strong>Scream into the Void:</strong> Post updates on the News Board to notify the collective."
+          ];
+        } else {
+          title = "📋 Division Head Management Reference";
+          welcome = "👥 Welcome, Division Head " + name + ". You are managing the " + (member.depts ? member.depts.join('/') : '') + " department. Use these administrative tools:";
+          items = [
+            "<strong>Create & Delegate:</strong> Formulate tasks with titles, descriptions, priorities, and deadlines using the <strong>Task Upload Form</strong>.",
+            "<strong>Audit Performance:</strong> Switch views to the <strong>Progress Tracker (Excel Matrix)</strong> to monitor individual members.",
+            "<strong>Task Review:</strong> Check active tasks in Kanban columns. Obsolete tasks can be permanently deleted using the &times; button.",
+            "<strong>Publish News:</strong> Post division announcements on the News Board."
+          ];
+        }
+      } else if (member && member.role === 'vice_head') {
+        // Vice Heads
+        if (activeTheme === 'stitch') {
+          title = "🌺 Ohana Control Deck & Guidelines";
+          welcome = "🛸 Aloha, Hannah! Ohana means family, and family means nobody gets left behind or forgotten. Welcome to your Vice Head control deck:";
+          items = [
+            "<strong>Stitch's Directives:</strong> Switch department tabs to coordinate the crew across mechanical and electrical fronts.",
+            "<strong>Ohana Matrix:</strong> Toggle between the <strong>Kanban Board</strong> and the <strong>Progress Tracker</strong> to keep the family in check.",
+            "<strong>Role Shift:</strong> Switch your active role to <strong>Team Head</strong> to help create tasks for the family."
+          ];
+        } else if (activeTheme === 'batman') {
+          title = "🦇 Batcomputer Technical Reference HUD";
+          welcome = "🌃 Welcome back, Vice Head Ammar Yasser. Gotham's mechanical department requires vigilance. This Batcomputer console monitors progress:";
+          items = [
+            "<strong>Tactical Telemetry:</strong> Inspect tasks in the Mechanical column by switching tabs.",
+            "<strong>Batcomputer Tracker:</strong> Access the <strong>Progress Tracker (Excel)</strong> to scan overall member performance.",
+            "<strong>Dark Knight Duties:</strong> Elevate your active role to <strong>Team Head</strong> to initialize new directives (tasks) in the shadows."
+          ];
+        } else if (activeTheme === 'mickey') {
+          title = "🏰 Mickey's Clubhouse Guide & Magic";
+          welcome = "🎈 Oh boy! Welcome, Vice Head Hala Farouk! Welcome to the Clubhouse. Let's make some magic in the non-technical division:";
+          items = [
+            "<strong>Clubhouse Tabs:</strong> Click Non-Technical tab to see what Mickey and friends are doing.",
+            "<strong>Mouseketools Matrix:</strong> Switch views to the **Progress Tracker (Excel)** to monitor our members.",
+            "<strong>Clubhouse Leader:</strong> Switch your active role to **Team Head** to assist with task creation."
+          ];
+        } else if (activeTheme === 'dragon') {
+          title = "🐉 Guide d'Entraînement de l'Île de Berk";
+          welcome = "🐉 Bienvenue sur l'île de Berk, Hanah ! Enfourchez votre dragon et menons la division vers la victoire !";
+          items = [
+            "<strong>Volez vers les Cibles :</strong> Sélectionnez les onglets pour voir les directives de chaque division.",
+            "<strong>L'Œil du Dragon :</strong> Basculez vers le **Tracker de Progrès (Excel)** pour surveiller le statut de l'Ohana.",
+            "<strong>Chef de Clan :</strong> Passez en rôle **Team Head** pour ordonner de nouvelles directives."
+          ];
+        } else {
+          title = "📋 Division Vice-Head Operational Guide";
+          welcome = "👥 Welcome, Vice Head " + name + ". You are supporting the " + (member.depts ? member.depts.join('/') : '') + " department. Here are your operational options:";
+          items = [
+            "<strong>Milestone Coordination:</strong> Oversee tasks in progress and ensure deadlines are met.",
+            "<strong>Progress Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to monitor department performance.",
+            "<strong>Create Tasks:</strong> Toggle your active role to <strong>Team Head</strong> to gain access to task creation."
+          ];
+        }
+      } else {
+        // Members / General users
+        if (activeTheme === 'spongebob') {
+          title = "🍍 Bikini Bottom Task Navigation Guide";
+          welcome = "🌊 Ahoy, Hana Moataz! Happy Birthday! Let's get ready to make some bubbles in the mechanical department under the sea! 🎂🎈";
+          items = [
+            "<strong>Under the Sea Tasks:</strong> Click the Mechanical tab to browse current chores and checklist items.",
+            "<strong>Unbox Present & Celebrate:</strong> Use the <strong>▶ Unbox</strong> button to start a task, and <strong>✓ Celebrate</strong> once completed! Let's get that cake!",
+            "<strong>Bikini Bottom Telemetry:</strong> Check task details by clicking them to read notes from Mr. Krabs (the advisors)."
+          ];
+        } else if (activeTheme === 'mcqueen') {
+          title = "⚡ Radiator Springs Piston Cup Guide";
+          welcome = "🏎️ Ka-chow, Ibrahim Hassan! Rev up your engines and let's speed through the software and mechanical tasks! 🏁";
+          items = [
+            "<strong>Track Map:</strong> Click tabs to select your racing tracks (departments).",
+            "<strong>Piston Cup Race:</strong> Click <strong>▶ Start</strong> to speed out of the pit stop, and click <strong>✓ Done</strong> to cross the finish line!",
+            "<strong>Pit Stop Reviews:</strong> Double-click task cards to read technical notes from Doc Hudson (your advisors)."
+          ];
+        } else if (activeTheme === 'spiderman') {
+          title = "🕷️ Daily Bugle Superhero Guide";
+          welcome = "🕸️ Hey there, Hazem Walid! Remember, with great power comes great responsibility. Let's web-swing through mechanical tasks!";
+          items = [
+            "<strong>Web Grid:</strong> Click Mechanical or other tabs to scan the neighborhood for pending tasks.",
+            "<strong>Friendly Neighborhood Actions:</strong> Click <strong>▶ Start</strong> to sling webs onto a task, and <strong>✓ Done</strong> once the villain is captured!",
+            "<strong>Bugle Telemetry:</strong> Open tasks to view notes from J. Jonah Jameson (your advisors)."
+          ];
+        } else if (activeTheme === 'sonic') {
+          title = "🌀 Green Hill Zone Loop Reference";
+          welcome = "🦔 Gotta go fast, Sara Ahmed! Collect those gold rings and sprint through the software tasks at supersonic speed!";
+          items = [
+            "<strong>Zone Selection:</strong> Select the Software tab to view active task loops.",
+            "<strong>Supersonic Sprint:</strong> Use <strong>▶ Start</strong> to spin-dash into action, and click <strong>✓ Done</strong> to complete the level before Dr. Eggman catches up!",
+            "<strong>Chaos Emerald Details:</strong> Tap task cards to view feedback on your tasks."
+          ];
+        } else if (activeTheme === 'tomjerry') {
+          title = "🧀 Cat & Mouse Chase Reference Card";
+          welcome = "🐱 Sba7 el fol, Amr! Grab your mouse traps and let's jump into the software, mechanical, and electrical tasks! 🐭";
+          items = [
+            "<strong>Chase Tracks:</strong> Toggle tabs to see tasks in software, mechanical, and electrical sectors.",
+            "<strong>Mischief & Action:</strong> Click <strong>▶ Start</strong> to set the trap, and click <strong>✓ Done</strong> once the chase is won!",
+            "<strong>Trap Details:</strong> Open tasks to inspect evaluations and feedback."
+          ];
+        } else if (activeTheme === 'tweety') {
+          title = "🐣 Tweety Bird Cage Guide";
+          welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our mechanical tasks.";
+          items = [
+            "<strong>Bird's Eye View:</strong> Click Mechanical to view what tasks are hanging on the swing.",
+            "<strong>Canary Actions:</strong> Click <strong>▶ Start</strong> to chirp at a task, and click <strong>✓ Done</strong> once the cat is gone!",
+            "<strong>Feather Details:</strong> Click a task to read messages and advice from Granny."
+          ];
+        } else if (activeTheme === 'pooh') {
+          title = "🍯 Hundred Acre Wood Hunny Guide";
+          welcome = "🧸 Sba7 el fol, Sara Abdo! Welcome back to a cozy corner in the Hundred Acre Wood. Let's find some hunny (tasks)!";
+          items = [
+            "<strong>Wood Paths:</strong> Click Mechanical tab to see what Piglet and Pooh have set up for you.",
+            "<strong>Hunny Jar Actions:</strong> Click <strong>▶ Start</strong> to dip into a task, and click <strong>✓ Done</strong> once the jar is full and empty of troubles!",
+            "<strong>Christopher Robin's Notes:</strong> Open task cards to read gentle feedback from your advisors."
+          ];
+        } else if (activeTheme === 'ironman') {
+          title = "🚀 Stark Industries Mark LXXXV HUD";
+          welcome = "🤖 Jarvis online, Baraa Ibrahim. Repulsors charged. Ready to calibrate mechanical designs for Stark Industries.";
+          items = [
+            "<strong>System Diagnostics:</strong> Click Mechanical to view the task list.",
+            "<strong>Repulsor Ignition:</strong> Click <strong>▶ Start</strong> to initialize armor assembly, and click <strong>✓ Done</strong> to mark the mission completed!",
+            "<strong>Tony Stark Feedback:</strong> Open task detail parameters to read advisory recommendations."
+          ];
+        } else if (activeTheme === 'ladybug') {
+          title = "🐞 Miraculous Superhero Action Reference";
+          welcome = "🌸 Sba7 el fol, Sherry! Tikki, spots on! Let's use our lucky charms to clear our mechanical tasks!";
+          items = [
+            "<strong>Paris Map:</strong> Tap Mechanical tab to locate the pending task spots.",
+            "<strong>Lucky Charm Actions:</strong> Click <strong>▶ Start</strong> to activate your superpower, and click <strong>✓ Done</strong> to de-evilize the task!",
+            "<strong>Miraculous Box:</strong> Click on tasks to view advisor comments and checklist details."
+          ];
+        } else {
+          title = "📋 Team Member Guide & Reference";
+          welcome = "💻 Welcome, Team Member " + name + ". Follow these steps to log your contributions and tasks efficiently:";
+          items = [
+            "<strong>Track Assignments:</strong> Toggle department tabs to see tasks uploaded by your heads.",
+            "<strong>Update Workflow:</strong> Click <strong>▶ Start</strong> to move tasks to \"In Progress\" when you begin work. Click <strong>✓ Done</strong> once completed.",
+            "<strong>Check Advisor Reviews:</strong> Click on tasks to view evaluation notes and feedback from professors and mentors."
+          ];
+        }
+      }
+
+      // Populate UI
+      titleTextEl.innerHTML = title;
+      
+      let html = '<p class="dashboard-guide-welcome">' + welcome + '</p>';
+      html += '<ul class="dashboard-guide-list">';
+      items.forEach(item => {
+        html += '<li>' + item + '</li>';
+      });
+      html += '</ul>';
+
+      body.innerHTML = html;
+      card.style.display = 'block';
+    }
 
     const AUTHORIZED_REVIEWERS = new Set([
       '8383', '9749', '5970', '5550', '231002350', '2006'
@@ -1311,6 +1633,9 @@
         if (regNum === '2006') {
           playDragonSong();
         }
+
+        // Render guide card
+        renderDashboardGuide(regNum, role);
 
 
       }, 600);
