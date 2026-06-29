@@ -690,12 +690,12 @@
       } else if (member && member.role === 'vice_head') {
         // Vice Heads
         if (activeTheme === 'stitch') {
-          title = "🌺 Ohana Control Deck & Guidelines";
-          welcome = "🛸 Aloha, Hannah! Ohana means family, and family means nobody gets left behind or forgotten. Welcome to your Vice Head control deck:";
+          title = "🌺 Tableau de Bord & Directives d'Ohana";
+          welcome = "🛸 Aloha, Hannah ! Ohana signifie famille, et famille signifie que personne n'est laissé de côté ni oublié. Bienvenue sur votre console de Vice-Head :";
           items = [
-            "<strong>Stitch's Directives:</strong> Switch department tabs to coordinate the crew across mechanical and electrical fronts.",
-            "<strong>Ohana Matrix:</strong> Toggle between the <strong>Kanban Board</strong> and the <strong>Progress Tracker</strong> to keep the family in check.",
-            "<strong>Role Shift:</strong> Switch your active role to <strong>Team Head</strong> to help create tasks for the family."
+            "<strong>Directives de Stitch :</strong> Changez d'onglet de département pour coordonner l'équipage sur les fronts mécanique et électrique.",
+            "<strong>Matrice d'Ohana :</strong> Basculez entre le <strong>Kanban</strong> et le <strong>Tracker de Progrès</strong> pour veiller sur la famille.",
+            "<strong>Changement de Rôle :</strong> Passez en rôle <strong>Team Head</strong> (Chef d'Équipe) pour aider à créer des tâches pour la famille."
           ];
         } else if (activeTheme === 'batman') {
           title = "🦇 Batcomputer Technical Reference HUD";
@@ -706,12 +706,12 @@
             "<strong>Dark Knight Duties:</strong> Elevate your active role to <strong>Team Head</strong> to initialize new directives (tasks) in the shadows."
           ];
         } else if (activeTheme === 'mickey') {
-          title = "🏰 Mickey's Clubhouse Guide & Magic";
-          welcome = "🎈 Oh boy! Welcome, Vice Head Hala Farouk! Welcome to the Clubhouse. Let's make some magic in the non-technical division:";
+          title = "🏰 Guide de la Maison de Mickey & Magie";
+          welcome = "🎈 Oh là là ! Bienvenue, Vice-Head Hala Farouk ! Bienvenue à la Maison de Mickey. Faisons de la magie dans la division non-technique :";
           items = [
-            "<strong>Clubhouse Tabs:</strong> Click Non-Technical tab to see what Mickey and friends are doing.",
-            "<strong>Mouseketools Matrix:</strong> Switch views to the **Progress Tracker (Excel)** to monitor our members.",
-            "<strong>Clubhouse Leader:</strong> Switch your active role to **Team Head** to assist with task creation."
+            "<strong>Onglets de la Maison :</strong> Cliquez sur l'onglet Non-Technical pour voir ce que font Mickey et ses amis.",
+            "<strong>Matrice des Maxitouts :</strong> Basculez vers le <strong>Tracker de Progrès (Excel)</strong> pour veiller sur nos membres.",
+            "<strong>Chef de la Maison :</strong> Passez en rôle <strong>Team Head</strong> (Chef d'Équipe) pour aider à la création de tâches."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement de l'Île de Berk";
@@ -838,6 +838,8 @@
       '231002350', // CEO
       '5550',      // Eng. Mohamad Ashraf
       '5970',      // Professor Alaa Ossman
+      '8383',      // Professor Aly Haridi
+      '9749',      // Professor Ahmad El Safty
       '251002119', // Software Head
       '231012318', // Mechanical Head
       '241012132', // Electrical Head
@@ -1551,7 +1553,7 @@
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
         
-        // Show view switcher tabs for authorized roles (exclude Aly Haridi 8383 and Ahmad El Safty 9749)
+        // Show view switcher tabs for authorized roles
         const viewTabs = document.getElementById('view-tabs');
         if (viewTabs) {
           const hasAccess = TRACKER_FULL_VIEWERS.has(regNum) || ALL_MEMBERS.has(regNum);
@@ -1559,7 +1561,7 @@
         }
 
         // Filter department tabs based on user depts to only show their own sub-team Excel/Kanban
-        const isGlobalViewer = regNum === '231002350' || regNum === '5550' || regNum === '5970';
+        const isGlobalViewer = regNum === '231002350' || !!ADVISORS[regNum];
         const personObj = MEMBERS_DATABASE[regNum] || ADVISORS[regNum];
         const depts = isGlobalViewer ? ['mechanical', 'electrical', 'software', 'non-technical'] : (personObj ? (personObj.depts || []) : []);
         
@@ -1632,6 +1634,11 @@
         // Kick off Dragon custom music player
         if (regNum === '2006') {
           playDragonSong();
+        }
+
+        // Kick off Bloodborne custom music player
+        if (regNum === '241012132') {
+          playBloodborneSong();
         }
 
         // Render guide card
@@ -5404,6 +5411,187 @@
         document.removeEventListener('click', autoplayFallback);
         document.removeEventListener('keydown', autoplayFallback);
       };
+      document.addEventListener('keydown', autoplayFallback);
+    }
+
+    function playBloodborneSong() {
+      if (document.getElementById('bloodborne-music-card')) return;
+
+      const musicCardHTML = `
+        <div class="bloodborne-music-card" id="bloodborne-music-card">
+          <div class="hmc-album-art">
+            <div class="hmc-vinyl-wrapper">
+              <svg class="hmc-vinyl" viewBox="0 0 100 100" style="width: 100%; height: 100%; border-radius: 50%; animation: hmcSpin 8s linear infinite; animation-play-state: paused;">
+                <!-- Vinyl base -->
+                <circle cx="50" cy="50" r="48" fill="#0d0c0c" stroke="#5c1515" stroke-width="3"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#8c1c1c" stroke-width="1" stroke-dasharray="3 3"/>
+                <circle cx="50" cy="50" r="28" fill="none" stroke="#8c1c1c" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <circle cx="50" cy="50" r="18" fill="#8c1c1c"/>
+                <text x="50" y="47" font-size="5" font-family="'Fredoka', sans-serif" font-weight="bold" fill="#0d0c0c" text-anchor="middle">HUNTER</text>
+                <text x="50" y="55" font-size="4" font-family="'Fredoka', sans-serif" fill="#0d0c0c" text-anchor="middle">OST</text>
+                <!-- Center hole -->
+                <circle cx="50" cy="50" r="3.5" fill="#0d0c0c"/>
+              </svg>
+            </div>
+            <div class="hmc-music-note">🩸</div>
+          </div>
+          
+          <div class="hmc-info" style="flex: 1; min-width: 0;">
+            <div class="hmc-track-title" style="font-size: 0.95rem; font-weight: bold; color: #8c1c1c; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Cleric Beast Theme</div>
+            <div class="hmc-artist" style="font-size: 0.75rem; color: #ff3333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tsukasa Saitoh — Boss Music 🩸</div>
+            
+            <div class="hmc-controls-row" style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+              <!-- Equalizer / Visualizer -->
+              <div class="hmc-visualizer" id="bmc-visualizer" style="display: flex; gap: 3px; align-items: flex-end; height: 18px; width: 40px;">
+                <span class="hmc-bar hmc-bar-1" style="width: 3px; height: 3px; border-radius: 1px; background-color: #8c1c1c;"></span>
+                <span class="hmc-bar hmc-bar-2" style="width: 3px; height: 3px; border-radius: 1px; background-color: #8c1c1c;"></span>
+                <span class="hmc-bar hmc-bar-3" style="width: 3px; height: 3px; border-radius: 1px; background-color: #8c1c1c;"></span>
+                <span class="hmc-bar hmc-bar-4" style="width: 3px; height: 3px; border-radius: 1px; background-color: #8c1c1c;"></span>
+              </div>
+              
+              <!-- Buttons -->
+              <div class="hmc-buttons" style="display: flex; gap: 6px;">
+                <button class="hmc-btn" id="bmc-play-pause" title="Play/Pause" style="background: none; padding: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; border: none; color: #8c1c1c;">
+                  <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="hmc-btn" id="bmc-minimize" title="Minimize" style="background: none; padding: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; border: none; color: #8c1c1c;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="hmc-btn hmc-close-btn" id="bmc-close" title="Dismiss" style="background: none; padding: 0 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; font-size: 16px; border: none; color: #8c1c1c;">&times;</button>
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="hmc-progress-container" style="background: rgba(0,0,0,0.6); height: 5px; border-radius: 2.5px; margin-top: 8px; overflow: hidden; cursor: pointer; border: 1px solid rgba(140, 28, 28, 0.3);">
+              <div class="hmc-progress-bar" id="bmc-progress-bar" style="width: 0%; height: 100%; background: #8c1c1c;"></div>
+            </div>
+
+            <!-- Volume Slider -->
+            <div class="bmc-volume-row" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span class="bmc-volume-icon" style="font-size: 11px; color: #8c1c1c; line-height: 1; font-family: monospace;">VOL</span>
+              <input type="range" id="bmc-volume" class="bmc-volume-slider" min="0" max="1" step="0.05" value="0.5" style="flex: 1; accent-color: #8c1c1c; cursor: pointer; background: rgba(0,0,0,0.6); border: 1px solid #8c1c1c; height: 6px; border-radius: 3px; -webkit-appearance: none;">
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = musicCardHTML;
+      const cardEl = tempDiv.firstElementChild;
+      document.body.appendChild(cardEl);
+
+      const audio = new Audio('images/cleric_beast.mp3');
+      audio.volume = 0.5;
+      audio.loop = true;
+
+      const playPauseBtn = document.getElementById('bmc-play-pause');
+      const minimizeBtn = document.getElementById('bmc-minimize');
+      const closeBtn = document.getElementById('bmc-close');
+      const volumeSlider = document.getElementById('bmc-volume');
+      const progressBar = document.getElementById('bmc-progress-bar');
+      const vinylSVG = cardEl.querySelector('.hmc-vinyl');
+      const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
+      const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
+
+      let isPlaying = false;
+      let progressInterval = null;
+
+      function updateUI(playing) {
+        isPlaying = playing;
+        if (playing) {
+          cardEl.classList.add('playing');
+          vinylSVG.style.animationPlayState = 'running';
+          iconPause.style.display = 'block';
+          iconPlay.style.display = 'none';
+        } else {
+          cardEl.classList.remove('playing');
+          vinylSVG.style.animationPlayState = 'paused';
+          iconPause.style.display = 'none';
+          iconPlay.style.display = 'block';
+        }
+      }
+
+      function startProgress() {
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+          if (!isPlaying) return;
+          const duration = audio.duration || 186;
+          const percentage = Math.min((audio.currentTime / duration) * 100, 100);
+          progressBar.style.width = percentage + '%';
+        }, 200);
+      }
+
+      function pauseProgress() {
+        clearInterval(progressInterval);
+      }
+
+      function playAudio() {
+        audio.play().then(() => {
+          updateUI(true);
+          startProgress();
+        }).catch(err => {
+          console.warn("Autoplay blocked, waiting for user click/interaction.", err);
+          updateUI(false);
+        });
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        updateUI(false);
+        pauseProgress();
+      }
+
+      playPauseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isPlaying) {
+          pauseAudio();
+        } else {
+          playAudio();
+        }
+      });
+
+      minimizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        cardEl.classList.add('minimized');
+        cardEl.setAttribute('title', 'Click to expand');
+      });
+
+      cardEl.addEventListener('click', () => {
+        if (cardEl.classList.contains('minimized')) {
+          cardEl.classList.remove('minimized');
+          cardEl.removeAttribute('title');
+        }
+      });
+
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        audio.pause();
+        clearInterval(progressInterval);
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'translateX(120%) scale(0.9)';
+        setTimeout(() => {
+          cardEl.remove();
+        }, 500);
+      });
+
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+      });
+
+      volumeSlider.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      playAudio();
+
+      const autoplayFallback = () => {
+        if (!isPlaying && audio.currentTime === 0) {
+          playAudio();
+        }
+        document.removeEventListener('click', autoplayFallback);
+        document.removeEventListener('keydown', autoplayFallback);
+      };
       document.addEventListener('click', autoplayFallback);
       document.addEventListener('keydown', autoplayFallback);
     }
@@ -7001,7 +7189,7 @@
       
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
-      const isGlobalViewer = currentReg === '231002350' || currentReg === '5550' || currentReg === '5970';
+      const isGlobalViewer = currentReg === '231002350' || !!ADVISORS[currentReg];
       const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
       
       if (!hasDeptPermission) {
@@ -7335,7 +7523,7 @@
       exportBtn.addEventListener('click', () => {
         const currentReg = safeSession.getItem('aeris_auth_reg');
         const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
-        const isGlobalViewer = currentReg === '231002350' || currentReg === '5550' || currentReg === '5970';
+        const isGlobalViewer = currentReg === '231002350' || !!ADVISORS[currentReg];
         const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
         
         if (!hasDeptPermission) {
