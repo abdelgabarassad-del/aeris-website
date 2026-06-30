@@ -10807,5 +10807,441 @@ body.stitch-theme .view-tab.active {
 }
 
 
+/* ========== 🕵️‍♀️ TOTALLY SPIES THEME (251001767 only) ========== */
+body.totallyspies-theme {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 0, 102, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 204, 102, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 187, 0, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #12030d 0%, #050005 100%) !important;
+  color: #ffb3cc !important;
+  --accent: #ff0066;
+}
+
+body.totallyspies-theme .site-header {
+  background: rgba(18, 3, 13, 0.95) !important;
+  border-bottom: 2px solid #ff0066 !important;
+  box-shadow: 0 4px 20px rgba(255, 0, 102, 0.15) !important;
+}
+
+.totallyspies-theme .page-title {
+  color: #ff3377 !important;
+  text-shadow: 0 0 10px rgba(255, 51, 119, 0.5), 0 0 20px rgba(255, 0, 102, 0.3) !important;
+  font-family: 'Fredoka', sans-serif !important;
+  letter-spacing: 1px;
+}
+
+/* Welcome banner */
+.totallyspies-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(255, 0, 102, 0.12), rgba(0, 204, 102, 0.08)) !important;
+  border: 1.5px solid #ff0066 !important;
+  box-shadow: 0 8px 32px rgba(255, 0, 102, 0.1) !important;
+  position: relative;
+}
+
+.totallyspies-theme .welcome-banner__icon {
+  background: rgba(255, 0, 102, 0.2) !important;
+  color: #ff3377 !important;
+  border-color: #ff0066 !important;
+}
+
+.spy-heart-pulse {
+  animation: spyHeartBeat 1.2s infinite alternate;
+}
+
+@keyframes spyHeartBeat {
+  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px #ff0066); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #ff3377); }
+}
+
+/* Task Columns & Cards */
+.totallyspies-theme .task-column {
+  background: rgba(26, 4, 20, 0.65) !important;
+  border: 1.5px solid rgba(255, 0, 102, 0.25) !important;
+  border-radius: 12px !important;
+}
+
+.totallyspies-theme .task-column__header {
+  border-bottom: 2px solid rgba(255, 0, 102, 0.35) !important;
+}
+
+.totallyspies-theme .task-column__header h3 {
+  color: #ff3377 !important;
+}
+
+.totallyspies-theme .task-card {
+  background: rgba(18, 3, 14, 0.85) !important;
+  border: 1.2px solid rgba(255, 0, 102, 0.2) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.25s ease;
+}
+
+.totallyspies-theme .task-card:hover {
+  border-color: #ff0066 !important;
+  box-shadow: 0 0 12px rgba(255, 0, 102, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.totallyspies-theme .task-card__title {
+  color: #ffe6f0 !important;
+}
+
+.totallyspies-theme .task-card__desc {
+  color: #ffb3cc !important;
+}
+
+/* Priority stripes - Clover Pink, Sam Green, Alex Yellow */
+.totallyspies-theme .task-card--low { border-left: 6px solid #00cc66 !important; } /* Sam Green */
+.totallyspies-theme .task-card--medium { border-left: 6px solid #ffbb00 !important; } /* Alex Yellow */
+.totallyspies-theme .task-card--high { border-left: 6px solid #ff0055 !important; } /* Clover Red-Pink */
+.totallyspies-theme .task-card--urgent { 
+  border-left: 6px solid #ff0066 !important; 
+  animation: spyUrgentGlow 1.2s infinite alternate !important;
+}
+
+@keyframes spyUrgentGlow {
+  0% { box-shadow: 0 0 5px rgba(255, 0, 102, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(255, 0, 102, 0.6); }
+}
+
+/* Buttons */
+.totallyspies-theme .btn-primary,
+.totallyspies-theme #submit-task,
+.totallyspies-theme .task-card__action {
+  background: linear-gradient(135deg, #ff0055, #cc0052) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #ff3377 !important;
+  box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.totallyspies-theme .btn-primary:hover,
+.totallyspies-theme #submit-task:hover {
+  background: linear-gradient(135deg, #ff3377, #e6005c) !important;
+  box-shadow: 0 4px 15px rgba(255, 0, 85, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Input Fields styling */
+.totallyspies-theme input,
+.totallyspies-theme textarea,
+.totallyspies-theme select {
+  background: rgba(18, 3, 14, 0.7) !important;
+  border: 1.5px solid rgba(255, 0, 102, 0.25) !important;
+  color: #fff !important;
+}
+
+.totallyspies-theme input:focus,
+.totallyspies-theme textarea:focus,
+.totallyspies-theme select:focus {
+  border-color: #ff0066 !important;
+  box-shadow: 0 0 8px rgba(255, 0, 102, 0.35) !important;
+}
+
+/* Dynamic Floater: ComPowder widget styling */
+.totallyspies-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff3377 0%, #ff0055 100%);
+  border: 3px solid #ffb3cc;
+  box-shadow: 0 8px 24px rgba(255, 0, 85, 0.4), 0 0 0 4px rgba(255, 51, 119, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  z-index: 1000;
+  cursor: pointer;
+  animation: spiesWiggle 3.2s ease-in-out infinite;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.totallyspies-corner:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 10px 28px rgba(255, 0, 85, 0.6), 0 0 0 6px rgba(255, 51, 119, 0.3);
+}
+
+@keyframes spiesWiggle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-6px) rotate(-10deg); }
+  70% { transform: translateY(-2px) rotate(10deg); }
+}
+
+.totallyspies-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 32px;
+  background: #1a0414;
+  border: 2.5px solid #ff3377;
+  border-radius: 16px;
+  padding: 12px 18px;
+  max-width: 260px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 0, 85, 0.2);
+  z-index: 999;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #ffe6f0;
+  display: none;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.totallyspies-bubble.show {
+  display: block;
+}
+
+.totallyspies-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  right: 20px;
+  border-width: 12px 12px 0 0;
+  border-style: solid;
+  border-color: #ff3377 transparent;
+  display: block;
+  width: 0;
+}
+
+/* Guide Card */
+.totallyspies-theme .dashboard-guide-card {
+  background: rgba(26, 4, 20, 0.7) !important;
+  border: 2.5px solid #ff3377 !important;
+  box-shadow: 0 0 20px rgba(255, 0, 102, 0.25) !important;
+}
+
+.totallyspies-theme .dashboard-guide-title-group {
+  color: #ff3377 !important;
+}
+
+.totallyspies-theme .dashboard-guide-list li::before {
+  content: "🌸" !important;
+}
+
+/* Corner TL */
+.totallyspies-corner-tl {
+  position: fixed;
+  top: 85px;
+  left: 20px;
+  font-size: 1.1rem;
+  background: rgba(255, 0, 102, 0.2);
+  border: 1.5px solid #ff0066;
+  color: #ffb3cc;
+  padding: 4px 10px;
+  border-radius: 20px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(255, 0, 102, 0.15);
+  font-weight: bold;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* Decors */
+.totallyspies-decors {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+/* Task Form styling */
+.totallyspies-theme .task-form {
+  background: rgba(26, 4, 20, 0.75) !important;
+  border: 2px solid #ff3377 !important;
+  box-shadow: 0 8px 32px rgba(255, 0, 102, 0.15) !important;
+}
+
+/* ComPowder Lab Bottom Widget */
+.totallyspies-gadget-card {
+  background: rgba(26, 4, 20, 0.8) !important;
+  border: 2px solid #ff3377 !important;
+  box-shadow: 0 10px 30px rgba(255, 0, 102, 0.2) !important;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 32px;
+  width: 100%;
+}
+
+.totallyspies-gadget-card .card-body {
+  padding: 24px;
+}
+
+.compowder-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 850px) {
+  .compowder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compowder-section {
+  background: rgba(18, 3, 14, 0.7);
+  border: 1px solid rgba(255, 0, 102, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.compowder-section-title {
+  color: #ff3377;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 0, 102, 0.2);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* ComPowder graphic visualizer */
+.compowder-visualizer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.1;
+  background: #0d000a;
+  border: 1.5px solid #ff3377;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#compowder-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.compowder-hud-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: #ff3377;
+}
+
+/* Laser lock target */
+.laser-target-game {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.laser-grid-screen {
+  background: #090007;
+  border: 1.5px solid #ff3377;
+  height: 150px;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.laser-grid-line {
+  position: absolute;
+  background: rgba(255, 0, 102, 0.35);
+  box-shadow: 0 0 5px #ff0055;
+  transition: all 0.4s ease;
+}
+
+.laser-beam-effect {
+  position: absolute;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.lock-node {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffbb00;
+  border: 2.5px solid #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  box-shadow: 0 0 8px #ffbb00;
+}
+
+.lock-node.broken {
+  background: #00cc66;
+  box-shadow: 0 0 8px #00cc66;
+  border-color: #ffffff;
+  animation: lockNodeBreak 0.4s ease-out;
+}
+
+@keyframes lockNodeBreak {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.6); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.laser-status-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-family: monospace;
+  color: #ffb3cc;
+}
+
+.laser-btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Gear Levels info */
+.gear-levels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gear-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gear-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #ffb3cc;
+}
+
+.gear-bar-bg {
+  height: 12px;
+  background: rgba(255, 0, 102, 0.15);
+  border: 1px solid rgba(255, 0, 102, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gear-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff0055, #ffbb00);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.gear-bar-fill.lipstick { width: 85%; }
+.gear-bar-fill.hairdryer { width: 60%; background: linear-gradient(90deg, #00cc66, #ffbb00); }
+.gear-bar-fill.boots { width: 95%; background: linear-gradient(90deg, #ff0055, #00cc66); }
+.gear-bar-fill.jetpack { width: 40%; }
+
+
 
 

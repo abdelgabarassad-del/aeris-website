@@ -602,6 +602,7 @@
       else if (regNum === '251011829') activeTheme = "mickey";
       else if (regNum === '2006') activeTheme = "dragon";
       else if (regNum === '231012318') activeTheme = "existential"; // Omar Atwan
+      else if (regNum === '251001767') activeTheme = "totallyspies"; // Esraa Mohammed
 
       // Guide content generation based on role and theme
       let title = "📋 Dashboard Guide & Reference";
@@ -803,6 +804,14 @@
             "<strong>Paris Map:</strong> Tap Mechanical tab to locate the pending task spots.",
             "<strong>Lucky Charm Actions:</strong> Click <strong>▶ Start</strong> to activate your superpower, and click <strong>✓ Done</strong> to de-evilize the task!",
             "<strong>Miraculous Box:</strong> Click on tasks to view advisor comments and checklist details."
+          ];
+        } else if (activeTheme === 'totallyspies') {
+          title = "🕵️‍♀️ WOOHP Spy Gadget Mission Briefing";
+          welcome = "🌸 Welcome agent Esraa Mohammed! Jerry has locked in a new mission briefing for you. Get your laser lipsticks ready!";
+          items = [
+            "<strong>WOOHP Objective:</strong> Tap the Mechanical tab to view your assigned espionage tasks.",
+            "<strong>Missions Directive:</strong> Click <strong>▶ Start</strong> to deploy into undercover action, and click <strong>✓ Done</strong> to neutralize the villain!",
+            "<strong>Classified Intel:</strong> Open cards to read secret messages and feedback from Jerry."
           ];
         } else {
           title = "📋 Team Member Guide & Reference";
@@ -1074,6 +1083,7 @@
       if (sessionReg === '251010536') document.body.classList.add('ironman-theme');
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
+      if (sessionReg === '251001767') document.body.classList.add('totallyspies-theme');
       if (sessionReg === '251002119') document.body.classList.add('schnoz-theme');
       grantAccess(sessionRole, sessionReg);
     }
@@ -1617,6 +1627,7 @@
         applyIronmanTheme();
         applyPoohTheme();
         applyTweetyTheme();
+        applyTotallySpiesTheme();
         applySchnozTheme();
         applySovietTheme();
         applyDragonTheme();
@@ -3542,6 +3553,594 @@
         submitTaskBtn.textContent = '';
         if (svg) submitTaskBtn.appendChild(svg);
         submitTaskBtn.append(' Spread Wings!');
+      }
+    }
+
+    /* ========== TOTALLY SPIES THEME (251001767 only) ========== */
+    const TOTALLY_SPIES_REG = '251001767';
+
+    function isTotallySpiesUser() {
+      return safeSession.getItem('aeris_auth_reg') === TOTALLY_SPIES_REG;
+    }
+
+    function applyTotallySpiesTheme() {
+      if (!isTotallySpiesUser()) {
+        document.body.classList.remove('totallyspies-theme');
+        document.querySelectorAll('.totallyspies-corner, .totallyspies-corner-tl, .totallyspies-bubble, .totallyspies-decors, .totallyspies-gadget-card').forEach(el => el.remove());
+        
+        // Restore elements
+        const formTitle = document.querySelector('.task-form__title');
+        if (formTitle && formTitle.textContent.includes('Mission Directive')) {
+          const svg = formTitle.querySelector('svg');
+          formTitle.textContent = '';
+          if (svg) formTitle.appendChild(svg);
+          formTitle.append(' Upload New Task');
+        }
+        const labelTaskTitle = document.querySelector('label[for="task-title"]');
+        if (labelTaskTitle && labelTaskTitle.textContent.includes('Objective')) labelTaskTitle.textContent = 'Task Title';
+        const labelTaskDesc = document.querySelector('label[for="task-description"]');
+        if (labelTaskDesc && labelTaskDesc.textContent.includes('Classified')) labelTaskDesc.textContent = 'Description';
+        const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+        if (labelTaskPriority && labelTaskPriority.textContent.includes('Threat')) labelTaskPriority.textContent = 'Priority';
+        
+        const prioritySelect = document.getElementById('task-priority');
+        if (prioritySelect) {
+          const optLow = prioritySelect.querySelector('option[value="low"]');
+          if (optLow && optLow.textContent.includes('Shopping')) optLow.textContent = 'Low';
+          const optMed = prioritySelect.querySelector('option[value="medium"]');
+          if (optMed && optMed.textContent.includes('WOOHP')) optMed.textContent = 'Medium';
+          const optHigh = prioritySelect.querySelector('option[value="high"]');
+          if (optHigh && optHigh.textContent.includes('Gear')) optHigh.textContent = 'High';
+          const optUrgent = prioritySelect.querySelector('option[value="urgent"]');
+          if (optUrgent && optUrgent.textContent.includes('WORLD')) optUrgent.textContent = 'Urgent';
+        }
+        const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+        if (labelTaskDeadline && labelTaskDeadline.textContent.includes('Mission')) labelTaskDeadline.textContent = 'Deadline';
+        
+        const submitTaskBtn = document.getElementById('submit-task');
+        if (submitTaskBtn && submitTaskBtn.textContent.includes('Deploy')) {
+          const svg = submitTaskBtn.querySelector('svg');
+          submitTaskBtn.textContent = '';
+          if (svg) submitTaskBtn.appendChild(svg);
+          submitTaskBtn.append(' Add Task');
+        }
+        
+        // Cancel visual animation frames
+        if (window.totallySpiesAnimationFrame) {
+          cancelAnimationFrame(window.totallySpiesAnimationFrame);
+          window.totallySpiesAnimationFrame = null;
+        }
+        // Stop audio pings
+        if (window.totallySpiesBeepInterval) {
+          clearInterval(window.totallySpiesBeepInterval);
+          window.totallySpiesBeepInterval = null;
+        }
+        return;
+      }
+
+      document.body.classList.add('totallyspies-theme');
+
+      // Customize welcome banner icon to be a Heart / spy gadget SVG
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spy-heart-pulse"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+        }
+      }
+
+      // Totally Spies Compowder widget bottom right
+      if (!document.querySelector('.totallyspies-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'totallyspies-corner';
+        corner.innerHTML = `<div class="totallyspies-compowder-floater">🌸</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'totallyspies-bubble';
+        document.body.appendChild(bubble);
+
+        const phrases = [
+          "WOOHP Calling! Jerry has a new mission for us! 💼📱",
+          "It's time to test the Laser Lipstick! 💄✨",
+          "Oh my gosh, Clover! Did you see those shoes? 👠💖",
+          "Sam, what does the Compowder say? 🧠🔬",
+          "Alex, watch out for the laser grid! 🤸‍♀️💥",
+          "Get ready to jetpack out of here! 🎒🚀",
+          "Another mission accomplished! Time for shopping! 🛍️✨",
+          "Is that a jet-powered hair dryer? 💇‍♀️💨"
+        ];
+
+        corner.addEventListener('click', () => {
+          ensureSpiesAudio();
+          playSpiesBeepRing();
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          setTimeout(() => bubble.classList.remove('show'), 3500);
+        });
+      }
+
+      // WOOHP Logo / star top-left
+      if (!document.querySelector('.totallyspies-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'totallyspies-corner-tl';
+        cornerTL.innerHTML = `⭐ WOOHP AGENT`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Decors above task board (Classified Lipstick & Flowers)
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.totallyspies-decors')) {
+        const decors = document.createElement('div');
+        decors.className = 'totallyspies-decors';
+        const decorsContent = `<span>💄</span><span>🌸</span><span>🕶️</span><span>💄</span><span>🌸</span>`;
+        decors.innerHTML = decorsContent;
+        taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // Customize task form headers for Totally Spies
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' Upload Mission Directive');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '💼 Mission Objective';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🕵️‍♀️ Classified Briefing Details';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🚨 Threat Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '💤 Shopping Time (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🛠️ WOOHP HQ Briefing (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🔥 Spy Gear Action (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🚨 WORLD DOMINATION THREAT! (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⏱️ Mission Deadline';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' Deploy Spies!');
+      }
+
+      // Inject the Bottom WOOHP Gadget Lab & ComPowder Widget
+      if (!document.querySelector('.totallyspies-gadget-card')) {
+        const dashboardPage = document.getElementById('dashboard-page');
+        const containerInner = dashboardPage ? dashboardPage.querySelector('.container') : null;
+        if (containerInner) {
+          const gadgetCard = document.createElement('div');
+          gadgetCard.className = 'totallyspies-gadget-card fade-in visible';
+          gadgetCard.innerHTML = `
+            <div class="totallyspies-gadget-card">
+              <div class="soviet-widget__header" style="background: linear-gradient(90deg, #ff0055, #cc0052) !important; border-bottom: 2px solid #ff3377 !important;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span>🕵️‍♀️ WOOHP GADGET LAB & COMPOWDER TELEMETRY</span>
+                </div>
+                <span class="soviet-station-status" style="color: #ffb3cc; border-color: #ff3377; text-shadow: 0 0 5px rgba(255, 51, 119, 0.4);" id="spies-agent-status">AGENT: ESRAA</span>
+              </div>
+              <div class="card-body" style="background: #060101; padding: 24px;">
+                <div class="compowder-layout">
+                  
+                  <!-- Left: ComPowder communicator graphical screen -->
+                  <div class="compowder-section">
+                    <div class="compowder-section-title">ComPowder Screen</div>
+                    <div class="compowder-visualizer">
+                      <div class="compowder-hud-overlay">LINK: ACTIVE<br>JERRY_SYS</div>
+                      <canvas id="compowder-canvas"></canvas>
+                    </div>
+                  </div>
+                  
+                  <!-- Center: Laser Lipstick interactive game -->
+                  <div class="compowder-section">
+                    <div class="compowder-section-title">Laser Lipstick Lock Cutter</div>
+                    <div class="laser-target-game">
+                      <div class="laser-grid-screen" id="laser-grid-screen">
+                        <div class="laser-grid-line" style="top: 25%; left: 0; right: 0; height: 1px;"></div>
+                        <div class="laser-grid-line" style="top: 50%; left: 0; right: 0; height: 1px;"></div>
+                        <div class="laser-grid-line" style="top: 75%; left: 0; right: 0; height: 1px;"></div>
+                        <div class="laser-grid-line" style="left: 25%; top: 0; bottom: 0; width: 1px;"></div>
+                        <div class="laser-grid-line" style="left: 50%; top: 0; bottom: 0; width: 1px;"></div>
+                        <div class="laser-grid-line" style="left: 75%; top: 0; bottom: 0; width: 1px;"></div>
+                        
+                        <!-- Lock nodes -->
+                        <div class="lock-node" id="node-1" style="top: 30%; left: 30%;"></div>
+                        <div class="lock-node" id="node-2" style="top: 40%; left: 70%;"></div>
+                        <div class="lock-node" id="node-3" style="top: 70%; left: 45%;"></div>
+                        <div class="lock-node" id="node-4" style="top: 60%; left: 80%;"></div>
+                        
+                        <canvas id="laser-particles-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+                      </div>
+                      <div class="laser-status-bar">
+                        <span>NODES CUT: <span id="nodes-cut-val">0/4</span></span>
+                        <span>BATTERY: <span id="laser-battery-val">100%</span></span>
+                      </div>
+                      <div class="laser-btn-row">
+                        <button class="soviet-console-btn btn-sm" id="btn-recharge-laser">🔌 RECHARGE</button>
+                        <button class="soviet-console-btn btn-sm" style="color: #00cc66; border-color: #00cc66;" id="btn-reset-nodes">🔄 RESET LOCKS</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Right: Gear Charge Levels -->
+                  <div class="compowder-section">
+                    <div class="compowder-section-title">Spy Gear Status</div>
+                    <div class="gear-levels-list">
+                      <div class="gear-bar-container">
+                        <div class="gear-bar-header">
+                          <span>Laser Lipstick</span>
+                          <span id="txt-lvl-lipstick">85%</span>
+                        </div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill lipstick" id="bar-lipstick"></div></div>
+                      </div>
+                      <div class="gear-bar-container">
+                        <div class="gear-bar-header">
+                          <span>Laser Hair Dryer</span>
+                          <span>60%</span>
+                        </div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill hairdryer"></div></div>
+                      </div>
+                      <div class="gear-bar-container">
+                        <div class="gear-bar-header">
+                          <span>Suction Cup Boots</span>
+                          <span>95%</span>
+                        </div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill boots"></div></div>
+                      </div>
+                      <div class="gear-bar-container">
+                        <div class="gear-bar-header">
+                          <span>Spy Jetpack Fuel</span>
+                          <span>40%</span>
+                        </div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill jetpack"></div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          `;
+          containerInner.appendChild(gadgetCard);
+          initSpiesGraphics();
+          initSpiesLaserGame();
+        }
+      }
+    }
+
+    // Audio & Web Audio Synthesizer for Totally Spies
+    let spiesAudioCtx = null;
+    function ensureSpiesAudio() {
+      if (!spiesAudioCtx) {
+        spiesAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (spiesAudioCtx.state === 'suspended') {
+        spiesAudioCtx.resume();
+      }
+    }
+
+    function playSpiesBeepRing() {
+      ensureSpiesAudio();
+      if (!spiesAudioCtx) return;
+      // Synthesize high beep communicator notes
+      const notes = [659.25, 783.99, 880, 987.77]; // E5, G5, A5, B5 notes
+      notes.forEach((freq, index) => {
+        const osc = spiesAudioCtx.createOscillator();
+        const gainNode = spiesAudioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, spiesAudioCtx.currentTime + index * 0.15);
+        
+        gainNode.gain.setValueAtTime(0, spiesAudioCtx.currentTime + index * 0.15);
+        gainNode.gain.linearRampToValueAtTime(0.15, spiesAudioCtx.currentTime + index * 0.15 + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + index * 0.15 + 0.2);
+        
+        osc.connect(gainNode);
+        gainNode.connect(spiesAudioCtx.destination);
+        osc.start(spiesAudioCtx.currentTime + index * 0.15);
+        osc.stop(spiesAudioCtx.currentTime + index * 0.15 + 0.25);
+      });
+    }
+
+    function playLaserFireSound() {
+      ensureSpiesAudio();
+      if (!spiesAudioCtx) return;
+      const osc = spiesAudioCtx.createOscillator();
+      const gainNode = spiesAudioCtx.createGain();
+      osc.type = 'triangle';
+      
+      // Sweep down frequency for laser burst
+      osc.frequency.setValueAtTime(1400, spiesAudioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, spiesAudioCtx.currentTime + 0.3);
+      
+      gainNode.gain.setValueAtTime(0.2, spiesAudioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + 0.3);
+      
+      osc.connect(gainNode);
+      gainNode.connect(spiesAudioCtx.destination);
+      osc.start();
+      osc.stop(spiesAudioCtx.currentTime + 0.35);
+    }
+
+    // ComPowder Screen canvas visualizer (sinusoidal waves + spinning heart)
+    function initSpiesGraphics() {
+      const canvas = document.getElementById('compowder-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = canvas.offsetWidth || 150;
+      let height = canvas.height = canvas.offsetHeight || 140;
+
+      let rotation = 0;
+      let phase = 0;
+
+      const render = () => {
+        if (!document.getElementById('compowder-canvas')) {
+          if (window.totallySpiesAnimationFrame) {
+            cancelAnimationFrame(window.totallySpiesAnimationFrame);
+            window.totallySpiesAnimationFrame = null;
+          }
+          return;
+        }
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Resize support
+        if (canvas.offsetWidth && canvas.offsetWidth !== width) {
+          width = canvas.width = canvas.offsetWidth;
+          height = canvas.height = canvas.offsetHeight;
+        }
+
+        // Draw grid
+        ctx.strokeStyle = 'rgba(255, 0, 102, 0.15)';
+        ctx.lineWidth = 0.5;
+        for (let x = 15; x < width; x += 15) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+        }
+        for (let y = 15; y < height; y += 15) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+        }
+
+        // Draw spinning wireframe heart
+        rotation += 0.025;
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(rotation);
+        
+        ctx.beginPath();
+        // Parametric heart formula
+        let scale = 2.5;
+        for (let t = 0; t <= Math.PI * 2; t += 0.05) {
+          let hx = 16 * Math.pow(Math.sin(t), 3) * scale;
+          let hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * scale;
+          if (t === 0) ctx.moveTo(hx, hy);
+          else ctx.lineTo(hx, hy);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = '#ff3377';
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = '#ff0055';
+        ctx.shadowBlur = 6;
+        ctx.stroke();
+        ctx.restore();
+        ctx.shadowBlur = 0;
+
+        // Draw audio wave frequencies at the bottom
+        phase += 0.15;
+        ctx.strokeStyle = 'rgba(0, 204, 102, 0.6)'; // Jerry Green line
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let x = 0; x < width; x++) {
+          let y = height - 18 + Math.sin(x * 0.06 + phase) * 8 * Math.sin(x * 0.01);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        window.totallySpiesAnimationFrame = requestAnimationFrame(render);
+      };
+
+      render();
+    }
+
+    // Laser game
+    function initSpiesLaserGame() {
+      const grid = document.getElementById('laser-grid-screen');
+      const partsCanvas = document.getElementById('laser-particles-canvas');
+      const nodesCutTxt = document.getElementById('nodes-cut-val');
+      const batteryTxt = document.getElementById('laser-battery-val');
+      const btnRecharge = document.getElementById('btn-recharge-laser');
+      const btnReset = document.getElementById('btn-reset-nodes');
+      
+      if (!grid || !partsCanvas) return;
+      const ctx = partsCanvas.getContext('2d');
+      
+      let pWidth = partsCanvas.width = grid.offsetWidth;
+      let pHeight = partsCanvas.height = grid.offsetHeight;
+      
+      let particles = [];
+      let battery = 100;
+      let brokenNodes = new Set();
+      
+      // Node IDs
+      const nodesList = ['node-1', 'node-2', 'node-3', 'node-4'];
+      
+      function shootLaser(targetX, targetY) {
+        if (battery <= 0) {
+          logTerminal("[SYSTEM] LASER LIPSTICK OUT OF CHARGE. PLUG IN COMPOWDER RECHARGER.");
+          return;
+        }
+
+        ensureSpiesAudio();
+        playLaserFireSound();
+        battery = Math.max(0, battery - 15);
+        batteryTxt.textContent = battery + '%';
+        const barLipstick = document.getElementById('bar-lipstick');
+        if (barLipstick) barLipstick.style.width = battery + '%';
+        const txtLvlLipstick = document.getElementById('txt-lvl-lipstick');
+        if (txtLvlLipstick) txtLvlLipstick.textContent = battery + '%';
+
+        // Spawn laser beam line element
+        const laserBeam = document.createElement('div');
+        laserBeam.className = 'laser-beam-effect';
+        
+        // Origin is bottom center of the screen
+        let startX = pWidth / 2;
+        let startY = pHeight;
+        
+        let dx = targetX - startX;
+        let dy = targetY - startY;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        let angle = Math.atan2(dy, dx);
+        
+        laserBeam.style.width = dist + 'px';
+        laserBeam.style.height = '4px';
+        laserBeam.style.left = startX + 'px';
+        laserBeam.style.top = startY + 'px';
+        laserBeam.style.transform = `rotate(${angle}rad)`;
+        laserBeam.style.transformOrigin = 'left center';
+        
+        grid.appendChild(laserBeam);
+        
+        // Spawn sparks at click point
+        for (let i = 0; i < 15; i++) {
+          particles.push({
+            x: targetX,
+            y: targetY,
+            vx: (Math.random() * 4 - 2) * 2,
+            vy: (Math.random() * 4 - 2) * 2,
+            size: Math.random() * 3 + 1,
+            color: '#ff0066',
+            life: 1.0,
+            decay: 0.045
+          });
+        }
+        
+        // Check collision with locks
+        nodesList.forEach((nid) => {
+          if (brokenNodes.has(nid)) return;
+          const nodeEl = document.getElementById(nid);
+          if (nodeEl) {
+            const rect = nodeEl.getBoundingClientRect();
+            const gridRect = grid.getBoundingClientRect();
+            const nx = rect.left - gridRect.left + rect.width / 2;
+            const ny = rect.top - gridRect.top + rect.height / 2;
+            
+            let distToNode = Math.sqrt((targetX - nx)*(targetX - nx) + (targetY - ny)*(targetY - ny));
+            if (distToNode < 18) {
+              brokenNodes.add(nid);
+              nodeEl.classList.add('broken');
+              nodesCutTxt.textContent = brokenNodes.size + '/4';
+              logTerminal(`[GEAR] DESTRUCTIVE LOCK NODE ${nid.toUpperCase()} NEUTRALIZED.`);
+              
+              // Spark explosion
+              for (let j = 0; j < 25; j++) {
+                particles.push({
+                  x: nx,
+                  y: ny,
+                  vx: (Math.random() * 5 - 2.5) * 3,
+                  vy: (Math.random() * 5 - 2.5) * 3,
+                  size: Math.random() * 4 + 1.5,
+                  color: '#00cc66',
+                  life: 1.0,
+                  decay: 0.035
+                });
+              }
+
+              if (brokenNodes.size === 4) {
+                logTerminal("[MISSION COMPLETED] WOOHP SECURITY SYSTEM BYPASS OK! LOCK DESTROYED.");
+                document.getElementById('spies-agent-status').textContent = "STATUS: BYPASSED";
+                document.getElementById('spies-agent-status').style.color = "#00cc66";
+              }
+            }
+          }
+        });
+
+        setTimeout(() => laserBeam.remove(), 120);
+      }
+
+      grid.addEventListener('mousedown', (e) => {
+        const gridRect = grid.getBoundingClientRect();
+        let clickX = e.clientX - gridRect.left;
+        let clickY = e.clientY - gridRect.top;
+        
+        // Prevent click if clicking a button or node
+        if (e.target.classList.contains('soviet-console-btn')) return;
+        
+        shootLaser(clickX, clickY);
+      });
+
+      // Sparks particle update loop
+      const updateParticles = () => {
+        if (!document.getElementById('laser-particles-canvas')) return;
+        
+        // Handle canvas resize
+        if (grid.offsetWidth !== pWidth) {
+          pWidth = partsCanvas.width = grid.offsetWidth;
+          pHeight = partsCanvas.height = grid.offsetHeight;
+        }
+
+        ctx.clearRect(0, 0, pWidth, pHeight);
+        
+        particles.forEach((p, index) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= p.decay;
+          
+          if (p.life <= 0) {
+            particles.splice(index, 1);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        
+        ctx.globalAlpha = 1.0;
+        requestAnimationFrame(updateParticles);
+      };
+      
+      updateParticles();
+
+      // Button controls
+      if (btnRecharge) {
+        btnRecharge.addEventListener('click', () => {
+          ensureSpiesAudio();
+          battery = 100;
+          batteryTxt.textContent = '100%';
+          const barLipstick = document.getElementById('bar-lipstick');
+          if (barLipstick) barLipstick.style.width = '85%';
+          const txtLvlLipstick = document.getElementById('txt-lvl-lipstick');
+          if (txtLvlLipstick) txtLvlLipstick.textContent = '85%';
+          logTerminal("[GEAR] GADGET CHARGING LINK LOCKED. LASER RECHARGED.");
+        });
+      }
+
+      if (btnReset) {
+        btnReset.addEventListener('click', () => {
+          ensureSpiesAudio();
+          brokenNodes.clear();
+          nodesList.forEach((nid) => {
+            const el = document.getElementById(nid);
+            if (el) el.classList.remove('broken');
+          });
+          nodesCutTxt.textContent = '0/4';
+          document.getElementById('spies-agent-status').textContent = "AGENT: ESRAA";
+          document.getElementById('spies-agent-status').style.color = "#ffb3cc";
+          logTerminal("[SYSTEM] LOCK MATRIX RE-INITIALIZED. DEFENSE GRID ONLINE.");
+        });
       }
     }
 
