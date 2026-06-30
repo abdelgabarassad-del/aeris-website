@@ -807,7 +807,7 @@
           ];
         } else if (activeTheme === 'totallyspies') {
           title = "🕵️‍♀️ WOOHP Spy Gadget Mission Briefing";
-          welcome = "🌸 Welcome agent Esraa Mohammed! Jerry has locked in a new mission briefing for you. Get your laser lipsticks ready!";
+          welcome = "🍑 Welcome agent Esraa Mohammed! Jerry has locked in a new mission briefing for you. Get your laser lipsticks ready!";
           items = [
             "<strong>WOOHP Objective:</strong> Tap the Mechanical tab to view your assigned espionage tasks.",
             "<strong>Missions Directive:</strong> Click <strong>▶ Start</strong> to deploy into undercover action, and click <strong>✓ Done</strong> to neutralize the villain!",
@@ -3633,7 +3633,7 @@
       if (!document.querySelector('.totallyspies-corner')) {
         const corner = document.createElement('div');
         corner.className = 'totallyspies-corner';
-        corner.innerHTML = `<div class="totallyspies-compowder-floater">🌸</div>`;
+        corner.innerHTML = `<div class="totallyspies-compowder-floater">🍑</div>`;
         document.body.appendChild(corner);
 
         const bubble = document.createElement('div');
@@ -3669,12 +3669,12 @@
         document.body.appendChild(cornerTL);
       }
 
-      // Decors above task board (Classified Lipstick & Flowers)
+      // Decors above task board (Classified Lipstick & Peaches)
       const taskBoard = document.getElementById('task-board');
       if (taskBoard && !document.querySelector('.totallyspies-decors')) {
         const decors = document.createElement('div');
         decors.className = 'totallyspies-decors';
-        const decorsContent = `<span>💄</span><span>🌸</span><span>🕶️</span><span>💄</span><span>🌸</span>`;
+        const decorsContent = `<span>💄</span><span>🍑</span><span>🕶️</span><span>💄</span><span>🍑</span>`;
         decors.innerHTML = decorsContent;
         taskBoard.parentNode.insertBefore(decors, taskBoard);
       }
