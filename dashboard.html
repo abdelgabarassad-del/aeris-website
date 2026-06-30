@@ -6289,13 +6289,37 @@
       gameWrapper.innerHTML = `
         <div style="display: flex; flex-wrap: wrap; gap: 20px; width: 100%; align-items: start;">
           <!-- Left Column: The main Game Panel -->
-          <div class="dragon-game-panel" style="flex: 3 1 600px; background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif;">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="dragon-game-panel" style="flex: 3 1 600px; background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; position: relative;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span style="font-size: 1.3rem;">🐉 CHASSE AUX MOUTONS DE BERK</span>
+                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-mute" style="width: auto; padding: 2px 8px; font-size: 0.68rem; margin-left: 10px; cursor: pointer;">🔊 Mute</button>
+                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-manual" style="width: auto; padding: 2px 8px; font-size: 0.68rem; margin-left: 6px; cursor: pointer;">❔ Manuel</button>
+                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-reset" style="width: auto; padding: 2px 8px; font-size: 0.68rem; margin-left: 6px; background: rgba(239, 68, 68, 0.15) !important; border-color: #ef4444 !important; color: #fca5a5 !important; cursor: pointer;">🔄 Reset</button>
               </div>
               <div style="font-family: monospace; font-size: 0.85rem; color: #81c784; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
                 ENTRAÎNEMENT DE KROKMOU (TOOTHLESS)
+              </div>
+            </div>
+
+            <!-- Manual Modal Overlay -->
+            <div id="dragon-game-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a3f; padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Guide de Vol - Chasse aux Moutons</h3>
+                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+              </div>
+              <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+                <strong style="color: #60a5fa;">💡 How it works:</strong><br>
+                Steer Krokmou (Toothless) to grab sheep while dodging hunter arrows.<br><br>
+                <strong style="color: #39ff14;">✔️ What to do:</strong><br>
+                - Move your cursor over the canvas: Krokmou follows your mouse position.<br>
+                - Capture 🐑 **White Sheep** for standard points, and **Black/Gold Sheep** for bonus scores.<br>
+                - **Left Click** to fire plasma blasts at incoming arrows to destroy them and protect yourself.<br><br>
+                <strong style="color: #ff5555;">❌ What NOT to do:</strong><br>
+                - Do not crash into the glowing red arrows fired by dragon hunters. They drain your energy (Health).<br>
+                - Do not let your energy bar drop to 0%, or you will crash and trigger Game Over.<br><br>
+                <strong style="color: #ffaa44;">🔍 What to look for:</strong><br>
+                - Collect gold rings and shield bubbles for temporary power-ups and score multipliers.
               </div>
             </div>
             
@@ -6582,6 +6606,46 @@
       if (btnStart) {
         btnStart.addEventListener('click', () => {
           startGame();
+        });
+      }
+
+      // Flight Game Mute, Manual and Reset
+      const btnDragonMute = document.getElementById('btn-dragon-game-mute');
+      const btnDragonManual = document.getElementById('btn-dragon-game-manual');
+      const btnDragonManualClose = document.getElementById('btn-dragon-game-manual-close');
+      const btnDragonReset = document.getElementById('btn-dragon-game-reset');
+      const dragonManualModal = document.getElementById('dragon-game-manual-modal');
+
+      if (btnDragonMute) {
+        btnDragonMute.addEventListener('click', () => {
+          soundEnabled = !soundEnabled;
+          btnDragonMute.textContent = soundEnabled ? "🔊 Mute" : "🔈 Muted";
+          btnDragonMute.classList.toggle('active', !soundEnabled);
+          const sidebarCheckbox = document.getElementById('toggle-dragon-game-sound');
+          if (sidebarCheckbox) {
+            sidebarCheckbox.checked = soundEnabled;
+          }
+        });
+      }
+
+      if (btnDragonManual && dragonManualModal) {
+        btnDragonManual.addEventListener('click', () => {
+          dragonManualModal.style.display = 'block';
+        });
+      }
+
+      if (btnDragonManualClose && dragonManualModal) {
+        btnDragonManualClose.addEventListener('click', () => {
+          dragonManualModal.style.display = 'none';
+        });
+      }
+
+      if (btnDragonReset) {
+        btnDragonReset.addEventListener('click', () => {
+          gameRunning = false;
+          setTimeout(() => {
+            startGame();
+          }, 30);
         });
       }
 
@@ -7007,13 +7071,37 @@
       const duelWrapper = document.createElement('div');
       duelWrapper.className = 'dragon-duel-container dragon-widget fade-in visible';
       duelWrapper.innerHTML = `
-        <div class="dragon-duel-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
-            <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="dragon-duel-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px; position: relative;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span style="font-size: 1.3rem;">⚔️ ARÈNE DE BERK : SIMULATEUR DE DUEL</span>
+              <button class="dragon-weapon-btn btn-sm" id="btn-dragon-duel-mute" style="width: auto; padding: 2px 8px; font-size: 0.68rem; margin-left: 10px; cursor: pointer;">🔊 Mute</button>
+              <button class="dragon-weapon-btn btn-sm" id="btn-dragon-duel-manual" style="width: auto; padding: 2px 8px; font-size: 0.68rem; margin-left: 6px; cursor: pointer;">❔ Manuel</button>
             </div>
             <div style="font-family: monospace; font-size: 0.85rem; color: #81c784; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
               ENTRAÎNEMENT COMBAT (DUEL SIMULATOR)
+            </div>
+          </div>
+
+          <!-- Manual Modal Overlay -->
+          <div id="dragon-duel-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a3f; padding-bottom: 8px; margin-bottom: 12px;">
+              <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Manuel d'Arène - Simulateur de Combat</h3>
+              <button class="dragon-weapon-btn btn-sm" id="btn-dragon-duel-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+            </div>
+            <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+              <strong style="color: #60a5fa;">💡 How it works:</strong><br>
+              Dodge and attack the wild dragon in turn-based combat inside the Berk Academy ring.<br><br>
+              <strong style="color: #39ff14;">✔️ What to do:</strong><br>
+              - Use **Tir Plasma** to deal maximum damage when your plasma reserve is high.<br>
+              - Use **Attaque Feu** as a reliable medium damage, low cost attack.<br>
+              - Use **Esquive Vent** to regain plasma (+15) and gain a 45% chance to dodge the next wild dragon strike.<br>
+              - Consume saumon (**Poisson Soin**) to heal +35 HP if your health gets low.<br><br>
+              <strong style="color: #ff5555;">❌ What NOT to do:</strong><br>
+              - Do not exhaust all your plasma, or you won't be able to heal or perform high-damage strikes.<br>
+              - Do not ignore your health level—if Krokmou falls to 0 HP, you lose.<br><br>
+              <strong style="color: #ffaa44;">🔍 What to look for:</strong><br>
+              - Monitor both the Wild Dragon's health bar and Krokmou's health/plasma bars.
             </div>
           </div>
 
@@ -7121,6 +7209,7 @@
       let gameTurn = 'ended'; // 'player', 'enemy', 'ended'
       let dodgeActive = false;
       let gameTime = 0;
+      let duelMuted = false;
 
       // Animations state variables
       let animProjectiles = [];
@@ -7147,6 +7236,7 @@
       }
 
       function playDuelSound(type) {
+        if (duelMuted) return;
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         if (!AudioContextClass) return;
         try {
@@ -7224,6 +7314,32 @@
       if (btnStart) {
         btnStart.addEventListener('click', () => {
           startDuel();
+        });
+      }
+
+      // Duel Mute and Manual
+      const btnDuelMute = document.getElementById('btn-dragon-duel-mute');
+      const btnDuelManual = document.getElementById('btn-dragon-duel-manual');
+      const btnDuelManualClose = document.getElementById('btn-dragon-duel-manual-close');
+      const duelManualModal = document.getElementById('dragon-duel-manual-modal');
+
+      if (btnDuelMute) {
+        btnDuelMute.addEventListener('click', () => {
+          duelMuted = !duelMuted;
+          btnDuelMute.textContent = duelMuted ? "🔈 Muted" : "🔊 Mute";
+          btnDuelMute.classList.toggle('active', duelMuted);
+        });
+      }
+
+      if (btnDuelManual && duelManualModal) {
+        btnDuelManual.addEventListener('click', () => {
+          duelManualModal.style.display = 'block';
+        });
+      }
+
+      if (btnDuelManualClose && duelManualModal) {
+        btnDuelManualClose.addEventListener('click', () => {
+          duelManualModal.style.display = 'none';
         });
       }
 
@@ -10008,11 +10124,36 @@
 
         <!-- МИГ-25 ФОКСРАТ THERMO-ATMOSPHERIC & ENGINE CONSOLE -->
         <div class="soviet-widget" id="soviet-foxbat-panel" style="margin-top: 24px;">
-          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #1f292e, #2a363b) !important; border-bottom: 2px solid #546e7a !important;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span>🚀 МИГ-25 ФОКСРАТ: TWIN-TURBOJET CONSOLE & THERMODYNAMICS</span>
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #1f292e, #2a363b) !important; border-bottom: 2px solid #546e7a !important; position: relative;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span>🚀 МИГ-25 ФОКСРАТ: CONSOLE</span>
+              <button class="stitch-btn-music" id="btn-foxbat-mute" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 8px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">🔊 Mute</button>
+              <button class="stitch-btn-music" id="btn-foxbat-manual" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">❔ Manuel</button>
+              <button class="stitch-btn-music" id="btn-foxbat-reset" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; background: rgba(239, 68, 68, 0.15) !important; border: 1px solid rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; cursor: pointer;">🔄 Reset</button>
             </div>
-            <span class="soviet-station-status" id="foxbat-sys-status" style="border-color: #546e7a; color: #81c784;">ДВИГАТЕЛЬ СТАБИЛЕН</span>
+            <span class="soviet-station-status" id="foxbat-sys-status" style="border-color: #546e7a; color: #81c784; margin-left: auto;">ДВИГАТЕЛЬ СТАБИЛЕН</span>
+
+            <!-- Manual Modal Overlay -->
+            <div id="foxbat-manual-modal" style="display: none; position: absolute; top: 42px; left: 10px; right: 10px; background: rgba(10, 15, 20, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #546e7a; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #546e7a; padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; text-transform: uppercase;">📋 Manual - MiG-25 Telemetry Console</h3>
+                <button class="stitch-btn-music" id="btn-foxbat-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+              </div>
+              <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+                <strong style="color: #60a5fa;">💡 How it works:</strong><br>
+                Simulate twin R-15 jet engines. Maximize speed up to Mach 3.2 without burning the engines.<br><br>
+                <strong style="color: #39ff14;">✔️ What to do:</strong><br>
+                - Click the engine status buttons (initially **`OFFLINE`**) to start engines. Wait for idle (30% RPM).<br>
+                - Push throttles past 85% and switch Afterburner to `ZONE 3` to speed up.<br>
+                - Switch coolant flow to 50% or 100% to cool engines down during high EGT.<br>
+                - Refill water-methanol when low.<br><br>
+                <strong style="color: #ff5555;">❌ What NOT to do:</strong><br>
+                - Do not run afterburners without cooling; EGT > 850°C melts core components (accumulates engine damage).<br>
+                - If manual inlet ramps are active, do not mismatch the ideal ramp angle by >12° at high speeds (Mach > 1.5), which causes compressor stalls.<br><br>
+                <strong style="color: #ffaa44;">🔍 What to look for:</strong><br>
+                - EGT Nixie readouts: Keep under 800°C. Red flags indicate warning status.
+              </div>
+            </div>
           </div>
           <div class="card-body" style="padding: 16px;">
             <div class="foxbat-layout">
@@ -12018,6 +12159,8 @@
       let foxbatFuelRate = 0.0;
       let engineFlameTime = 0;
 
+      let jetMuted = false;
+
       // Audio variables
       let leftAudioNode = null;
       let leftGainNode = null;
@@ -12102,7 +12245,7 @@
         if (leftGainNode && leftFilterNode) {
           const rpmRatio = leftRPM / 100;
           const targetFreq = 110 + (rpmRatio * 220) + (leftAfterburner ? 80 : 0);
-          const targetGain = (0.012 * rpmRatio + (leftAfterburner ? 0.045 : 0)) * densityFactor;
+          const targetGain = jetMuted ? 0 : (0.012 * rpmRatio + (leftAfterburner ? 0.045 : 0)) * densityFactor;
           leftFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
           leftGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
         }
@@ -12110,13 +12253,13 @@
         if (rightGainNode && rightFilterNode) {
           const rpmRatio = rightRPM / 100;
           const targetFreq = 105 + (rpmRatio * 225) + (rightAfterburner ? 85 : 0);
-          const targetGain = (0.012 * rpmRatio + (rightAfterburner ? 0.045 : 0)) * densityFactor;
+          const targetGain = jetMuted ? 0 : (0.012 * rpmRatio + (rightAfterburner ? 0.045 : 0)) * densityFactor;
           rightFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
           rightGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
         }
 
         if (coolantGainNode) {
-          const targetCgain = coolantFlow > 0 && coolantQty > 0 ? (coolantFlow === 2 ? 0.02 : 0.01) : 0.0;
+          const targetCgain = jetMuted ? 0 : (coolantFlow > 0 && coolantQty > 0 ? (coolantFlow === 2 ? 0.02 : 0.01) : 0.0);
           coolantGainNode.gain.setValueAtTime(targetCgain, window.sovietAudioCtx.currentTime);
         }
       }
@@ -12511,6 +12654,111 @@
         });
       }
 
+      // Foxbat Mute, Manual and Reset
+      const btnFoxbatMute = document.getElementById('btn-foxbat-mute');
+      const btnFoxbatManual = document.getElementById('btn-foxbat-manual');
+      const btnFoxbatManualClose = document.getElementById('btn-foxbat-manual-close');
+      const btnFoxbatReset = document.getElementById('btn-foxbat-reset');
+      const foxbatManualModal = document.getElementById('foxbat-manual-modal');
+
+      if (btnFoxbatMute) {
+        btnFoxbatMute.addEventListener('click', () => {
+          jetMuted = !jetMuted;
+          btnFoxbatMute.textContent = jetMuted ? "🔈 Muted" : "🔊 Mute";
+          btnFoxbatMute.classList.toggle('active', jetMuted);
+          updateFoxbatSound();
+        });
+      }
+
+      if (btnFoxbatManual && foxbatManualModal) {
+        btnFoxbatManual.addEventListener('click', () => {
+          foxbatManualModal.style.display = 'block';
+        });
+      }
+
+      if (btnFoxbatManualClose && foxbatManualModal) {
+        btnFoxbatManualClose.addEventListener('click', () => {
+          foxbatManualModal.style.display = 'none';
+        });
+      }
+
+      if (btnFoxbatReset) {
+        btnFoxbatReset.addEventListener('click', () => {
+          leftIgnition = false;
+          leftRPM = 0;
+          leftThrottle = 0;
+          leftAfterburner = false;
+          leftEGT = 20;
+          leftStatus = 'OFFLINE';
+          leftDamage = 0;
+
+          rightIgnition = false;
+          rightRPM = 0;
+          rightThrottle = 0;
+          rightAfterburner = false;
+          rightEGT = 20;
+          rightStatus = 'OFFLINE';
+          rightDamage = 0;
+
+          rampAngle = 0;
+          nozzlePos = 20;
+          coolantFlow = 0;
+          coolantQty = 100;
+          foxbatMach = 0.0;
+          foxbatAlt = 10000;
+          foxbatTemp = 22;
+          foxbatAirDensity = 0.413;
+          foxbatFuelRate = 0.0;
+
+          if (btnLeftStarter) {
+            btnLeftStarter.classList.remove('starter-active');
+            btnLeftStarter.textContent = "OFFLINE";
+          }
+          if (btnRightStarter) {
+            btnRightStarter.classList.remove('starter-active');
+            btnRightStarter.textContent = "OFFLINE";
+          }
+          if (sliderLeftThrottle) {
+            sliderLeftThrottle.value = 0;
+            if (lblLeftThrottle) lblLeftThrottle.textContent = "0%";
+          }
+          if (sliderRightThrottle) {
+            sliderRightThrottle.value = 0;
+            if (lblRightThrottle) lblRightThrottle.textContent = "0%";
+          }
+          if (toggleLeftAfterburner) {
+            toggleLeftAfterburner.checked = false;
+            toggleLeftAfterburner.disabled = true;
+          }
+          if (toggleRightAfterburner) {
+            toggleRightAfterburner.checked = false;
+            toggleRightAfterburner.disabled = true;
+          }
+          if (statusLeftAfterburner) {
+            statusLeftAfterburner.textContent = "SAFE";
+            statusLeftAfterburner.style.color = "#8c736e";
+          }
+          if (statusRightAfterburner) {
+            statusRightAfterburner.textContent = "SAFE";
+            statusRightAfterburner.style.color = "#8c736e";
+          }
+          if (sliderMach) {
+            sliderMach.value = 0.0;
+            if (lblMach) lblMach.textContent = "Mach 0.0";
+          }
+          if (sliderAlt) {
+            sliderAlt.value = 10000;
+            if (lblAltVal) lblAltVal.textContent = "10,000m";
+          }
+          if (barCoolant) barCoolant.style.width = '100%';
+          if (lblCoolantQty) lblCoolantQty.textContent = '100%';
+          updateCoolantButtons(0);
+
+          logTerminal("[SYS] COLD RESET INITIATED. ALL TELEMETRY PARAMETERS RETRACTED TO STANDSTILL STATE.");
+          updateFoxbatSound();
+        });
+      }
+
       const updateCoolantButtons = (flow) => {
         coolantFlow = flow;
         if (btnCoolantOff) btnCoolantOff.classList.toggle('active', flow === 0);
@@ -12580,7 +12828,7 @@
 
         // 2. Airflow, Density, & Inlet Diffuser physics
         foxbatAirDensity = 1.225 * Math.exp(-foxbatAlt / 8500);
-        const ambientTemp = -56;
+        const ambientTemp = foxbatAlt < 11000 ? 15 - (foxbatAlt / 11000) * 71 : -56;
 
         // Supersonic inlet diffuser ramp physics
         const idealRamp = foxbatMach > 1.0 ? Math.min(45, (foxbatMach - 1.0) * 20.4) : 0;
@@ -12763,9 +13011,14 @@
         }
 
         // 5. Propulsion & Dynamic flight physics
-        const tL = leftStatus === 'RUNNING' ? ((leftRPM / 100) * 80 + (leftAfterburner ? 32 : 0)) * leftNozzleThrustPenalty : 0;
-        const tR = rightStatus === 'RUNNING' ? ((rightRPM / 100) * 80 + (rightAfterburner ? 32 : 0)) * rightNozzleThrustPenalty : 0;
-        const totalThrust = (tL + tR) * (foxbatAirDensity / 0.413);
+        const tL = leftStatus === 'RUNNING' ? ((leftRPM / 100) * 80 + (leftAfterburner ? 45 : 0)) * leftNozzleThrustPenalty : 0;
+        const tR = rightStatus === 'RUNNING' ? ((rightRPM / 100) * 80 + (rightAfterburner ? 45 : 0)) * rightNozzleThrustPenalty : 0;
+        
+        // Thrust peak at high altitude (sweet spot around 19,000m)
+        const altFactor = 0.3 + 0.7 * Math.exp(-Math.pow(foxbatAlt - 19000, 2) / 100000000);
+        // Ramjet compression boost: thrust increases with Mach speed
+        const ramFactor = 1.0 + (foxbatMach * 0.35);
+        const totalThrust = (tL + tR) * altFactor * ramFactor * 0.6;
 
         foxbatFuelRate = (leftStatus === 'RUNNING' ? (0.2 + (leftRPM / 100) * 0.4 + (leftAfterburner ? 1.2 : 0)) : 0) +
                          (rightStatus === 'RUNNING' ? (0.2 + (rightRPM / 100) * 0.4 + (rightAfterburner ? 1.2 : 0)) : 0);
@@ -12773,11 +13026,11 @@
         if (flightMode === 'DYNAMIC') {
           let dragCoeff = 3.5;
           if (foxbatMach > 0.85 && foxbatMach < 1.25) {
-            dragCoeff = 7.8;
+            dragCoeff = 6.8;
           }
-          const drag = dragCoeff * foxbatAirDensity * (foxbatMach ** 2) * 22;
+          const drag = dragCoeff * (foxbatAirDensity / 0.413) * (foxbatMach ** 2) * 5.0;
           const netForce = totalThrust - drag;
-          const accel = netForce * 0.00012;
+          const accel = netForce * 0.00035;
 
           foxbatMach = Math.max(0.0, Math.min(3.2, foxbatMach + accel));
           
@@ -12787,7 +13040,7 @@
           }
         }
 
-        const skinTargetTemp = ambientTemp + 80 * (foxbatMach ** 2);
+        const skinTargetTemp = ambientTemp + 90 * (foxbatMach ** 2);
         foxbatTemp += (skinTargetTemp - foxbatTemp) * 0.05;
 
         // 6. Audio Modulator updates
@@ -13013,7 +13266,7 @@
           }
 
           // Sound alarm buzzer periodically
-          if (Math.round(engineFlameTime) % 25 === 0) {
+          if (Math.round(engineFlameTime) % 25 === 0 && !jetMuted) {
             try {
               const osc = window.sovietAudioCtx.createOscillator();
               const gain = window.sovietAudioCtx.createGain();
