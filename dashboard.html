@@ -6792,6 +6792,111 @@
             </div>
           </div>
         </div>
+        
+        <!-- МИГ-29 ФУЛКРУМ Cockpit Simulator Card -->
+        <div class="soviet-widget soviet-jet-panel" id="soviet-jet-panel">
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #bf360c, #870000) !important;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>✈️ МИГ-29 ФУЛКРУМ: COCKPIT TELEMETRY & FLIGHT SIMULATOR</span>
+            </div>
+            <span class="soviet-station-status" id="jet-radar-lock" style="border-color: #CC442A; color: #ff8877;">RADAR LOCK: STANDBY</span>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="jet-grid">
+              
+              <!-- Left Column: ADI Gym Horizon -->
+              <div class="jet-col">
+                <div class="jet-col-title">Attitude Indicator (ADI)</div>
+                <div class="jet-canvas-wrapper">
+                  <canvas id="jet-adi-canvas"></canvas>
+                </div>
+                <div class="jet-control-row">
+                  <div class="jet-control-label">
+                    <span>Pitch angle</span>
+                    <span class="jet-control-value" id="lbl-jet-pitch">0°</span>
+                  </div>
+                  <input type="range" id="slider-jet-pitch" min="-45" max="45" value="0" class="soviet-slider">
+                </div>
+                <div class="jet-control-row">
+                  <div class="jet-control-label">
+                    <span>Roll angle</span>
+                    <span class="jet-control-value" id="lbl-jet-roll">0°</span>
+                  </div>
+                  <input type="range" id="slider-jet-roll" min="-60" max="60" value="0" class="soviet-slider">
+                </div>
+              </div>
+              
+              <!-- Center Column: Jet Flight Dynamics -->
+              <div class="jet-col">
+                <div class="jet-col-title">Engine & Speed Parameters</div>
+                
+                <div class="jet-nixie-group">
+                  <div class="jet-nixie-card">
+                    <div class="jet-nixie-label">Airspeed (km/h)</div>
+                    <div class="jet-nixie-digits" id="nixie-jet-speed">0000</div>
+                  </div>
+                  <div class="jet-nixie-card">
+                    <div class="jet-nixie-label">Altitude (m)</div>
+                    <div class="jet-nixie-digits" id="nixie-jet-alt">001500</div>
+                  </div>
+                  <div class="jet-nixie-card">
+                    <div class="jet-nixie-label">G-Force (G)</div>
+                    <div class="jet-nixie-digits" id="nixie-jet-g">1.0</div>
+                  </div>
+                  <div class="jet-nixie-card">
+                    <div class="jet-nixie-label">Fuel capacity</div>
+                    <div class="jet-nixie-digits" id="nixie-jet-fuel">100%</div>
+                  </div>
+                </div>
+                
+                <div class="jet-control-row">
+                  <div class="jet-control-label">
+                    <span>Throttle Lever</span>
+                    <span class="jet-control-value" id="lbl-jet-throttle">30%</span>
+                  </div>
+                  <input type="range" id="slider-jet-throttle" min="0" max="100" value="30" class="soviet-slider">
+                </div>
+                
+                <div class="afterburner-guard-wrapper">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="jet-warning-led" id="led-afterburner"></div>
+                    <span style="font-family: monospace; font-size: 0.8rem; color: #8c736e;">AFTERBURNER (КФ-1)</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="toggle-afterburner">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Right Column: Weapon System Trigger -->
+              <div class="jet-col">
+                <div class="jet-col-title">Weapon Control System</div>
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
+                  <div class="jet-nixie-card" style="padding: 14px;">
+                    <div class="jet-nixie-label">Active ordnance</div>
+                    <div class="jet-nixie-digits" id="lbl-active-missile" style="font-size: 1.1rem; color: #ffaa44;">AA-10 ALAMO (2)</div>
+                  </div>
+                  
+                  <div style="position: relative; margin-top: 10px;">
+                    <!-- Striped weapon guard cover -->
+                    <div class="jet-weapon-guard" id="jet-weapon-guard-cover">⚠️ SAFE: GUARD CLOSED</div>
+                    <!-- Missile Launch button -->
+                    <button class="soviet-console-btn jet-fire-btn" id="btn-fire-missile" style="width: 100%;" disabled>🚀 ПУСК (FIRE MISSILE)</button>
+                  </div>
+                  
+                  <div class="afterburner-guard-wrapper" style="border-color: rgba(255,51,51,0.2); background: rgba(255,51,51,0.03); margin-top: auto;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="jet-warning-led" id="led-rwr"></div>
+                      <span style="font-family: monospace; font-size: 0.72rem; color: #ff5555;">⚠️ СПО-15 БЕРЕЗА (RWR WARNING)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
       `;
       container.appendChild(widgetsGrid);
 
@@ -7434,9 +7539,12 @@
         ctx.beginPath();
         ctx.moveTo(width / 2, height / 2);
         ctx.lineTo(sx, sy);
-        ctx.strokeStyle = 'rgba(204, 68, 42, 0.12)';
-        ctx.lineWidth = 1.5;
         ctx.stroke();
+
+        // Integrate MiG-29 cockpit ticks
+        if (typeof animateJetSimulator === 'function') {
+          animateJetSimulator();
+        }
 
         window.sovietConsoleAnimationFrame = requestAnimationFrame(animate);
       };
@@ -7681,6 +7789,377 @@
           triggerSiren(true);
         });
       }
+
+      // ==========================================
+      // SOVIET МИГ-29 COCKPIT SIMULATOR LOGIC
+      // ==========================================
+      const jetCanvas = document.getElementById('jet-adi-canvas');
+      const jetCtx = jetCanvas ? jetCanvas.getContext('2d') : null;
+      
+      let jetPitch = 0;
+      let jetRoll = 0;
+      let jetThrottle = 30;
+      let jetSpeed = 450;
+      let jetAlt = 1500;
+      let jetFuel = 100.0;
+      let jetAfterburner = false;
+      let jetGForce = 1.0;
+      let jetLockActive = false;
+      let jetLockBlink = false;
+      let missilesCount = 2;
+      let weaponGuardOpen = false;
+
+      // Audio Nodes for Jet Engine
+      let jetSourceNode = null;
+      let jetGainNode = null;
+      let jetFilterNode = null;
+      let jetAudioRunning = false;
+
+      function startJetEngineSound() {
+        if (jetAudioRunning) return;
+        ensureAudioCtx();
+        if (!sovietAudioCtx) return;
+        try {
+          const bufferSize = sovietAudioCtx.sampleRate * 2;
+          const noiseBuffer = sovietAudioCtx.createBuffer(1, bufferSize, sovietAudioCtx.sampleRate);
+          const data = noiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          
+          const noiseNode = sovietAudioCtx.createBufferSource();
+          noiseNode.buffer = noiseBuffer;
+          noiseNode.loop = true;
+          
+          jetFilterNode = sovietAudioCtx.createBiquadFilter();
+          jetFilterNode.type = 'lowpass';
+          jetFilterNode.frequency.value = 120;
+          
+          jetGainNode = sovietAudioCtx.createGain();
+          jetGainNode.gain.value = 0.05;
+          
+          noiseNode.connect(jetFilterNode);
+          jetFilterNode.connect(jetGainNode);
+          jetGainNode.connect(sovietAudioCtx.destination);
+          
+          noiseNode.start();
+          jetSourceNode = noiseNode;
+          jetAudioRunning = true;
+        } catch (err) {
+          console.warn("Audio Context init error:", err);
+        }
+      }
+
+      function updateJetEngineSound() {
+        if (!jetAudioRunning || !sovietAudioCtx) return;
+        let targetFreq = 70 + (jetThrottle / 100) * 160;
+        let targetGain = 0.02 + (jetThrottle / 100) * 0.06;
+        if (jetAfterburner) {
+          targetFreq += 350;
+          targetGain += 0.10;
+        }
+        if (jetFuel <= 0) {
+          targetFreq = 0;
+          targetGain = 0;
+        }
+        if (jetFilterNode) jetFilterNode.frequency.setValueAtTime(targetFreq, sovietAudioCtx.currentTime);
+        if (jetGainNode) jetGainNode.gain.setValueAtTime(targetGain, sovietAudioCtx.currentTime);
+      }
+
+      // DOM Event Listeners for Jet Controls
+      const sliderPitch = document.getElementById('slider-jet-pitch');
+      const sliderRoll = document.getElementById('slider-jet-roll');
+      const sliderThrottle = document.getElementById('slider-jet-throttle');
+      const toggleAfterburner = document.getElementById('toggle-afterburner');
+      const jetWeaponGuard = document.getElementById('jet-weapon-guard-cover');
+      const btnFireMissile = document.getElementById('btn-fire-missile');
+
+      if (sliderPitch) {
+        sliderPitch.addEventListener('input', (e) => {
+          jetPitch = parseInt(e.target.value);
+          const lbl = document.getElementById('lbl-jet-pitch');
+          if (lbl) lbl.textContent = jetPitch + "°";
+        });
+      }
+
+      if (sliderRoll) {
+        sliderRoll.addEventListener('input', (e) => {
+          jetRoll = parseInt(e.target.value);
+          const lbl = document.getElementById('lbl-jet-roll');
+          if (lbl) lbl.textContent = jetRoll + "°";
+        });
+      }
+
+      if (sliderThrottle) {
+        sliderThrottle.addEventListener('input', (e) => {
+          jetThrottle = parseInt(e.target.value);
+          const lbl = document.getElementById('lbl-jet-throttle');
+          if (lbl) lbl.textContent = jetThrottle + "%";
+          startJetEngineSound();
+          updateJetEngineSound();
+        });
+      }
+
+      if (toggleAfterburner) {
+        toggleAfterburner.addEventListener('change', (e) => {
+          jetAfterburner = e.target.checked;
+          const led = document.getElementById('led-afterburner');
+          if (led) {
+            if (jetAfterburner) led.classList.add('active');
+            else led.classList.remove('active');
+          }
+          if (jetAfterburner) {
+            logTerminal("[PROPULSION] МИГ-29 AFTERBURNER ENGAGED. КФ-1 STAGE-2 COMMITTED.");
+          } else {
+            logTerminal("[PROPULSION] AFTERBURNER TERMINATED. CORE ENGINE SUSTAINED.");
+          }
+          startJetEngineSound();
+          updateJetEngineSound();
+        });
+      }
+
+      if (jetWeaponGuard && btnFireMissile) {
+        jetWeaponGuard.addEventListener('click', () => {
+          ensureAudioCtx();
+          weaponGuardOpen = true;
+          jetWeaponGuard.classList.add('flipped');
+          jetWeaponGuard.textContent = "SAFE REMOVED";
+          btnFireMissile.disabled = false;
+          jetLockActive = true;
+          logTerminal("[TACTICAL] WEAPON FIRE CONTROL ENGAGED. SEEKING RADAR ACQUISITION...");
+        });
+
+        btnFireMissile.addEventListener('click', () => {
+          ensureAudioCtx();
+          if (missilesCount <= 0 || jetFuel <= 0) return;
+          
+          missilesCount--;
+          const lblOrdnance = document.getElementById('lbl-active-missile');
+          if (lblOrdnance) {
+            lblOrdnance.textContent = `AA-10 ALAMO (${missilesCount})`;
+          }
+          
+          logTerminal(`[TACTICAL] МИГ-29 WEAPON DETECTED: AA-10 ALAMO AIR-TO-AIR MISSILE DEPLOYED!`);
+          
+          // Synthesize missile launch sound
+          try {
+            const osc = sovietAudioCtx.createOscillator();
+            const gain = sovietAudioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(600, sovietAudioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(60, sovietAudioCtx.currentTime + 0.8);
+            
+            gain.gain.setValueAtTime(0.25, sovietAudioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.8);
+            
+            osc.connect(gain);
+            gain.connect(sovietAudioCtx.destination);
+            
+            osc.start();
+            osc.stop(sovietAudioCtx.currentTime + 0.8);
+          } catch(e) {}
+          
+          if (missilesCount === 0) {
+            btnFireMissile.disabled = true;
+            btnFireMissile.textContent = "NO ORDNANCE LEFT";
+            if (lblOrdnance) lblOrdnance.textContent = "EMPTY";
+            jetLockActive = false;
+            const lockStatus = document.getElementById('jet-radar-lock');
+            if (lockStatus) {
+              lockStatus.textContent = "RADAR LOCK: OFF";
+              lockStatus.style.color = "#8c736e";
+            }
+          }
+        });
+      }
+
+      // Blink intervals
+      const jetBlinkInterval = setInterval(() => {
+        if (!document.getElementById('soviet-jet-panel')) {
+          clearInterval(jetBlinkInterval);
+          return;
+        }
+        if (jetLockActive) {
+          jetLockBlink = !jetLockBlink;
+          const lockStatus = document.getElementById('jet-radar-lock');
+          if (lockStatus) {
+            if (jetLockBlink) {
+              lockStatus.textContent = "RADAR LOCK: ACTIVE";
+              lockStatus.style.color = "#ff3333";
+            } else {
+              lockStatus.textContent = "RADAR LOCK: SEEKING";
+              lockStatus.style.color = "#ffaa44";
+            }
+          }
+        }
+      }, 500);
+
+      // ADI Render function
+      function drawAdiHorizon() {
+        if (!jetCtx || !jetCanvas) return;
+        const w = jetCanvas.width = jetCanvas.offsetWidth || 150;
+        const h = jetCanvas.height = jetCanvas.offsetHeight || 140;
+        const cx = w / 2;
+        const cy = h / 2;
+
+        jetCtx.clearRect(0, 0, w, h);
+
+        // Save context state for ADI Horizon rotation/pitch
+        jetCtx.save();
+        jetCtx.translate(cx, cy);
+        
+        // Rotate ADI Horizon based on Roll angle
+        jetCtx.rotate(-jetRoll * Math.PI / 180);
+        
+        // Translate vertically based on Pitch (approx 1.5 pixels per degree)
+        const pitchOffset = jetPitch * 1.5;
+        jetCtx.translate(0, pitchOffset);
+
+        // Draw Sky (teal/blue half)
+        jetCtx.fillStyle = '#0a4c5c';
+        jetCtx.fillRect(-w * 1.5, -h * 1.5, w * 3, h * 1.5);
+
+        // Draw Ground (brown half)
+        jetCtx.fillStyle = '#2d1c12';
+        jetCtx.fillRect(-w * 1.5, 0, w * 3, h * 1.5);
+
+        // Draw Horizon separating line
+        jetCtx.strokeStyle = '#ffffff';
+        jetCtx.lineWidth = 2;
+        jetCtx.beginPath();
+        jetCtx.moveTo(-w * 1.2, 0);
+        jetCtx.lineTo(w * 1.2, 0);
+        jetCtx.stroke();
+
+        // Draw Pitch Ladder Lines
+        jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        jetCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        jetCtx.lineWidth = 1;
+        jetCtx.font = '8px monospace';
+        jetCtx.textAlign = 'center';
+        jetCtx.textBaseline = 'middle';
+
+        const pitchSteps = [-30, -20, -10, 10, 20, 30];
+        pitchSteps.forEach(deg => {
+          const y = -deg * 1.5;
+          const len = Math.abs(deg) % 20 === 0 ? 30 : 18;
+          jetCtx.beginPath();
+          jetCtx.moveTo(-len / 2, y);
+          jetCtx.lineTo(len / 2, y);
+          jetCtx.stroke();
+          
+          // Draw degree digits
+          jetCtx.fillText(Math.abs(deg).toString(), -len / 2 - 8, y);
+          jetCtx.fillText(Math.abs(deg).toString(), len / 2 + 8, y);
+        });
+
+        // Restore context state (un-rotate, un-translate)
+        jetCtx.restore();
+
+        // Draw static aircraft reference crosshair in center (orange wings)
+        jetCtx.strokeStyle = '#ff7f00';
+        jetCtx.lineWidth = 3;
+        
+        // Left stabilizer wing
+        jetCtx.beginPath();
+        jetCtx.moveTo(cx - 35, cy);
+        jetCtx.lineTo(cx - 15, cy);
+        jetCtx.lineTo(cx - 15, cy + 6);
+        jetCtx.stroke();
+
+        // Right stabilizer wing
+        jetCtx.beginPath();
+        jetCtx.moveTo(cx + 35, cy);
+        jetCtx.lineTo(cx + 15, cy);
+        jetCtx.lineTo(cx + 15, cy + 6);
+        jetCtx.stroke();
+
+        // Center dot
+        jetCtx.fillStyle = '#ff7f00';
+        jetCtx.beginPath();
+        jetCtx.arc(cx, cy, 3, 0, Math.PI * 2);
+        jetCtx.fill();
+
+        // Draw locking vector reticle if locking active
+        if (jetLockActive && jetLockBlink) {
+          jetCtx.strokeStyle = '#ff3333';
+          jetCtx.lineWidth = 1.5;
+          jetCtx.strokeRect(cx - 16, cy - 16, 32, 32);
+          
+          // Crosshair locks
+          jetCtx.beginPath();
+          jetCtx.moveTo(cx - 22, cy); jetCtx.lineTo(cx - 16, cy);
+          jetCtx.moveTo(cx + 22, cy); jetCtx.lineTo(cx + 16, cy);
+          jetCtx.moveTo(cx, cy - 22); jetCtx.lineTo(cx, cy - 16);
+          jetCtx.moveTo(cx, cy + 22); jetCtx.lineTo(cx, cy + 16);
+          jetCtx.stroke();
+        }
+      }
+
+      // MiG-29 loop integration inside animate()
+      window.animateJetSimulator = () => {
+        if (!document.getElementById('soviet-jet-panel')) return;
+
+        // Dynamics Updates
+        if (jetFuel > 0) {
+          // Speed increases with throttle and afterburner
+          const targetSpeed = (jetThrottle / 100) * 900 + (jetAfterburner ? 1400 : 0);
+          jetSpeed += (targetSpeed - jetSpeed) * 0.05; // smooth speed ramp
+
+          // Fuel decays
+          jetFuel -= (0.005 + (jetAfterburner ? 0.065 : 0)) * (jetThrottle / 100);
+          if (jetFuel <= 0) {
+            jetFuel = 0;
+            jetThrottle = 0;
+            jetAfterburner = false;
+            updateJetEngineSound();
+            logTerminal("[CRITICAL] МИГ-29 ENGINE FUEL DECAYED TO ZERO. DYNAMIC POWER TERMINATED.");
+          }
+
+          // Altitude updates based on pitch angle
+          jetAlt += (jetSpeed / 3.6) * Math.sin(jetPitch * Math.PI / 180) * 0.016;
+          if (jetAlt < 0) {
+            jetAlt = 0;
+            jetSpeed = 0;
+          }
+          
+          // G-Force estimation
+          jetGForce = 1.0 + Math.abs(jetRoll / 25.0) + (jetPitch > 0 ? (jetPitch / 8.0) : 0);
+        } else {
+          // No fuel glide/stall
+          jetSpeed += (0 - jetSpeed) * 0.02;
+          jetAlt += (jetSpeed / 3.6) * Math.sin(jetPitch * Math.PI / 180) * 0.016;
+          if (jetAlt < 0) jetAlt = 0;
+          jetGForce = 1.0;
+        }
+
+        // DOM Readout updates
+        const lblSpeed = document.getElementById('nixie-jet-speed');
+        if (lblSpeed) lblSpeed.textContent = String(Math.round(jetSpeed)).padStart(4, '0');
+
+        const lblAlt = document.getElementById('nixie-jet-alt');
+        if (lblAlt) lblAlt.textContent = String(Math.round(jetAlt)).padStart(6, '0');
+
+        const lblG = document.getElementById('nixie-jet-g');
+        if (lblG) lblG.textContent = jetGForce.toFixed(1);
+
+        const lblFuel = document.getElementById('nixie-jet-fuel');
+        if (lblFuel) lblFuel.textContent = Math.round(jetFuel) + "%";
+
+        // Warnings logic
+        const ledRwr = document.getElementById('led-rwr');
+        if (ledRwr) {
+          // Warning if low altitude (terrain collision warning) or high G-force overload
+          if ((jetAlt < 300 && jetSpeed > 50) || jetGForce > 5.5) {
+            ledRwr.classList.add('active');
+          } else {
+            ledRwr.classList.remove('active');
+          }
+        }
+
+        // Draw ADI
+        drawAdiHorizon();
+      };
 
       window.sovietConsoleResizeHandler = () => {
         if (canvas.offsetWidth) {
