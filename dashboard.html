@@ -3668,14 +3668,276 @@
         document.body.appendChild(cornerTL);
       }
 
-      // Decors above task board (Classified Lipstick & Peaches)
+      // Decors above task board (Lipstick, stars, glasses, scanners)
       const taskBoard = document.getElementById('task-board');
       if (taskBoard && !document.querySelector('.totallyspies-decors')) {
         const decors = document.createElement('div');
         decors.className = 'totallyspies-decors';
-        const decorsContent = `<span>💄</span><span>🍑</span><span>🕶️</span><span>💄</span><span>🍑</span>`;
+        const decorsContent = `<span>💄</span><span>⭐</span><span>🕶️</span><span>📟</span><span>🔎</span>`;
         decors.innerHTML = decorsContent;
         taskBoard.parentNode.insertBefore(decors, taskBoard);
+      }
+
+      // WOOHP GADGET CARD WIDGET INJECTION
+      if (welcomeBanner && !document.querySelector('.totallyspies-gadget-card')) {
+        const gadgetCard = document.createElement('div');
+        gadgetCard.className = 'totallyspies-gadget-card soviet-widget';
+        gadgetCard.id = 'totallyspies-gadget-card';
+        gadgetCard.style.marginTop = '24px';
+        
+        gadgetCard.innerHTML = `
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #354f52, #2f3e46) !important; border-bottom: 2px solid #2a9d8f !important; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>💼 WOOHP COGNIZANCE: TACTICAL GADGET INVENTORY</span>
+            </div>
+            <span class="soviet-station-status" id="woohp-link-status" style="border-color: #2a9d8f; color: #2ec4b6;">LINK STABLE</span>
+          </div>
+          <div class="card-body" style="padding: 20px;">
+            <p style="font-family: monospace; font-size: 0.82rem; color: var(--white-muted); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px;">
+              Agent Esraa, WOOHP logistics has equipped the following field gadgets. Engage toggles to deploy:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+              
+              <div class="jet-nixie-card" style="display: flex; flex-direction: column; gap: 8px; align-items: center; background: rgba(42, 157, 143, 0.08); border: 1.5px solid rgba(42, 157, 143, 0.25); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 1.8rem;">💄</div>
+                <div style="font-weight: bold; font-family: monospace; font-size: 0.85rem; color: #2a9d8f;">Laser Lipstick</div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-spies-laser">
+                  <span class="slider"></span>
+                </label>
+                <div style="font-size: 0.72rem; font-family: monospace; color: var(--white-muted);" id="status-spies-laser">OFFLINE</div>
+              </div>
+              
+              <div class="jet-nixie-card" style="display: flex; flex-direction: column; gap: 8px; align-items: center; background: rgba(244, 162, 97, 0.08); border: 1.5px solid rgba(244, 162, 97, 0.25); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 1.8rem;">🎒</div>
+                <div style="font-weight: bold; font-family: monospace; font-size: 0.85rem; color: #f4a261;">Jetpack Backpack</div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-spies-jetpack">
+                  <span class="slider"></span>
+                </label>
+                <div style="font-size: 0.72rem; font-family: monospace; color: var(--white-muted);" id="status-spies-jetpack">STANDBY</div>
+              </div>
+              
+              <div class="jet-nixie-card" style="display: flex; flex-direction: column; gap: 8px; align-items: center; background: rgba(53, 79, 82, 0.08); border: 1.5px solid rgba(53, 79, 82, 0.25); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 1.8rem;">🍬</div>
+                <div style="font-weight: bold; font-family: monospace; font-size: 0.85rem; color: #354f52;">Explosive Bubblegum</div>
+                <button class="btn-primary" id="btn-spies-gum" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 4px;">Blow Bubble</button>
+                <div style="font-size: 0.72rem; font-family: monospace; color: var(--white-muted);" id="status-spies-gum">READY</div>
+              </div>
+              
+              <div class="jet-nixie-card" style="display: flex; flex-direction: column; gap: 8px; align-items: center; background: rgba(231, 111, 81, 0.08); border: 1.5px solid rgba(231, 111, 81, 0.25); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 1.8rem;">🕶️</div>
+                <div style="font-weight: bold; font-family: monospace; font-size: 0.85rem; color: #e76f51;">HUD Sunglasses</div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-spies-hud">
+                  <span class="slider"></span>
+                </label>
+                <div style="font-size: 0.72rem; font-family: monospace; color: var(--white-muted);" id="status-spies-hud">NORMAL</div>
+              </div>
+              
+            </div>
+            
+            <div id="spies-hud-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none;">
+              <div id="spies-laser-pointer" style="position: absolute; width: 12px; height: 12px; background: rgba(255, 51, 51, 0.95); border-radius: 50%; box-shadow: 0 0 10px #ff3333; pointer-events: none; transform: translate(-50%, -50%); display: none;"></div>
+              <div id="spies-gum-bubble" style="position: fixed; bottom: 80px; right: 120px; width: 0px; height: 0px; background: rgba(46, 196, 182, 0.75); border: 2.5px solid #2ec4b6; border-radius: 50%; pointer-events: none; transform: translate(50%, 50%); transition: width 0.1s ease, height 0.1s ease; display: none; z-index: 10000;"></div>
+            </div>
+          </div>
+        `;
+        
+        welcomeBanner.parentNode.insertBefore(gadgetCard, welcomeBanner.nextSibling);
+
+        // Gadgets Listeners & Web Audio binds
+        let laserSoundNode = null;
+        let jetpackSoundNode = null;
+
+        const toggleLaser = document.getElementById('toggle-spies-laser');
+        const statusLaser = document.getElementById('status-spies-laser');
+        const hudOverlay = document.getElementById('spies-hud-overlay');
+        const laserPointer = document.getElementById('spies-laser-pointer');
+
+        if (toggleLaser) {
+          toggleLaser.addEventListener('change', (e) => {
+            ensureSpiesAudio();
+            const active = e.target.checked;
+            if (active) {
+              if (statusLaser) statusLaser.textContent = "DEPLOYED";
+              if (hudOverlay) hudOverlay.style.display = "block";
+              if (laserPointer) laserPointer.style.display = "block";
+              logTerminal("[GADGET] CLASSIFIED LASER LIPSTICK DEPLOYED. RETICLE SYNCED.");
+              
+              // Start laser audio hum
+              if (spiesAudioCtx && !laserSoundNode) {
+                try {
+                  const osc = spiesAudioCtx.createOscillator();
+                  const gain = spiesAudioCtx.createGain();
+                  const filter = spiesAudioCtx.createBiquadFilter();
+                  osc.type = 'sawtooth';
+                  osc.frequency.value = 85;
+                  filter.type = 'lowpass';
+                  filter.frequency.value = 160;
+                  gain.gain.value = 0.05;
+                  osc.connect(filter);
+                  filter.connect(gain);
+                  gain.connect(spiesAudioCtx.destination);
+                  osc.start();
+                  laserSoundNode = { osc, gain };
+                } catch(err) {}
+              }
+            } else {
+              if (statusLaser) statusLaser.textContent = "OFFLINE";
+              if (laserPointer) laserPointer.style.display = "none";
+              if (laserSoundNode) {
+                try { laserSoundNode.osc.stop(); } catch(err) {}
+                laserSoundNode = null;
+              }
+              logTerminal("[GADGET] LASER LIPSTICK SHUTDOWN.");
+            }
+          });
+        }
+
+        // Global laser tracking on viewport
+        document.addEventListener('mousemove', (e) => {
+          if (laserPointer && laserPointer.style.display === "block") {
+            laserPointer.style.left = e.clientX + 'px';
+            laserPointer.style.top = e.clientY + 'px';
+          }
+        });
+
+        // Jetpack control
+        const toggleJetpack = document.getElementById('toggle-spies-jetpack');
+        const statusJetpack = document.getElementById('status-spies-jetpack');
+        if (toggleJetpack) {
+          toggleJetpack.addEventListener('change', (e) => {
+            ensureSpiesAudio();
+            const active = e.target.checked;
+            
+            // Toggle zero-g floating animation class on all cards
+            document.querySelectorAll('.task-card, .news-card, .email-card').forEach(card => {
+              if (active) card.classList.add('zero-g');
+              else card.classList.remove('zero-g');
+            });
+
+            if (active) {
+              if (statusJetpack) statusJetpack.textContent = "AIRBORNE";
+              logTerminal("[GADGET] JETPACK DEPLOYED. THRUST VECTOR LOADED. GRAVITY COEFFICIENT OVERRIDDEN.");
+              
+              // Start jetpack sound
+              if (spiesAudioCtx && !jetpackSoundNode) {
+                try {
+                  const bufferSize = spiesAudioCtx.sampleRate * 2;
+                  const buffer = spiesAudioCtx.createBuffer(1, bufferSize, spiesAudioCtx.sampleRate);
+                  const data = buffer.getChannelData(0);
+                  for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                  }
+                  const noise = spiesAudioCtx.createBufferSource();
+                  noise.buffer = buffer;
+                  noise.loop = true;
+                  const filter = spiesAudioCtx.createBiquadFilter();
+                  filter.type = 'bandpass';
+                  filter.frequency.value = 380;
+                  const gain = spiesAudioCtx.createGain();
+                  gain.gain.value = 0.035;
+                  noise.connect(filter);
+                  filter.connect(gain);
+                  gain.connect(spiesAudioCtx.destination);
+                  noise.start();
+                  jetpackSoundNode = { noise, gain };
+                } catch(err) {}
+              }
+            } else {
+              if (statusJetpack) statusJetpack.textContent = "STANDBY";
+              if (jetpackSoundNode) {
+                try { jetpackSoundNode.noise.stop(); } catch(err) {}
+                jetpackSoundNode = null;
+              }
+              logTerminal("[GADGET] JETPACK SUSTAINED.");
+            }
+          });
+        }
+
+        // Explosive Bubblegum
+        const btnGum = document.getElementById('btn-spies-gum');
+        const statusGum = document.getElementById('status-spies-gum');
+        const gumBubble = document.getElementById('spies-gum-bubble');
+        let bubbleSize = 0;
+
+        if (btnGum && gumBubble) {
+          btnGum.addEventListener('click', () => {
+            ensureSpiesAudio();
+            if (statusGum.textContent === "POPPED!") {
+              // Reset
+              bubbleSize = 0;
+              gumBubble.style.width = '0px';
+              gumBubble.style.height = '0px';
+              gumBubble.style.display = 'none';
+              statusGum.textContent = "READY";
+              btnGum.textContent = "Blow Bubble";
+              return;
+            }
+
+            gumBubble.style.display = 'block';
+            if (hudOverlay) hudOverlay.style.display = "block";
+            bubbleSize += 25;
+            gumBubble.style.width = bubbleSize + 'px';
+            gumBubble.style.height = bubbleSize + 'px';
+            
+            // Play blow synthesize
+            try {
+              const osc = spiesAudioCtx.createOscillator();
+              const gain = spiesAudioCtx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(140 + bubbleSize, spiesAudioCtx.currentTime);
+              gain.gain.setValueAtTime(0.08, spiesAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + 0.3);
+              osc.connect(gain);
+              gain.connect(spiesAudioCtx.destination);
+              osc.start();
+              osc.stop(spiesAudioCtx.currentTime + 0.3);
+            } catch(e) {}
+
+            if (bubbleSize >= 125) {
+              statusGum.textContent = "POPPED!";
+              btnGum.textContent = "Clean Mess";
+              
+              // Play pop sound
+              try {
+                const osc = spiesAudioCtx.createOscillator();
+                const gain = spiesAudioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(500, spiesAudioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, spiesAudioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.25, spiesAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(spiesAudioCtx.destination);
+                osc.start();
+                osc.stop(spiesAudioCtx.currentTime + 0.18);
+              } catch(e) {}
+
+              logTerminal("[CRITICAL] EXPLOSIVE BUBBLEGUM SPLASH DETECTED. GADGET EXPENDED.");
+            }
+          });
+        }
+
+        // HUD Sunglasses
+        const toggleHud = document.getElementById('toggle-spies-hud');
+        const statusHud = document.getElementById('status-spies-hud');
+        if (toggleHud) {
+          toggleHud.addEventListener('change', (e) => {
+            ensureSpiesAudio();
+            const active = e.target.checked;
+            if (active) {
+              document.body.classList.add('hud-glasses-overlay');
+              if (statusHud) statusHud.textContent = "SPECTRAL";
+              logTerminal("[GADGET] THERMAL HUD SUNGLASSES DEPLOYED. INTENSITY FILTER MODULATED.");
+            } else {
+              document.body.classList.remove('hud-glasses-overlay');
+              if (statusHud) statusHud.textContent = "NORMAL";
+              logTerminal("[GADGET] SUNGLASSES HUD SHUTDOWN.");
+            }
+          });
+        }
       }
 
       // Customize task form headers for Totally Spies
@@ -7993,7 +8255,18 @@
         }
       }, 500);
 
-      // ADI Render function
+      // ADI Render function with 3D terrain grid and target lock gameplay
+      let targetOffsetX = 30;
+      let targetOffsetY = -20;
+      let targetSpeedX = 0.35;
+      let targetSpeedY = 0.2;
+      let groundScroll = 0;
+      let missileActive = false;
+      let missileProgress = 0;
+      let targetExploding = false;
+      let explosionTimer = 0;
+      let lockSoundBeepTimer = 0;
+
       function drawAdiHorizon() {
         if (!jetCtx || !jetCanvas) return;
         const w = jetCanvas.width = jetCanvas.offsetWidth || 150;
@@ -8003,36 +8276,67 @@
 
         jetCtx.clearRect(0, 0, w, h);
 
-        // Save context state for ADI Horizon rotation/pitch
+        // Save context state for rotating ADI horizon & terrain
         jetCtx.save();
         jetCtx.translate(cx, cy);
-        
-        // Rotate ADI Horizon based on Roll angle
         jetCtx.rotate(-jetRoll * Math.PI / 180);
         
-        // Translate vertically based on Pitch (approx 1.5 pixels per degree)
         const pitchOffset = jetPitch * 1.5;
         jetCtx.translate(0, pitchOffset);
 
-        // Draw Sky (teal/blue half)
-        jetCtx.fillStyle = '#0a4c5c';
-        jetCtx.fillRect(-w * 1.5, -h * 1.5, w * 3, h * 1.5);
+        // 1. Draw Sky (dark blue)
+        jetCtx.fillStyle = '#0a3040';
+        jetCtx.fillRect(-w * 2, -h * 2, w * 4, h * 2);
 
-        // Draw Ground (brown half)
-        jetCtx.fillStyle = '#2d1c12';
-        jetCtx.fillRect(-w * 1.5, 0, w * 3, h * 1.5);
+        // 2. Draw ground (dark brown)
+        jetCtx.fillStyle = '#1e120c';
+        jetCtx.fillRect(-w * 2, 0, w * 4, h * 2);
 
-        // Draw Horizon separating line
-        jetCtx.strokeStyle = '#ffffff';
-        jetCtx.lineWidth = 2;
+        // 3. Draw moving Ground Grid Lines (scrolls forward with speed)
+        jetCtx.strokeStyle = 'rgba(204, 68, 42, 0.25)';
+        jetCtx.lineWidth = 1;
+        
+        // Vanishing grid lines radiating from the center horizon
+        for (let angle = -60; angle <= 60; angle += 20) {
+          const rad = angle * Math.PI / 180;
+          jetCtx.beginPath();
+          jetCtx.moveTo(0, 0);
+          jetCtx.lineTo(Math.sin(rad) * w * 2, Math.cos(rad) * h * 2);
+          jetCtx.stroke();
+        }
+
+        // Horizontal scrolling lines
+        for (let y = groundScroll; y < h * 2; y += 25) {
+          jetCtx.beginPath();
+          jetCtx.moveTo(-w * 2, y);
+          jetCtx.lineTo(w * 2, y);
+          jetCtx.stroke();
+        }
+
+        // 4. Draw sky mountains/grid elements
+        jetCtx.strokeStyle = 'rgba(0, 162, 204, 0.15)';
         jetCtx.beginPath();
-        jetCtx.moveTo(-w * 1.2, 0);
-        jetCtx.lineTo(w * 1.2, 0);
+        // Sky horizon mountain vectors
+        jetCtx.moveTo(-w * 2, -5);
+        jetCtx.lineTo(-w, -25);
+        jetCtx.lineTo(-w * 0.5, -5);
+        jetCtx.lineTo(0, -35);
+        jetCtx.lineTo(w * 0.5, -5);
+        jetCtx.lineTo(w, -20);
+        jetCtx.lineTo(w * 2, -5);
         jetCtx.stroke();
 
-        // Draw Pitch Ladder Lines
-        jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        jetCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        // 5. Draw Horizon separating line
+        jetCtx.strokeStyle = '#ffffff';
+        jetCtx.lineWidth = 1.5;
+        jetCtx.beginPath();
+        jetCtx.moveTo(-w * 1.5, 0);
+        jetCtx.lineTo(w * 1.5, 0);
+        jetCtx.stroke();
+
+        // 6. Draw Pitch Ladder Lines
+        jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        jetCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         jetCtx.lineWidth = 1;
         jetCtx.font = '8px monospace';
         jetCtx.textAlign = 'center';
@@ -8041,61 +8345,134 @@
         const pitchSteps = [-30, -20, -10, 10, 20, 30];
         pitchSteps.forEach(deg => {
           const y = -deg * 1.5;
-          const len = Math.abs(deg) % 20 === 0 ? 30 : 18;
+          const len = Math.abs(deg) % 20 === 0 ? 24 : 14;
           jetCtx.beginPath();
           jetCtx.moveTo(-len / 2, y);
           jetCtx.lineTo(len / 2, y);
           jetCtx.stroke();
-          
-          // Draw degree digits
           jetCtx.fillText(Math.abs(deg).toString(), -len / 2 - 8, y);
           jetCtx.fillText(Math.abs(deg).toString(), len / 2 + 8, y);
         });
 
-        // Restore context state (un-rotate, un-translate)
+        // Restore rotation/translation
         jetCtx.restore();
 
-        // Draw static aircraft reference crosshair in center (orange wings)
+        // Compute screen coordinates of the Target based on our Pitch and Roll steering
+        const targetScreenX = cx + targetOffsetX - (jetRoll * 0.9);
+        const targetScreenY = cy + targetOffsetY + (jetPitch * 1.3);
+
+        // Distance to crosshair
+        const dist = Math.sqrt((targetScreenX - cx) ** 2 + (targetScreenY - cy) ** 2);
+        const isLocked = weaponGuardOpen && (dist < 18) && !targetExploding;
+
+        // 7. Draw Enemy Target if not exploded
+        if (targetExploding) {
+          // Draw explosion ring
+          jetCtx.strokeStyle = '#ff5500';
+          jetCtx.lineWidth = 2;
+          jetCtx.beginPath();
+          jetCtx.arc(targetScreenX, targetScreenY, (30 - explosionTimer) * 1.2, 0, Math.PI * 2);
+          jetCtx.stroke();
+          
+          jetCtx.fillStyle = '#ffaa00';
+          jetCtx.font = 'bold 9px monospace';
+          jetCtx.fillText("HIT!", targetScreenX - 8, targetScreenY - 12);
+        } else {
+          // Draw wireframe enemy aircraft box
+          jetCtx.strokeStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.6)';
+          jetCtx.lineWidth = isLocked ? 2 : 1;
+          
+          // Target box corners
+          jetCtx.strokeRect(targetScreenX - 10, targetScreenY - 10, 20, 20);
+          
+          // Leader line
+          jetCtx.beginPath();
+          jetCtx.moveTo(targetScreenX - 14, targetScreenY);
+          jetCtx.lineTo(targetScreenX - 10, targetScreenY);
+          jetCtx.moveTo(targetScreenX + 14, targetScreenY);
+          jetCtx.lineTo(targetScreenX + 10, targetScreenY);
+          jetCtx.stroke();
+
+          // Draw label
+          jetCtx.fillStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.8)';
+          jetCtx.font = '8px monospace';
+          jetCtx.fillText(`LOCK: ${isLocked ? 'ACQUIRED' : 'SEEKING'}`, targetScreenX - 35, targetScreenY - 14);
+          jetCtx.fillText(`MIG-21: ${Math.round(dist * 12)}m`, targetScreenX - 30, targetScreenY + 18);
+        }
+
+        // 8. Draw Missile Projectile Trajectory if fired
+        if (missileActive) {
+          jetCtx.strokeStyle = '#ffaa00';
+          jetCtx.lineWidth = 2;
+          
+          // Starts from nose of our jet (bottom center) to enemy coordinates
+          const startX = cx;
+          const startY = h - 10;
+          const currentX = startX + (targetScreenX - startX) * missileProgress;
+          const currentY = startY + (targetScreenY - startY) * missileProgress;
+          
+          jetCtx.beginPath();
+          jetCtx.moveTo(startX, startY);
+          jetCtx.lineTo(currentX, currentY);
+          jetCtx.stroke();
+
+          // Missile rocket flame
+          jetCtx.fillStyle = '#ff3300';
+          jetCtx.beginPath();
+          jetCtx.arc(currentX, currentY, 3, 0, Math.PI * 2);
+          jetCtx.fill();
+        }
+
+        // 9. Draw static aircraft HUD reference crosshair in center (orange wings)
         jetCtx.strokeStyle = '#ff7f00';
-        jetCtx.lineWidth = 3;
+        jetCtx.lineWidth = 2.5;
         
         // Left stabilizer wing
         jetCtx.beginPath();
-        jetCtx.moveTo(cx - 35, cy);
-        jetCtx.lineTo(cx - 15, cy);
-        jetCtx.lineTo(cx - 15, cy + 6);
+        jetCtx.moveTo(cx - 30, cy);
+        jetCtx.lineTo(cx - 12, cy);
+        jetCtx.lineTo(cx - 12, cy + 4);
         jetCtx.stroke();
 
         // Right stabilizer wing
         jetCtx.beginPath();
-        jetCtx.moveTo(cx + 35, cy);
-        jetCtx.lineTo(cx + 15, cy);
-        jetCtx.lineTo(cx + 15, cy + 6);
+        jetCtx.moveTo(cx + 30, cy);
+        jetCtx.lineTo(cx + 12, cy);
+        jetCtx.lineTo(cx + 12, cy + 4);
         jetCtx.stroke();
 
-        // Center dot
+        // Center reticle dot
         jetCtx.fillStyle = '#ff7f00';
         jetCtx.beginPath();
         jetCtx.arc(cx, cy, 3, 0, Math.PI * 2);
         jetCtx.fill();
 
-        // Draw locking vector reticle if locking active
-        if (jetLockActive && jetLockBlink) {
-          jetCtx.strokeStyle = '#ff3333';
-          jetCtx.lineWidth = 1.5;
-          jetCtx.strokeRect(cx - 16, cy - 16, 32, 32);
-          
-          // Crosshair locks
-          jetCtx.beginPath();
-          jetCtx.moveTo(cx - 22, cy); jetCtx.lineTo(cx - 16, cy);
-          jetCtx.moveTo(cx + 22, cy); jetCtx.lineTo(cx + 16, cy);
-          jetCtx.moveTo(cx, cy - 22); jetCtx.lineTo(cx, cy - 16);
-          jetCtx.moveTo(cx, cy + 22); jetCtx.lineTo(cx, cy + 16);
-          jetCtx.stroke();
+        // Draw HUD alignment box
+        jetCtx.strokeStyle = isLocked ? '#ff3333' : 'rgba(255, 127, 0, 0.4)';
+        jetCtx.lineWidth = 1;
+        jetCtx.strokeRect(cx - 18, cy - 18, 36, 36);
+
+        // 10. Play locking sound beeps if targeted
+        if (isLocked) {
+          lockSoundBeepTimer++;
+          if (lockSoundBeepTimer % 5 === 0) {
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(1400, sovietAudioCtx.currentTime);
+              gain.gain.setValueAtTime(0.08, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.12);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.12);
+            } catch(e) {}
+          }
         }
       }
 
-      // MiG-29 loop integration inside animate()
+      // MiG-29 loop integration inside Vostok animate()
       window.animateJetSimulator = () => {
         if (!document.getElementById('soviet-jet-panel')) return;
 
@@ -8103,7 +8480,7 @@
         if (jetFuel > 0) {
           // Speed increases with throttle and afterburner
           const targetSpeed = (jetThrottle / 100) * 900 + (jetAfterburner ? 1400 : 0);
-          jetSpeed += (targetSpeed - jetSpeed) * 0.05; // smooth speed ramp
+          jetSpeed += (targetSpeed - jetSpeed) * 0.05;
 
           // Fuel decays
           jetFuel -= (0.005 + (jetAfterburner ? 0.065 : 0)) * (jetThrottle / 100);
@@ -8125,14 +8502,62 @@
           // G-Force estimation
           jetGForce = 1.0 + Math.abs(jetRoll / 25.0) + (jetPitch > 0 ? (jetPitch / 8.0) : 0);
         } else {
-          // No fuel glide/stall
+          // No fuel glide
           jetSpeed += (0 - jetSpeed) * 0.02;
           jetAlt += (jetSpeed / 3.6) * Math.sin(jetPitch * Math.PI / 180) * 0.016;
           if (jetAlt < 0) jetAlt = 0;
           jetGForce = 1.0;
         }
 
-        // DOM Readout updates
+        // Enemy Target wandering simulation ( Lissajous Curve )
+        if (!targetExploding) {
+          targetOffsetX += targetSpeedX;
+          targetOffsetY += targetSpeedY;
+          if (Math.abs(targetOffsetX) > 75) targetSpeedX *= -1;
+          if (Math.abs(targetOffsetY) > 35) targetSpeedY *= -1;
+        }
+
+        // Update ground grid scroll speed
+        groundScroll = (groundScroll + (jetSpeed / 25)) % 25;
+
+        // Update missile tracking
+        if (missileActive) {
+          missileProgress += 0.05;
+          if (missileProgress >= 1.0) {
+            missileActive = false;
+            targetExploding = true;
+            explosionTimer = 30; // 30 animation frames
+            logTerminal("[TACTICAL] МИГ-29 MISSILE DETECTED IMPACT. TARGET DESTROYED!");
+            
+            // Play synthetic crash explosion noise burst
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(120, sovietAudioCtx.currentTime);
+              osc.frequency.exponentialRampToValueAtTime(10, sovietAudioCtx.currentTime + 0.6);
+              gain.gain.setValueAtTime(0.3, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.6);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.6);
+            } catch(e) {}
+          }
+        }
+
+        // Update explosion sequence
+        if (targetExploding) {
+          explosionTimer--;
+          if (explosionTimer <= 0) {
+            targetExploding = false;
+            // Respawn in a random outer coordinate quadrant
+            targetOffsetX = (Math.random() > 0.5 ? 1 : -1) * (45 + Math.random() * 25);
+            targetOffsetY = (Math.random() > 0.5 ? 1 : -1) * (20 + Math.random() * 15);
+          }
+        }
+
+        // Update DOM Nixies
         const lblSpeed = document.getElementById('nixie-jet-speed');
         if (lblSpeed) lblSpeed.textContent = String(Math.round(jetSpeed)).padStart(4, '0');
 
@@ -8145,10 +8570,31 @@
         const lblFuel = document.getElementById('nixie-jet-fuel');
         if (lblFuel) lblFuel.textContent = Math.round(jetFuel) + "%";
 
+        // Weapon fire sync
+        const btnFire = document.getElementById('btn-fire-missile');
+        if (btnFire && !targetExploding && missilesCount > 0 && weaponGuardOpen) {
+          // Distance checks for locking
+          const cx = (jetCanvas ? jetCanvas.offsetWidth : 150) / 2;
+          const cy = (jetCanvas ? jetCanvas.offsetHeight : 140) / 2;
+          const targetScreenX = cx + targetOffsetX - (jetRoll * 0.9);
+          const targetScreenY = cy + targetOffsetY + (jetPitch * 1.3);
+          const dist = Math.sqrt((targetScreenX - cx) ** 2 + (targetScreenY - cy) ** 2);
+          
+          // Disable button if not locked to prevent simple blind fire
+          if (dist < 18) {
+            btnFire.disabled = false;
+            btnFire.innerHTML = "🚀 FIRE MISSILE (LOCKED)";
+            btnFire.style.background = "linear-gradient(180deg, #d62828 0%, #780000 100%)";
+          } else {
+            btnFire.disabled = true;
+            btnFire.innerHTML = "SEEKING LOCK...";
+            btnFire.style.background = "#33110e";
+          }
+        }
+
         // Warnings logic
         const ledRwr = document.getElementById('led-rwr');
         if (ledRwr) {
-          // Warning if low altitude (terrain collision warning) or high G-force overload
           if ((jetAlt < 300 && jetSpeed > 50) || jetGForce > 5.5) {
             ledRwr.classList.add('active');
           } else {
@@ -8159,6 +8605,16 @@
         // Draw ADI
         drawAdiHorizon();
       };
+
+      // Weapon Fire handler bind
+      document.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'btn-fire-missile') {
+          if (missilesCount > 0 && !targetExploding && !missileActive) {
+            missileActive = true;
+            missileProgress = 0.0;
+          }
+        }
+      });
 
       window.sovietConsoleResizeHandler = () => {
         if (canvas.offsetWidth) {
