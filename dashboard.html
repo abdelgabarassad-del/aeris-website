@@ -5459,7 +5459,7 @@
     function applyDragonTheme() {
       if (!isDragonUser()) {
         document.body.classList.remove('dragon-theme');
-        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container').forEach(el => el.remove());
+        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container, .dragon-hatchery-container').forEach(el => el.remove());
         
         // Restore elements modified in applyDragonTheme
         const formTitle = document.querySelector('.task-form__title');
@@ -5708,6 +5708,7 @@
         });
       }
       initDragonGame();
+      initDragonHatchery();
     }
 
     function initDragonGame() {
@@ -6428,6 +6429,372 @@
 
         requestAnimationFrame(updateGame);
       }
+    }
+
+    function initDragonHatchery() {
+      if (document.querySelector('.dragon-hatchery-container')) return;
+
+      const container = document.querySelector('#dashboard-page .container');
+      if (!container) return;
+
+      const hatcheryWrapper = document.createElement('div');
+      hatcheryWrapper.className = 'dragon-hatchery-container dragon-widget fade-in visible';
+      hatcheryWrapper.innerHTML = `
+        <div class="dragon-hatchery-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.3rem;">🥚 COUVEUSE & ENCLOS DE DRAGONS (HATCHERY)</span>
+            </div>
+            <div style="font-family: monospace; font-size: 0.85rem; color: #ffaa44; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
+              POISSONS COLLECTÉS: <span id="hatchery-fish-count" style="color: #39ff14; font-weight: bold;">0</span> 🐟 (Fps: <span id="hatchery-fps-count">0</span>)
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+            <!-- Column 1: Clicker / Fishery -->
+            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+              <div style="font-size: 0.9rem; color: #81c784; text-align: center;">🐟 PÊCHERIE DE BERK (CLICK TO FISH)</div>
+              
+              <!-- Big Fish Button -->
+              <button id="btn-hatchery-click" style="width: 105px; height: 105px; border-radius: 50%; background: radial-gradient(circle, #2d5a3f 0%, #102519 100%); border: 3px solid #39ff14; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); transition: transform 0.1s; outline: none;">
+                🐟
+              </button>
+
+              <div style="font-family: monospace; font-size: 0.72rem; color: #a5d6a7; text-align: center;">
+                +<span id="fish-per-click">1</span> Poisson par clic
+              </div>
+
+              <!-- Upgrades -->
+              <div style="width: 100%; border-top: 1px solid rgba(61, 106, 79, 0.2); padding-top: 8px; display: flex; flex-direction: column; gap: 6px;">
+                <button class="dragon-weapon-btn" id="btn-upgrade-net" style="font-size: 0.7rem; padding: 6px 10px; width: 100%;">🛡️ Filet de Pêche [Coût: 50 🐟] (+1 Fps)</button>
+                <button class="dragon-weapon-btn" id="btn-upgrade-boat" style="font-size: 0.7rem; padding: 6px 10px; width: 100%;">⛵ Barque Viking [Coût: 250 🐟] (+5 Fps)</button>
+              </div>
+            </div>
+
+            <!-- Column 2: Incubator / Hatch Eggs -->
+            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; gap: 10px;">
+              <div style="font-size: 0.9rem; color: #ffaa44; text-align: center; font-family: 'MedievalSharp';">🥚 COUVEUSE D'ŒUFS (HATCHERY)</div>
+              
+              <div style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
+                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.2rem;">🥚</span>
+                    <div style="font-family: monospace; font-size: 0.72rem;">
+                      <div style="color: #fff;">Furie Nocturne</div>
+                      <div style="color: #8c736e;" id="cost-hatch-fury">Coût: 100 🐟</div>
+                    </div>
+                  </div>
+                  <button class="soviet-console-btn btn-sm" id="btn-hatch-fury" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+                </div>
+
+                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.2rem;">🥚</span>
+                    <div style="font-family: monospace; font-size: 0.72rem;">
+                      <div style="color: #fff;">Nadder Mortel</div>
+                      <div style="color: #8c736e;" id="cost-hatch-nadder">Coût: 400 🐟</div>
+                    </div>
+                  </div>
+                  <button class="soviet-console-btn btn-sm" id="btn-hatch-nadder" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+                </div>
+
+                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.2rem;">🥚</span>
+                    <div style="font-family: monospace; font-size: 0.72rem;">
+                      <div style="color: #fff;">Cauchemar</div>
+                      <div style="color: #8c736e;" id="cost-hatch-nightmare">Coût: 1500 🐟</div>
+                    </div>
+                  </div>
+                  <button class="soviet-console-btn btn-sm" id="btn-hatch-nightmare" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: Stable / Feeding Hatchlings -->
+            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-size: 0.9rem; color: #81c784; text-align: center; font-family: 'MedievalSharp';">🐉 ENCLOS DES DRAGONS (STABLES)</div>
+              
+              <div style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 4px;" id="hatchery-dragons-list">
+                <div style="font-size: 0.75rem; color: #8c736e; text-align: center; margin-top: 30px; font-family: monospace;">Aucun dragon éclos. Faites éclore des œufs!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(hatcheryWrapper);
+
+      // DOM bindings
+      const txtFish = document.getElementById('hatchery-fish-count');
+      const txtFps = document.getElementById('hatchery-fps-count');
+      const btnClick = document.getElementById('btn-hatchery-click');
+      const btnNet = document.getElementById('btn-upgrade-net');
+      const btnBoat = document.getElementById('btn-upgrade-boat');
+
+      const btnHatchFury = document.getElementById('btn-hatch-fury');
+      const btnHatchNadder = document.getElementById('btn-hatch-nadder');
+      const btnHatchNightmare = document.getElementById('btn-hatch-nightmare');
+
+      const stablesList = document.getElementById('hatchery-dragons-list');
+
+      // State variables
+      let fish = 0;
+      let fps = 0;
+      let fpc = 1;
+
+      let netCost = 50;
+      let netLvl = 0;
+      let boatCost = 250;
+      let boatLvl = 0;
+
+      let dragons = {
+        fury: { name: 'Krokmou (Night Fury)', hatched: false, level: 0, cost: 100, fpsBonus: 10, foodCost: 50, icon: '🐉', color: '#81c784' },
+        nadder: { name: 'Tempête (Deadly Nadder)', hatched: false, level: 0, cost: 400, fpsBonus: 40, foodCost: 180, icon: '🔥', color: '#44aaff' },
+        nightmare: { name: 'Krochefer (Monstrous Nightmare)', hatched: false, level: 0, cost: 1500, fpsBonus: 120, foodCost: 600, icon: '💥', color: '#ffaa44' }
+      };
+
+      function playHatcherySound(type) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        try {
+          const actx = window.sovietAudioCtx || new AudioContextClass();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          
+          const now = actx.currentTime;
+          
+          if (type === 'click') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(450, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
+            gain.gain.setValueAtTime(0.02, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.09);
+          } else if (type === 'hatch') {
+            // Happy arpeggio
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.setValueAtTime(450, now + 0.06);
+            osc.frequency.setValueAtTime(600, now + 0.12);
+            osc.frequency.setValueAtTime(900, now + 0.18);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+            osc.start(now);
+            osc.stop(now + 0.3);
+          } else if (type === 'feed') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(500, now);
+            osc.frequency.linearRampToValueAtTime(800, now + 0.05);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.start(now);
+            osc.stop(now + 0.14);
+          } else if (type === 'upgrade') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(350, now);
+            osc.frequency.linearRampToValueAtTime(700, now + 0.18);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.start(now);
+            osc.stop(now + 0.22);
+          }
+        } catch(e) {}
+      }
+
+      // Fishing click event
+      if (btnClick) {
+        btnClick.addEventListener('click', () => {
+          if (window.ensureAudioCtx) window.ensureAudioCtx();
+          fish += fpc;
+          txtFish.textContent = Math.floor(fish);
+          playHatcherySound('click');
+          
+          btnClick.style.transform = 'scale(0.92)';
+          setTimeout(() => { btnClick.style.transform = 'scale(1)'; }, 80);
+        });
+      }
+
+      // Fishing Net Upgrade click
+      if (btnNet) {
+        btnNet.addEventListener('click', () => {
+          if (fish >= netCost) {
+            fish -= netCost;
+            netLvl++;
+            fps += 1;
+            netCost = Math.round(netCost * 1.4);
+            txtFish.textContent = Math.floor(fish);
+            txtFps.textContent = fps;
+            btnNet.innerHTML = `🛡️ Filet de Pêche [Coût: ${netCost} 🐟] (${netLvl} owned)`;
+            playHatcherySound('upgrade');
+          }
+        });
+      }
+
+      // Viking Boat Upgrade click
+      if (btnBoat) {
+        btnBoat.addEventListener('click', () => {
+          if (fish >= boatCost) {
+            fish -= boatCost;
+            boatLvl++;
+            fps += 5;
+            boatCost = Math.round(boatCost * 1.45);
+            txtFish.textContent = Math.floor(fish);
+            txtFps.textContent = fps;
+            btnBoat.innerHTML = `⛵ Barque Viking [Coût: ${boatCost} 🐟] (${boatLvl} owned)`;
+            playHatcherySound('upgrade');
+          }
+        });
+      }
+
+      // Hatching functions
+      if (btnHatchFury) {
+        btnHatchFury.addEventListener('click', () => {
+          const d = dragons.fury;
+          if (!d.hatched && fish >= d.cost) {
+            fish -= d.cost;
+            d.hatched = true;
+            d.level = 1;
+            fps += d.fpsBonus;
+            
+            txtFish.textContent = Math.floor(fish);
+            txtFps.textContent = fps;
+            btnHatchFury.disabled = true;
+            btnHatchFury.textContent = "ÉCLOS ✔";
+            playHatcherySound('hatch');
+            renderStables();
+          }
+        });
+      }
+
+      if (btnHatchNadder) {
+        btnHatchNadder.addEventListener('click', () => {
+          const d = dragons.nadder;
+          if (!d.hatched && fish >= d.cost) {
+            fish -= d.cost;
+            d.hatched = true;
+            d.level = 1;
+            fps += d.fpsBonus;
+            
+            txtFish.textContent = Math.floor(fish);
+            txtFps.textContent = fps;
+            btnHatchNadder.disabled = true;
+            btnHatchNadder.textContent = "ÉCLOS ✔";
+            playHatcherySound('hatch');
+            renderStables();
+          }
+        });
+      }
+
+      if (btnHatchNightmare) {
+        btnHatchNightmare.addEventListener('click', () => {
+          const d = dragons.nightmare;
+          if (!d.hatched && fish >= d.cost) {
+            fish -= d.cost;
+            d.hatched = true;
+            d.level = 1;
+            fps += d.fpsBonus;
+            
+            txtFish.textContent = Math.floor(fish);
+            txtFps.textContent = fps;
+            btnHatchNightmare.disabled = true;
+            btnHatchNightmare.textContent = "ÉCLOS ✔";
+            playHatcherySound('hatch');
+            renderStables();
+          }
+        });
+      }
+
+      // Render dragons stables
+      function renderStables() {
+        let html = '';
+        let count = 0;
+        
+        for (let key in dragons) {
+          const d = dragons[key];
+          if (d.hatched) {
+            count++;
+            const currentFpsProd = d.fpsBonus + (d.level - 1) * Math.round(d.fpsBonus * 0.4);
+            html += `
+              <div style="background: rgba(255,255,255,0.02); border: 1.5px solid ${d.color}; border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px; font-family: monospace;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: ${d.color};">
+                  <span>${d.icon} ${d.name}</span>
+                  <span>Niv. ${d.level}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7;">
+                  <span>PROD: +${currentFpsProd} Fps</span>
+                  <button class="soviet-console-btn btn-sm btn-feed-dragon" data-key="${key}" style="padding: 2px 5px !important; font-size: 0.65rem !important; border-color: #81c784; color: #81c784;">FEED (-${d.foodCost} 🐟)</button>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        if (count === 0) {
+          stablesList.innerHTML = `<div style="font-size: 0.75rem; color: #8c736e; text-align: center; margin-top: 30px; font-family: monospace;">Aucun dragon éclos. Faites éclore des œufs!</div>`;
+        } else {
+          stablesList.innerHTML = html;
+          
+          // Bind Feed buttons
+          document.querySelectorAll('.btn-feed-dragon').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const key = e.target.getAttribute('data-key');
+              feedDragon(key);
+            });
+          });
+        }
+      }
+
+      function feedDragon(key) {
+        const d = dragons[key];
+        if (d.hatched && fish >= d.foodCost) {
+          fish -= d.foodCost;
+          d.level++;
+          
+          // Recalculate Fps contribution
+          const oldProd = d.fpsBonus + (d.level - 2) * Math.round(d.fpsBonus * 0.4);
+          const newProd = d.fpsBonus + (d.level - 1) * Math.round(d.fpsBonus * 0.4);
+          fps += (newProd - oldProd);
+
+          d.foodCost = Math.round(d.foodCost * 1.5);
+          
+          txtFish.textContent = Math.floor(fish);
+          txtFps.textContent = fps;
+          playHatcherySound('feed');
+          renderStables();
+        }
+      }
+
+      // Loop to calculate fish generation (runs every 100ms)
+      const hatcheryInterval = setInterval(() => {
+        if (!document.querySelector('.dragon-hatchery-container')) {
+          clearInterval(hatcheryInterval);
+          return;
+        }
+
+        if (fps > 0) {
+          fish += fps / 10;
+          txtFish.textContent = Math.floor(fish);
+        }
+
+        // Enable / Disable buttons depending on fish reserve
+        if (btnNet) btnNet.disabled = (fish < netCost);
+        if (btnBoat) btnBoat.disabled = (fish < boatCost);
+
+        if (btnHatchFury) btnHatchFury.disabled = (dragons.fury.hatched || fish < dragons.fury.cost);
+        if (btnHatchNadder) btnHatchNadder.disabled = (dragons.nadder.hatched || fish < dragons.nadder.cost);
+        if (btnHatchNightmare) btnHatchNightmare.disabled = (dragons.nightmare.hatched || fish < dragons.nightmare.cost);
+
+        document.querySelectorAll('.btn-feed-dragon').forEach(btn => {
+          const key = btn.getAttribute('data-key');
+          const d = dragons[key];
+          if (d) {
+            btn.disabled = (fish < d.foodCost);
+          }
+        });
+      }, 100);
     }
 
     function playDragonSong() {
