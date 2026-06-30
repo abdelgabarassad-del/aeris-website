@@ -1024,7 +1024,7 @@
       '251000305': { name: 'Abdelrahman ehab elsayed', message: 'sba7 el fol ya ba4ah' },
       '241012132': { name: 'Bassem Toulan', message: 'eh el klam ya m3lm' },
       '231003934': { name: 'Ibrahim Hassan Ibrahim', message: 'whassssuppp babyyyy' },
-      '251001767': { name: 'Esraa Mohammed', message: 'esraaaa 3amlah ehhh' },
+      '251001767': { name: 'Esraa Mohammed', message: 'Welcome back, WOOHP Agent Esraa! 🕵️‍♀️ Crimson jumpsuit armed. ComPowder active.' },
       '251000553': { name: 'Khalid Ahmed Mohamed', message: 'malk el computer vision' },
       '251010151': { name: 'Sherry George Youssef', message: '4ofy tasks eh el nahrdah ya 7aga' },
       '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
@@ -3633,7 +3633,7 @@
       if (!document.querySelector('.totallyspies-corner')) {
         const corner = document.createElement('div');
         corner.className = 'totallyspies-corner';
-        corner.innerHTML = `<div class="totallyspies-compowder-floater">🍑</div>`;
+        corner.innerHTML = `<div class="totallyspies-compowder-floater">📟</div>`;
         document.body.appendChild(corner);
 
         const bubble = document.createElement('div');
@@ -3641,14 +3641,13 @@
         document.body.appendChild(bubble);
 
         const phrases = [
-          "WOOHP Calling! Jerry has a new mission for us! 💼📱",
-          "It's time to test the Laser Lipstick! 💄✨",
-          "Oh my gosh, Clover! Did you see those shoes? 👠💖",
-          "Sam, what does the Compowder say? 🧠🔬",
-          "Alex, watch out for the laser grid! 🤸‍♀️💥",
-          "Get ready to jetpack out of here! 🎒🚀",
-          "Another mission accomplished! Time for shopping! 🛍️✨",
-          "Is that a jet-powered hair dryer? 💇‍♀️💨"
+          "📟 Jerry: WOOHP Calling! Anomalies detected in the Mechanical Division database! 🕵️‍♀️",
+          "📟 Clover: Esraa, did you see my new pink laser lipstick? It is so cute! 💄💖",
+          "📟 Sam: I am analyzing the track sheet, we need to finalize these tasks! 🧠📋",
+          "📟 Alex: Oh my gosh, watch out for the laser trap! Jetpacks on! 🎒💥",
+          "📟 WOOHP: Jerry has queued a new gadget. Laser-powered hair dryer ready! 💇‍♀️🚀",
+          "📟 Clover: Time for a shopping trip in Paris after this task is complete! 🛍️✨",
+          "📟 Sam: Secure link established. WOOHP Mainframe monitoring status."
         ];
 
         corner.addEventListener('click', () => {
@@ -3657,7 +3656,7 @@
           const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
           bubble.textContent = randomPhrase;
           bubble.classList.add('show');
-          setTimeout(() => bubble.classList.remove('show'), 3500);
+          setTimeout(() => bubble.classList.remove('show'), 4200);
         });
       }
 
