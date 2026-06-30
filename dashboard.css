@@ -12010,6 +12010,63 @@ body.totallyspies-theme .nav-link:hover {
   font-weight: bold;
 }
 
+/* ========== 📈 STITCH BADNESS CALIBRATOR WIDGET STYLE CLASSES ========== */
+.stitch-badness-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.badness-thermometer {
+  width: 32px;
+  height: 220px;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #334155;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 3px;
+  margin: 0 auto;
+}
+
+.badness-liquid-fill {
+  width: 100%;
+  border-radius: 16px;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+.siren-overlay-alert {
+  position: absolute;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.15);
+  pointer-events: none;
+  animation: alarmPulse 0.5s infinite alternate;
+  display: none;
+  border-radius: 10px;
+}
+
+@keyframes alarmPulse {
+  0% { opacity: 0.1; }
+  100% { opacity: 1.0; }
+}
+
+.stitch-hyper-shake {
+  animation: hyperShake 0.12s infinite;
+}
+
+@keyframes hyperShake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(-2px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
+
 
 
 

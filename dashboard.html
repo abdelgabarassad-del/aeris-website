@@ -2781,7 +2781,7 @@
     function applyStitchTheme() {
       if (!isStitchUser()) {
         document.body.classList.remove('stitch-theme');
-        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements, .stitch-ukulele-container').forEach(el => el.remove());
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements, .stitch-ukulele-container, .stitch-badness-container').forEach(el => el.remove());
         return;
       }
 
@@ -2914,6 +2914,20 @@
                 </div>
                 <div style="font-family: monospace; font-size: 0.85rem; color: #60a5fa; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.3);">
                   EXPERIMENT 626 SOUND CONSOLE
+                </div>
+              </div>
+
+              <!-- Collapsible Guide Tab -->
+              <div style="background: rgba(0, 0, 0, 0.25); border: 1.5px solid rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 6px 12px; margin-bottom: 12px; font-family: monospace;">
+                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="const body = this.nextElementSibling; const btn = this.querySelector('.toggle-guide-btn'); if(body.style.display==='none'){body.style.display='block'; btn.textContent='[-] Cacher le Guide';}else{body.style.display='none'; btn.textContent='[+] Comment Jouer';}">
+                  <span style="font-size: 0.8rem; color: #60a5fa; font-weight: bold;">📖 GUIDE DU JUKE-BOX & UKULÉLÉ (INSTRUCTIONS)</span>
+                  <span class="toggle-guide-btn" style="font-size: 0.72rem; color: #60a5fa;">[+] Comment Jouer</span>
+                </div>
+                <div style="display: none; margin-top: 8px; font-size: 0.72rem; color: #94a3b8; line-height: 1.45; border-top: 1px solid rgba(59, 130, 246, 0.2); padding-top: 6px;">
+                  - <strong>Cordes de l'Ukulélé</strong> : Passez votre souris ou cliquez sur les 4 cordes (SOL, DO, MI, LA) pour gratter un accord réaliste.<br>
+                  - <strong>Chant d'Aloha</strong> : Cliquez sur <em>🌺 JOUER MELODIE (ALOHA OE)</em> pour lancer un arpège hawaïen.<br>
+                  - <strong>Bruit des Vagues</strong> : Cliquez sur <em>🌊 BRUIT DES VAGUES</em> pour activer/désactiver le bruit ambiant relaxant de l'océan (Kauai Surf).<br>
+                  - <strong>Cri de Stitch</strong> : Cliquez sur <em>👽 CRI DE L'EXPÉRIENCE 626</em> pour entendre la voix alien de Stitch.
                 </div>
               </div>
 
@@ -3171,6 +3185,283 @@
               } catch(e) {}
             });
           }
+        }
+      }
+
+      // Stitch Badness Level Calibrator widget
+      if (!document.querySelector('.stitch-badness-container')) {
+        const container = document.querySelector('#dashboard-page .container');
+        if (container) {
+          const badnessWrapper = document.createElement('div');
+          badnessWrapper.className = 'stitch-badness-container stitch-deco fade-in visible';
+          badnessWrapper.innerHTML = `
+            <div class="ukulele-board-panel" id="badness-panel" style="padding: 16px; margin-top: 24px; position: relative;">
+              <!-- Siren overlay -->
+              <div class="siren-overlay-alert" id="badness-siren"></div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid rgba(59, 130, 246, 0.3); padding-bottom: 8px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.3rem;">📈 CALIBRATEUR DE MÉCHANCETÉ DE STITCH</span>
+                </div>
+                <div style="font-family: monospace; font-size: 0.85rem; color: #ff5555; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255, 85, 85, 0.3);" id="badness-status-badge">
+                  STATUT: ACTIF (35%)
+                </div>
+              </div>
+
+              <!-- Collapsible Guide Tab -->
+              <div style="background: rgba(0, 0, 0, 0.25); border: 1.5px solid rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 6px 12px; margin-bottom: 12px; font-family: monospace;">
+                <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="const body = this.nextElementSibling; const btn = this.querySelector('.toggle-guide-btn'); if(body.style.display==='none'){body.style.display='block'; btn.textContent='[-] Cacher le Guide';}else{body.style.display='none'; btn.textContent='[+] Comment Jouer';}">
+                  <span style="font-size: 0.8rem; color: #ff5555; font-weight: bold;">📖 GUIDE DU CALIBRATEUR (INSTRUCTIONS)</span>
+                  <span class="toggle-guide-btn" style="font-size: 0.72rem; color: #ff5555;">[+] Comment Jouer</span>
+                </div>
+                <div style="display: none; margin-top: 8px; font-size: 0.72rem; color: #94a3b8; line-height: 1.45; border-top: 1px solid rgba(59, 130, 246, 0.2); padding-top: 6px;">
+                  - <strong>But du jeu</strong> : Gérer le niveau de méchanceté de Stitch à l'aide des boutons d'actions.<br>
+                  - <strong>Biscuit, Canard et Elvis</strong> : Diminuent le niveau de méchanceté respectivement de -15%, -25% et -20% (sons correspondants).<br>
+                  - <strong>Café</strong> : Excite Stitch de +30%. Attention, à 100% Stitch devient fou, l'écran tremble et l'alarme sonne !<br>
+                  - <strong>Jet d'eau</strong> : Apparaît seulement à 100% de méchanceté pour éteindre l'alarme et ramener le calme.
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: center;">
+                <!-- Column 1: The Thermometer -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                  <div class="badness-thermometer">
+                    <div class="badness-liquid-fill" id="badness-liquid" style="height: 35%; background-color: #3b82f6;"></div>
+                  </div>
+                  <div style="font-family: monospace; font-size: 0.8rem; font-weight: bold; color: #fff;" id="badness-txt-pct">35%</div>
+                </div>
+
+                <!-- Column 2: Calibrator controls -->
+                <div style="display: flex; flex-direction: column; gap: 10px; font-family: monospace;">
+                  <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(59,130,246,0.3); border-radius: 6px; padding: 10px; min-height: 52px; display: flex; align-items: center;">
+                    <p id="badness-feed-log" style="margin: 0; font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+                      Calibrez le niveau de méchanceté de Stitch (Expérience 626). S'il atteint 100%, Stitch devient incontrôlable !
+                    </p>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button class="stitch-btn-music" id="btn-badness-cookie" style="font-size: 0.7rem; padding: 6px;">🍪 Donner un Biscuit<br><span style="color: #60a5fa;">(Méchanceté: -15%)</span></button>
+                    <button class="stitch-btn-music" id="btn-badness-duck" style="font-size: 0.7rem; padding: 6px;">📚 Vilain Petit Canard<br><span style="color: #60a5fa;">(Méchanceté: -25%)</span></button>
+                    <button class="stitch-btn-music" id="btn-badness-coffee" style="font-size: 0.7rem; padding: 6px;">☕ Offrir un Café<br><span style="color: #ff5555;">(Méchanceté: +30%)</span></button>
+                    <button class="stitch-btn-music" id="btn-badness-elvis" style="font-size: 0.7rem; padding: 6px;">🎸 Jouer du Elvis<br><span style="color: #60a5fa;">(Méchanceté: -20%)</span></button>
+                  </div>
+
+                  <!-- Alarm control button (hidden by default) -->
+                  <button class="stitch-btn-music active" id="btn-badness-reset" style="display: none; background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #fca5a5 !important; font-family: 'MedievalSharp'; margin-top: 4px;">🌀 ACTIVER LE JET D'EAU (RESET EXPERIMENT)</button>
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(badnessWrapper);
+
+          // DOM bindings
+          const badnessPanel = badnessWrapper.querySelector('#badness-panel');
+          const liquid = badnessWrapper.querySelector('#badness-liquid');
+          const txtPct = badnessWrapper.querySelector('#badness-txt-pct');
+          const statusBadge = badnessWrapper.querySelector('#badness-status-badge');
+          const feedLog = badnessWrapper.querySelector('#badness-feed-log');
+          const siren = badnessWrapper.querySelector('#badness-siren');
+
+          const btnCookie = badnessWrapper.querySelector('#btn-badness-cookie');
+          const btnDuck = badnessWrapper.querySelector('#btn-badness-duck');
+          const btnCoffee = badnessWrapper.querySelector('#btn-badness-coffee');
+          const btnElvis = badnessWrapper.querySelector('#btn-badness-elvis');
+          const btnReset = badnessWrapper.querySelector('#btn-badness-reset');
+
+          let badness = 35;
+          let alarmOsc = null;
+          let alarmInterval = null;
+
+          function playCalibratorSFX(type) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            try {
+              const actx = window.sovietAudioCtx || new AudioContextClass();
+              const osc = actx.createOscillator();
+              const gain = actx.createGain();
+              osc.connect(gain);
+              gain.connect(actx.destination);
+              const now = actx.currentTime;
+
+              if (type === 'cookie') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(30, now + 0.08);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                osc.start();
+                osc.stop(now + 0.1);
+              } else if (type === 'coffee') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.exponentialRampToValueAtTime(850, now + 0.22);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                osc.start();
+                osc.stop(now + 0.27);
+              } else if (type === 'duck') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(554, now + 0.06);
+                osc.frequency.setValueAtTime(659, now + 0.12);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                osc.start();
+                osc.stop(now + 0.25);
+              } else if (type === 'elvis') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(440, now + 0.2);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                osc.start();
+                osc.stop(now + 0.28);
+              } else if (type === 'cute') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523, now);
+                osc.frequency.setValueAtTime(659, now + 0.08);
+                osc.frequency.setValueAtTime(784, now + 0.16);
+                osc.frequency.setValueAtTime(1046, now + 0.24);
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                osc.start();
+                osc.stop(now + 0.5);
+              }
+            } catch(e) {}
+          }
+
+          function startGalacticAlarm() {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            try {
+              const actx = window.sovietAudioCtx || new AudioContextClass();
+              alarmOsc = actx.createOscillator();
+              const gainNode = actx.createGain();
+              alarmOsc.connect(gainNode);
+              gainNode.connect(actx.destination);
+
+              alarmOsc.type = 'sawtooth';
+              alarmOsc.frequency.setValueAtTime(600, actx.currentTime);
+              gainNode.gain.setValueAtTime(0.04, actx.currentTime);
+
+              alarmOsc.start();
+
+              let rising = true;
+              alarmInterval = setInterval(() => {
+                const nowTime = actx.currentTime;
+                try {
+                  if (rising) {
+                    alarmOsc.frequency.exponentialRampToValueAtTime(950, nowTime + 0.24);
+                  } else {
+                    alarmOsc.frequency.exponentialRampToValueAtTime(450, nowTime + 0.24);
+                  }
+                } catch(e) {}
+                rising = !rising;
+              }, 250);
+            } catch(e) {}
+          }
+
+          function stopGalacticAlarm() {
+            if (alarmInterval) {
+              clearInterval(alarmInterval);
+              alarmInterval = null;
+            }
+            if (alarmOsc) {
+              try { alarmOsc.stop(); } catch(e) {}
+              alarmOsc = null;
+            }
+          }
+
+          function updateBadness() {
+            txtPct.textContent = `${badness}%`;
+            liquid.style.height = `${badness}%`;
+
+            if (badness <= 30) {
+              liquid.style.backgroundColor = '#3b82f6';
+              statusBadge.textContent = "STATUT: TOUT DOUX 🌸";
+              statusBadge.style.borderColor = 'rgba(59, 130, 246, 0.4)';
+              statusBadge.style.color = '#93c5fd';
+            } else if (badness <= 79) {
+              liquid.style.backgroundColor = '#ffaa44';
+              statusBadge.textContent = "STATUT: ESPIÈGLE 🐾";
+              statusBadge.style.borderColor = 'rgba(255, 170, 68, 0.4)';
+              statusBadge.style.color = '#fdba74';
+            } else {
+              liquid.style.backgroundColor = '#ef4444';
+              statusBadge.textContent = "STATUT: EXPÉRIENCE 626 🚨";
+              statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+              statusBadge.style.color = '#fca5a5';
+            }
+
+            const isUnleashed = (badness >= 100);
+            btnCookie.disabled = isUnleashed;
+            btnDuck.disabled = isUnleashed;
+            btnCoffee.disabled = isUnleashed;
+            btnElvis.disabled = isUnleashed;
+
+            if (isUnleashed) {
+              siren.style.display = 'block';
+              btnReset.style.display = 'block';
+              badnessPanel.classList.add('stitch-hyper-shake');
+              feedLog.innerHTML = `<strong style="color: #ef4444;">ALERTE ROUGE : Stitch est hors de contrôle !</strong> L'Expérience 626 est déchaînée. Activez le jet d'eau pour le calmer !`;
+              startGalacticAlarm();
+            } else {
+              siren.style.display = 'none';
+              btnReset.style.display = 'none';
+              badnessPanel.classList.remove('stitch-hyper-shake');
+              stopGalacticAlarm();
+            }
+          }
+
+          btnCookie.addEventListener('click', () => {
+            if (window.ensureAudioCtx) window.ensureAudioCtx();
+            badness = Math.max(0, badness - 15);
+            playCalibratorSFX('cookie');
+            feedLog.textContent = "Stitch croque le biscuit coco ! Son niveau de méchanceté diminue. 🍪";
+            updateBadness();
+            if (badness === 0) triggerCuteFluffy();
+          });
+
+          btnDuck.addEventListener('click', () => {
+            if (window.ensureAudioCtx) window.ensureAudioCtx();
+            badness = Math.max(0, badness - 25);
+            playCalibratorSFX('duck');
+            feedLog.textContent = "Lilo lit l'histoire du Vilain Petit Canard. Stitch est ému... 📚";
+            updateBadness();
+            if (badness === 0) triggerCuteFluffy();
+          });
+
+          btnCoffee.addEventListener('click', () => {
+            if (window.ensureAudioCtx) window.ensureAudioCtx();
+            badness = Math.min(100, badness + 30);
+            playCalibratorSFX('coffee');
+            feedLog.textContent = "Stitch boit une grande tasse de café noir ! Il s'excite !! ☕⚡";
+            updateBadness();
+          });
+
+          btnElvis.addEventListener('click', () => {
+            if (window.ensureAudioCtx) window.ensureAudioCtx();
+            badness = Math.max(0, badness - 20);
+            playCalibratorSFX('elvis');
+            feedLog.textContent = "Stitch joue un morceau d'Elvis Presley à la guitare ! Rock'n'roll ! 🎸";
+            updateBadness();
+            if (badness === 0) triggerCuteFluffy();
+          });
+
+          btnReset.addEventListener('click', () => {
+            if (window.ensureAudioCtx) window.ensureAudioCtx();
+            badness = 20;
+            playCalibratorSFX('cute');
+            feedLog.textContent = "Splash ! Stitch est aspergé d'eau galactique. Il redevient calme. 💧";
+            updateBadness();
+          });
+
+          function triggerCuteFluffy() {
+            playCalibratorSFX('cute');
+            feedLog.innerHTML = `<span style="color: #39ff14; font-weight: bold;">STITCH EST TOUT DOUX 🌸</span>. Il est redevenu mignon et gentil, prêt à faire des câlins !`;
+          }
+
+          updateBadness();
         }
       }
     }
@@ -6726,6 +7017,21 @@
             </div>
           </div>
 
+          <!-- Collapsible Guide Tab -->
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1.5px solid rgba(45, 90, 63, 0.4); border-radius: 6px; padding: 6px 12px; margin-bottom: 12px; font-family: monospace;">
+            <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="const body = this.nextElementSibling; const btn = this.querySelector('.toggle-guide-btn'); if(body.style.display==='none'){body.style.display='block'; btn.textContent='[-] Cacher le Guide';}else{body.style.display='none'; btn.textContent='[+] Comment Jouer';}">
+              <span style="font-size: 0.8rem; color: #81c784; font-weight: bold;">📖 GUIDE DE COMBAT (INSTRUCTIONS)</span>
+              <span class="toggle-guide-btn" style="font-size: 0.72rem; color: #a5d6a7;">[+] Comment Jouer</span>
+            </div>
+            <div style="display: none; margin-top: 8px; font-size: 0.72rem; color: #a5d6a7; line-height: 1.45; border-top: 1px solid rgba(45, 90, 63, 0.25); padding-top: 6px;">
+              - <strong>Tir Plasma</strong> (24 Dégâts, -20 Plasma) : Tir puissant et rapide de Krokmou.<br>
+              - <strong>Attaque Feu</strong> (15 Dégâts, -10 Plasma) : Crache 5 boules de feu successives.<br>
+              - <strong>Esquive Vent</strong> (+15 Plasma, +45% Esquive) : Krokmou s'élève dans les airs pour esquiver le prochain assaut.<br>
+              - <strong>Poisson Soin</strong> (+35 PV, -35 Plasma) : Krokmou mange un saumon pour régénérer sa santé.<br>
+              - <em>Objectif</em> : Terrasser le dragon sauvage en gérant votre santé et votre réserve de Plasma !
+            </div>
+          </div>
+
           <div style="display: grid; grid-template-columns: 1fr 310px; gap: 16px;">
             <!-- Canvas Column -->
             <div style="position: relative; background: #080f0c; border: 2px solid #274433; border-radius: 6px; overflow: hidden;">
@@ -7426,6 +7732,20 @@
             </div>
           </div>
 
+          <!-- Collapsible Guide Tab -->
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1.5px solid rgba(45, 90, 63, 0.4); border-radius: 6px; padding: 6px 12px; margin-bottom: 12px; font-family: monospace;">
+            <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="const body = this.nextElementSibling; const btn = this.querySelector('.toggle-guide-btn'); if(body.style.display==='none'){body.style.display='block'; btn.textContent='[-] Cacher le Guide';}else{body.style.display='none'; btn.textContent='[+] Comment Jouer';}">
+              <span style="font-size: 0.8rem; color: #ffaa44; font-weight: bold;">📖 GUIDE DE L'ENCYCLOPÉDIE (INSTRUCTIONS)</span>
+              <span class="toggle-guide-btn" style="font-size: 0.72rem; color: #ffaa44;">[+] Comment Jouer</span>
+            </div>
+            <div style="display: none; margin-top: 8px; font-size: 0.72rem; color: #a5d6a7; line-height: 1.45; border-top: 1px solid rgba(45, 90, 63, 0.25); padding-top: 6px;">
+              - <strong>Sélection</strong> : Utilisez les boutons fléchés ◀ et ▶ pour parcourir le registre des espèces.<br>
+              - <strong>Visualisation 3D</strong> : Passez votre curseur sur la carte pour l'incliner et l'examiner sous tous ses angles.<br>
+              - <strong>Acoustique</strong> : Cliquez sur <em>🔊 ÉCOUTER LE CRI</em> pour écouter le rugissement propre à chaque espèce.<br>
+              - <strong>Entraînement</strong> : Cliquez sur <em>🛡️ ENTRAÎNER</em> pour augmenter le niveau d'entraînement, ce qui projette des étincelles dorées.
+            </div>
+          </div>
+
           <div style="display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start;">
             <!-- Left: 3D interactive Card visualizer -->
             <div class="dragon-card-3d" id="dragon-card-3d" style="cursor: pointer;">
@@ -7923,6 +8243,19 @@
             </div>
             <div style="font-family: monospace; font-size: 0.85rem; color: #39ff14; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
               CARVER & ORACLE WIDGET
+            </div>
+          </div>
+
+          <!-- Collapsible Guide Tab -->
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1.5px solid rgba(45, 90, 63, 0.4); border-radius: 6px; padding: 6px 12px; margin-bottom: 12px; font-family: monospace;">
+            <div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="const body = this.nextElementSibling; const btn = this.querySelector('.toggle-guide-btn'); if(body.style.display==='none'){body.style.display='block'; btn.textContent='[-] Cacher le Guide';}else{body.style.display='none'; btn.textContent='[+] Comment Jouer';}">
+              <span style="font-size: 0.8rem; color: #39ff14; font-weight: bold;">📖 GUIDE DU GRAVEUR & DE L'ORACLE (INSTRUCTIONS)</span>
+              <span class="toggle-guide-btn" style="font-size: 0.72rem; color: #39ff14;">[+] Comment Jouer</span>
+            </div>
+            <div style="display: none; margin-top: 8px; font-size: 0.72rem; color: #a5d6a7; line-height: 1.45; border-top: 1px solid rgba(45, 90, 63, 0.25); padding-top: 6px;">
+              - <strong>Graveur de Runes</strong> : Tapez votre texte en alphabet classique dans le champ, puis cliquez sur <em>🔨 GRAVER SUR LA PIERRE</em>.<br>
+              - <strong>Animation</strong> : Les lettres sont gravées une à une avec des étincelles sous le burin et des sons métalliques.<br>
+              - <strong>Oracle Viking</strong> : Cliquez sur la carte runique ou sur <em>🎴 TIRER UNE NOUVELLE RUNE</em> pour dévoiler un présage viking et ses conseils d'entraînement.
             </div>
           </div>
 
