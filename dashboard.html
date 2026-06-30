@@ -6381,43 +6381,49 @@
 
     function cleanupSovietWidgets() {
       // Cancel animation frames
-      if (window.sovietWindTunnelAnimationFrame) {
-        cancelAnimationFrame(window.sovietWindTunnelAnimationFrame);
-        window.sovietWindTunnelAnimationFrame = null;
-      }
-      if (window.sovietAttitudeAnimationFrame) {
-        cancelAnimationFrame(window.sovietAttitudeAnimationFrame);
-        window.sovietAttitudeAnimationFrame = null;
-      }
-      if (window.sovietCadAnimationFrame) {
-        cancelAnimationFrame(window.sovietCadAnimationFrame);
-        window.sovietCadAnimationFrame = null;
+      if (window.sovietConsoleAnimationFrame) {
+        cancelAnimationFrame(window.sovietConsoleAnimationFrame);
+        window.sovietConsoleAnimationFrame = null;
       }
       
       // Clear intervals
-      if (window.sovietTerminalInterval) {
-        clearInterval(window.sovietTerminalInterval);
-        window.sovietTerminalInterval = null;
+      if (window.sovietConsolePhysicsInterval) {
+        clearInterval(window.sovietConsolePhysicsInterval);
+        window.sovietConsolePhysicsInterval = null;
       }
-      
-      // Call handlers cleanup
-      if (window.sovietAttitudeCleanup) {
-        window.sovietAttitudeCleanup();
-        window.sovietAttitudeCleanup = null;
+      if (window.sovietConsoleBeepInterval) {
+        clearInterval(window.sovietConsoleBeepInterval);
+        window.sovietConsoleBeepInterval = null;
       }
-      if (window.sovietCadCleanup) {
-        window.sovietCadCleanup();
-        window.sovietCadCleanup = null;
+
+      // Stop Audio Context
+      if (window.sovietAudioCtx) {
+        try {
+          if (window.sovietHumOsc) { window.sovietHumOsc.stop(); }
+          if (window.sovietStaticNoise) { window.sovietStaticNoise.stop(); }
+          if (window.sovietSirenOsc) { window.sovietSirenOsc.stop(); }
+        } catch(e) {}
+        try {
+          window.sovietAudioCtx.close();
+        } catch(e) {}
+        window.sovietAudioCtx = null;
+        window.sovietHumOsc = null;
+        window.sovietStaticNoise = null;
+        window.sovietSirenOsc = null;
       }
-      
+
       // Remove window event listeners
-      if (window.sovietWindResizeHandler) {
-        window.removeEventListener('resize', window.sovietWindResizeHandler);
-        window.sovietWindResizeHandler = null;
+      if (window.sovietConsoleResizeHandler) {
+        window.removeEventListener('resize', window.sovietConsoleResizeHandler);
+        window.sovietConsoleResizeHandler = null;
       }
-      if (window.sovietChartResizeHandler) {
-        window.removeEventListener('resize', window.sovietChartResizeHandler);
-        window.sovietChartResizeHandler = null;
+      if (window.sovietConsoleMouseUpHandler) {
+        window.removeEventListener('mouseup', window.sovietConsoleMouseUpHandler);
+        window.sovietConsoleMouseUpHandler = null;
+      }
+      if (window.sovietConsoleMouseMoveHandler) {
+        window.removeEventListener('mousemove', window.sovietConsoleMouseMoveHandler);
+        window.sovietConsoleMouseMoveHandler = null;
       }
       
       // Remove widgets container
@@ -6434,750 +6440,1047 @@
       const widgetsGrid = document.createElement('div');
       widgetsGrid.className = 'soviet-widgets-container fade-in visible';
       widgetsGrid.innerHTML = `
-        <!-- Widget 1: The Wind Tunnel -->
-        <div class="soviet-widget" id="widget-wind-tunnel">
+        <div class="soviet-widget soviet-console-panel" id="soviet-mission-control">
           <div class="soviet-widget__header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22 L22 22 M12 2 L12 18 M6 8 L18 8"/></svg>
-            <span>Wind Tunnel (Fluid Dynamics)</span>
-          </div>
-          <div class="soviet-widget__body" style="padding:0;">
-            <canvas id="soviet-wind-tunnel-canvas" class="soviet-wind-canvas"></canvas>
-            <div id="soviet-wind-tooltip" class="soviet-wind-tooltip"></div>
-          </div>
-        </div>
-
-        <!-- Widget 2: Tactical Ground Control -->
-        <div class="soviet-widget" id="widget-tactical-cockpit">
-          <div class="soviet-widget__header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2 L12 12 M12 12 L19 12"/></svg>
-            <span>Tactical Ground Control (Glass Cockpit)</span>
-          </div>
-          <div class="soviet-widget__body">
-            <div class="soviet-cockpit-layout">
-              <div class="soviet-cockpit-panel">
-                <span class="soviet-cockpit-panel__label">Alt (Meters)</span>
-                <span id="soviet-alt-value" class="soviet-cockpit-panel__value">12,450</span>
-              </div>
-              <svg id="soviet-attitude-svg" class="soviet-attitude-indicator-svg" width="130" height="130" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="#0d0302" stroke="#4a180e" stroke-width="3"/>
-                <circle cx="50" cy="50" r="42" fill="#070101" stroke="#a32d17" stroke-width="1.5"/>
-                <defs>
-                  <clipPath id="attitude-clip">
-                    <circle cx="50" cy="50" r="41"/>
-                  </clipPath>
-                </defs>
-                <g clip-path="url(#attitude-clip)">
-                  <g id="soviet-attitude-card" transform="translate(50, 50) rotate(0)">
-                    <rect x="-80" y="-80" width="160" height="80" fill="rgba(163, 45, 23, 0.25)"/>
-                    <rect x="-80" y="0" width="160" height="80" fill="rgba(115, 39, 24, 0.8)"/>
-                    <line x1="-80" y1="0" x2="80" y2="0" stroke="#CC442A" stroke-width="2"/>
-                    <line x1="-15" y1="-10" x2="15" y2="-10" stroke="#CC442A" stroke-width="1" opacity="0.6"/>
-                    <text x="22" y="-8" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">10</text>
-                    <text x="-28" y="-8" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">10</text>
-                    <line x1="-10" y1="-20" x2="10" y2="-20" stroke="#CC442A" stroke-width="1" opacity="0.6"/>
-                    <text x="17" y="-18" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">20</text>
-                    <text x="-23" y="-18" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">20</text>
-                    <line x1="-15" y1="10" x2="15" y2="10" stroke="#CC442A" stroke-width="1" opacity="0.6"/>
-                    <text x="22" y="12" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">-10</text>
-                    <text x="-28" y="12" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">-10</text>
-                    <line x1="-10" y1="20" x2="10" y2="20" stroke="#CC442A" stroke-width="1" opacity="0.6"/>
-                    <text x="17" y="22" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">-20</text>
-                    <text x="-23" y="22" font-size="6" fill="#CC442A" font-family="'Courier New', monospace" opacity="0.6">-20</text>
-                  </g>
-                </g>
-                <g stroke="#ffffff" stroke-width="2" fill="none" opacity="0.95" style="filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));">
-                  <circle cx="50" cy="50" r="1.5" fill="#ffffff"/>
-                  <path d="M 28 50 L 40 50 L 44 54 L 46 50"/>
-                  <path d="M 72 50 L 60 50 L 56 54 L 54 50"/>
-                  <path d="M 50 9 L 50 13 M 30 15 L 33 18 M 70 15 L 67 18 M 15 30 L 19 32 M 85 30 L 81 32" stroke="#CC442A" stroke-width="1"/>
-                </g>
-              </svg>
-              <div class="soviet-cockpit-panel">
-                <span class="soviet-cockpit-panel__label">Hdg (Degrees)</span>
-                <span id="soviet-hdg-value" class="soviet-cockpit-panel__value">285°</span>
-              </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 .5-1.5V11a2 2 0 0 0-2-2h-3V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 .5 1.5M12 17h.01"/></svg>
+              <span>VOSTOK-1 MISSION CONTROL & ORBITAL COMMAND CENTER</span>
             </div>
+            <span class="soviet-station-status" id="soviet-station-status">STATUS: DEPLOYED</span>
           </div>
-        </div>
+          <div class="soviet-console-body">
+            <div class="soviet-console-grid">
+              
+              <!-- LEFT COLUMN: CRT RADARSCOPE -->
+              <div class="soviet-console-col col-radar">
+                <div class="col-header">
+                  <span>CRT TELEMETRY RADARSCOPE</span>
+                  <span class="col-sub">DRAG ORBIT TO ROTATE CAMERA</span>
+                </div>
+                <div class="radar-scope-wrapper">
+                  <div class="radar-scanline"></div>
+                  <canvas id="soviet-radar-canvas"></canvas>
+                  <div class="radar-overlay-data" id="radar-overlay-text">
+                    ALT: 320 KM<br>VEL: 7.82 KM/S<br>FUEL: 100%
+                  </div>
+                  <div class="radar-ping-ripple" id="radar-ping-ripple"></div>
+                </div>
+                <div class="radar-bottom-controls">
+                  <button class="soviet-console-btn btn-sm" id="btn-radar-ping">🛰️ EMIT PING</button>
+                  <button class="soviet-console-btn btn-sm" id="btn-radar-reset">🔄 RESET CAMERA</button>
+                  <button class="soviet-console-btn btn-sm" id="btn-sim-reset">🚀 RESET ORBIT</button>
+                </div>
+              </div>
+              
+              <!-- CENTER COLUMN: FLIGHT DYNAMICS & CONTROL -->
+              <div class="soviet-console-col col-telemetry">
+                <div class="col-header">FLIGHT DYNAMICS AND TELEMETRY</div>
+                
+                <div class="nixie-display-group">
+                  <div class="nixie-container">
+                    <div class="nixie-label">ALTITUDE (KM)</div>
+                    <div class="nixie-digits" id="nixie-alt">000320</div>
+                  </div>
+                  <div class="nixie-container">
+                    <div class="nixie-label">VELOCITY (KM/S)</div>
+                    <div class="nixie-digits" id="nixie-vel">7.82</div>
+                  </div>
+                  <div class="nixie-container">
+                    <div class="nixie-label">FUEL CAPACITY</div>
+                    <div class="nixie-digits" id="nixie-fuel">100%</div>
+                  </div>
+                  <div class="nixie-container">
+                    <div class="nixie-label">G-FORCE (G)</div>
+                    <div class="nixie-digits" id="nixie-gforce">1.00</div>
+                  </div>
+                </div>
+                
+                <div class="telemetry-controls">
+                  <div class="control-row">
+                    <div class="control-label">THRUST DIRECTION (MANUAL DEGREES): <span id="val-thrust-angle">0°</span></div>
+                    <input type="range" id="slider-thrust-angle" min="0" max="359" value="0" class="soviet-slider">
+                  </div>
+                  
+                  <div class="control-row">
+                    <div class="control-label">THRUST VECTOR MODE</div>
+                    <div class="thrust-mode-selector">
+                      <button class="soviet-mode-btn active" id="btn-mode-prograde">PROGRADE (ACCEL)</button>
+                      <button class="soviet-mode-btn" id="btn-mode-retrograde">RETROGRADE (DECEL)</button>
+                      <button class="soviet-mode-btn" id="btn-mode-manual">MANUAL DEG</button>
+                    </div>
+                  </div>
 
-        <!-- Widget 3: The Computational Terminal -->
-        <div class="soviet-widget" id="widget-computational-terminal" style="grid-column: 1 / 3;">
-          <div class="soviet-widget__header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            <span>Computational Terminal (Data-Centric Grid)</span>
-          </div>
-          <div class="soviet-widget__body" style="padding:12px;">
-            <div class="soviet-terminal-grid">
-              <div id="soviet-terminal-logs" class="soviet-terminal-cli">
-                <div class="soviet-terminal-cli__line">[SYS] INITIALIZING COMPUTATIONAL GRID...</div>
-                <div class="soviet-terminal-cli__line">[RADAR] SWEEP ACTIVE - SECTOR 7 OK</div>
-                <div class="soviet-terminal-cli__line">[TELEMETRY] SPUTNIK FREQ LOCKED 20.005 MHZ</div>
-                <div class="soviet-terminal-cli__line">[SYS] THRUST VEC: 0.11 <span class="soviet-terminal-cli__cursor"></span></div>
+                  <div class="control-row engine-action-row">
+                    <button class="soviet-big-red-btn" id="btn-fire-engines">
+                      <span class="btn-cap">ENGAGE ENGINE DIRECTIVE</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div class="soviet-mini-chart" id="soviet-chart-scatter">
-                <span class="soviet-mini-chart__label">Orbit Scatter Plot</span>
-                <canvas id="canvas-scatter" style="width:100%; height:100%; display:block;"></canvas>
-              </div>
-              <div class="soviet-mini-chart" id="soviet-chart-bar">
-                <span class="soviet-mini-chart__label">Thrust Distribution</span>
-                <canvas id="canvas-bar" style="width:100%; height:100%; display:block;"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
+              
+              <!-- RIGHT COLUMN: CHANNELS & SYSTEMS -->
+              <div class="soviet-console-col col-systems">
+                <div class="col-header">SYSTEM COGNIZANCE & COMMS</div>
+                
+                <div class="toggles-grid">
+                  <div class="toggle-switch-container">
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-sputnik-beacon">
+                      <span class="slider"></span>
+                    </label>
+                    <div class="toggle-info">
+                      <span class="toggle-name">SPUTNIK BEACON</span>
+                      <span class="toggle-status" id="status-sputnik">OFF</span>
+                    </div>
+                    <div class="indicator-led red" id="led-sputnik"></div>
+                  </div>
+                  
+                  <div class="toggle-switch-container">
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-static-filter">
+                      <span class="slider"></span>
+                    </label>
+                    <div class="toggle-info">
+                      <span class="toggle-name">STATIC CABINET HUM</span>
+                      <span class="toggle-status" id="status-static">OFF</span>
+                    </div>
+                    <div class="indicator-led red" id="led-static"></div>
+                  </div>
+                  
+                  <div class="toggle-switch-container">
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-stabilizer" checked>
+                      <span class="slider"></span>
+                    </label>
+                    <div class="toggle-info">
+                      <span class="toggle-name">AUTO-STABILIZATION</span>
+                      <span class="toggle-status" id="status-stabilizer">ON</span>
+                    </div>
+                    <div class="indicator-led green active" id="led-stabilizer"></div>
+                  </div>
+                </div>
+                
+                <div class="ejection-panel">
+                  <div class="ejection-light-beacon" id="ejection-alarm-beacon">
+                    <span class="beacon-label">RE-ENTRY ALERT</span>
+                  </div>
+                  <div class="guarded-button-wrapper">
+                    <div class="guard-lid" id="eject-guard-lid">CLICK TO FLIP COVER</div>
+                    <button class="soviet-danger-btn" id="btn-eject-capsule" disabled>EMERGENCY VEHICLE EJECT</button>
+                  </div>
+                </div>
 
-        <!-- Widget 4: Active Prototyping (CAD Wireframe) -->
-        <div class="soviet-widget" id="widget-active-prototyping">
-          <div class="soviet-widget__header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            <span>Active Prototyping (CAD-Wireframe)</span>
-          </div>
-          <div class="soviet-widget__body" style="padding:12px;">
-            <div class="soviet-cad-layout">
-              <canvas id="soviet-cad-canvas" class="soviet-cad-canvas"></canvas>
-              <div class="soviet-cad-controls">
-                <button class="soviet-cad-btn" id="cad-toggle-avionics">Avionics</button>
-                <button class="soviet-cad-btn" id="cad-toggle-struct">Structure</button>
-                <button class="soviet-cad-btn" id="cad-toggle-prop">Propulsion</button>
+                <div class="console-diagnostics">
+                  <div class="diagnostics-header">TELEMETRY DIAGNOSTIC CHANNEL</div>
+                  <div class="diagnostics-logs" id="console-telemetry-logs">
+                    <div class="log-line">[SYS] INITIALIZING CORE TELEMETRY LINK...</div>
+                    <div class="log-line">[SYS] LINK ESTABLISHED. VOSTOK COGNIZANT.</div>
+                  </div>
+                </div>
               </div>
+              
             </div>
           </div>
         </div>
       `;
       container.appendChild(widgetsGrid);
 
-      // Start scripts
-      initWindTunnel();
-      initTacticalGroundControl();
-      initComputationalTerminal();
-      initCADPrototyping();
-    }
-
-    function initWindTunnel() {
-      const canvas = document.getElementById('soviet-wind-tunnel-canvas');
-      const tooltip = document.getElementById('soviet-wind-tooltip');
+      // Simulation States
+      let r_earth = 55;
+      let GM = 3200;
+      let px = 100;
+      let py = 0;
+      let vx = 0;
+      let vy = 5.65;
+      let fuel = 100.0;
+      let crashed = false;
+      let ejected = false;
+      let gforce = 1.0;
+      
+      let ejectPx = 0, ejectPy = 0;
+      let ejectVx = 0, ejectVy = 0;
+      
+      let thrustMode = 'prograde'; // prograde, retrograde, manual
+      let manualThrustAngle = 0;
+      let isThrusting = false;
+      
+      // Drag/rotation parameters for radar scope
+      let camPitch = 0.45;
+      let camYaw = 0.6;
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let basePitch = 0.45, baseYaw = 0.6;
+      
+      const canvas = document.getElementById('soviet-radar-canvas');
       if (!canvas) return;
-
       const ctx = canvas.getContext('2d');
-      let width = canvas.width = canvas.offsetWidth || 360;
-      let height = canvas.height = 240;
+      let width = canvas.width = canvas.offsetWidth || 280;
+      let height = canvas.height = canvas.offsetHeight || 220;
 
-      // Handle resize
-      const resize = () => {
-        if (canvas.offsetWidth) {
-          width = canvas.width = canvas.offsetWidth;
+      // Audio States (Synthesized)
+      let sputnikActive = false;
+      let staticActive = false;
+      let sirenActive = false;
+      let sirenInterval = null;
+
+      function ensureAudioCtx() {
+        if (!window.sovietAudioCtx) {
+          window.sovietAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-      };
-      window.addEventListener('resize', resize);
-
-      // Particles config
-      const particles = [];
-      const maxParticles = 65;
-      for (let i = 0; i < maxParticles; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          speed: 1.5 + Math.random() * 2,
-          length: 10 + Math.random() * 25,
-          alpha: 0.15 + Math.random() * 0.4
-        });
+        if (window.sovietAudioCtx.state === 'suspended') {
+          window.sovietAudioCtx.resume();
+        }
       }
 
-      // Mouse interaction
-      let mouse = { x: -1000, y: -1000, hover: false };
-      canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-        mouse.hover = true;
+      function playSonarPing() {
+        ensureAudioCtx();
+        if (!window.sovietAudioCtx) return;
+        const osc = window.sovietAudioCtx.createOscillator();
+        const gainNode = window.sovietAudioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1050, window.sovietAudioCtx.currentTime);
         
-        const acX = width / 2;
-        const acY = height / 2;
-        const dx = mouse.x - acX;
-        const dy = mouse.y - acY;
-        const dist = Math.sqrt(dx*dx + dy*dy);
+        gainNode.gain.setValueAtTime(0.25, window.sovietAudioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, window.sovietAudioCtx.currentTime + 1.2);
         
-        if (dist < 80) {
-          tooltip.style.display = 'block';
-          tooltip.style.left = (mouse.x + 15) + 'px';
-          tooltip.style.top = (mouse.y + 15) + 'px';
+        osc.connect(gainNode);
+        gainNode.connect(window.sovietAudioCtx.destination);
+        osc.start();
+        osc.stop(window.sovietAudioCtx.currentTime + 1.2);
+      }
+
+      function startSputnikBeep() {
+        if (window.sovietConsoleBeepInterval) clearInterval(window.sovietConsoleBeepInterval);
+        window.sovietConsoleBeepInterval = setInterval(() => {
+          if (!window.sovietAudioCtx || !sputnikActive) return;
+          const osc = window.sovietAudioCtx.createOscillator();
+          const gainNode = window.sovietAudioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(920, window.sovietAudioCtx.currentTime);
           
-          if (mouse.x < acX - 25) {
-            tooltip.innerHTML = `SECTOR: NOSE CONE<br>DRAG COEFF: 0.08<br>PRESSURE: HIGH<br>FLOW: LAMINAR`;
-          } else if (mouse.x > acX + 40) {
-            tooltip.innerHTML = `SECTOR: EXHAUST NOZZLE<br>DRAG COEFF: 0.35<br>PRESSURE: STAGNANT<br>FLOW: TURBULENT`;
-          } else {
-            tooltip.innerHTML = `SECTOR: WING ROOT / CANOPY<br>DRAG COEFF: 0.18<br>PRESSURE: LOW (LIFT)<br>VELOCITY: MACH 2.35`;
-          }
-        } else {
-          tooltip.style.display = 'none';
+          gainNode.gain.setValueAtTime(0, window.sovietAudioCtx.currentTime);
+          gainNode.gain.linearRampToValueAtTime(0.12, window.sovietAudioCtx.currentTime + 0.05);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, window.sovietAudioCtx.currentTime + 0.35);
+          
+          osc.connect(gainNode);
+          gainNode.connect(window.sovietAudioCtx.destination);
+          osc.start();
+          osc.stop(window.sovietAudioCtx.currentTime + 0.4);
+        }, 1600);
+      }
+
+      function startHumStatic() {
+        ensureAudioCtx();
+        if (!window.sovietAudioCtx) return;
+        
+        if (window.sovietHumOsc) {
+          try { window.sovietHumOsc.stop(); } catch(e) {}
         }
+        if (window.sovietStaticNoise) {
+          try { window.sovietStaticNoise.stop(); } catch(e) {}
+        }
+        
+        // Cabin hum
+        window.sovietHumOsc = window.sovietAudioCtx.createOscillator();
+        const humGain = window.sovietAudioCtx.createGain();
+        window.sovietHumOsc.type = 'triangle';
+        window.sovietHumOsc.frequency.value = 60; // low frequency hum
+        humGain.gain.value = 0.06;
+        
+        window.sovietHumOsc.connect(humGain);
+        humGain.connect(window.sovietAudioCtx.destination);
+        window.sovietHumOsc.start();
+        
+        // Static noise
+        const bufferSize = window.sovietAudioCtx.sampleRate * 2;
+        const buffer = window.sovietAudioCtx.createBuffer(1, bufferSize, window.sovietAudioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        window.sovietStaticNoise = window.sovietAudioCtx.createBufferSource();
+        window.sovietStaticNoise.buffer = buffer;
+        window.sovietStaticNoise.loop = true;
+        
+        const filter = window.sovietAudioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 1300;
+        filter.Q.value = 0.6;
+        
+        const staticGain = window.sovietAudioCtx.createGain();
+        staticGain.gain.value = 0.012;
+        
+        window.sovietStaticNoise.connect(filter);
+        filter.connect(staticGain);
+        staticGain.connect(window.sovietAudioCtx.destination);
+        window.sovietStaticNoise.start();
+      }
+
+      function stopHumStatic() {
+        if (window.sovietHumOsc) {
+          try { window.sovietHumOsc.stop(); } catch(e) {}
+          window.sovietHumOsc = null;
+        }
+        if (window.sovietStaticNoise) {
+          try { window.sovietStaticNoise.stop(); } catch(e) {}
+          window.sovietStaticNoise = null;
+        }
+      }
+
+      function triggerSiren(active) {
+        if (active) {
+          if (sirenActive) return;
+          sirenActive = true;
+          ensureAudioCtx();
+          if (!window.sovietAudioCtx) return;
+          
+          window.sovietSirenOsc = window.sovietAudioCtx.createOscillator();
+          const sirenGain = window.sovietAudioCtx.createGain();
+          window.sovietSirenOsc.type = 'sawtooth';
+          window.sovietSirenOsc.frequency.value = 400;
+          sirenGain.gain.value = 0.04;
+          
+          const filter = window.sovietAudioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.value = 750;
+          
+          window.sovietSirenOsc.connect(filter);
+          filter.connect(sirenGain);
+          sirenGain.connect(window.sovietAudioCtx.destination);
+          window.sovietSirenOsc.start();
+          
+          let toggler = false;
+          sirenInterval = setInterval(() => {
+            if (window.sovietSirenOsc) {
+              window.sovietSirenOsc.frequency.setValueAtTime(toggler ? 380 : 580, window.sovietAudioCtx.currentTime);
+              toggler = !toggler;
+            }
+          }, 350);
+        } else {
+          sirenActive = false;
+          if (sirenInterval) {
+            clearInterval(sirenInterval);
+            sirenInterval = null;
+          }
+          if (window.sovietSirenOsc) {
+            try { window.sovietSirenOsc.stop(); } catch(e) {}
+            window.sovietSirenOsc = null;
+          }
+        }
+      }
+
+      // Drag Orbit scope to rotate
+      canvas.addEventListener('mousedown', (e) => {
+        ensureAudioCtx();
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        basePitch = camPitch;
+        baseYaw = camYaw;
+        e.preventDefault();
       });
 
-      canvas.addEventListener('mouseleave', () => {
-        mouse.x = -1000;
-        mouse.y = -1000;
-        mouse.hover = false;
-        tooltip.style.display = 'none';
-      });
-
-      const drawAircraft = (cx, cy) => {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.strokeStyle = 'rgba(163, 45, 23, 0.55)';
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = 'rgba(163, 45, 23, 0.4)';
-        ctx.shadowBlur = 4;
-        ctx.fillStyle = 'rgba(13, 3, 2, 0.6)';
-
-        ctx.beginPath();
-        ctx.moveTo(-100, 0);
-        ctx.lineTo(-75, 0);
-        ctx.quadraticCurveTo(-65, -8, -40, -12);
-        ctx.lineTo(-20, -12);
-        ctx.quadraticCurveTo(-10, -25, 5, -25);
-        ctx.lineTo(25, -25);
-        ctx.quadraticCurveTo(35, -12, 50, -10);
-        ctx.lineTo(75, -8);
-        ctx.lineTo(82, -35);
-        ctx.lineTo(95, -35);
-        ctx.lineTo(85, -2);
-        ctx.lineTo(95, 0);
-        ctx.lineTo(95, 8);
-        ctx.lineTo(80, 10);
-        ctx.lineTo(40, 12);
-        ctx.lineTo(15, 20);
-        ctx.lineTo(-10, 20);
-        ctx.lineTo(-25, 10);
-        ctx.lineTo(-65, 8);
-        ctx.quadraticCurveTo(-75, 5, -100, 0);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+      const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
         
-        ctx.fillStyle = 'rgba(163, 45, 23, 0.3)';
-        ctx.font = '10px monospace';
-        ctx.fillText('AERODYNAMIC PROFILE: SU-27', -90, 80);
-        
-        ctx.restore();
+        camYaw = baseYaw + dx * 0.008;
+        camPitch = Math.max(-Math.PI/2.1, Math.min(Math.PI/2.1, basePitch + dy * 0.008));
+      };
+      
+      const stopDrag = () => {
+        isDragging = false;
       };
 
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', stopDrag);
+      window.sovietConsoleMouseMoveHandler = handleMouseMove;
+      window.sovietConsoleMouseUpHandler = stopDrag;
+
+      // Projection mapping (Rotating wireframe Earth + Inclined orbits)
+      let earthRotation = 0;
+      const incl = 0.42; // Inclination of orbit (~24 deg)
+      
+      function project3D(x, y, z) {
+        // 1. Earth rotation
+        let cosR = Math.cos(earthRotation);
+        let sinR = Math.sin(earthRotation);
+        let x1 = x * cosR - z * sinR;
+        let z1 = x * sinR + z * cosR;
+        let y1 = y;
+
+        // 2. Camera Pitch
+        let cosP = Math.cos(camPitch);
+        let sinP = Math.sin(camPitch);
+        let x2 = x1;
+        let y2 = y1 * cosP - z1 * sinP;
+        let z2 = y1 * sinP + z1 * cosP;
+
+        // 3. Camera Yaw
+        let cosY = Math.cos(camYaw);
+        let sinY = Math.sin(camYaw);
+        let x3 = x2 * cosY - z2 * sinY;
+        let z3 = x2 * sinY + z2 * cosY;
+        let y3 = y2;
+
+        return {
+          x: width / 2 + x3,
+          y: height / 2 - y3,
+          z: z3
+        };
+      }
+
+      function orbitTo3D(u, v) {
+        return {
+          x: u,
+          y: v * Math.sin(incl),
+          z: v * Math.cos(incl)
+        };
+      }
+
+      // Physics loop
+      const runPhysicsStep = () => {
+        if (crashed) {
+          gforce = 0;
+          return;
+        }
+
+        let r = Math.sqrt(px*px + py*py);
+        if (r < r_earth) {
+          crashed = true;
+          isThrusting = false;
+          logTerminal("[CRITICAL] CAPSULE COLLISION ON EARTH SURFACE!");
+          logTerminal("[SYS] SYSTEM TELEMETRY DOWN. SIGNAL DISCONTINUED.");
+          document.getElementById('soviet-station-status').textContent = "STATUS: VEHICLE DESTROYED";
+          document.getElementById('soviet-station-status').style.color = "#ef4444";
+          
+          document.getElementById('btn-eject-capsule').disabled = true;
+          document.getElementById('btn-fire-engines').classList.remove('active');
+          triggerSiren(true);
+          updateNixies();
+          return;
+        }
+
+        // Atmosphere boundary
+        let alt = r - r_earth;
+        let drag = 0;
+        if (alt < 18) {
+          drag = 0.045 * (1 - alt / 18);
+          // Friction deceleration
+          vx *= (1 - drag);
+          vy *= (1 - drag);
+          
+          let speed = Math.sqrt(vx*vx + vy*vy);
+          gforce = 1.0 + speed * drag * 6;
+          
+          if (Math.random() < 0.12 && !ejected) {
+            logTerminal(`[WARNING] ORBITAL DECAY IN PROGRESS. DRAG FORCE ACTIVE. ALT: ${Math.round(alt * 6.37)} KM`);
+          }
+          
+          document.getElementById('ejection-alarm-beacon').classList.add('alarm-active');
+          // Start warn chime
+          triggerSiren(true);
+        } else {
+          if (!ejected) {
+            document.getElementById('ejection-alarm-beacon').classList.remove('alarm-active');
+            // If they are safe and hum is off, turn off siren
+            if (!sirenActive && !crashed) triggerSiren(false);
+          }
+          gforce = 1.0;
+        }
+
+        // Gravity parameters
+        let ax = -GM * px / (r*r*r);
+        let ay = -GM * py / (r*r*r);
+
+        // Engine maneuvers
+        if (isThrusting && fuel > 0) {
+          let theta;
+          if (thrustMode === 'prograde') {
+            theta = Math.atan2(vy, vx);
+          } else if (thrustMode === 'retrograde') {
+            theta = Math.atan2(vy, vx) + Math.PI;
+          } else {
+            theta = manualThrustAngle * Math.PI / 180;
+          }
+
+          let force = 0.13;
+          ax += force * Math.cos(theta);
+          ay += force * Math.sin(theta);
+          gforce += 1.25;
+
+          fuel = Math.max(0, fuel - 0.22);
+          if (fuel <= 0) {
+            isThrusting = false;
+            logTerminal("[SYS] DIRECTIVE END: ENGINE FUEL DEPLETED.");
+            document.getElementById('btn-fire-engines').classList.remove('active');
+          }
+        }
+
+        // Stable integrator substeps
+        let steps = 4;
+        let dt = 0.085 / steps;
+        for (let i = 0; i < steps; i++) {
+          let curr_r = Math.sqrt(px*px + py*py);
+          let curr_ax = -GM * px / (curr_r*curr_r*curr_r);
+          let curr_ay = -GM * py / (curr_r*curr_r*curr_r);
+
+          if (isThrusting && fuel > 0) {
+            let theta;
+            if (thrustMode === 'prograde') {
+              theta = Math.atan2(vy, vx);
+            } else if (thrustMode === 'retrograde') {
+              theta = Math.atan2(vy, vx) + Math.PI;
+            } else {
+              theta = manualThrustAngle * Math.PI / 180;
+            }
+            let force = 0.13;
+            curr_ax += force * Math.cos(theta);
+            curr_ay += force * Math.sin(theta);
+          }
+
+          // Eject dynamics separate
+          if (ejected) {
+            ejectPx += ejectVx * dt;
+            ejectPy += ejectVy * dt;
+            
+            let er = Math.sqrt(ejectPx*ejectPx + ejectPy*ejectPy);
+            let eax = -GM * ejectPx / (er*er*er);
+            let eay = -GM * ejectPy / (er*er*er);
+            ejectVx += eax * dt;
+            ejectVy += eay * dt;
+          }
+
+          vx += curr_ax * dt;
+          vy += curr_ay * dt;
+          px += vx * dt;
+          py += vy * dt;
+        }
+
+        updateNixies();
+      };
+
+      window.sovietConsolePhysicsInterval = setInterval(runPhysicsStep, 60);
+
+      // Trajectory forward prediction
+      function calculatePredictedOrbit() {
+        let ox = px;
+        let oy = py;
+        let ovx = vx;
+        let ovy = vy;
+        let path = [];
+        let dt_p = 0.45;
+        let hit_earth = false;
+        
+        for (let i = 0; i < 180; i++) {
+          let r = Math.sqrt(ox*ox + oy*oy);
+          if (r < r_earth) {
+            hit_earth = true;
+            path.push({x: ox, y: oy});
+            break;
+          }
+          let ax = -GM * ox / (r*r*r);
+          let ay = -GM * py / (r*r*r); // Wait, this should be oy! Correcting:
+          ay = -GM * oy / (r*r*r);
+          
+          ovx += ax * dt_p;
+          ovy += ay * dt_p;
+          ox += ovx * dt_p;
+          oy += ovy * dt_p;
+          path.push({x: ox, y: oy});
+        }
+        return { path, hit_earth };
+      }
+
+      // Nixie formatter
+      function updateNixies() {
+        let r = Math.sqrt(px*px + py*py);
+        let alt = Math.max(0, r - r_earth);
+        let speed = Math.sqrt(vx*vx + vy*vy);
+
+        let dispAlt = Math.round(alt * 6.371).toString().padStart(6, '0');
+        let dispVel = (speed * 1.39).toFixed(2);
+        let dispFuel = Math.round(fuel).toString().padStart(3, '0') + '%';
+        let dispG = gforce.toFixed(2);
+
+        if (crashed) {
+          dispAlt = "ERROR";
+          dispVel = "0.00";
+          dispFuel = "000%";
+          dispG = "0.00";
+        }
+
+        document.getElementById('nixie-alt').textContent = dispAlt;
+        document.getElementById('nixie-vel').textContent = dispVel;
+        document.getElementById('nixie-fuel').textContent = dispFuel;
+        document.getElementById('nixie-gforce').textContent = dispG;
+
+        const overlayText = document.getElementById('radar-overlay-text');
+        if (overlayText) {
+          if (crashed) {
+            overlayText.innerHTML = `<span style="color:#ef4444;">COLLISION SHUTDOWN</span>`;
+          } else if (ejected) {
+            overlayText.innerHTML = `CAPSULE SEPARATED<br>RESCUE FREQ UNLOCKED`;
+          } else {
+            overlayText.innerHTML = `ALT: ${Math.round(alt * 6.371)} KM<br>VEL: ${(speed * 1.39).toFixed(2)} KM/S<br>FUEL: ${Math.round(fuel)}%`;
+          }
+        }
+      }
+
+      // Canvas Rendering Loop
+      let sweepAngle = 0;
+      
       const animate = () => {
         ctx.clearRect(0, 0, width, height);
 
-        ctx.strokeStyle = 'rgba(74, 24, 14, 0.05)';
-        ctx.lineWidth = 0.5;
-        for (let y = 20; y < height; y += 20) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(width, y);
-          ctx.stroke();
+        // Resize support
+        if (canvas.offsetWidth && canvas.offsetWidth !== width) {
+          width = canvas.width = canvas.offsetWidth;
+          height = canvas.height = canvas.offsetHeight;
         }
 
-        const acX = width / 2;
-        const acY = height / 2;
+        // 1. Concentric circles radar oscilloscope grid
+        ctx.strokeStyle = 'rgba(74, 24, 14, 0.3)';
+        ctx.lineWidth = 0.6;
+        for (let r = 25; r <= 100; r += 25) {
+          ctx.beginPath();
+          ctx.arc(width / 2, height / 2, r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - 110, height / 2); ctx.lineTo(width / 2 + 110, height / 2);
+        ctx.moveTo(width / 2, height / 2 - 110); ctx.lineTo(width / 2, height / 2 + 110);
+        ctx.stroke();
 
-        particles.forEach(p => {
-          p.x += p.speed;
-          if (p.x > width + p.length) {
-            p.x = -p.length;
-            p.y = Math.random() * height;
+        // 2. Render rotating 3D wireframe Earth
+        earthRotation += 0.0022;
+        
+        // Latitudes (Parallels)
+        for (let lat = -70; lat <= 70; lat += 20) {
+          let latRad = lat * Math.PI / 180;
+          let r_lat = r_earth * Math.cos(latRad);
+          let y_lat = r_earth * Math.sin(latRad);
+
+          let prevProj = null;
+          for (let lon = 0; lon <= 360; lon += 10) {
+            let lonRad = lon * Math.PI / 180;
+            let ex = r_lat * Math.cos(lonRad);
+            let ez = r_lat * Math.sin(lonRad);
+
+            let proj = project3D(ex, y_lat, ez);
+            if (prevProj) {
+              ctx.beginPath();
+              ctx.moveTo(prevProj.x, prevProj.y);
+              ctx.lineTo(proj.x, proj.y);
+              
+              if (proj.z > 0 && prevProj.z > 0) {
+                ctx.strokeStyle = 'rgba(204, 68, 42, 0.42)';
+                ctx.lineWidth = 0.9;
+              } else {
+                ctx.strokeStyle = 'rgba(74, 24, 14, 0.12)';
+                ctx.lineWidth = 0.4;
+              }
+              ctx.stroke();
+            }
+            prevProj = proj;
           }
+        }
 
-          let drawY = p.y;
-          const dx = p.x - acX;
-          
-          if (dx > -95 && dx < 95) {
-            const t = (dx + 95) / 190;
-            const thickness = 28 * Math.sin(t * Math.PI) * (1.1 - t * 0.35);
-            
-            if (p.y < acY) {
-              const strength = Math.max(0, 1 - Math.abs(p.y - (acY - 10)) / 90);
-              drawY = p.y - thickness * strength;
+        // Longitudes (Meridians)
+        for (let lon = 0; lon < 360; lon += 30) {
+          let lonRad = lon * Math.PI / 180;
+          let prevProj = null;
+          for (let lat = -90; lat <= 90; lat += 10) {
+            let latRad = lat * Math.PI / 180;
+            let ex = r_earth * Math.cos(latRad) * Math.cos(lonRad);
+            let ez = r_earth * Math.cos(latRad) * Math.sin(lonRad);
+            let ey = r_earth * Math.sin(latRad);
+
+            let proj = project3D(ex, ey, ez);
+            if (prevProj) {
+              ctx.beginPath();
+              ctx.moveTo(prevProj.x, prevProj.y);
+              ctx.lineTo(proj.x, proj.y);
+
+              if (proj.z > 0 && prevProj.z > 0) {
+                ctx.strokeStyle = 'rgba(204, 68, 42, 0.42)';
+                ctx.lineWidth = 0.9;
+              } else {
+                ctx.strokeStyle = 'rgba(74, 24, 14, 0.12)';
+                ctx.lineWidth = 0.4;
+              }
+              ctx.stroke();
+            }
+            prevProj = proj;
+          }
+        }
+
+        // 3. Predicted orbit line (Kepler forecast)
+        if (!crashed) {
+          let pred = calculatePredictedOrbit();
+          if (pred.path.length > 1) {
+            ctx.beginPath();
+            let first = true;
+            pred.path.forEach(pt => {
+              let pt3D = orbitTo3D(pt.x, pt.y);
+              let proj = project3D(pt3D.x, pt3D.y, pt3D.z);
+              if (first) {
+                ctx.moveTo(proj.x, proj.y);
+                first = false;
+              } else {
+                ctx.lineTo(proj.x, proj.y);
+              }
+            });
+
+            if (pred.hit_earth) {
+              // Red alarm blinking warning trajectory
+              ctx.strokeStyle = (Math.floor(Date.now() / 250) % 2 === 0) ? 'rgba(239, 68, 68, 0.85)' : 'rgba(74, 24, 14, 0.3)';
+              ctx.lineWidth = 1.6;
+              ctx.stroke();
             } else {
-              const strength = Math.max(0, 1 - Math.abs(p.y - (acY + 10)) / 90);
-              drawY = p.y + (thickness * 0.7) * strength;
+              ctx.strokeStyle = 'rgba(243, 156, 18, 0.5)';
+              ctx.lineWidth = 1.0;
+              ctx.setLineDash([5, 5]);
+              ctx.stroke();
+              ctx.setLineDash([]);
             }
           }
+        }
 
-          if (mouse.hover) {
-            const mdx = p.x - mouse.x;
-            const mdy = drawY - mouse.y;
-            const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
-            const warpRadius = 45;
-            if (mdist < warpRadius) {
-              const force = (warpRadius - mdist) / warpRadius;
-              drawY += (mdy / mdist) * force * 12;
+        // 4. Draw spacecraft Dot & beacon
+        if (!crashed) {
+          let ship3D = orbitTo3D(px, py);
+          let shipProj = project3D(ship3D.x, ship3D.y, ship3D.z);
+
+          // Draw thrust fire backfire
+          if (isThrusting && fuel > 0) {
+            let theta;
+            if (thrustMode === 'prograde') {
+              theta = Math.atan2(vy, vx);
+            } else if (thrustMode === 'retrograde') {
+              theta = Math.atan2(vy, vx) + Math.PI;
+            } else {
+              theta = manualThrustAngle * Math.PI / 180;
             }
+            
+            // Thrust direction is theta, draw flame at opposite angle
+            let flameAngle = theta + Math.PI;
+            let fpx = px + 9 * Math.cos(flameAngle);
+            let fpy = py + 9 * Math.sin(flameAngle);
+            let flame3D = orbitTo3D(fpx, fpy);
+            let flameProj = project3D(flame3D.x, flame3D.y, flame3D.z);
+
+            ctx.fillStyle = '#ff7600';
+            ctx.beginPath();
+            ctx.moveTo(shipProj.x, shipProj.y);
+            ctx.lineTo(flameProj.x + Math.random()*5 - 2.5, flameProj.y + Math.random()*5 - 2.5);
+            ctx.lineTo(shipProj.x + Math.random()*4 - 2, shipProj.y + Math.random()*4 - 2);
+            ctx.fill();
           }
 
-          ctx.strokeStyle = p.y < acY ? `rgba(204, 68, 42, ${p.alpha})` : `rgba(243, 156, 18, ${p.alpha})`;
+          ctx.fillStyle = (Math.floor(Date.now() / 150) % 2 === 0) ? '#ff3838' : '#e056fd';
+          ctx.beginPath();
+          ctx.arc(shipProj.x, shipProj.y, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = 'rgba(255, 56, 56, 0.4)';
           ctx.lineWidth = 1.5;
           ctx.beginPath();
-          ctx.moveTo(p.x - p.length, drawY);
-          ctx.lineTo(p.x, drawY);
+          ctx.arc(shipProj.x, shipProj.y, 8 + Math.sin(Date.now() / 80) * 3.5, 0, Math.PI * 2);
           ctx.stroke();
-        });
 
-        drawAircraft(acX, acY);
+          // Label
+          ctx.fillStyle = 'rgba(204, 68, 42, 0.65)';
+          ctx.font = '8px monospace';
+          ctx.fillText('VS-1', shipProj.x + 8, shipProj.y - 2);
+        }
 
-        window.sovietWindTunnelAnimationFrame = requestAnimationFrame(animate);
+        // 5. Draw separated capsule if ejected
+        if (ejected) {
+          let cap3D = orbitTo3D(ejectPx, ejectPy);
+          let capProj = project3D(cap3D.x, cap3D.y, cap3D.z);
+
+          ctx.fillStyle = (Math.floor(Date.now() / 100) % 2 === 0) ? '#00e8c6' : '#ffffff';
+          ctx.beginPath();
+          ctx.arc(capProj.x, capProj.y, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = 'rgba(0, 232, 198, 0.5)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(capProj.x, capProj.y, 6 + Math.sin(Date.now() / 50) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#00e8c6';
+          ctx.font = '8px monospace';
+          ctx.fillText('CAPSULE', capProj.x + 7, capProj.y - 2);
+        }
+
+        // 6. Draw rotating radar scanline
+        sweepAngle += 0.022;
+        let sx = width / 2 + 105 * Math.cos(sweepAngle);
+        let sy = height / 2 + 105 * Math.sin(sweepAngle);
+        ctx.beginPath();
+        ctx.moveTo(width / 2, height / 2);
+        ctx.lineTo(sx, sy);
+        ctx.strokeStyle = 'rgba(204, 68, 42, 0.12)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        window.sovietConsoleAnimationFrame = requestAnimationFrame(animate);
       };
 
       animate();
-      window.sovietWindResizeHandler = resize;
-    }
 
-    function initTacticalGroundControl() {
-      const card = document.getElementById('soviet-attitude-card');
-      const svg = document.getElementById('soviet-attitude-svg');
-      const altVal = document.getElementById('soviet-alt-value');
-      const hdgVal = document.getElementById('soviet-hdg-value');
-      if (!card || !svg) return;
-
-      let pitch = 0;
-      let roll = 0;
-      let isDragging = false;
-      let startY = 0;
-      let startX = 0;
-      let basePitch = 0;
-      let baseRoll = 0;
-      let autoTimer = null;
-      let lastTime = 0;
-
-      const updateHUD = (p, r) => {
-        card.setAttribute('transform', `translate(50, ${50 + p}) rotate(${r})`);
-        
-        const calculatedAlt = Math.round(12450 + p * -75);
-        altVal.textContent = calculatedAlt.toLocaleString('en-US');
-        
-        let calculatedHdg = Math.round(285 + r) % 360;
-        if (calculatedHdg < 0) calculatedHdg += 360;
-        hdgVal.textContent = calculatedHdg + '°';
-      };
-
-      const autoLoop = (timestamp) => {
-        if (isDragging) return;
-        
-        if (!lastTime) lastTime = timestamp;
-        const elapsed = timestamp - lastTime;
-        
-        pitch = 12 * Math.sin(elapsed / 1200);
-        roll = 20 * Math.cos(elapsed / 1600);
-        
-        updateHUD(pitch, roll);
-        window.sovietAttitudeAnimationFrame = requestAnimationFrame(autoLoop);
-      };
-
-      svg.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        if (window.sovietAttitudeAnimationFrame) {
-          cancelAnimationFrame(window.sovietAttitudeAnimationFrame);
-        }
-        if (autoTimer) clearTimeout(autoTimer);
-        
-        startX = e.clientX;
-        startY = e.clientY;
-        basePitch = pitch;
-        baseRoll = roll;
-        e.preventDefault();
-      });
-
-      const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        const dy = e.clientY - startY;
-        const dx = e.clientX - startX;
-        
-        pitch = Math.max(-30, Math.min(30, basePitch + dy * 0.5));
-        roll = Math.max(-60, Math.min(60, baseRoll + dx * 0.7));
-        
-        updateHUD(pitch, roll);
-      };
-
-      const stopDrag = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        autoTimer = setTimeout(() => {
-          lastTime = 0;
-          window.sovietAttitudeAnimationFrame = requestAnimationFrame(autoLoop);
-        }, 3000);
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', stopDrag);
-
-      window.sovietAttitudeAnimationFrame = requestAnimationFrame(autoLoop);
-
-      window.sovietAttitudeCleanup = () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', stopDrag);
-        if (autoTimer) clearTimeout(autoTimer);
-      };
-    }
-
-    function initComputationalTerminal() {
-      const logsContainer = document.getElementById('soviet-terminal-logs');
-      const charts = [
-        { id: 'soviet-chart-scatter', canvasId: 'canvas-scatter', type: 'scatter', title: 'Orbit Scatter Plot (Raw Telemetry)' },
-        { id: 'soviet-chart-bar', canvasId: 'canvas-bar', type: 'bar', title: 'Thrust Vector Distribution (Mach Lines)' }
-      ];
-
-      if (!logsContainer) return;
-
-      const logLines = [
-        "[SYS] THRUST VEC: 0.11",
-        "[RADAR] SWEEPING... SCANNING AZIMUTH 145",
-        "[TELEMETRY] TEMPERATURE TAPE STABLE: +21.4C",
-        "[COMM] BEACON SYNC OK: VOSTOK-1",
-        "[SYS] RE-ORIENTING THRUST GYRO VECTOR",
-        "[SYS] FUEL FEED PRESSURE: 1.2 ATM",
-        "[RADAR] DETECTED REFLECTION - SPEED: 7.96 KM/S",
-        "[SYS] PROPULSION SHOCK CELL GENERATION: ACTIVE",
-        "[COMM] OSCILLATOR FREQ BEAT: 20.005 MHZ",
-        "[SYS] HYDRAULICS BOOST RATIO: 1.0",
-        "[RADAR] ECHO SIGNALS REGISTERED: 12",
-        "[TELEMETRY] ALTITUDE DIVERGENCE: -4M"
-      ];
-      let logIndex = 0;
-      let isFeedPaused = false;
-
-      const addLogLine = () => {
-        if (isFeedPaused) return;
-        
-        const oldCursor = logsContainer.querySelector('.soviet-terminal-cli__cursor');
-        if (oldCursor) oldCursor.remove();
-        
-        const nextText = logLines[logIndex];
-        logIndex = (logIndex + 1) % logLines.length;
-        
+      // UI Control bindings
+      const logTerminal = (msg) => {
+        const logs = document.getElementById('console-telemetry-logs');
+        if (!logs) return;
         const line = document.createElement('div');
-        line.className = 'soviet-terminal-cli__line';
-        line.innerHTML = `[SYS] ${new Date().toLocaleTimeString()} ${nextText} <span class="soviet-terminal-cli__cursor"></span>`;
-        
-        logsContainer.appendChild(line);
-        logsContainer.scrollTop = logsContainer.scrollHeight;
-        
-        while (logsContainer.children.length > 25) {
-          logsContainer.removeChild(logsContainer.firstChild);
+        line.className = 'log-line';
+        line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        logs.appendChild(line);
+        logs.scrollTop = logs.scrollHeight;
+        while (logs.children.length > 30) {
+          logs.removeChild(logs.firstChild);
         }
       };
 
-      if (window.sovietTerminalInterval) clearInterval(window.sovietTerminalInterval);
-      window.sovietTerminalInterval = setInterval(addLogLine, 1800);
+      // Radar sound buttons
+      const btnPing = document.getElementById('btn-radar-ping');
+      const pingRipple = document.getElementById('radar-ping-ripple');
+      if (btnPing && pingRipple) {
+        btnPing.addEventListener('click', () => {
+          ensureAudioCtx();
+          playSonarPing();
+          pingRipple.classList.remove('pinging');
+          void pingRipple.offsetWidth; // trigger reflow
+          pingRipple.classList.add('pinging');
+          logTerminal("[SYS] TRANSMITTING TELEMETRY ECHO... DEPARTURE PING RETURN OK.");
+        });
+      }
 
-      const drawChart = (canvasEl, type, isExpanded = false) => {
-        const ctx = canvasEl.getContext('2d');
-        const width = canvasEl.width = canvasEl.offsetWidth || 150;
-        const height = canvasEl.height = canvasEl.offsetHeight || 100;
-        
-        ctx.clearRect(0, 0, width, height);
-        
-        ctx.strokeStyle = 'rgba(74, 24, 14, 0.2)';
-        ctx.lineWidth = 0.5;
-        const gap = isExpanded ? 40 : 20;
-        for (let x = gap; x < width; x += gap) {
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
-        }
-        for (let y = gap; y < height; y += gap) {
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
-        }
+      const btnResetCam = document.getElementById('btn-radar-reset');
+      if (btnResetCam) {
+        btnResetCam.addEventListener('click', () => {
+          ensureAudioCtx();
+          camPitch = 0.45;
+          camYaw = 0.6;
+          logTerminal("[SYS] SCOPE CAMERA MATRIX RE-ALIGNED.");
+        });
+      }
 
-        ctx.strokeStyle = '#a32d17';
-        ctx.lineWidth = 1;
-
-        if (type === 'scatter') {
-          const points = [];
-          const numPoints = isExpanded ? 24 : 12;
-          for (let i = 0; i < numPoints; i++) {
-            const xVal = (width / numPoints) * i + (isExpanded ? 15 : 8);
-            const yVal = (height / 2) + Math.sin(i * 0.8) * (height / 3.5) + (Math.random() * (isExpanded ? 15 : 6) - (isExpanded ? 7.5 : 3));
-            points.push({ x: xVal, y: yVal });
+      // Reset Simulation Button
+      const btnSimReset = document.getElementById('btn-sim-reset');
+      if (btnSimReset) {
+        btnSimReset.addEventListener('click', () => {
+          ensureAudioCtx();
+          px = 100;
+          py = 0;
+          vx = 0;
+          vy = 5.65;
+          fuel = 100.0;
+          crashed = false;
+          ejected = false;
+          gforce = 1.0;
+          
+          document.getElementById('soviet-station-status').textContent = "STATUS: DEPLOYED";
+          document.getElementById('soviet-station-status').style.color = "#51cf66";
+          
+          // Eject cover reset
+          const ejectCover = document.getElementById('eject-guard-lid');
+          const ejectBtn = document.getElementById('btn-eject-capsule');
+          if (ejectCover) {
+            ejectCover.classList.remove('flipped');
+            ejectCover.textContent = "CLICK TO FLIP COVER";
+          }
+          if (ejectBtn) {
+            ejectBtn.disabled = true;
+            ejectBtn.textContent = "EMERGENCY VEHICLE EJECT";
           }
           
-          ctx.beginPath();
-          ctx.moveTo(points[0].x, points[0].y);
-          for (let i = 1; i < points.length; i++) {
-            ctx.lineTo(points[i].x, points[i].y);
-          }
-          ctx.stroke();
+          triggerSiren(false);
+          updateNixies();
+          logTerminal("[SYS] SIMULATION RESET. VEHICLE LAUNCHED IN ORBIT (ALT: 286KM).");
+        });
+      }
 
-          ctx.fillStyle = '#CC442A';
-          points.forEach(p => {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, isExpanded ? 4 : 2.5, 0, Math.PI * 2);
-            ctx.fill();
-          });
-        } else if (type === 'bar') {
-          const numBars = isExpanded ? 16 : 8;
-          const barSpacing = isExpanded ? 12 : 6;
-          const totalBarWidth = (width - 30) / numBars;
-          const barWidth = totalBarWidth - barSpacing;
-          
-          ctx.fillStyle = 'rgba(163, 45, 23, 0.45)';
-          ctx.strokeStyle = '#CC442A';
-          ctx.lineWidth = 1;
-          
-          for (let i = 0; i < numBars; i++) {
-            const hVal = Math.max(10, (height - 35) * (0.3 + 0.6 * Math.sin(i * 0.5 + 0.2)));
-            const xVal = 15 + i * totalBarWidth;
-            const yVal = height - hVal - 15;
-            
-            ctx.fillRect(xVal, yVal, barWidth, hVal);
-            ctx.strokeRect(xVal, yVal, barWidth, hVal);
-          }
-          
-          ctx.beginPath();
-          ctx.moveTo(10, height - 15);
-          ctx.lineTo(width - 10, height - 15);
-          ctx.stroke();
-        }
+      // Slider thrust direction
+      const sliderAngle = document.getElementById('slider-thrust-angle');
+      const valAngle = document.getElementById('val-thrust-angle');
+      if (sliderAngle && valAngle) {
+        sliderAngle.addEventListener('input', (e) => {
+          ensureAudioCtx();
+          manualThrustAngle = parseInt(e.target.value);
+          valAngle.textContent = manualThrustAngle + '°';
+        });
+      }
+
+      // Mode selectors
+      const btnPrograde = document.getElementById('btn-mode-prograde');
+      const btnRetrograde = document.getElementById('btn-mode-retrograde');
+      const btnManual = document.getElementById('btn-mode-manual');
+
+      const setThrustMode = (mode, btn) => {
+        ensureAudioCtx();
+        thrustMode = mode;
+        [btnPrograde, btnRetrograde, btnManual].forEach(b => {
+          if (b) b.classList.remove('active');
+        });
+        if (btn) btn.classList.add('active');
+        logTerminal(`[SYS] MANEUVER MODE CONFIGURED TO: ${mode.toUpperCase()}`);
       };
 
-      setTimeout(() => {
-        charts.forEach(c => {
-          const el = document.getElementById(c.canvasId);
-          if (el) drawChart(el, c.type);
-        });
-      }, 100);
+      if (btnPrograde) btnPrograde.addEventListener('click', () => setThrustMode('prograde', btnPrograde));
+      if (btnRetrograde) btnRetrograde.addEventListener('click', () => setThrustMode('retrograde', btnRetrograde));
+      if (btnManual) btnManual.addEventListener('click', () => setThrustMode('manual', btnManual));
 
-      const resizeCharts = () => {
-        charts.forEach(c => {
-          const el = document.getElementById(c.canvasId);
-          if (el && !el.closest('.soviet-expanded-overlay')) drawChart(el, c.type);
-        });
-      };
-      window.addEventListener('resize', resizeCharts);
+      // Fire engines holding button
+      const btnFire = document.getElementById('btn-fire-engines');
+      if (btnFire) {
+        const startThrust = (e) => {
+          ensureAudioCtx();
+          if (crashed) return;
+          if (fuel <= 0) return;
+          
+          isThrusting = true;
+          btnFire.classList.add('active');
+          logTerminal(`[PROPULSION] DIRECTIVE ENGAGED. BURN VECTOR: ${thrustMode.toUpperCase()}`);
+          e.preventDefault();
+        };
 
-      charts.forEach(c => {
-        const widget = document.getElementById('widget-computational-terminal');
-        const container = document.getElementById(c.id);
-        if (!container || !widget) return;
+        const stopThrust = () => {
+          if (isThrusting) {
+            isThrusting = false;
+            btnFire.classList.remove('active');
+            logTerminal("[PROPULSION] DIRECTIVE STANDBY.");
+          }
+        };
+
+        btnFire.addEventListener('mousedown', startThrust);
+        btnFire.addEventListener('mouseup', stopThrust);
+        btnFire.addEventListener('mouseleave', stopThrust);
         
-        container.addEventListener('click', () => {
-          isFeedPaused = true;
+        btnFire.addEventListener('touchstart', startThrust);
+        btnFire.addEventListener('touchend', stopThrust);
+      }
 
-          const overlay = document.createElement('div');
-          overlay.className = 'soviet-expanded-overlay';
-          overlay.innerHTML = `
-            <div class="soviet-expanded-overlay__header">
-              <span class="soviet-expanded-overlay__title">${c.title}</span>
-              <button class="soviet-expanded-overlay__close">&times; CLOSE</button>
-            </div>
-            <div class="soviet-expanded-overlay__body">
-              <canvas id="expanded-canvas" style="width:100%; height:100%; display:block;"></canvas>
-            </div>
-          `;
-          widget.appendChild(overlay);
-
-          const expCanvas = document.getElementById('expanded-canvas');
-          setTimeout(() => drawChart(expCanvas, c.type, true), 10);
-
-          const closeBtn = overlay.querySelector('.soviet-expanded-overlay__close');
-          const closeOverlay = () => {
-            overlay.remove();
-            isFeedPaused = false;
-            const miniCanvas = document.getElementById(c.canvasId);
-            if (miniCanvas) drawChart(miniCanvas, c.type);
-          };
-          closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closeOverlay();
-          });
+      // Toggles switches logic
+      const toggleSputnik = document.getElementById('toggle-sputnik-beacon');
+      const ledSputnik = document.getElementById('led-sputnik');
+      const statusSputnik = document.getElementById('status-sputnik');
+      if (toggleSputnik) {
+        toggleSputnik.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          sputnikActive = e.target.checked;
+          if (sputnikActive) {
+            if (ledSputnik) ledSputnik.classList.add('active');
+            if (statusSputnik) statusSputnik.textContent = "ACTIVE";
+            startSputnikBeep();
+            logTerminal("[COMM] BEACON BEAT LOCKED: VOSTOK FREQ 20.005 MHZ.");
+          } else {
+            if (ledSputnik) ledSputnik.classList.remove('active');
+            if (statusSputnik) statusSputnik.textContent = "OFF";
+            if (window.sovietConsoleBeepInterval) {
+              clearInterval(window.sovietConsoleBeepInterval);
+              window.sovietConsoleBeepInterval = null;
+            }
+            logTerminal("[COMM] BEACON BEAT STANDBY.");
+          }
         });
-      });
+      }
 
-      window.sovietChartResizeHandler = resizeCharts;
-    }
+      const toggleStatic = document.getElementById('toggle-static-filter');
+      const ledStatic = document.getElementById('led-static');
+      const statusStatic = document.getElementById('status-static');
+      if (toggleStatic) {
+        toggleStatic.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          staticActive = e.target.checked;
+          if (staticActive) {
+            if (ledStatic) ledStatic.classList.add('active');
+            if (statusStatic) statusStatic.textContent = "ACTIVE";
+            startHumStatic();
+            logTerminal("[AUDIO] COCKPIT PRESSURE SOUND HUM FILTER STABILIZED.");
+          } else {
+            if (ledStatic) ledStatic.classList.remove('active');
+            if (statusStatic) statusStatic.textContent = "OFF";
+            stopHumStatic();
+            logTerminal("[AUDIO] COCKPIT PRESSURE SOUND HUM FILTER TERMINATED.");
+          }
+        });
+      }
 
-    function initCADPrototyping() {
-      const canvas = document.getElementById('soviet-cad-canvas');
-      if (!canvas) return;
+      const toggleStab = document.getElementById('toggle-stabilizer');
+      const ledStab = document.getElementById('led-stabilizer');
+      const statusStab = document.getElementById('status-stabilizer');
+      if (toggleStab) {
+        toggleStab.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          let active = e.target.checked;
+          if (active) {
+            if (ledStab) ledStab.classList.add('active');
+            if (statusStab) statusStab.textContent = "ON";
+            logTerminal("[SYS] GYRO COCKPIT STANDBY AUTO-STABILIZATION ACTIVE.");
+          } else {
+            if (ledStab) ledStab.classList.remove('active');
+            if (statusStab) statusStab.textContent = "OFF";
+            logTerminal("[SYS] AUTO-STABILIZATION TERMINATED. GYROS MANUAL OVERRIDE.");
+          }
+        });
+      }
 
-      const ctx = canvas.getContext('2d');
-      let width = canvas.width = canvas.offsetWidth || 300;
-      let height = canvas.height = 200;
+      // Guarded ejection cover & button
+      const ejectCover = document.getElementById('eject-guard-lid');
+      const ejectBtn = document.getElementById('btn-eject-capsule');
+      if (ejectCover && ejectBtn) {
+        ejectCover.addEventListener('click', () => {
+          ensureAudioCtx();
+          ejectCover.classList.add('flipped');
+          ejectCover.textContent = "GUARD OPEN";
+          ejectBtn.disabled = false;
+          logTerminal("[WARNING] EMERGENCY VEHICLE EJECTION COVER DEPLOYED!");
+        });
 
-      const resize = () => {
+        ejectBtn.addEventListener('click', () => {
+          ensureAudioCtx();
+          if (ejected || crashed) return;
+          
+          ejected = true;
+          // Launch capsule dynamic drift
+          ejectPx = px;
+          ejectPy = py;
+          let launchAngle = Math.atan2(vy, vx) + 0.35;
+          ejectVx = vx + 1.6 * Math.cos(launchAngle);
+          ejectVy = vy + 1.6 * Math.sin(launchAngle);
+          
+          // Repercussive spacecraft drift
+          vx -= 0.6 * Math.cos(launchAngle);
+          vy -= 0.6 * Math.sin(launchAngle);
+          
+          ejectBtn.disabled = true;
+          ejectBtn.textContent = "CAPSULE JETTISONED";
+          
+          document.getElementById('soviet-station-status').textContent = "STATUS: CAPSULE EJECTED";
+          document.getElementById('soviet-station-status').style.color = "#ffb703";
+          
+          logTerminal("[CRITICAL] SEAT EJECTION INITIATED. RETRO BULTS EXPLODED.");
+          logTerminal("[SYS] SPACE CAPSULE SEPARATED - COSPAS DETECT SYNC ACTIVE.");
+          
+          triggerSiren(true);
+        });
+      }
+
+      window.sovietConsoleResizeHandler = () => {
         if (canvas.offsetWidth) {
           width = canvas.width = canvas.offsetWidth;
+          height = canvas.height = canvas.offsetHeight;
         }
       };
-      window.addEventListener('resize', resize);
-
-      let highlightedSubsystem = null;
-      const btnAvionics = document.getElementById('cad-toggle-avionics');
-      const btnStructure = document.getElementById('cad-toggle-struct');
-      const btnPropulsion = document.getElementById('cad-toggle-prop');
-
-      const setupBtn = (btn, system) => {
-        btn.addEventListener('click', () => {
-          if (highlightedSubsystem === system) {
-            highlightedSubsystem = null;
-            btn.classList.remove('active');
-          } else {
-            highlightedSubsystem = system;
-            [btnAvionics, btnStructure, btnPropulsion].forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-          }
-        });
-      };
-      setupBtn(btnAvionics, 'avionics');
-      setupBtn(btnStructure, 'structure');
-      setupBtn(btnPropulsion, 'propulsion');
-
-      let angleX = 0.35;
-      let angleY = 0.5;
-      let isDragging = false;
-      let startX = 0;
-      let startY = 0;
-      let baseAngleX = 0;
-      let baseAngleY = 0;
-
-      canvas.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        baseAngleX = angleX;
-        baseAngleY = angleY;
-        e.preventDefault();
-      });
-
-      const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        
-        angleY = baseAngleY + dx * 0.01;
-        angleX = Math.max(-Math.PI/2, Math.min(Math.PI/2, baseAngleX + dy * 0.01));
-      };
-
-      const stopDrag = () => {
-        isDragging = false;
-      };
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', stopDrag);
-
-      const vertices = [];
-      vertices.push({ x: 0, y: 90, z: 0, sub: 'avionics' });
-      for (let i = 0; i < 8; i++) {
-        const theta = (i * Math.PI) / 4;
-        vertices.push({ x: 30 * Math.cos(theta), y: 50, z: 30 * Math.sin(theta), sub: 'avionics' });
-      }
-      for (let i = 0; i < 8; i++) {
-        const theta = (i * Math.PI) / 4;
-        vertices.push({ x: 30 * Math.cos(theta), y: 0, z: 30 * Math.sin(theta), sub: 'structure' });
-      }
-      for (let i = 0; i < 8; i++) {
-        const theta = (i * Math.PI) / 4;
-        vertices.push({ x: 30 * Math.cos(theta), y: -50, z: 30 * Math.sin(theta), sub: 'structure' });
-      }
-      for (let i = 0; i < 8; i++) {
-        const theta = (i * Math.PI) / 4;
-        vertices.push({ x: 16 * Math.cos(theta), y: -75, z: 16 * Math.sin(theta), sub: 'propulsion' });
-      }
-
-      const edges = [];
-      for (let i = 1; i <= 8; i++) edges.push({ v1: 0, v2: i, sub: 'avionics' });
-      for (let i = 1; i <= 8; i++) edges.push({ v1: i, v2: i === 8 ? 1 : i + 1, sub: 'avionics' });
-      for (let i = 9; i <= 16; i++) edges.push({ v1: i, v2: i === 16 ? 9 : i + 1, sub: 'structure' });
-      for (let i = 17; i <= 24; i++) edges.push({ v1: i, v2: i === 24 ? 17 : i + 1, sub: 'structure' });
-      for (let i = 1; i <= 8; i++) edges.push({ v1: i, v2: i + 8, sub: 'structure' });
-      for (let i = 9; i <= 16; i++) edges.push({ v1: i, v2: i + 8, sub: 'structure' });
-      for (let i = 17; i <= 24; i++) edges.push({ v1: i, v2: i + 8, sub: 'propulsion' });
-      for (let i = 25; i <= 32; i++) edges.push({ v1: i, v2: i === 32 ? 25 : i + 1, sub: 'propulsion' });
-      for (let i = 1; i <= 8; i++) {
-        const next = i === 8 ? 1 : i + 1;
-        edges.push({ v1: i, v2: next + 8, sub: 'structure' });
-      }
-
-      const animate = () => {
-        ctx.clearRect(0, 0, width, height);
-
-        if (!isDragging) {
-          angleY += 0.006;
-        }
-
-        const cosX = Math.cos(angleX);
-        const sinX = Math.sin(angleX);
-        const cosY = Math.cos(angleY);
-        const sinY = Math.sin(angleY);
-
-        const projectedPoints = [];
-        vertices.forEach(v => {
-          let x1 = v.x * cosY - v.z * sinY;
-          let z1 = v.x * sinY + v.z * cosY;
-          let y2 = v.y * cosX - z1 * sinX;
-          
-          const scale = 1.05;
-          const px = width / 2 + x1 * scale;
-          const py = height / 2 - y2 * scale;
-
-          projectedPoints.push({ x: px, y: py });
-        });
-
-        edges.forEach(e => {
-          const p1 = projectedPoints[e.v1];
-          const p2 = projectedPoints[e.v2];
-          
-          const isHighlighted = highlightedSubsystem === e.sub;
-          
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          
-          if (highlightedSubsystem) {
-            if (isHighlighted) {
-              ctx.strokeStyle = '#ffffff';
-              ctx.lineWidth = 2;
-              ctx.shadowColor = '#CC442A';
-              ctx.shadowBlur = 8;
-            } else {
-              ctx.strokeStyle = 'rgba(74, 24, 14, 0.15)';
-              ctx.lineWidth = 0.5;
-              ctx.shadowBlur = 0;
-            }
-          } else {
-            ctx.shadowBlur = 0;
-            if (e.sub === 'avionics') {
-              ctx.strokeStyle = 'rgba(204, 68, 42, 0.7)';
-              ctx.lineWidth = 1;
-            } else if (e.sub === 'propulsion') {
-              ctx.strokeStyle = 'rgba(243, 156, 18, 0.7)';
-              ctx.lineWidth = 1;
-            } else {
-              ctx.strokeStyle = 'rgba(163, 45, 23, 0.55)';
-              ctx.lineWidth = 0.8;
-            }
-          }
-          ctx.stroke();
-        });
-
-        ctx.shadowBlur = 0;
-
-        ctx.strokeStyle = '#732718';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(25, height - 20); ctx.lineTo(45, height - 20);
-        ctx.moveTo(25, height - 20); ctx.lineTo(25, height - 40);
-        ctx.moveTo(25, height - 20); ctx.lineTo(15, height - 10);
-        ctx.stroke();
-        ctx.fillStyle = '#732718';
-        ctx.font = '8px monospace';
-        ctx.fillText('X', 48, height - 18);
-        ctx.fillText('Y', 23, height - 43);
-        ctx.fillText('Z', 10, height - 7);
-
-        window.sovietCadAnimationFrame = requestAnimationFrame(animate);
-      };
-
-      animate();
-
-      window.sovietCadCleanup = () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', stopDrag);
-      };
+      window.addEventListener('resize', window.sovietConsoleResizeHandler);
     }
+
 
     /* ========== PROGRESS TRACKER CONTROLLER & EXCEL VIEW ========== */
     let currentView = 'kanban';

@@ -8617,24 +8617,19 @@ body.stitch-theme {
    ========================================================================== */
 
 .soviet-widgets-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 24px;
   margin-top: 40px;
   margin-bottom: 40px;
   font-family: 'VT323', monospace;
-}
-
-@media (max-width: 900px) {
-  .soviet-widgets-container {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
 }
 
 .soviet-widget {
   background: #0d0302 !important;
   border: 2px solid #4a180e !important;
-  box-shadow: 0 0 15px rgba(163, 45, 23, 0.08) !important;
+  box-shadow: 0 0 20px rgba(163, 45, 23, 0.12) !important;
   position: relative;
   overflow: hidden;
   color: #d1d8e0;
@@ -8645,276 +8640,656 @@ body.stitch-theme {
 .soviet-widget__header {
   background: #4a180e !important;
   color: #CC442A !important;
-  padding: 10px 14px;
+  padding: 10px 18px;
   border-bottom: 2px solid #a32d17 !important;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
   font-weight: bold;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 
-.soviet-widget__body {
+.soviet-station-status {
+  font-size: 1.1rem;
+  color: #51cf66;
+  text-shadow: 0 0 5px rgba(81, 207, 102, 0.6);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 8px;
+  border: 1px solid rgba(81, 207, 102, 0.3);
+  border-radius: 3px;
+  font-weight: normal;
+}
+
+.soviet-console-body {
+  background: #060101;
+  padding: 24px;
+}
+
+.soviet-console-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .soviet-console-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .col-systems {
+    grid-column: 1 / 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .soviet-console-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-telemetry, .col-systems {
+    grid-column: 1;
+  }
+}
+
+.soviet-console-col {
+  background: #090202;
+  border: 1.5px solid #3a120b;
+  border-radius: 4px;
   padding: 16px;
-  min-height: 280px;
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #080101;
-}
-
-/* 1. Wind Tunnel styling */
-.soviet-wind-canvas {
-  background: #0b0202;
-  border: 1px solid #4a180e;
-  width: 100%;
-  max-width: 100%;
-  height: 240px;
-  display: block;
-}
-
-.soviet-wind-tooltip {
-  position: absolute;
-  background: rgba(13, 3, 2, 0.95);
-  border: 1.5px solid #CC442A;
-  color: #CC442A;
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  pointer-events: none;
-  display: none;
-  z-index: 100;
-  box-shadow: 0 0 10px rgba(204, 68, 42, 0.25);
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-/* 2. Glass Cockpit (Attitude Indicator) */
-.soviet-cockpit-layout {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
   gap: 16px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
 }
 
-.soviet-cockpit-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  border: 1px solid #4a180e;
-  background: #0b0202;
-  padding: 10px;
-  width: 100px;
-  text-align: center;
-}
-
-.soviet-cockpit-panel__label {
-  font-size: 0.85rem;
-  color: #732718;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.soviet-cockpit-panel__value {
-  font-size: 1.4rem;
+.soviet-console-col .col-header {
+  font-size: 1.3rem;
   color: #CC442A;
-  text-shadow: 0 0 5px rgba(204, 68, 42, 0.4);
+  border-bottom: 1.5px solid #4a180e;
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.soviet-attitude-indicator-svg {
+.soviet-console-col .col-sub {
+  font-size: 0.8rem;
+  color: #732718;
+  font-weight: normal;
+}
+
+/* 1. Radar scope style */
+.radar-scope-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.3;
+  min-height: 220px;
+  background: #040000;
+  border: 2px solid #3a120b;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: inset 0 0 25px rgba(204, 68, 42, 0.15), 0 0 10px rgba(0, 0, 0, 0.5);
+  align-self: center;
+  max-width: 320px;
+}
+
+#soviet-radar-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
   cursor: grab;
-  user-select: none;
 }
-
-.soviet-attitude-indicator-svg:active {
+#soviet-radar-canvas:active {
   cursor: grabbing;
 }
 
-/* 3. Computational Terminal & Data Grid */
-.soviet-terminal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 12px;
-  width: 100%;
-}
-
-.soviet-terminal-cli {
-  grid-column: 1 / 3;
-  background: #070101;
-  border: 1.5px solid #4a180e;
-  height: 80px;
-  overflow-y: auto;
-  padding: 8px;
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: #CC442A;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
-}
-
-.soviet-terminal-cli::-webkit-scrollbar {
-  width: 4px;
-}
-.soviet-terminal-cli::-webkit-scrollbar-track {
-  background: #0d0302;
-}
-.soviet-terminal-cli::-webkit-scrollbar-thumb {
-  background: #4a180e;
-}
-
-.soviet-terminal-cli__line {
-  margin-bottom: 2px;
-  white-space: nowrap;
-}
-
-.soviet-terminal-cli__cursor {
-  display: inline-block;
-  width: 6px;
-  height: 12px;
-  background: #CC442A;
-  animation: sovietCliBlink 1s infinite steps(2);
-}
-
-@keyframes sovietCliBlink {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-.soviet-mini-chart {
-  background: #070101;
-  border: 1.5px solid #4a180e;
-  height: 120px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.soviet-mini-chart:hover {
-  border-color: #CC442A;
-  box-shadow: 0 0 8px rgba(204, 68, 42, 0.25);
-}
-
-.soviet-mini-chart__label {
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  font-size: 0.75rem;
-  color: #732718;
-  text-transform: uppercase;
-}
-
-.soviet-expanded-overlay {
+.radar-scanline {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #080101;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(from 0deg, rgba(204, 68, 42, 0.15) 0deg, transparent 90deg, transparent 360deg);
+  animation: radarSweep 5s linear infinite;
+  z-index: 5;
+}
+
+@keyframes radarSweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.radar-overlay-data {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 3, 2, 0.85);
+  border: 1px solid #732718;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #CC442A;
+  text-align: center;
+  pointer-events: none;
+  z-index: 6;
+  white-space: nowrap;
+}
+
+.radar-ping-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   border: 2px solid #CC442A;
-  box-shadow: 0 0 25px rgba(204, 68, 42, 0.45);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 4;
+}
+
+.radar-ping-ripple.pinging {
+  animation: radarPingAnimation 1.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+@keyframes radarPingAnimation {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+.radar-bottom-controls {
   display: flex;
-  flex-direction: column;
-  z-index: 110;
-  animation: sovietChartExpand 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+  gap: 8px;
+  justify-content: center;
 }
 
-@keyframes sovietChartExpand {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.soviet-expanded-overlay__header {
-  background: #4a180e;
+.soviet-console-btn {
+  background: #0d0302;
+  border: 1.5px solid #4a180e;
+  color: #CC442A;
   padding: 6px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2.5px solid #a32d17;
-}
-
-.soviet-expanded-overlay__title {
-  color: #CC442A;
-  font-size: 1.1rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.soviet-expanded-overlay__close {
-  background: none;
-  border: none;
-  color: #CC442A;
-  font-size: 1.4rem;
   font-family: 'VT323', monospace;
   cursor: pointer;
-  line-height: 1;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+.soviet-console-btn:hover {
+  border-color: #CC442A;
+  background: #1c0704;
+  box-shadow: 0 0 8px rgba(204, 68, 42, 0.3);
+}
+.soviet-console-btn:active {
+  transform: translateY(1px);
+}
+.soviet-console-btn.btn-sm {
+  font-size: 0.85rem;
+  padding: 4px 8px;
 }
 
-.soviet-expanded-overlay__close:hover {
-  color: #ffffff;
-  text-shadow: 0 0 5px #CC442A;
+/* 2. Nixie tube styles */
+.nixie-display-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-.soviet-expanded-overlay__body {
-  flex: 1;
-  padding: 12px;
-  position: relative;
-}
-
-/* 4. Active Prototyping (CAD Wireframe) */
-.soviet-cad-layout {
+.nixie-container {
+  background: #040000;
+  border: 1.5px solid #3a120b;
+  border-radius: 4px;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
+}
+
+.nixie-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.06), transparent);
+  pointer-events: none;
+  border-radius: 3px 3px 0 0;
+}
+
+.nixie-label {
+  font-size: 0.8rem;
+  color: #732718;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.nixie-digits {
+  font-size: 1.9rem;
+  color: #ff5500;
+  text-shadow: 0 0 4px #ff5500, 0 0 10px #ff2200, 0 0 18px rgba(255, 0, 0, 0.6);
+  letter-spacing: 1px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* Custom sliders */
+.telemetry-controls {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
-.soviet-cad-canvas {
-  background: #0b0202;
-  border: 1px solid #4a180e;
+.control-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-label {
+  font-size: 0.9rem;
+  color: #a32d17;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+.soviet-slider {
+  -webkit-appearance: none;
   width: 100%;
-  height: 200px;
-  display: block;
-  cursor: grab;
+  height: 8px;
+  background: #0d0302;
+  border: 1.5px solid #3a120b;
+  border-radius: 4px;
+  outline: none;
+}
+.soviet-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: #CC442A;
+  border: 1px solid #ff5500;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(255, 85, 0, 0.8);
+  transition: background 0.15s;
+}
+.soviet-slider::-webkit-slider-thumb:hover {
+  background: #ff5500;
 }
 
-.soviet-cad-canvas:active {
-  cursor: grabbing;
-}
-
-.soviet-cad-controls {
+.thrust-mode-selector {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
-.soviet-cad-btn {
+.soviet-mode-btn {
   background: #0d0302;
   border: 1.5px solid #4a180e;
   color: #732718;
   padding: 6px;
   font-family: 'VT323', monospace;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   transition: all 0.2s ease;
 }
-
-.soviet-cad-btn:hover {
+.soviet-mode-btn:hover {
   border-color: #CC442A;
   color: #CC442A;
 }
-
-.soviet-cad-btn.active {
+.soviet-mode-btn.active {
   background: #4a180e;
   border-color: #CC442A;
   color: #ffffff;
-  box-shadow: 0 0 10px rgba(204, 68, 42, 0.4);
+  box-shadow: 0 0 8px rgba(204, 68, 42, 0.4);
+}
+
+/* Big red mechanical button */
+.engine-action-row {
+  margin-top: 6px;
+}
+
+.soviet-big-red-btn {
+  background: #300602;
+  border: 2px solid #5a1107;
+  border-radius: 6px;
+  padding: 3px;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  box-shadow: 0 4px 0 #1b0200, 0 6px 10px rgba(0,0,0,0.6);
+  transition: all 0.1s ease;
+}
+
+.soviet-big-red-btn .btn-cap {
+  display: block;
+  background: linear-gradient(135deg, #a81c0c 0%, #7d1004 100%);
+  border: 1.5px solid #d43b22;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 10px;
+  text-transform: uppercase;
+  text-shadow: 0 -1px 2px rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.4);
+  transition: background 0.1s;
+}
+
+.soviet-big-red-btn:hover .btn-cap {
+  background: linear-gradient(135deg, #bd2513 0%, #8c1608 100%);
+}
+
+.soviet-big-red-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #1b0200, 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.soviet-big-red-btn.active .btn-cap {
+  background: #e63946;
+  box-shadow: 0 0 15px rgba(230, 57, 70, 0.8), inset 0 2px 5px rgba(0,0,0,0.5);
+  border-color: #ffb703;
+  color: #ffb703;
+}
+
+/* 3. Toggles grid */
+.toggles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.toggle-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #040000;
+  border: 1px solid #3a120b;
+  padding: 8px 12px;
+  border-radius: 4px;
+  position: relative;
+}
+
+/* Mechanical Toggle switch style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0f0403;
+  border: 2px solid #4a180e;
+  transition: .2s;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+}
+
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background: linear-gradient(to bottom, #732718, #300a03);
+  border: 1px solid #1a0502;
+  border-radius: 2px;
+  transition: .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.switch input:checked + .slider {
+  background-color: #240a06;
+  border-color: #CC442A;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+  background: linear-gradient(to bottom, #CC442A, #8c1e0b);
+  border-color: #ff5500;
+  box-shadow: 0 0 5px rgba(255, 85, 0, 0.6);
+}
+
+.toggle-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.toggle-name {
+  font-size: 0.95rem;
+  color: #a32d17;
+  text-transform: uppercase;
+}
+
+.toggle-status {
+  font-size: 0.75rem;
+  color: #732718;
+}
+
+.indicator-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #2b0b06;
+  border: 1px solid #100200;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+  transition: all 0.2s ease;
+}
+
+.indicator-led.red.active {
+  background-color: #ff3333;
+  box-shadow: 0 0 8px #ff3333, inset 0 1px 1px rgba(255,255,255,0.6);
+}
+
+.indicator-led.green.active {
+  background-color: #33ff33;
+  box-shadow: 0 0 8px #33ff33, inset 0 1px 1px rgba(255,255,255,0.6);
+}
+
+/* Guarded Ejection cover and button */
+.ejection-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(163, 45, 23, 0.05);
+  border: 1.5px dashed #4a180e;
+  padding: 12px;
+  border-radius: 4px;
+  align-items: center;
+}
+
+.ejection-light-beacon {
+  width: 100%;
+  background: #140503;
+  border: 1px solid #3a120b;
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ejection-light-beacon .beacon-label {
+  color: #44140c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.ejection-light-beacon.alarm-active {
+  animation: warningBeaconFlash 1s step-end infinite;
+}
+
+@keyframes warningBeaconFlash {
+  50% {
+    background: #7d1004;
+    border-color: #ff3333;
+  }
+}
+
+.ejection-light-beacon.alarm-active .beacon-label {
+  animation: warningTextFlash 1s step-end infinite;
+}
+
+@keyframes warningTextFlash {
+  50% {
+    color: #ffffff;
+    text-shadow: 0 0 6px #ff3333;
+  }
+}
+
+.guarded-button-wrapper {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  perspective: 200px;
+}
+
+.guard-lid {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    #4a180e,
+    #4a180e 10px,
+    #1f0804 10px,
+    #1f0804 20px
+  );
+  border: 2px solid #a32d17;
+  border-radius: 4px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+  transform-origin: top center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.guard-lid:hover {
+  border-color: #CC442A;
+  box-shadow: 0 4px 10px rgba(204, 68, 42, 0.3);
+}
+
+.guard-lid.flipped {
+  transform: rotateX(110deg);
+  opacity: 0.8;
+  pointer-events: none;
+  box-shadow: 0 -4px 6px rgba(0,0,0,0.3);
+}
+
+.soviet-danger-btn {
+  width: 100%;
+  height: 100%;
+  background: #330704;
+  border: 2px solid #8f180f;
+  color: #ff8888;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: not-allowed;
+  border-radius: 4px;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+  transition: all 0.2s ease;
+}
+
+.soviet-danger-btn:not([disabled]) {
+  cursor: pointer;
+  background: #a81c0c;
+  border-color: #ff3333;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+}
+
+.soviet-danger-btn:not([disabled]):hover {
+  background: #c72210;
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+}
+
+.soviet-danger-btn:not([disabled]):active {
+  transform: scale(0.98);
+}
+
+/* 4. Diagnostics terminal */
+.console-diagnostics {
+  background: #040000;
+  border: 1px solid #3a120b;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+}
+
+.diagnostics-header {
+  font-size: 0.8rem;
+  color: #732718;
+  text-transform: uppercase;
+  border-bottom: 1px solid #200603;
+  padding-bottom: 2px;
+}
+
+.diagnostics-logs {
+  height: 72px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #CC442A;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.diagnostics-logs::-webkit-scrollbar {
+  width: 4px;
+}
+.diagnostics-logs::-webkit-scrollbar-track {
+  background: #040000;
+}
+.diagnostics-logs::-webkit-scrollbar-thumb {
+  background: #3a120b;
+}
+
+.diagnostics-logs .log-line {
+  word-break: break-all;
+  line-height: 1.2;
 }
 
 
