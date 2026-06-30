@@ -7227,10 +7227,10 @@
                     <!-- Speed (Mach) slider -->
                     <div class="jet-control-row">
                       <div class="jet-control-label">
-                        <span>Speed (Mach)</span>
-                        <span class="jet-control-value" id="lbl-foxbat-mach" style="color: #ffb703;">Mach 1.0</span>
+                        <span>Speed (Mach) [DYNAMIC]</span>
+                        <span class="jet-control-value" id="lbl-foxbat-mach" style="color: #ffb703;">Mach 0.0</span>
                       </div>
-                      <input type="range" id="slider-foxbat-mach" min="0.0" max="3.2" step="0.1" value="1.0" class="soviet-slider">
+                      <input type="range" id="slider-foxbat-mach" min="0.0" max="3.2" step="0.1" value="0.0" class="soviet-slider" disabled>
                     </div>
                     <!-- Altitude slider -->
                     <div class="jet-control-row">
@@ -7242,9 +7242,12 @@
                     </div>
                   </div>
 
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding: 4px 8px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(84, 110, 122, 0.15);">
-                    <span style="font-family: monospace; font-size: 0.72rem; color: #b0bec5;">РЕЖИМ ТЯГИ (FLIGHT PROPULSION MODE):</span>
-                    <button class="soviet-console-btn btn-sm" id="btn-foxbat-flightmode" style="min-width: 110px; padding: 3px 6px !important; font-size: 0.68rem !important; border-color: #81c784; color: #81c784;">MANUAL SLIDER</button>
+                  <div class="afterburner-guard-wrapper" style="padding: 6px 10px; border-color: rgba(84, 110, 122, 0.3); background: rgba(84, 110, 122, 0.04); margin-top: 4px;">
+                    <span style="font-family: monospace; font-size: 0.72rem; color: #81c784;">🔗 СИНХР. ТЯГИ (SYNC ENGINE THROTTLES)</span>
+                    <label class="switch" style="scale: 0.85;">
+                      <input type="checkbox" id="toggle-foxbat-throttle-sync">
+                      <span class="slider"></span>
+                    </label>
                   </div>
                 </div>
 
@@ -9159,8 +9162,9 @@
       let coolantFlow = 0; // 0, 1, 2
       let coolantQty = 100;
 
-      let flightMode = 'MANUAL'; // MANUAL vs DYNAMIC
-      let foxbatMach = 1.0;
+      let throttleSync = false;
+      let flightMode = 'DYNAMIC'; // default to dynamic thrust speed
+      let foxbatMach = 0.0;      // start at standstill
       let foxbatAlt = 10000;
       let foxbatTemp = 22;
       let foxbatAirDensity = 0.413;
@@ -9295,7 +9299,7 @@
       const sliderAlt = document.getElementById('slider-foxbat-alt');
       const lblAltVal = document.getElementById('lbl-foxbat-alt');
 
-      const btnFlightMode = document.getElementById('btn-foxbat-flightmode');
+      const toggleThrottleSync = document.getElementById('toggle-foxbat-throttle-sync');
 
       const barCoolant = document.getElementById('bar-foxbat-coolant');
       const lblCoolantQty = document.getElementById('lbl-foxbat-coolant-qty');
@@ -9335,6 +9339,17 @@
             btnLeftStarter.classList.add('starter-active');
             btnLeftStarter.textContent = "STARTING";
             logTerminal("[SYS] МИГ-25 LEFT APU & TURBOJET STARTER ENGAGED.");
+            
+            // Sync starter ignition if sync active
+            if (throttleSync && rightStatus === 'OFFLINE') {
+              rightIgnition = true;
+              rightStatus = 'STARTING';
+              if (btnRightStarter) {
+                btnRightStarter.classList.add('starter-active');
+                btnRightStarter.textContent = "STARTING";
+              }
+              logTerminal("[SYS] МИГ-25 RIGHT APU & TURBOJET STARTER ENGAGED (SYNCED).");
+            }
           } else {
             leftStatus = 'OFFLINE';
             leftAfterburner = false;
@@ -9342,6 +9357,19 @@
             btnLeftStarter.classList.remove('starter-active');
             btnLeftStarter.textContent = "OFFLINE";
             logTerminal("[SYS] МИГ-25 LEFT ENGINE FUEL ISOLATION COCK SHUT.");
+            
+            // Sync shutdown if sync active
+            if (throttleSync && rightIgnition) {
+              rightIgnition = false;
+              rightStatus = 'OFFLINE';
+              rightAfterburner = false;
+              if (toggleRightAfterburner) toggleRightAfterburner.checked = false;
+              if (btnRightStarter) {
+                btnRightStarter.classList.remove('starter-active');
+                btnRightStarter.textContent = "OFFLINE";
+              }
+              logTerminal("[SYS] МИГ-25 RIGHT ENGINE FUEL ISOLATION COCK SHUT (SYNCED).");
+            }
           }
           updateFoxbatSound();
         });
@@ -9376,6 +9404,17 @@
             btnRightStarter.classList.add('starter-active');
             btnRightStarter.textContent = "STARTING";
             logTerminal("[SYS] МИГ-25 RIGHT APU & TURBOJET STARTER ENGAGED.");
+            
+            // Sync starter ignition if sync active
+            if (throttleSync && leftStatus === 'OFFLINE') {
+              leftIgnition = true;
+              leftStatus = 'STARTING';
+              if (btnLeftStarter) {
+                btnLeftStarter.classList.add('starter-active');
+                btnLeftStarter.textContent = "STARTING";
+              }
+              logTerminal("[SYS] МИГ-25 LEFT APU & TURBOJET STARTER ENGAGED (SYNCED).");
+            }
           } else {
             rightStatus = 'OFFLINE';
             rightAfterburner = false;
@@ -9383,6 +9422,19 @@
             btnRightStarter.classList.remove('starter-active');
             btnRightStarter.textContent = "OFFLINE";
             logTerminal("[SYS] МИГ-25 RIGHT ENGINE FUEL ISOLATION COCK SHUT.");
+            
+            // Sync shutdown if sync active
+            if (throttleSync && leftIgnition) {
+              leftIgnition = false;
+              leftStatus = 'OFFLINE';
+              leftAfterburner = false;
+              if (toggleLeftAfterburner) toggleLeftAfterburner.checked = false;
+              if (btnLeftStarter) {
+                btnLeftStarter.classList.remove('starter-active');
+                btnLeftStarter.textContent = "OFFLINE";
+              }
+              logTerminal("[SYS] МИГ-25 LEFT ENGINE FUEL ISOLATION COCK SHUT (SYNCED).");
+            }
           }
           updateFoxbatSound();
         });
@@ -9393,6 +9445,7 @@
           ensureAudioCtx();
           leftThrottle = parseInt(e.target.value);
           if (lblLeftThrottle) lblLeftThrottle.textContent = `${leftThrottle}%`;
+          
           if (toggleLeftAfterburner) {
             toggleLeftAfterburner.disabled = (leftThrottle < 85 || leftStatus !== 'RUNNING');
             if (leftThrottle < 85 && leftAfterburner) {
@@ -9405,6 +9458,26 @@
               logTerminal("[SYS] LEFT AFTERBURNER DISENGAGED.");
             }
           }
+          
+          // Link throttles
+          if (throttleSync) {
+            rightThrottle = leftThrottle;
+            if (sliderRightThrottle) sliderRightThrottle.value = rightThrottle;
+            if (lblRightThrottle) lblRightThrottle.textContent = `${rightThrottle}%`;
+            
+            if (toggleRightAfterburner) {
+              toggleRightAfterburner.disabled = (rightThrottle < 85 || rightStatus !== 'RUNNING');
+              if (rightThrottle < 85 && rightAfterburner) {
+                rightAfterburner = false;
+                toggleRightAfterburner.checked = false;
+                if (statusRightAfterburner) {
+                  statusRightAfterburner.textContent = "SAFE";
+                  statusRightAfterburner.style.color = "#8c736e";
+                }
+                logTerminal("[SYS] RIGHT AFTERBURNER DISENGAGED (SYNCED).");
+              }
+            }
+          }
         });
       }
 
@@ -9413,6 +9486,7 @@
           ensureAudioCtx();
           rightThrottle = parseInt(e.target.value);
           if (lblRightThrottle) lblRightThrottle.textContent = `${rightThrottle}%`;
+          
           if (toggleRightAfterburner) {
             toggleRightAfterburner.disabled = (rightThrottle < 85 || rightStatus !== 'RUNNING');
             if (rightThrottle < 85 && rightAfterburner) {
@@ -9423,6 +9497,26 @@
                 statusRightAfterburner.style.color = "#8c736e";
               }
               logTerminal("[SYS] RIGHT AFTERBURNER DISENGAGED.");
+            }
+          }
+          
+          // Link throttles
+          if (throttleSync) {
+            leftThrottle = rightThrottle;
+            if (sliderLeftThrottle) sliderLeftThrottle.value = leftThrottle;
+            if (lblLeftThrottle) lblLeftThrottle.textContent = `${leftThrottle}%`;
+            
+            if (toggleLeftAfterburner) {
+              toggleLeftAfterburner.disabled = (leftThrottle < 85 || leftStatus !== 'RUNNING');
+              if (leftThrottle < 85 && leftAfterburner) {
+                leftAfterburner = false;
+                toggleLeftAfterburner.checked = false;
+                if (statusLeftAfterburner) {
+                  statusLeftAfterburner.textContent = "SAFE";
+                  statusLeftAfterburner.style.color = "#8c736e";
+                }
+                logTerminal("[SYS] LEFT AFTERBURNER DISENGAGED (SYNCED).");
+              }
             }
           }
         });
@@ -9437,6 +9531,17 @@
             statusLeftAfterburner.style.color = leftAfterburner ? "#ff5533" : "#8c736e";
           }
           logTerminal(`[SYS] LEFT AFTERBURNER COMBUSTION FIELD: ${leftAfterburner ? 'IGNITED' : 'SAFE'}`);
+          
+          // Sync afterburner
+          if (throttleSync && rightStatus === 'RUNNING' && rightThrottle >= 85) {
+            rightAfterburner = leftAfterburner;
+            if (toggleRightAfterburner) toggleRightAfterburner.checked = rightAfterburner;
+            if (statusRightAfterburner) {
+              statusRightAfterburner.textContent = rightAfterburner ? "ZONE 3 (LIT)" : "SAFE";
+              statusRightAfterburner.style.color = rightAfterburner ? "#ff5533" : "#8c736e";
+            }
+            logTerminal(`[SYS] RIGHT AFTERBURNER COMBUSTION FIELD: ${rightAfterburner ? 'IGNITED (SYNCED)' : 'SAFE (SYNCED)'}`);
+          }
           updateFoxbatSound();
         });
       }
@@ -9450,6 +9555,17 @@
             statusRightAfterburner.style.color = rightAfterburner ? "#ff5533" : "#8c736e";
           }
           logTerminal(`[SYS] RIGHT AFTERBURNER COMBUSTION FIELD: ${rightAfterburner ? 'IGNITED' : 'SAFE'}`);
+          
+          // Sync afterburner
+          if (throttleSync && leftStatus === 'RUNNING' && leftThrottle >= 85) {
+            leftAfterburner = rightAfterburner;
+            if (toggleLeftAfterburner) toggleLeftAfterburner.checked = leftAfterburner;
+            if (statusLeftAfterburner) {
+              statusLeftAfterburner.textContent = leftAfterburner ? "ZONE 3 (LIT)" : "SAFE";
+              statusLeftAfterburner.style.color = leftAfterburner ? "#ff5533" : "#8c736e";
+            }
+            logTerminal(`[SYS] LEFT AFTERBURNER COMBUSTION FIELD: ${leftAfterburner ? 'IGNITED (SYNCED)' : 'SAFE (SYNCED)'}`);
+          }
           updateFoxbatSound();
         });
       }
@@ -9484,15 +9600,6 @@
         });
       }
 
-      if (sliderMach) {
-        sliderMach.addEventListener('input', (e) => {
-          ensureAudioCtx();
-          foxbatMach = parseFloat(e.target.value);
-          if (lblMach) lblMach.textContent = `Mach ${foxbatMach.toFixed(1)}`;
-          updateFoxbatSound();
-        });
-      }
-
       if (sliderAlt) {
         sliderAlt.addEventListener('input', (e) => {
           ensureAudioCtx();
@@ -9502,24 +9609,48 @@
         });
       }
 
-      if (btnFlightMode) {
-        btnFlightMode.addEventListener('click', () => {
+      if (toggleThrottleSync) {
+        toggleThrottleSync.addEventListener('change', (e) => {
           ensureAudioCtx();
-          if (flightMode === 'MANUAL') {
-            flightMode = 'DYNAMIC';
-            btnFlightMode.textContent = "DYNAMIC THRUST";
-            btnFlightMode.style.borderColor = "#ff5533";
-            btnFlightMode.style.color = "#ff5533";
-            if (sliderMach) sliderMach.disabled = true;
-            logTerminal("[SYS] FLIGHT SPEED RE-ROUTED: DYNAMIC EQUILIBRIUM THRUST LOADED.");
-          } else {
-            flightMode = 'MANUAL';
-            btnFlightMode.textContent = "MANUAL SLIDER";
-            btnFlightMode.style.borderColor = "#81c784";
-            btnFlightMode.style.color = "#81c784";
-            if (sliderMach) sliderMach.disabled = false;
-            logTerminal("[SYS] FLIGHT SPEED RETURNED TO MANUAL DIAL COMMANDS.");
+          throttleSync = e.target.checked;
+          logTerminal(`[SYS] ENGINE THROTTLES SYNC LINKAGE: ${throttleSync ? 'CONNECTED' : 'DISCONNECTED'}`);
+          if (throttleSync) {
+            // Equalize right throttle to left
+            rightThrottle = leftThrottle;
+            if (sliderRightThrottle) sliderRightThrottle.value = rightThrottle;
+            if (lblRightThrottle) lblRightThrottle.textContent = `${rightThrottle}%`;
+            
+            // Equalize right starter to left
+            if (leftIgnition !== rightIgnition) {
+              rightIgnition = leftIgnition;
+              rightStatus = leftStatus;
+              if (btnRightStarter) {
+                btnRightStarter.classList.toggle('starter-active', rightIgnition);
+                btnRightStarter.textContent = rightIgnition ? (rightStatus === 'STARTING' ? "STARTING" : "RUNNING") : "OFFLINE";
+              }
+              logTerminal(`[SYS] RIGHT STARTER SYNCED TO LEFT ENGINE: ${rightIgnition ? 'ACTIVE' : 'OFFLINE'}`);
+            }
+
+            // Equalize afterburner
+            if (leftAfterburner !== rightAfterburner) {
+              if (leftAfterburner && rightStatus === 'RUNNING' && rightThrottle >= 85) {
+                rightAfterburner = true;
+                if (toggleRightAfterburner) toggleRightAfterburner.checked = true;
+                if (statusRightAfterburner) {
+                  statusRightAfterburner.textContent = "ZONE 3 (LIT)";
+                  statusRightAfterburner.style.color = "#ff5533";
+                }
+              } else if (!leftAfterburner) {
+                rightAfterburner = false;
+                if (toggleRightAfterburner) toggleRightAfterburner.checked = false;
+                if (statusRightAfterburner) {
+                  statusRightAfterburner.textContent = "SAFE";
+                  statusRightAfterburner.style.color = "#8c736e";
+                }
+              }
+            }
           }
+          updateFoxbatSound();
         });
       }
 
