@@ -10823,89 +10823,74 @@ body.stitch-theme .view-tab.active {
 
 /* ========== 🕵️‍♀️ TOTALLY SPIES THEME (251001767 only) ========== */
 body.totallyspies-theme {
-  --bg-primary: #f5eeea; /* Cozy muted linen background */
-  --bg-secondary: #e6dad4; /* Soft warm sand secondary background */
-  --bg-card: rgba(255, 255, 255, 0.78); /* Semi-transparent muted glass cards */
-  --bg-header: #dfcec6; /* Soft warm clay header */
+  --bg-primary: #120b09; /* Deep dark cocoa background */
+  --bg-secondary: #1a100d; /* Soft dark chocolate secondary background */
+  --bg-card: rgba(26, 17, 14, 0.88); /* Cozy dark card backing */
+  --bg-header: #261611; /* Warm dark clay header */
   
-  --accent: #b55a3e; /* Muted terracotta/coral */
-  --accent-dim: #9e4b31;
-  --accent-glow: rgba(181, 90, 62, 0.12);
-  --accent-border: #d4a390; /* Dusty warm rose-sand border */
+  --accent: #b55a3e; /* Muted terracotta */
+  --accent-dim: #94442c;
+  --accent-glow: rgba(181, 90, 62, 0.15);
+  --accent-border: #803924; /* Dark terracotta border */
   
-  --white: #3b1f15; /* Subdued chestnut brown text */
-  --white-soft: #2e1711;
-  --white-muted: #5e3223;
+  --white: #dfcdc6; /* Comfortable soft beige text (zero glare) */
+  --white-soft: #cbb9b2;
+  --white-muted: #9c8a83;
   
-  --text-primary: #3b1f15;
-  --text-secondary: #5e3223;
-  --overlay-dark: rgba(245, 238, 234, 0.85);
-  --overlay-darker: rgba(245, 238, 234, 0.95);
+  --text-primary: #dfcdc6;
+  --text-secondary: #9c8a83;
+  --overlay-dark: rgba(18, 11, 9, 0.85);
+  --overlay-darker: rgba(18, 11, 9, 0.95);
 
   background: 
-    radial-gradient(circle at 10% 20%, rgba(212, 163, 144, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(181, 90, 62, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(220, 200, 180, 0.06) 0%, transparent 50%),
-    linear-gradient(135deg, #f5eeea 0%, #e6dad4 100%) !important;
+    radial-gradient(circle at 10% 20%, rgba(181, 90, 62, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(181, 90, 62, 0.05) 0%, transparent 40%),
+    linear-gradient(135deg, #120b09 0%, #1a100d 100%) !important;
   background-attachment: fixed !important;
-  color: #3b1f15 !important;
+  color: #dfcdc6 !important;
 }
 
 body.totallyspies-theme .dashboard-page {
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(212, 163, 144, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(181, 90, 62, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(220, 200, 180, 0.06) 0%, transparent 50%),
-    linear-gradient(135deg, #f5eeea 0%, #e6dad4 100%) !important;
+  background: linear-gradient(135deg, #120b09 0%, #1a100d 100%) !important;
   background-attachment: fixed !important;
-  color: #3b1f15 !important;
-}
-
-body.totallyspies-theme .dashboard-page-old-override-disabled {
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(244, 162, 97, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(231, 111, 81, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(255, 220, 0, 0.08) 0%, transparent 50%),
-    linear-gradient(135deg, #fff9f6 0%, #ffece3 100%) !important;
-  background-attachment: fixed !important;
-  color: #4a1c0d !important;
+  color: #dfcdc6 !important;
 }
 
 body.totallyspies-theme .site-header {
-  background: rgba(255, 250, 246, 0.95) !important;
-  border-bottom: 2px solid #e76f51 !important;
-  box-shadow: 0 4px 20px rgba(231, 111, 81, 0.1) !important;
+  background: rgba(26, 17, 14, 0.96) !important;
+  border-bottom: 2px solid #b55a3e !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 body.totallyspies-theme .site-header__logo-text,
 body.totallyspies-theme .nav-link,
 body.totallyspies-theme .header-actions__reg {
-  color: #b3361b !important;
+  color: #dfcdc6 !important;
 }
 
 .totallyspies-theme .page-title {
-  color: #d95d39 !important;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9), 0 0 10px rgba(231, 111, 81, 0.2) !important;
+  color: #b55a3e !important;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.6) !important;
   font-family: 'Fredoka', sans-serif !important;
   letter-spacing: 1px;
 }
 
 /* Welcome banner */
 .totallyspies-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(231, 111, 81, 0.08), rgba(255, 255, 255, 0.85)) !important;
-  border: 1.5px solid #e76f51 !important;
-  box-shadow: 0 8px 32px rgba(231, 111, 81, 0.06) !important;
-  color: #4a1c0d !important;
+  background: rgba(26, 17, 14, 0.85) !important;
+  border: 1.5px solid #b55a3e !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+  color: #dfcdc6 !important;
 }
 
 .totallyspies-theme .welcome-banner__greeting strong {
-  color: #e76f51 !important;
+  color: #b55a3e !important;
 }
 
 .totallyspies-theme .welcome-banner__icon {
-  background: rgba(231, 111, 81, 0.12) !important;
-  color: #e76f51 !important;
-  border-color: #e76f51 !important;
+  background: rgba(181, 90, 62, 0.2) !important;
+  color: #dfcdc6 !important;
+  border-color: #b55a3e !important;
 }
 
 .spy-heart-pulse {
@@ -10913,190 +10898,85 @@ body.totallyspies-theme .header-actions__reg {
 }
 
 @keyframes spyHeartBeat {
-  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px #e76f51); }
-  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #f4a261); }
+  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px #b55a3e); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #d4a390); }
 }
 
 /* Task Columns & Cards */
 .totallyspies-theme .task-column {
-  background: rgba(255, 255, 255, 0.65) !important;
-  border: 1.5px solid rgba(231, 111, 81, 0.2) !important;
+  background: rgba(26, 17, 14, 0.4) !important;
+  border: 1.5px solid rgba(181, 90, 62, 0.18) !important;
   border-radius: 12px !important;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.5) !important;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .totallyspies-theme .task-column__header {
-  border-bottom: 2px solid rgba(231, 111, 81, 0.2) !important;
+  border-bottom: 2px solid rgba(181, 90, 62, 0.18) !important;
 }
 
 .totallyspies-theme .task-column__header h3 {
-  color: #b3361b !important;
+  color: var(--accent) !important;
   font-weight: 700 !important;
 }
 
 .totallyspies-theme .task-card {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1.2px solid rgba(231, 111, 81, 0.15) !important;
-  box-shadow: 0 4px 10px rgba(231, 111, 81, 0.03) !important;
+  background: var(--bg-card) !important;
+  border: 1.2px solid rgba(181, 90, 62, 0.12) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.25s ease;
 }
 
 .totallyspies-theme .task-card:hover {
-  border-color: #e76f51 !important;
-  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.18) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 4px 12px rgba(181, 90, 62, 0.25) !important;
   transform: translateY(-2px);
 }
 
 .totallyspies-theme .task-card__title {
-  color: #4a1c0d !important;
+  color: var(--white) !important;
   font-weight: 700 !important;
 }
 
 .totallyspies-theme .task-card__desc {
-  color: #662c18 !important;
+  color: var(--white-soft) !important;
 }
 
 .totallyspies-theme .task-card__approved-pill {
-  background: rgba(0, 204, 102, 0.15) !important;
-  border-color: rgba(0, 204, 102, 0.3) !important;
-  color: #008040 !important;
+  background: rgba(0, 204, 102, 0.08) !important;
+  border-color: rgba(0, 204, 102, 0.15) !important;
+  color: #10b981 !important;
 }
 
-/* Priority stripes - Clover Orange/Red, Sam Green, Alex Yellow */
-.totallyspies-theme .task-card--low { border-left: 6px solid #00cc66 !important; } 
-.totallyspies-theme .task-card--medium { border-left: 6px solid #e6b800 !important; } 
-.totallyspies-theme .task-card--high { border-left: 6px solid #e76f51 !important; } 
-body.totallyspies-theme .dashboard-page-old-override-disabled {
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(244, 162, 97, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(231, 111, 81, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(255, 220, 0, 0.08) 0%, transparent 50%),
-    linear-gradient(135deg, #fff9f6 0%, #ffece3 100%) !important;
-  background-attachment: fixed !important;
-  color: #4a1c0d !important;
-}
-
-body.totallyspies-theme .site-header {
-  background: rgba(255, 250, 246, 0.95) !important;
-  border-bottom: 2px solid #e76f51 !important;
-  box-shadow: 0 4px 20px rgba(231, 111, 81, 0.1) !important;
-}
-
-body.totallyspies-theme .site-header__logo-text,
-body.totallyspies-theme .nav-link,
-body.totallyspies-theme .header-actions__reg {
-  color: #b3361b !important;
-}
-
-.totallyspies-theme .page-title {
-  color: #d95d39 !important;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9), 0 0 10px rgba(231, 111, 81, 0.2) !important;
-  font-family: 'Fredoka', sans-serif !important;
-  letter-spacing: 1px;
-}
-
-/* Welcome banner */
-.totallyspies-theme .welcome-banner {
-  background: linear-gradient(135deg, rgba(231, 111, 81, 0.08), rgba(255, 255, 255, 0.85)) !important;
-  border: 1.5px solid #e76f51 !important;
-  box-shadow: 0 8px 32px rgba(231, 111, 81, 0.06) !important;
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .welcome-banner__greeting strong {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .welcome-banner__icon {
-  background: rgba(231, 111, 81, 0.12) !important;
-  color: #e76f51 !important;
-  border-color: #e76f51 !important;
-}
-
-.spy-heart-pulse {
-  animation: spyHeartBeat 1.2s infinite alternate;
-}
-
-@keyframes spyHeartBeat {
-  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px #e76f51); }
-  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #f4a261); }
-}
-
-/* Task Columns & Cards */
-.totallyspies-theme .task-column {
-  background: rgba(255, 255, 255, 0.65) !important;
-  border: 1.5px solid rgba(231, 111, 81, 0.2) !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.5) !important;
-}
-
-.totallyspies-theme .task-column__header {
-  border-bottom: 2px solid rgba(231, 111, 81, 0.2) !important;
-}
-
-.totallyspies-theme .task-column__header h3 {
-  color: #b3361b !important;
-  font-weight: 700 !important;
-}
-
-.totallyspies-theme .task-card {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1.2px solid rgba(231, 111, 81, 0.15) !important;
-  box-shadow: 0 4px 10px rgba(231, 111, 81, 0.03) !important;
-  transition: all 0.25s ease;
-}
-
-.totallyspies-theme .task-card:hover {
-  border-color: #e76f51 !important;
-  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.18) !important;
-  transform: translateY(-2px);
-}
-
-.totallyspies-theme .task-card__title {
-  color: #4a1c0d !important;
-  font-weight: 700 !important;
-}
-
-.totallyspies-theme .task-card__desc {
-  color: #662c18 !important;
-}
-
-.totallyspies-theme .task-card__approved-pill {
-  background: rgba(0, 204, 102, 0.15) !important;
-  border-color: rgba(0, 204, 102, 0.3) !important;
-  color: #008040 !important;
-}
-
-/* Priority stripes - Clover Orange/Red, Sam Green, Alex Yellow */
-.totallyspies-theme .task-card--low { border-left: 6px solid #00cc66 !important; } 
-.totallyspies-theme .task-card--medium { border-left: 6px solid #e6b800 !important; } 
-.totallyspies-theme .task-card--high { border-left: 6px solid #e76f51 !important; } 
+/* Priority stripes */
+.totallyspies-theme .task-card--low { border-left: 6px solid #2e7d32 !important; } 
+.totallyspies-theme .task-card--medium { border-left: 6px solid #f57f17 !important; } 
+.totallyspies-theme .task-card--high { border-left: 6px solid #b55a3e !important; } 
 .totallyspies-theme .task-card--urgent { 
-  border-left: 6px solid #d95d39 !important; 
+  border-left: 6px solid #d84315 !important; 
   animation: spyUrgentGlow 1.2s infinite alternate !important;
 }
 
 @keyframes spyUrgentGlow {
-  0% { box-shadow: 0 0 5px rgba(231, 111, 81, 0.15); }
-  100% { box-shadow: 0 0 15px rgba(231, 111, 81, 0.35); }
+  0% { box-shadow: 0 0 5px rgba(181, 90, 62, 0.1); }
+  100% { box-shadow: 0 0 15px rgba(181, 90, 62, 0.25); }
 }
 
 /* Buttons */
 .totallyspies-theme .btn-primary,
 .totallyspies-theme #submit-task,
 .totallyspies-theme .task-card__action {
-  background: linear-gradient(135deg, #b55a3e, #d4a390) !important;
+  background: linear-gradient(135deg, #a34c32, #b55a3e) !important;
   color: #ffffff !important;
-  border: 1.5px solid #b55a3e !important;
-  box-shadow: 0 4px 10px rgba(181, 90, 62, 0.15) !important;
+  border: 1.5px solid #a34c32 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
 }
 
 .totallyspies-theme .btn-primary:hover,
 .totallyspies-theme #submit-task:hover {
-  background: linear-gradient(135deg, #d4a390, #b55a3e) !important;
-  box-shadow: 0 4px 15px rgba(181, 90, 62, 0.25) !important;
+  background: linear-gradient(135deg, #b55a3e, #a34c32) !important;
+  box-shadow: 0 4px 15px rgba(181, 90, 62, 0.35) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -11104,9 +10984,360 @@ body.totallyspies-theme .header-actions__reg {
 .totallyspies-theme input,
 .totallyspies-theme textarea,
 .totallyspies-theme select {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1.5px solid rgba(181, 90, 62, 0.15) !important;
-  color: #3b1f15 !important;
+  background: rgba(26, 17, 14, 0.85) !important;
+  border: 1.5px solid rgba(181, 90, 62, 0.2) !important;
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme input:focus,
+.totallyspies-theme textarea:focus,
+.totallyspies-theme select:focus {
+  border-color: #b55a3e !important;
+  box-shadow: 0 0 8px rgba(181, 90, 62, 0.3) !important;
+}
+
+/* Dynamic Floater: ComPowder widget styling */
+.totallyspies-corner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b55a3e 0%, #803924 100%);
+  border: 3px solid #261611;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 4px rgba(181, 90, 62, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  z-index: 1000;
+  cursor: pointer;
+  animation: spiesWiggle 3.2s ease-in-out infinite;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.totallyspies-corner:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 10px 28px rgba(181, 90, 62, 0.4), 0 0 0 6px rgba(181, 90, 62, 0.2);
+}
+
+@keyframes spiesWiggle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-6px) rotate(-10deg); }
+  70% { transform: translateY(-2px) rotate(10deg); }
+}
+
+.totallyspies-bubble {
+  position: fixed;
+  bottom: 95px;
+  right: 32px;
+  background: #1a100d;
+  border: 2.5px solid #b55a3e;
+  border-radius: 16px;
+  padding: 12px 18px;
+  max-width: 260px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #dfcdc6;
+  display: none;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.totallyspies-bubble.show {
+  display: block;
+}
+
+.totallyspies-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  right: 20px;
+  border-width: 12px 12px 0 0;
+  border-style: solid;
+  border-color: #b55a3e transparent;
+  display: block;
+  width: 0;
+}
+
+/* Guide Card */
+.totallyspies-theme .dashboard-guide-card {
+  background: rgba(26, 17, 14, 0.85) !important;
+  border: 2.5px solid #b55a3e !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .dashboard-guide-title-group {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .dashboard-guide-list li::before {
+  content: "🍑" !important;
+}
+
+.totallyspies-theme .dashboard-guide-list strong {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .dashboard-guide-welcome {
+  color: #dfcdc6 !important;
+}
+
+/* Corner TL */
+.totallyspies-corner-tl {
+  position: fixed;
+  top: 85px;
+  left: 20px;
+  font-size: 1.1rem;
+  background: rgba(26, 17, 14, 0.85);
+  border: 1.5px solid #b55a3e;
+  color: #b55a3e;
+  padding: 4px 10px;
+  border-radius: 20px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* Decors */
+.totallyspies-decors {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+/* Task Form styling */
+.totallyspies-theme .task-form {
+  background: rgba(26, 17, 14, 0.85) !important;
+  border: 2px solid #b55a3e !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .task-form__title {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .task-form label {
+  color: #cbb9b2 !important;
+  font-weight: 600 !important;
+}
+
+/* Hardcoded green elements overrides for Totally Spies */
+.totallyspies-theme .tracker-table-container {
+  background: rgba(26, 17, 14, 0.85) !important;
+  border: 1.5px solid #b55a3e !important;
+}
+
+.totallyspies-theme .tracker-table {
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .tracker-table th {
+  background: rgba(181, 90, 62, 0.15) !important;
+  color: #b55a3e !important;
+  border-bottom: 1.5px solid #b55a3e !important;
+  border-right: 1px solid rgba(181, 90, 62, 0.15) !important;
+}
+
+.totallyspies-theme .tracker-table td {
+  border-bottom: 1px solid rgba(181, 90, 62, 0.1) !important;
+  border-right: 1px solid rgba(181, 90, 62, 0.1) !important;
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .tracker-table td:first-child {
+  background: rgba(38, 22, 17, 0.95) !important;
+  border-right: 2px solid #b55a3e !important;
+}
+
+.totallyspies-theme .tracker-table th:first-child {
+  background: rgba(38, 22, 17, 0.95) !important;
+  border-right: 2px solid #b55a3e !important;
+}
+
+.totallyspies-theme .tracker-table tr:hover td {
+  background: rgba(181, 90, 62, 0.05) !important;
+}
+
+.totallyspies-theme .tracker-table tr:hover td:first-child {
+  background: rgba(48, 30, 24, 0.95) !important;
+}
+
+.totallyspies-theme .tracker-table__member-name {
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .tracker-table__member-id {
+  color: #9c8a83 !important;
+}
+
+/* News overrides */
+.totallyspies-theme .news-section {
+  background: rgba(26, 17, 14, 0.8) !important;
+  border: 2px solid #b55a3e !important;
+}
+
+.totallyspies-theme .news-header h2 {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .news-header__icon {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .news-card {
+  background: rgba(26, 17, 14, 0.9) !important;
+  border: 1px solid rgba(181, 90, 62, 0.2) !important;
+  color: #dfcdc6 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.totallyspies-theme .news-card:hover {
+  border-color: #b55a3e !important;
+  box-shadow: 0 4px 12px rgba(181, 90, 62, 0.25) !important;
+}
+
+.totallyspies-theme .news-card__title {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .news-card__meta {
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .news-card__author {
+  color: #b55a3e !important;
+}
+
+/* Tabs & Buttons overrides */
+.totallyspies-theme .dept-tab {
+  background: rgba(26, 17, 14, 0.6) !important;
+  border: 1px solid rgba(181, 90, 62, 0.15) !important;
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .dept-tab:hover {
+  background: rgba(181, 90, 62, 0.08) !important;
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .dept-tab.active {
+  background: #b55a3e !important;
+  color: #ffffff !important;
+  border-color: #b55a3e !important;
+}
+
+.totallyspies-theme .view-tab {
+  background: rgba(26, 17, 14, 0.6) !important;
+  border: 1px solid rgba(181, 90, 62, 0.15) !important;
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .view-tab:hover {
+  background: rgba(181, 90, 62, 0.08) !important;
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .view-tab.active {
+  background: #b55a3e !important;
+  color: #ffffff !important;
+  border-color: #b55a3e !important;
+}
+
+.totallyspies-theme .role-btn {
+  background: rgba(26, 17, 14, 0.6) !important;
+  border: 1px solid rgba(181, 90, 62, 0.15) !important;
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .role-btn:hover {
+  background: rgba(181, 90, 62, 0.08) !important;
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .role-btn.active {
+  background: #b55a3e !important;
+  color: #ffffff !important;
+  border-color: #b55a3e !important;
+}
+
+/* Mailer card overrides */
+.totallyspies-theme .email-card {
+  background: rgba(26, 17, 14, 0.8) !important;
+  border: 1.5px solid #b55a3e !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .email-card__header h3 {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .email-card__subtitle {
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .email-input {
+  background: rgba(26, 17, 14, 0.95) !important;
+  color: #dfcdc6 !important;
+  border-color: rgba(181, 90, 62, 0.2) !important;
+}
+
+.totallyspies-theme .email-save-btn {
+  background: linear-gradient(135deg, #b55a3e, #803924) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #b55a3e !important;
+}
+
+.totallyspies-theme .email-display-container {
+  background: rgba(18, 11, 9, 0.6) !important;
+  border: 1.5px dashed rgba(181, 90, 62, 0.2) !important;
+}
+
+.totallyspies-theme .email-display-label {
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .email-display-value {
+  color: #dfcdc6 !important;
+}
+
+/* Task details popup overlay overrides */
+.totallyspies-theme .task-modal__content {
+  background: rgba(26, 17, 14, 0.98) !important;
+  border: 2px solid #b55a3e !important;
+  color: #dfcdc6 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.totallyspies-theme .task-modal__title {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .task-modal__meta {
+  color: #9c8a83 !important;
+}
+
+.totallyspies-theme .task-modal__desc {
+  color: #dfcdc6 !important;
+}
+
+.totallyspies-theme .task-modal__close {
+  color: #b55a3e !important;
+}
+
+.totallyspies-theme .task-modal__evaluation {
+  background: rgba(38, 22, 17, 0.8) !important;
+  border-left: 4px solid #b55a3e !important;
 }
 
 /* ========== ✈️ SOVIET MIG-29 FIGHTER JET SIMULATOR ========== */
