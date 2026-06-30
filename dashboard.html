@@ -7158,6 +7158,92 @@
             </div>
           </div>
         </div>
+
+        <!-- МИГ-25 ФОКСРАТ THERMO-ATMOSPHERIC & ENGINE CONSOLE -->
+        <div class="soviet-widget" id="soviet-foxbat-panel" style="margin-top: 24px;">
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #263238, #37474f) !important; border-bottom: 2px solid #546e7a !important;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>🚀 МИГ-25 ФОКСРАТ: THERMO-ATMOSPHERIC & TWIN-TURBOJET CONSOLE</span>
+            </div>
+            <span class="soviet-station-status" id="foxbat-sys-status" style="border-color: #546e7a; color: #81c784;">ДВИГАТЕЛЬ СТАБИЛЕН</span>
+          </div>
+          <div class="card-body" style="padding: 16px;">
+            <div class="jet-grid">
+              
+              <!-- Left Column: Engine Combustion visualizer -->
+              <div class="jet-col" style="flex: 1.3;">
+                <div class="jet-col-title">Tumansky R-15 Twin-Burner Cross-Section</div>
+                <div class="jet-canvas-wrapper" style="height: 150px; background: #000; border: 1.5px solid #546e7a;">
+                  <canvas id="foxbat-engine-canvas" style="width: 100%; height: 100%;"></canvas>
+                </div>
+                <div style="font-family: monospace; font-size: 0.72rem; color: #81c784; text-align: center; margin-top: 6px;">
+                  AIRFLOW INTAKE ➔ COMPRESSOR STAGES ➔ AFTERBURNER NOZZLE
+                </div>
+              </div>
+              
+              <!-- Right Column: Controls and Thermo readouts -->
+              <div class="jet-col">
+                <div class="jet-col-title">Foxbat Telemetry Adjustments</div>
+                
+                <!-- Speed & Alt control sliders -->
+                <div class="jet-control-row">
+                  <div class="jet-control-label">
+                    <span>Flight Speed (Mach)</span>
+                    <span class="jet-control-value" id="lbl-foxbat-mach" style="color: #ffb703;">Mach 1.0</span>
+                  </div>
+                  <input type="range" id="slider-foxbat-mach" min="1.0" max="3.2" step="0.1" value="1.0" class="soviet-slider">
+                </div>
+                
+                <div class="jet-control-row">
+                  <div class="jet-control-label">
+                    <span>Altitude (m)</span>
+                    <span class="jet-control-value" id="lbl-foxbat-alt" style="color: #2a9d8f;">10,000m</span>
+                  </div>
+                  <input type="range" id="slider-foxbat-alt" min="10000" max="25000" step="500" value="10000" class="soviet-slider">
+                </div>
+                
+                <!-- Active Liquid Coolant Toggles -->
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                  <div class="afterburner-guard-wrapper" style="flex: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; border-color: rgba(84, 110, 122, 0.4);">
+                    <span style="font-family: monospace; font-size: 0.7rem; color: #81c784;">❄️ AFTERBURNER WATER-COOLANT (СНПБ)</span>
+                    <label class="switch" style="margin: 4px 0;">
+                      <input type="checkbox" id="toggle-foxbat-coolant">
+                      <span class="slider"></span>
+                    </label>
+                    <span style="font-family: monospace; font-size: 0.65rem; color: #8c736e;" id="status-foxbat-coolant">INACTIVE</span>
+                  </div>
+                </div>
+
+              </div>
+              
+              <!-- Center Column: Thermo metrics readouts -->
+              <div class="jet-col" style="min-width: 170px;">
+                <div class="jet-col-title">Sensors Telemetry</div>
+                
+                <div class="jet-nixie-group" style="grid-template-columns: 1fr; gap: 8px;">
+                  <div class="jet-nixie-card" style="padding: 6px 10px;">
+                    <div class="jet-nixie-label">Skin Friction Temp</div>
+                    <div class="jet-nixie-digits" id="nixie-foxbat-temp" style="font-size: 1.3rem; color: #ffaa44;">025°C</div>
+                  </div>
+                  <div class="jet-nixie-card" style="padding: 6px 10px;">
+                    <div class="jet-nixie-label">Air Density (kg/m³)</div>
+                    <div class="jet-nixie-digits" id="nixie-foxbat-density" style="font-size: 1.3rem; color: #81c784;">0.413</div>
+                  </div>
+                  <div class="jet-nixie-card" style="padding: 6px 10px;">
+                    <div class="jet-nixie-label">Est. Fuel Consumption</div>
+                    <div class="jet-nixie-digits" id="nixie-foxbat-fuelrate" style="font-size: 1.3rem; color: #ff5555;">0.45 kg/s</div>
+                  </div>
+                </div>
+                
+                <div id="foxbat-overheat-alert" style="margin-top: 6px; padding: 4px; background: rgba(255, 51, 51, 0.1); border: 1px solid rgba(255, 51, 51, 0.3); border-radius: 4px; display: none; align-items: center; gap: 6px; justify-content: center;">
+                  <div class="jet-warning-led active"></div>
+                  <span style="font-family: monospace; font-size: 0.65rem; color: #ff5555; font-weight: bold; animation: alertFlash 1s infinite;">🚨 ПЕРЕГРЕВ: COOLANT REQUIRED!</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       `;
       container.appendChild(widgetsGrid);
 
@@ -8870,6 +8956,318 @@
           }
         }
       });
+
+      // ==========================================
+      // SOVIET МИГ-25 FOXBAT THERMAL ENGINE SIMULATOR
+      // ==========================================
+      const foxbatCanvas = document.getElementById('foxbat-engine-canvas');
+      const foxbatCtx = foxbatCanvas ? foxbatCanvas.getContext('2d') : null;
+
+      let foxbatMach = 1.0;
+      let foxbatAlt = 10000;
+      let foxbatCoolantActive = false;
+      let foxbatTemp = 22;
+      let foxbatAirDensity = 0.413;
+      let foxbatFuelRate = 0.45;
+      let engineFlameTime = 0;
+
+      let foxbatAudioNode = null;
+      let foxbatGainNode = null;
+      let foxbatFilterNode = null;
+      let foxbatAudioRunning = false;
+
+      function updateFoxbatSound() {
+        if (!sovietAudioCtx) return;
+        
+        // Start engine audio hum if not running
+        if (!foxbatAudioRunning) {
+          try {
+            const bufferSize = sovietAudioCtx.sampleRate * 2;
+            const buffer = sovietAudioCtx.createBuffer(1, bufferSize, sovietAudioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+              data[i] = Math.random() * 2 - 1;
+            }
+            
+            const noise = sovietAudioCtx.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true;
+
+            foxbatFilterNode = sovietAudioCtx.createBiquadFilter();
+            foxbatFilterNode.type = 'bandpass';
+            foxbatFilterNode.frequency.value = 250;
+            foxbatFilterNode.Q.value = 1.2;
+
+            foxbatGainNode = sovietAudioCtx.createGain();
+            foxbatGainNode.gain.value = 0.02;
+
+            noise.connect(foxbatFilterNode);
+            foxbatFilterNode.connect(foxbatGainNode);
+            foxbatGainNode.connect(sovietAudioCtx.destination);
+            noise.start();
+
+            foxbatAudioNode = noise;
+            foxbatAudioRunning = true;
+          } catch(e) {
+            console.warn("Foxbat audio failed:", e);
+          }
+        }
+
+        if (foxbatAudioRunning && foxbatGainNode && foxbatFilterNode) {
+          const densityFactor = foxbatAirDensity / 1.225; // sound attenuates in thinner air!
+          const targetFreq = 160 + (foxbatMach * 180);
+          const targetGain = (0.015 + (foxbatMach - 1.0) * 0.04) * densityFactor;
+
+          foxbatFilterNode.frequency.setValueAtTime(targetFreq, sovietAudioCtx.currentTime);
+          foxbatGainNode.gain.setValueAtTime(targetGain, sovietAudioCtx.currentTime);
+        }
+      }
+
+      // Event listeners for Mach speed and altitude changes
+      const sliderMach = document.getElementById('slider-foxbat-mach');
+      const lblMach = document.getElementById('lbl-foxbat-mach');
+      if (sliderMach) {
+        sliderMach.addEventListener('input', (e) => {
+          ensureAudioCtx();
+          foxbatMach = parseFloat(e.target.value);
+          if (lblMach) lblMach.textContent = `Mach ${foxbatMach.toFixed(1)}`;
+          updateFoxbatSound();
+        });
+      }
+
+      const sliderAlt = document.getElementById('slider-foxbat-alt');
+      const lblAltVal = document.getElementById('lbl-foxbat-alt');
+      if (sliderAlt) {
+        sliderAlt.addEventListener('input', (e) => {
+          ensureAudioCtx();
+          foxbatAlt = parseInt(e.target.value);
+          if (lblAltVal) lblAltVal.textContent = `${foxbatAlt.toLocaleString()}m`;
+          updateFoxbatSound();
+        });
+      }
+
+      const toggleCoolant = document.getElementById('toggle-foxbat-coolant');
+      const statusCoolant = document.getElementById('status-foxbat-coolant');
+      if (toggleCoolant) {
+        toggleCoolant.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          foxbatCoolantActive = e.target.checked;
+          if (statusCoolant) {
+            statusCoolant.textContent = foxbatCoolantActive ? "ACTIVE (SNP-B ON)" : "INACTIVE";
+            statusCoolant.style.color = foxbatCoolantActive ? "#81c784" : "#8c736e";
+          }
+          logTerminal(`[SYS] МИГ-25 LIQUID COOLANT COIL SYSTEM: ${foxbatCoolantActive ? 'ARMED' : 'OFFLINE'}`);
+        });
+      }
+
+      // Foxbat Engine simulation loop
+      window.animateFoxbatEngine = () => {
+        if (!document.getElementById('soviet-foxbat-panel')) {
+          // Terminate audio if panel is closed
+          if (foxbatAudioNode) {
+            try { foxbatAudioNode.stop(); } catch(e) {}
+            foxbatAudioNode = null;
+            foxbatAudioRunning = false;
+          }
+          return;
+        }
+
+        // 1. Calculate thermodynamics friction and air density parameters
+        foxbatAirDensity = 1.225 * Math.exp(-foxbatAlt / 8500);
+        
+        // Stratosphere ambient base (approx -56C)
+        const ambientTemp = -56;
+        let targetTemp = ambientTemp + 70 * (foxbatMach ** 2);
+        if (foxbatCoolantActive) {
+          targetTemp -= 160; // cooling system reduces temperature
+        }
+        
+        // Interpolate skin temp smoothly
+        foxbatTemp += (targetTemp - foxbatTemp) * 0.05;
+        if (foxbatTemp < 15) foxbatTemp = 15;
+
+        foxbatFuelRate = 0.3 + (foxbatMach * 0.95) * (foxbatAirDensity / 1.225) * 1.5;
+
+        // 2. Render engine cross-section drawing
+        if (foxbatCtx && foxbatCanvas) {
+          const cw = foxbatCanvas.width = foxbatCanvas.offsetWidth || 300;
+          const ch = foxbatCanvas.height = foxbatCanvas.offsetHeight || 150;
+          const cx = cw / 2;
+          const cy = ch / 2;
+
+          foxbatCtx.fillStyle = '#050505';
+          foxbatCtx.fillRect(0, 0, cw, ch);
+
+          const drawEngineDuct = (yOffset) => {
+            const ey = cy + yOffset;
+
+            // Draw intake frame
+            foxbatCtx.strokeStyle = '#546e7a';
+            foxbatCtx.lineWidth = 1.8;
+            foxbatCtx.strokeRect(20, ey - 22, 25, 44);
+
+            // Compressors block
+            foxbatCtx.fillStyle = '#1e272c';
+            foxbatCtx.fillRect(45, ey - 20, 60, 40);
+
+            // Compressor blades lines rotating
+            foxbatCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            for (let i = 0; i < 6; i++) {
+              const bx = 45 + (i * 10);
+              const speedFactor = 0.3 + (foxbatMach * 0.25);
+              const offset = Math.sin(engineFlameTime * speedFactor + i) * 12;
+              foxbatCtx.beginPath();
+              foxbatCtx.moveTo(bx, ey - 20);
+              foxbatCtx.lineTo(bx + offset / 2, ey + 20);
+              foxbatCtx.stroke();
+            }
+
+            // Burner nozzle chamber
+            foxbatCtx.fillStyle = '#111113';
+            foxbatCtx.beginPath();
+            foxbatCtx.moveTo(105, ey - 18);
+            foxbatCtx.lineTo(170, ey - 10);
+            foxbatCtx.lineTo(170, ey + 10);
+            foxbatCtx.lineTo(105, ey + 18);
+            foxbatCtx.closePath();
+            foxbatCtx.fill();
+
+            // Air intake molecules flowing
+            foxbatCtx.fillStyle = 'rgba(129, 207, 224, 0.55)'; // Cold air particles
+            for (let i = 0; i < 4; i++) {
+              const px = ((engineFlameTime * 2.8 + i * 38) % 150) + 15;
+              if (px < 165) {
+                const py = ey + Math.sin(engineFlameTime * 0.08 + px) * 10;
+                foxbatCtx.beginPath();
+                foxbatCtx.arc(px, py, 2.5, 0, Math.PI * 2);
+                foxbatCtx.fill();
+              }
+            }
+
+            // High energy combustion exhaust flame length
+            const flameLength = (foxbatMach - 0.4) * 44;
+            const alpha = 0.45 + Math.random() * 0.35;
+
+            let flameGrad = foxbatCtx.createLinearGradient(170, ey, 170 + flameLength, ey);
+            if (foxbatMach > 2.6) {
+              flameGrad.addColorStop(0, `rgba(0, 150, 255, ${alpha})`);
+              flameGrad.addColorStop(0.5, `rgba(0, 240, 210, ${alpha * 0.65})`);
+              flameGrad.addColorStop(1, 'rgba(0, 150, 255, 0)');
+            } else if (foxbatMach > 1.8) {
+              flameGrad.addColorStop(0, `rgba(255, 220, 0, ${alpha})`);
+              flameGrad.addColorStop(0.6, `rgba(255, 110, 0, ${alpha * 0.5})`);
+              flameGrad.addColorStop(1, 'rgba(255, 100, 0, 0)');
+            } else {
+              flameGrad.addColorStop(0, `rgba(255, 120, 0, ${alpha * 0.7})`);
+              flameGrad.addColorStop(1, 'rgba(255, 50, 0, 0)');
+            }
+
+            foxbatCtx.fillStyle = flameGrad;
+            foxbatCtx.beginPath();
+            foxbatCtx.moveTo(170, ey - 10);
+            const flutter = Math.sin(engineFlameTime * 1.8) * 3.5;
+            foxbatCtx.quadraticCurveTo(170 + flameLength * 0.5, ey - 12 + flutter, 170 + flameLength, ey + flutter);
+            foxbatCtx.quadraticCurveTo(170 + flameLength * 0.5, ey + 12 + flutter, 170, ey + 10);
+            foxbatCtx.closePath();
+            foxbatCtx.fill();
+
+            // Fuel spray lines
+            foxbatCtx.strokeStyle = 'rgba(255, 153, 0, 0.6)';
+            foxbatCtx.lineWidth = 1.2;
+            foxbatCtx.beginPath();
+            foxbatCtx.moveTo(110, ey - 14);
+            foxbatCtx.lineTo(120, ey);
+            foxbatCtx.moveTo(110, ey + 14);
+            foxbatCtx.lineTo(120, ey);
+            foxbatCtx.stroke();
+          };
+
+          // Draw double twin burners
+          drawEngineDuct(-30);
+          drawEngineDuct(30);
+
+          // Draw HUD altitude arrow visualizer
+          const gy = 15;
+          const gx = cw - 30;
+          const gh = ch - 30;
+
+          // Sky gradient background representing altitudes
+          let skyGrad = foxbatCtx.createLinearGradient(gx, gy, gx, gy + gh);
+          skyGrad.addColorStop(0, '#000000'); // Edge of space (Black)
+          skyGrad.addColorStop(0.5, '#0c1a30'); // High Stratosphere
+          skyGrad.addColorStop(1, '#00b4d8'); // Lower sky
+          
+          foxbatCtx.fillStyle = skyGrad;
+          foxbatCtx.fillRect(gx, gy, 12, gh);
+
+          // Arrow indicator coordinate mapping
+          const altRatio = (foxbatAlt - 10000) / 15000;
+          const arrowY = gy + gh - (altRatio * gh);
+
+          foxbatCtx.strokeStyle = '#ffb703';
+          foxbatCtx.lineWidth = 1.8;
+          foxbatCtx.beginPath();
+          foxbatCtx.moveTo(gx - 7, arrowY);
+          foxbatCtx.lineTo(gx - 2, arrowY);
+          foxbatCtx.moveTo(gx - 5, arrowY - 3);
+          foxbatCtx.lineTo(gx - 2, arrowY);
+          foxbatCtx.lineTo(gx - 5, arrowY + 3);
+          foxbatCtx.stroke();
+
+          // Text label altitude arrow indicator
+          foxbatCtx.fillStyle = '#ffb703';
+          foxbatCtx.font = '8px monospace';
+          foxbatCtx.fillText("ALT RANGE", gx - 68, arrowY + 3);
+        }
+
+        engineFlameTime++;
+
+        // Update readouts
+        const nixieTemp = document.getElementById('nixie-foxbat-temp');
+        if (nixieTemp) nixieTemp.textContent = String(Math.round(foxbatTemp)).padStart(3, '0') + "°C";
+
+        const nixieDensity = document.getElementById('nixie-foxbat-density');
+        if (nixieDensity) nixieDensity.textContent = foxbatAirDensity.toFixed(3);
+
+        const nixieFuelrate = document.getElementById('nixie-foxbat-fuelrate');
+        if (nixieFuelrate) nixieFuelrate.textContent = foxbatFuelRate.toFixed(2) + " kg/s";
+
+        // Thermal warning flashing alert
+        const alertBox = document.getElementById('foxbat-overheat-alert');
+        const sysStatus = document.getElementById('foxbat-sys-status');
+        if (foxbatTemp > 450) {
+          if (alertBox) alertBox.style.display = 'flex';
+          if (sysStatus) {
+            sysStatus.textContent = "ДВИГАТЕЛЬ ПЕРЕГРЕТ";
+            sysStatus.style.color = "#ff5555";
+          }
+          if (Math.round(engineFlameTime) % 18 === 0) {
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(620, sovietAudioCtx.currentTime);
+              gain.gain.setValueAtTime(0.06, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.15);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.16);
+            } catch(err) {}
+          }
+        } else {
+          if (alertBox) alertBox.style.display = 'none';
+          if (sysStatus) {
+            sysStatus.textContent = "ДВИГАТЕЛЬ СТАБИЛЕН";
+            sysStatus.style.color = "#81c784";
+          }
+        }
+
+        requestAnimationFrame(animateFoxbatEngine);
+      };
+
+      // Start the animation loop
+      requestAnimationFrame(animateFoxbatEngine);
 
       window.sovietConsoleResizeHandler = () => {
         if (canvas.offsetWidth) {
