@@ -7373,7 +7373,7 @@ body.stitch-theme {
 
 /* Interactive Stitch Corner Widget */
 .stitch-theme .stitch-corner {
-  position: fixed;
+  position: absolute;
   bottom: 24px;
   right: 24px;
   width: 65px;
@@ -7397,7 +7397,7 @@ body.stitch-theme {
 
 /* Stitch Speech Bubble */
 .stitch-theme .stitch-bubble {
-  position: fixed;
+  position: absolute;
   bottom: 100px;
   right: 30px;
   background: #0a192f;
@@ -7433,7 +7433,7 @@ body.stitch-theme {
 
 /* Floating top-left ornament */
 .stitch-theme .stitch-corner-tl {
-  position: fixed;
+  position: absolute;
   top: 95px;
   left: 24px;
   font-size: 2.8rem;
@@ -8184,7 +8184,7 @@ body.stitch-theme {
 }
 
 .soviet-theme .soviet-corner {
-  position: fixed;
+  position: absolute;
   bottom: 24px;
   right: 24px;
   font-size: 28px;
@@ -8208,7 +8208,7 @@ body.stitch-theme {
 }
 
 .soviet-theme .soviet-bubble {
-  position: fixed;
+  position: absolute;
   bottom: 80px;
   right: 32px;
   background: #120504;
@@ -8233,7 +8233,7 @@ body.stitch-theme {
 /* Side Telemetry Displays (Radar & Clock panels) */
 .soviet-theme .soviet-telemetry-left,
 .soviet-theme .soviet-telemetry-right {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   background: rgba(18, 5, 4, 0.95);
   border: 2px solid var(--soviet-cyan);
