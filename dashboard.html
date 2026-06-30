@@ -6670,10 +6670,10 @@
                 <div class="radar-scope-wrapper">
                   <div class="radar-scanline"></div>
                   <canvas id="soviet-radar-canvas"></canvas>
-                  <div class="radar-overlay-data" id="radar-overlay-text">
-                    ALT: 320 KM<br>VEL: 7.82 KM/S<br>FUEL: 100%
-                  </div>
                   <div class="radar-ping-ripple" id="radar-ping-ripple"></div>
+                </div>
+                <div class="radar-overlay-data-static" id="radar-overlay-text">
+                  ALT: 320 KM &nbsp;|&nbsp; VEL: 7.82 KM/S &nbsp;|&nbsp; FUEL: 100%
                 </div>
                 <div class="radar-bottom-controls">
                   <button class="soviet-console-btn btn-sm" id="btn-radar-ping">🛰️ EMIT PING</button>
@@ -7231,9 +7231,9 @@
           if (crashed) {
             overlayText.innerHTML = `<span style="color:#ef4444;">COLLISION SHUTDOWN</span>`;
           } else if (ejected) {
-            overlayText.innerHTML = `CAPSULE SEPARATED<br>RESCUE FREQ UNLOCKED`;
+            overlayText.innerHTML = `CAPSULE SEPARATED &nbsp;|&nbsp; RESCUE FREQ UNLOCKED`;
           } else {
-            overlayText.innerHTML = `ALT: ${Math.round(alt * 6.371)} KM<br>VEL: ${(speed * 1.39).toFixed(2)} KM/S<br>FUEL: ${Math.round(fuel)}%`;
+            overlayText.innerHTML = `ALT: ${Math.round(alt * 6.371)} KM &nbsp;|&nbsp; VEL: ${(speed * 1.39).toFixed(2)} KM/S &nbsp;|&nbsp; FUEL: ${Math.round(fuel)}%`;
           }
         }
       }

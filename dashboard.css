@@ -8782,6 +8782,21 @@ body.stitch-theme {
   white-space: nowrap;
 }
 
+.radar-overlay-data-static {
+  background: rgba(13, 3, 2, 0.7);
+  border: 1px solid rgba(115, 39, 24, 0.4);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: #CC442A;
+  text-align: center;
+  margin: 12px auto 4px auto;
+  max-width: 90%;
+  box-sizing: border-box;
+  text-shadow: 0 0 4px rgba(204, 68, 42, 0.3);
+}
+
 .radar-ping-ripple {
   position: absolute;
   top: 50%;
@@ -10808,34 +10823,150 @@ body.stitch-theme .view-tab.active {
 
 /* ========== 🕵️‍♀️ TOTALLY SPIES THEME (251001767 only) ========== */
 body.totallyspies-theme {
-  --bg-primary: #fff9f6; /* Eye-friendly warm peach/apricot background */
-  --bg-secondary: #ffece3; /* Soft warm peach secondary */
-  --bg-card: rgba(255, 255, 255, 0.94); /* Warm white glassmorphic card bg */
-  --bg-header: #ffd5c6; /* Warm peach header */
+  --bg-primary: #f5eeea; /* Cozy muted linen background */
+  --bg-secondary: #e6dad4; /* Soft warm sand secondary background */
+  --bg-card: rgba(255, 255, 255, 0.78); /* Semi-transparent muted glass cards */
+  --bg-header: #dfcec6; /* Soft warm clay header */
   
-  --accent: #e76f51; /* Clover Jumpsuit warm coral/terracotta */
-  --accent-dim: #d95d39;
-  --accent-glow: rgba(231, 111, 81, 0.18);
-  --accent-border: #f4a261; /* Warm peach-orange border */
+  --accent: #b55a3e; /* Muted terracotta/coral */
+  --accent-dim: #9e4b31;
+  --accent-glow: rgba(181, 90, 62, 0.12);
+  --accent-border: #d4a390; /* Dusty warm rose-sand border */
   
-  --white: #4a1c0d; /* High-contrast warm chestnut brown text */
-  --white-soft: #35140b;
-  --white-muted: #662c18;
+  --white: #3b1f15; /* Subdued chestnut brown text */
+  --white-soft: #2e1711;
+  --white-muted: #5e3223;
   
-  --text-primary: #4a1c0d;
-  --text-secondary: #7d3820;
-  --overlay-dark: rgba(255, 250, 246, 0.85);
-  --overlay-darker: rgba(255, 250, 246, 0.95);
+  --text-primary: #3b1f15;
+  --text-secondary: #5e3223;
+  --overlay-dark: rgba(245, 238, 234, 0.85);
+  --overlay-darker: rgba(245, 238, 234, 0.95);
 
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(212, 163, 144, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(181, 90, 62, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(220, 200, 180, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #f5eeea 0%, #e6dad4 100%) !important;
+  background-attachment: fixed !important;
+  color: #3b1f15 !important;
+}
+
+body.totallyspies-theme .dashboard-page {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(212, 163, 144, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(181, 90, 62, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(220, 200, 180, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #f5eeea 0%, #e6dad4 100%) !important;
+  background-attachment: fixed !important;
+  color: #3b1f15 !important;
+}
+
+body.totallyspies-theme .dashboard-page-old-override-disabled {
   background: 
     radial-gradient(circle at 10% 20%, rgba(244, 162, 97, 0.15) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(231, 111, 81, 0.12) 0%, transparent 40%),
     radial-gradient(circle at 50% 50%, rgba(255, 220, 0, 0.08) 0%, transparent 50%),
     linear-gradient(135deg, #fff9f6 0%, #ffece3 100%) !important;
+  background-attachment: fixed !important;
   color: #4a1c0d !important;
 }
 
-body.totallyspies-theme .dashboard-page {
+body.totallyspies-theme .site-header {
+  background: rgba(255, 250, 246, 0.95) !important;
+  border-bottom: 2px solid #e76f51 !important;
+  box-shadow: 0 4px 20px rgba(231, 111, 81, 0.1) !important;
+}
+
+body.totallyspies-theme .site-header__logo-text,
+body.totallyspies-theme .nav-link,
+body.totallyspies-theme .header-actions__reg {
+  color: #b3361b !important;
+}
+
+.totallyspies-theme .page-title {
+  color: #d95d39 !important;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9), 0 0 10px rgba(231, 111, 81, 0.2) !important;
+  font-family: 'Fredoka', sans-serif !important;
+  letter-spacing: 1px;
+}
+
+/* Welcome banner */
+.totallyspies-theme .welcome-banner {
+  background: linear-gradient(135deg, rgba(231, 111, 81, 0.08), rgba(255, 255, 255, 0.85)) !important;
+  border: 1.5px solid #e76f51 !important;
+  box-shadow: 0 8px 32px rgba(231, 111, 81, 0.06) !important;
+  color: #4a1c0d !important;
+}
+
+.totallyspies-theme .welcome-banner__greeting strong {
+  color: #e76f51 !important;
+}
+
+.totallyspies-theme .welcome-banner__icon {
+  background: rgba(231, 111, 81, 0.12) !important;
+  color: #e76f51 !important;
+  border-color: #e76f51 !important;
+}
+
+.spy-heart-pulse {
+  animation: spyHeartBeat 1.2s infinite alternate;
+}
+
+@keyframes spyHeartBeat {
+  0% { transform: scale(0.92); filter: drop-shadow(0 0 2px #e76f51); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 8px #f4a261); }
+}
+
+/* Task Columns & Cards */
+.totallyspies-theme .task-column {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1.5px solid rgba(231, 111, 81, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.5) !important;
+}
+
+.totallyspies-theme .task-column__header {
+  border-bottom: 2px solid rgba(231, 111, 81, 0.2) !important;
+}
+
+.totallyspies-theme .task-column__header h3 {
+  color: #b3361b !important;
+  font-weight: 700 !important;
+}
+
+.totallyspies-theme .task-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1.2px solid rgba(231, 111, 81, 0.15) !important;
+  box-shadow: 0 4px 10px rgba(231, 111, 81, 0.03) !important;
+  transition: all 0.25s ease;
+}
+
+.totallyspies-theme .task-card:hover {
+  border-color: #e76f51 !important;
+  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.18) !important;
+  transform: translateY(-2px);
+}
+
+.totallyspies-theme .task-card__title {
+  color: #4a1c0d !important;
+  font-weight: 700 !important;
+}
+
+.totallyspies-theme .task-card__desc {
+  color: #662c18 !important;
+}
+
+.totallyspies-theme .task-card__approved-pill {
+  background: rgba(0, 204, 102, 0.15) !important;
+  border-color: rgba(0, 204, 102, 0.3) !important;
+  color: #008040 !important;
+}
+
+/* Priority stripes - Clover Orange/Red, Sam Green, Alex Yellow */
+.totallyspies-theme .task-card--low { border-left: 6px solid #00cc66 !important; } 
+.totallyspies-theme .task-card--medium { border-left: 6px solid #e6b800 !important; } 
+.totallyspies-theme .task-card--high { border-left: 6px solid #e76f51 !important; } 
+body.totallyspies-theme .dashboard-page-old-override-disabled {
   background: 
     radial-gradient(circle at 10% 20%, rgba(244, 162, 97, 0.15) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(231, 111, 81, 0.12) 0%, transparent 40%),
@@ -10954,18 +11085,18 @@ body.totallyspies-theme .header-actions__reg {
 .totallyspies-theme .btn-primary,
 .totallyspies-theme #submit-task,
 .totallyspies-theme .task-card__action {
-  background: linear-gradient(135deg, #e76f51, #f4a261) !important;
+  background: linear-gradient(135deg, #b55a3e, #d4a390) !important;
   color: #ffffff !important;
-  border: 1.5px solid #e76f51 !important;
-  box-shadow: 0 4px 10px rgba(231, 111, 81, 0.2) !important;
+  border: 1.5px solid #b55a3e !important;
+  box-shadow: 0 4px 10px rgba(181, 90, 62, 0.15) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
 }
 
 .totallyspies-theme .btn-primary:hover,
 .totallyspies-theme #submit-task:hover {
-  background: linear-gradient(135deg, #f4a261, #e76f51) !important;
-  box-shadow: 0 4px 15px rgba(231, 111, 81, 0.3) !important;
+  background: linear-gradient(135deg, #d4a390, #b55a3e) !important;
+  box-shadow: 0 4px 15px rgba(181, 90, 62, 0.25) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -10974,357 +11105,7 @@ body.totallyspies-theme .header-actions__reg {
 .totallyspies-theme textarea,
 .totallyspies-theme select {
   background: rgba(255, 255, 255, 0.9) !important;
-  border: 1.5px solid rgba(231, 111, 81, 0.2) !important;
-  color: #4a1c0d !important;
+  border: 1.5px solid rgba(181, 90, 62, 0.15) !important;
+  color: #3b1f15 !important;
 }
 
-.totallyspies-theme input:focus,
-.totallyspies-theme textarea:focus,
-.totallyspies-theme select:focus {
-  border-color: #e76f51 !important;
-  box-shadow: 0 0 8px rgba(231, 111, 81, 0.2) !important;
-}
-
-/* Dynamic Floater: ComPowder widget styling */
-.totallyspies-corner {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #e76f51 0%, #f4a261 100%);
-  border: 3px solid #ffd5c6;
-  box-shadow: 0 8px 24px rgba(231, 111, 81, 0.25), 0 0 0 4px rgba(231, 111, 81, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
-  z-index: 1000;
-  cursor: pointer;
-  animation: spiesWiggle 3.2s ease-in-out infinite;
-  user-select: none;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.totallyspies-corner:hover {
-  transform: scale(1.1) rotate(15deg);
-  box-shadow: 0 10px 28px rgba(231, 111, 81, 0.4), 0 0 0 6px rgba(231, 111, 81, 0.2);
-}
-
-@keyframes spiesWiggle {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  30% { transform: translateY(-6px) rotate(-10deg); }
-  70% { transform: translateY(-2px) rotate(10deg); }
-}
-
-.totallyspies-bubble {
-  position: fixed;
-  bottom: 95px;
-  right: 32px;
-  background: #ffffff;
-  border: 2.5px solid #e76f51;
-  border-radius: 16px;
-  padding: 12px 18px;
-  max-width: 260px;
-  box-shadow: 0 8px 20px rgba(231, 111, 81, 0.1);
-  z-index: 999;
-  font-family: inherit;
-  font-size: 0.95rem;
-  color: #4a1c0d;
-  display: none;
-  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-.totallyspies-bubble.show {
-  display: block;
-}
-
-.totallyspies-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  right: 20px;
-  border-width: 12px 12px 0 0;
-  border-style: solid;
-  border-color: #e76f51 transparent;
-  display: block;
-  width: 0;
-}
-
-/* Guide Card */
-.totallyspies-theme .dashboard-guide-card {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 2.5px solid #e76f51 !important;
-  box-shadow: 0 4px 20px rgba(231, 111, 81, 0.08) !important;
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .dashboard-guide-title-group {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .dashboard-guide-list li::before {
-  content: "🌸" !important;
-}
-
-.totallyspies-theme .dashboard-guide-list strong {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .dashboard-guide-welcome {
-  color: #4a1c0d !important;
-}
-
-/* Corner TL */
-.totallyspies-corner-tl {
-  position: fixed;
-  top: 85px;
-  left: 20px;
-  font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid #e76f51;
-  color: #e76f51;
-  padding: 4px 10px;
-  border-radius: 20px;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.08);
-  font-weight: bold;
-  letter-spacing: 1px;
-  pointer-events: none;
-}
-
-/* Decors */
-.totallyspies-decors {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-}
-
-/* Task Form styling */
-.totallyspies-theme .task-form {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 2px solid #e76f51 !important;
-  box-shadow: 0 8px 32px rgba(231, 111, 81, 0.06) !important;
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .task-form__title {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .task-form label {
-  color: #7d3820 !important;
-  font-weight: 600 !important;
-}
-
-/* Hardcoded green elements overrides for Totally Spies */
-.totallyspies-theme .tracker-table-container {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border: 1.5px solid #e76f51 !important;
-}
-
-.totallyspies-theme .tracker-table {
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .tracker-table th {
-  background: rgba(231, 111, 81, 0.15) !important;
-  color: #e76f51 !important;
-  border-bottom: 1.5px solid #e76f51 !important;
-  border-right: 1px solid rgba(231, 111, 81, 0.15) !important;
-}
-
-.totallyspies-theme .tracker-table td {
-  border-bottom: 1px solid rgba(231, 111, 81, 0.1) !important;
-  border-right: 1px solid rgba(231, 111, 81, 0.1) !important;
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .tracker-table td:first-child {
-  background: rgba(255, 247, 244, 0.95) !important;
-  border-right: 2px solid #e76f51 !important;
-}
-
-.totallyspies-theme .tracker-table th:first-child {
-  background: rgba(255, 240, 235, 0.95) !important;
-  border-right: 2px solid #e76f51 !important;
-}
-
-.totallyspies-theme .tracker-table tr:hover td {
-  background: rgba(231, 111, 81, 0.05) !important;
-}
-
-.totallyspies-theme .tracker-table tr:hover td:first-child {
-  background: rgba(255, 230, 220, 0.95) !important;
-}
-
-.totallyspies-theme .tracker-table__member-name {
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .tracker-table__member-id {
-  color: #7d3820 !important;
-}
-
-/* News overrides */
-.totallyspies-theme .news-section {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 2px solid #e76f51 !important;
-}
-
-.totallyspies-theme .news-header h2 {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .news-header__icon {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .news-card {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(231, 111, 81, 0.2) !important;
-  color: #4a1c0d !important;
-  box-shadow: 0 4px 10px rgba(231, 111, 81, 0.02) !important;
-}
-
-.totallyspies-theme .news-card:hover {
-  border-color: #e76f51 !important;
-  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.12) !important;
-}
-
-.totallyspies-theme .news-card__title {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .news-card__meta {
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .news-card__author {
-  color: #e76f51 !important;
-}
-
-/* Tabs & Buttons overrides */
-.totallyspies-theme .dept-tab {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(231, 111, 81, 0.15) !important;
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .dept-tab:hover {
-  background: rgba(231, 111, 81, 0.08) !important;
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .dept-tab.active {
-  background: #e76f51 !important;
-  color: #ffffff !important;
-  border-color: #e76f51 !important;
-}
-
-.totallyspies-theme .view-tab {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(231, 111, 81, 0.15) !important;
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .view-tab:hover {
-  background: rgba(231, 111, 81, 0.08) !important;
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .view-tab.active {
-  background: #e76f51 !important;
-  color: #ffffff !important;
-  border-color: #e76f51 !important;
-}
-
-.totallyspies-theme .role-btn {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(231, 111, 81, 0.15) !important;
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .role-btn:hover {
-  background: rgba(231, 111, 81, 0.08) !important;
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .role-btn.active {
-  background: #e76f51 !important;
-  color: #ffffff !important;
-  border-color: #e76f51 !important;
-}
-
-/* Mailer card overrides */
-.totallyspies-theme .email-card {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border: 1.5px solid #e76f51 !important;
-  box-shadow: 0 8px 32px rgba(231, 111, 81, 0.06) !important;
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .email-card__header h3 {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .email-card__subtitle {
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .email-input {
-  background: rgba(255, 255, 255, 0.95) !important;
-  color: #4a1c0d !important;
-  border-color: rgba(231, 111, 81, 0.2) !important;
-}
-
-.totallyspies-theme .email-save-btn {
-  background: linear-gradient(135deg, #e76f51, #f4a261) !important;
-  color: #ffffff !important;
-  border: 1.5px solid #e76f51 !important;
-}
-
-.totallyspies-theme .email-display-container {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1.5px dashed rgba(231, 111, 81, 0.2) !important;
-}
-
-.totallyspies-theme .email-display-label {
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .email-display-value {
-  color: #4a1c0d !important;
-}
-
-/* Task details popup overlay overrides */
-.totallyspies-theme .task-modal__content {
-  background: rgba(255, 255, 255, 0.98) !important;
-  border: 2px solid #e76f51 !important;
-  color: #4a1c0d !important;
-  box-shadow: 0 10px 40px rgba(231, 111, 81, 0.15) !important;
-}
-
-.totallyspies-theme .task-modal__title {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .task-modal__meta {
-  color: #7d3820 !important;
-}
-
-.totallyspies-theme .task-modal__desc {
-  color: #4a1c0d !important;
-}
-
-.totallyspies-theme .task-modal__close {
-  color: #e76f51 !important;
-}
-
-.totallyspies-theme .task-modal__evaluation {
-  background: rgba(255, 247, 244, 0.8) !important;
-  border-left: 4px solid #e76f51 !important;
-}
