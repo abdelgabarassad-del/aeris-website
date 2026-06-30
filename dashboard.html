@@ -3732,45 +3732,17 @@
                 <span class="soviet-station-status" style="color: #ffb3cc; border-color: #ff3377; text-shadow: 0 0 5px rgba(255, 51, 119, 0.4);" id="spies-agent-status">AGENT: ESRAA</span>
               </div>
               <div class="card-body" style="background: #060101; padding: 24px;">
-                <div class="compowder-layout">
+                <div class="compowder-layout" style="grid-template-columns: 1fr 1fr;">
                   
                   <!-- Left: ComPowder communicator graphical screen -->
                   <div class="compowder-section">
                     <div class="compowder-section-title">ComPowder Screen</div>
-                    <div class="compowder-visualizer">
+                    <div class="compowder-visualizer" style="aspect-ratio: 1.6;">
                       <div class="compowder-hud-overlay">LINK: ACTIVE<br>JERRY_SYS</div>
                       <canvas id="compowder-canvas"></canvas>
                     </div>
-                  </div>
-                  
-                  <!-- Center: Laser Lipstick interactive game -->
-                  <div class="compowder-section">
-                    <div class="compowder-section-title">Laser Lipstick Lock Cutter</div>
-                    <div class="laser-target-game">
-                      <div class="laser-grid-screen" id="laser-grid-screen">
-                        <div class="laser-grid-line" style="top: 25%; left: 0; right: 0; height: 1px;"></div>
-                        <div class="laser-grid-line" style="top: 50%; left: 0; right: 0; height: 1px;"></div>
-                        <div class="laser-grid-line" style="top: 75%; left: 0; right: 0; height: 1px;"></div>
-                        <div class="laser-grid-line" style="left: 25%; top: 0; bottom: 0; width: 1px;"></div>
-                        <div class="laser-grid-line" style="left: 50%; top: 0; bottom: 0; width: 1px;"></div>
-                        <div class="laser-grid-line" style="left: 75%; top: 0; bottom: 0; width: 1px;"></div>
-                        
-                        <!-- Lock nodes -->
-                        <div class="lock-node" id="node-1" style="top: 30%; left: 30%;"></div>
-                        <div class="lock-node" id="node-2" style="top: 40%; left: 70%;"></div>
-                        <div class="lock-node" id="node-3" style="top: 70%; left: 45%;"></div>
-                        <div class="lock-node" id="node-4" style="top: 60%; left: 80%;"></div>
-                        
-                        <canvas id="laser-particles-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
-                      </div>
-                      <div class="laser-status-bar">
-                        <span>NODES CUT: <span id="nodes-cut-val">0/4</span></span>
-                        <span>BATTERY: <span id="laser-battery-val">100%</span></span>
-                      </div>
-                      <div class="laser-btn-row">
-                        <button class="soviet-console-btn btn-sm" id="btn-recharge-laser">🔌 RECHARGE</button>
-                        <button class="soviet-console-btn btn-sm" style="color: #00cc66; border-color: #00cc66;" id="btn-reset-nodes">🔄 RESET LOCKS</button>
-                      </div>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                      <button class="soviet-console-btn btn-sm" id="btn-call-jerry" style="width: 100%;">📞 CALL JERRY</button>
                     </div>
                   </div>
                   
@@ -3783,29 +3755,32 @@
                           <span>Laser Lipstick</span>
                           <span id="txt-lvl-lipstick">85%</span>
                         </div>
-                        <div class="gear-bar-bg"><div class="gear-bar-fill lipstick" id="bar-lipstick"></div></div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill lipstick" id="bar-lipstick" style="width: 85%;"></div></div>
                       </div>
                       <div class="gear-bar-container">
                         <div class="gear-bar-header">
                           <span>Laser Hair Dryer</span>
                           <span>60%</span>
                         </div>
-                        <div class="gear-bar-bg"><div class="gear-bar-fill hairdryer"></div></div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill hairdryer" style="width: 60%; background: linear-gradient(90deg, #00cc66, #ffbb00);"></div></div>
                       </div>
                       <div class="gear-bar-container">
                         <div class="gear-bar-header">
                           <span>Suction Cup Boots</span>
                           <span>95%</span>
                         </div>
-                        <div class="gear-bar-bg"><div class="gear-bar-fill boots"></div></div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill boots" style="width: 95%; background: linear-gradient(90deg, #ff0055, #00cc66);"></div></div>
                       </div>
                       <div class="gear-bar-container">
                         <div class="gear-bar-header">
                           <span>Spy Jetpack Fuel</span>
                           <span>40%</span>
                         </div>
-                        <div class="gear-bar-bg"><div class="gear-bar-fill jetpack"></div></div>
+                        <div class="gear-bar-bg"><div class="gear-bar-fill jetpack" style="width: 40%;"></div></div>
                       </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                      <button class="soviet-console-btn btn-sm" id="btn-calibrate-gear" style="width: 100%; color: #00cc66; border-color: #00cc66;">🔄 CALIBRATE SYSTEMS</button>
                     </div>
                   </div>
 
@@ -3815,7 +3790,36 @@
           `;
           containerInner.appendChild(gadgetCard);
           initSpiesGraphics();
-          initSpiesLaserGame();
+
+          // Add listeners for Call Jerry & Calibrate Systems
+          const btnCallJerry = document.getElementById('btn-call-jerry');
+          if (btnCallJerry) {
+            btnCallJerry.addEventListener('click', () => {
+              ensureSpiesAudio();
+              playSpiesBeepRing();
+              logTerminal("[COM LINK] JERRY: 'Spies, glad you called! I have uploaded target details directly to your mission briefing cards.'");
+            });
+          }
+
+          const btnCalibrate = document.getElementById('btn-calibrate-gear');
+          if (btnCalibrate) {
+            btnCalibrate.addEventListener('click', () => {
+              ensureSpiesAudio();
+              // Make nice sweep beep for calibration
+              const osc = spiesAudioCtx.createOscillator();
+              const gainNode = spiesAudioCtx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(400, spiesAudioCtx.currentTime);
+              osc.frequency.linearRampToValueAtTime(1200, spiesAudioCtx.currentTime + 0.4);
+              gainNode.gain.setValueAtTime(0.1, spiesAudioCtx.currentTime);
+              gainNode.gain.linearRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + 0.4);
+              osc.connect(gainNode);
+              gainNode.connect(spiesAudioCtx.destination);
+              osc.start();
+              osc.stop(spiesAudioCtx.currentTime + 0.4);
+              logTerminal("[SYSTEM] spy gear telemetry calibration completed. all systems operational.");
+            });
+          }
         }
       }
     }
@@ -3851,26 +3855,6 @@
         osc.start(spiesAudioCtx.currentTime + index * 0.15);
         osc.stop(spiesAudioCtx.currentTime + index * 0.15 + 0.25);
       });
-    }
-
-    function playLaserFireSound() {
-      ensureSpiesAudio();
-      if (!spiesAudioCtx) return;
-      const osc = spiesAudioCtx.createOscillator();
-      const gainNode = spiesAudioCtx.createGain();
-      osc.type = 'triangle';
-      
-      // Sweep down frequency for laser burst
-      osc.frequency.setValueAtTime(1400, spiesAudioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(200, spiesAudioCtx.currentTime + 0.3);
-      
-      gainNode.gain.setValueAtTime(0.2, spiesAudioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, spiesAudioCtx.currentTime + 0.3);
-      
-      osc.connect(gainNode);
-      gainNode.connect(spiesAudioCtx.destination);
-      osc.start();
-      osc.stop(spiesAudioCtx.currentTime + 0.35);
     }
 
     // ComPowder Screen canvas visualizer (sinusoidal waves + spinning heart)
@@ -3953,196 +3937,7 @@
       render();
     }
 
-    // Laser game
-    function initSpiesLaserGame() {
-      const grid = document.getElementById('laser-grid-screen');
-      const partsCanvas = document.getElementById('laser-particles-canvas');
-      const nodesCutTxt = document.getElementById('nodes-cut-val');
-      const batteryTxt = document.getElementById('laser-battery-val');
-      const btnRecharge = document.getElementById('btn-recharge-laser');
-      const btnReset = document.getElementById('btn-reset-nodes');
-      
-      if (!grid || !partsCanvas) return;
-      const ctx = partsCanvas.getContext('2d');
-      
-      let pWidth = partsCanvas.width = grid.offsetWidth;
-      let pHeight = partsCanvas.height = grid.offsetHeight;
-      
-      let particles = [];
-      let battery = 100;
-      let brokenNodes = new Set();
-      
-      // Node IDs
-      const nodesList = ['node-1', 'node-2', 'node-3', 'node-4'];
-      
-      function shootLaser(targetX, targetY) {
-        if (battery <= 0) {
-          logTerminal("[SYSTEM] LASER LIPSTICK OUT OF CHARGE. PLUG IN COMPOWDER RECHARGER.");
-          return;
-        }
 
-        ensureSpiesAudio();
-        playLaserFireSound();
-        battery = Math.max(0, battery - 15);
-        batteryTxt.textContent = battery + '%';
-        const barLipstick = document.getElementById('bar-lipstick');
-        if (barLipstick) barLipstick.style.width = battery + '%';
-        const txtLvlLipstick = document.getElementById('txt-lvl-lipstick');
-        if (txtLvlLipstick) txtLvlLipstick.textContent = battery + '%';
-
-        // Spawn laser beam line element
-        const laserBeam = document.createElement('div');
-        laserBeam.className = 'laser-beam-effect';
-        
-        // Origin is bottom center of the screen
-        let startX = pWidth / 2;
-        let startY = pHeight;
-        
-        let dx = targetX - startX;
-        let dy = targetY - startY;
-        let dist = Math.sqrt(dx*dx + dy*dy);
-        let angle = Math.atan2(dy, dx);
-        
-        laserBeam.style.width = dist + 'px';
-        laserBeam.style.height = '4px';
-        laserBeam.style.left = startX + 'px';
-        laserBeam.style.top = startY + 'px';
-        laserBeam.style.transform = `rotate(${angle}rad)`;
-        laserBeam.style.transformOrigin = 'left center';
-        
-        grid.appendChild(laserBeam);
-        
-        // Spawn sparks at click point
-        for (let i = 0; i < 15; i++) {
-          particles.push({
-            x: targetX,
-            y: targetY,
-            vx: (Math.random() * 4 - 2) * 2,
-            vy: (Math.random() * 4 - 2) * 2,
-            size: Math.random() * 3 + 1,
-            color: '#ff0066',
-            life: 1.0,
-            decay: 0.045
-          });
-        }
-        
-        // Check collision with locks
-        nodesList.forEach((nid) => {
-          if (brokenNodes.has(nid)) return;
-          const nodeEl = document.getElementById(nid);
-          if (nodeEl) {
-            const rect = nodeEl.getBoundingClientRect();
-            const gridRect = grid.getBoundingClientRect();
-            const nx = rect.left - gridRect.left + rect.width / 2;
-            const ny = rect.top - gridRect.top + rect.height / 2;
-            
-            let distToNode = Math.sqrt((targetX - nx)*(targetX - nx) + (targetY - ny)*(targetY - ny));
-            if (distToNode < 18) {
-              brokenNodes.add(nid);
-              nodeEl.classList.add('broken');
-              nodesCutTxt.textContent = brokenNodes.size + '/4';
-              logTerminal(`[GEAR] DESTRUCTIVE LOCK NODE ${nid.toUpperCase()} NEUTRALIZED.`);
-              
-              // Spark explosion
-              for (let j = 0; j < 25; j++) {
-                particles.push({
-                  x: nx,
-                  y: ny,
-                  vx: (Math.random() * 5 - 2.5) * 3,
-                  vy: (Math.random() * 5 - 2.5) * 3,
-                  size: Math.random() * 4 + 1.5,
-                  color: '#00cc66',
-                  life: 1.0,
-                  decay: 0.035
-                });
-              }
-
-              if (brokenNodes.size === 4) {
-                logTerminal("[MISSION COMPLETED] WOOHP SECURITY SYSTEM BYPASS OK! LOCK DESTROYED.");
-                document.getElementById('spies-agent-status').textContent = "STATUS: BYPASSED";
-                document.getElementById('spies-agent-status').style.color = "#00cc66";
-              }
-            }
-          }
-        });
-
-        setTimeout(() => laserBeam.remove(), 120);
-      }
-
-      grid.addEventListener('mousedown', (e) => {
-        const gridRect = grid.getBoundingClientRect();
-        let clickX = e.clientX - gridRect.left;
-        let clickY = e.clientY - gridRect.top;
-        
-        // Prevent click if clicking a button or node
-        if (e.target.classList.contains('soviet-console-btn')) return;
-        
-        shootLaser(clickX, clickY);
-      });
-
-      // Sparks particle update loop
-      const updateParticles = () => {
-        if (!document.getElementById('laser-particles-canvas')) return;
-        
-        // Handle canvas resize
-        if (grid.offsetWidth !== pWidth) {
-          pWidth = partsCanvas.width = grid.offsetWidth;
-          pHeight = partsCanvas.height = grid.offsetHeight;
-        }
-
-        ctx.clearRect(0, 0, pWidth, pHeight);
-        
-        particles.forEach((p, index) => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.life -= p.decay;
-          
-          if (p.life <= 0) {
-            particles.splice(index, 1);
-          } else {
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.life;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-        
-        ctx.globalAlpha = 1.0;
-        requestAnimationFrame(updateParticles);
-      };
-      
-      updateParticles();
-
-      // Button controls
-      if (btnRecharge) {
-        btnRecharge.addEventListener('click', () => {
-          ensureSpiesAudio();
-          battery = 100;
-          batteryTxt.textContent = '100%';
-          const barLipstick = document.getElementById('bar-lipstick');
-          if (barLipstick) barLipstick.style.width = '85%';
-          const txtLvlLipstick = document.getElementById('txt-lvl-lipstick');
-          if (txtLvlLipstick) txtLvlLipstick.textContent = '85%';
-          logTerminal("[GEAR] GADGET CHARGING LINK LOCKED. LASER RECHARGED.");
-        });
-      }
-
-      if (btnReset) {
-        btnReset.addEventListener('click', () => {
-          ensureSpiesAudio();
-          brokenNodes.clear();
-          nodesList.forEach((nid) => {
-            const el = document.getElementById(nid);
-            if (el) el.classList.remove('broken');
-          });
-          nodesCutTxt.textContent = '0/4';
-          document.getElementById('spies-agent-status').textContent = "AGENT: ESRAA";
-          document.getElementById('spies-agent-status').style.color = "#ffb3cc";
-          logTerminal("[SYSTEM] LOCK MATRIX RE-INITIALIZED. DEFENSE GRID ONLINE.");
-        });
-      }
-    }
 
     /* ========== BERSERK SCHNOZ THEME (251002119 only) ========== */
     const SCHNOZ_REG = '251002119';
