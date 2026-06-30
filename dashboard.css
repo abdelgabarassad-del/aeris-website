@@ -11835,6 +11835,184 @@ body.totallyspies-theme .nav-link:hover {
   transition: width 0.3s ease;
 }
 
+/* ========== 📜 HTTYD DRAGON ENCYCLOPEDIA STYLE CLASSES ========== */
+.dragon-encyclopedia-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.dragon-card-3d {
+  position: relative;
+  background: radial-gradient(circle at 50% 30%, #102218 0%, #060c08 100%);
+  border: 2px dashed #2d5a3f;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.dragon-card-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(57, 255, 20, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.dragon-card-3d:hover {
+  border-color: #39ff14;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.25);
+  transform: translateY(-2px);
+}
+
+/* ========== ᚱ HTTYD VIKING RUNE CARVER STYLE CLASSES ========== */
+.dragon-rune-carver-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.rune-stone-slab {
+  background: radial-gradient(circle at center, #232d28 0%, #0d1210 100%) !important;
+  border: 3px double #2d5a3f !important;
+  border-radius: 8px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 4px 10px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.rune-oracle-card {
+  perspective: 1000px;
+  width: 100%;
+  height: 110px;
+}
+
+.rune-oracle-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.rune-oracle-card.flipped .rune-oracle-inner {
+  transform: rotateY(180deg);
+}
+
+.rune-oracle-front, .rune-oracle-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.rune-oracle-front {
+  background: linear-gradient(135deg, #102519 0%, #0a1410 100%);
+  border: 1.5px dashed #2d5a3f;
+  color: #81c784;
+}
+
+.rune-oracle-back {
+  background: linear-gradient(135deg, #2d5a3f 0%, #102519 100%);
+  border: 1.5px solid #39ff14;
+  color: #fff;
+  transform: rotateY(180deg);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+}
+
+/* ========== 🌴 STITCH THEME UKULELE WIDGET STYLE CLASSES ========== */
+.stitch-ukulele-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.ukulele-board-panel {
+  background: linear-gradient(135deg, #102a45 0%, #061220 100%) !important;
+  border: 2.5px solid #3b82f6 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 0 15px rgba(59, 130, 246, 0.15) !important;
+  color: #f8fafc;
+}
+
+.ukulele-neck {
+  background: linear-gradient(90deg, #5c4033 0%, #3d2b1f 100%);
+  border-radius: 6px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 5px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.ukulele-string-wrapper {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.ukulele-string {
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%);
+  box-shadow: 0 0 4px rgba(255,255,255,0.8);
+  transition: transform 0.05s ease;
+}
+
+.ukulele-string.vibrate {
+  animation: stringVibrate 0.25s linear;
+}
+
+@keyframes stringVibrate {
+  0% { transform: translateY(0); }
+  20% { transform: translateY(-3px); }
+  40% { transform: translateY(2.5px); }
+  60% { transform: translateY(-1.5px); }
+  80% { transform: translateY(1px); }
+  100% { transform: translateY(0); }
+}
+
+.stitch-btn-music {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1.5px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 6px;
+  color: #93c5fd !important;
+  font-family: monospace;
+  font-size: 0.72rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.stitch-btn-music:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+  border-color: #60a5fa !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.2);
+}
+
+.stitch-btn-music.active {
+  background: rgba(59, 130, 246, 0.35) !important;
+  border-color: #3b82f6 !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  font-weight: bold;
+}
+
+
+
+
 
 
 

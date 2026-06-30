@@ -2781,7 +2781,7 @@
     function applyStitchTheme() {
       if (!isStitchUser()) {
         document.body.classList.remove('stitch-theme');
-        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements').forEach(el => el.remove());
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements, .stitch-ukulele-container').forEach(el => el.remove());
         return;
       }
 
@@ -2898,6 +2898,280 @@
         submitTaskBtn.textContent = '';
         if (svg) submitTaskBtn.appendChild(svg);
         submitTaskBtn.append(' Aloha ! 🌺');
+      }
+
+      // Stitch Ukulele Jukebox widget
+      if (!document.querySelector('.stitch-ukulele-container')) {
+        const container = document.querySelector('#dashboard-page .container');
+        if (container) {
+          const ukuleleWrapper = document.createElement('div');
+          ukuleleWrapper.className = 'stitch-ukulele-container stitch-deco fade-in visible';
+          ukuleleWrapper.innerHTML = `
+            <div class="ukulele-board-panel" style="padding: 16px; margin-top: 24px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid rgba(59, 130, 246, 0.3); padding-bottom: 8px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.3rem;">🌴 JUKE-BOX HAWAIEN & UKULÉLÉ DE LILO</span>
+                </div>
+                <div style="font-family: monospace; font-size: 0.85rem; color: #60a5fa; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                  EXPERIMENT 626 SOUND CONSOLE
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 310px; gap: 20px; align-items: start;">
+                <!-- Column 1: Ukulele Strings board -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="font-family: monospace; font-size: 0.78rem; color: #94a3b8; margin-bottom: 4px;">Pincez ou cliquez sur les cordes de l'ukulélé pour jouer des notes :</div>
+                  
+                  <div class="ukulele-neck" style="padding: 14px 20px;">
+                    <!-- String 1 -->
+                    <div class="ukulele-string-wrapper" data-note="392" data-name="SOL (G4)">
+                      <div class="ukulele-string"></div>
+                      <span style="position: absolute; right: 10px; font-family: monospace; font-size: 0.65rem; color: #94a3b8; text-shadow: 0 1px 2px #000;">SOL (G4)</span>
+                    </div>
+                    <!-- String 2 -->
+                    <div class="ukulele-string-wrapper" data-note="261.63" data-name="DO (C4)">
+                      <div class="ukulele-string"></div>
+                      <span style="position: absolute; right: 10px; font-family: monospace; font-size: 0.65rem; color: #94a3b8; text-shadow: 0 1px 2px #000;">DO (C4)</span>
+                    </div>
+                    <!-- String 3 -->
+                    <div class="ukulele-string-wrapper" data-note="329.63" data-name="MI (E4)">
+                      <div class="ukulele-string"></div>
+                      <span style="position: absolute; right: 10px; font-family: monospace; font-size: 0.65rem; color: #94a3b8; text-shadow: 0 1px 2px #000;">MI (E4)</span>
+                    </div>
+                    <!-- String 4 -->
+                    <div class="ukulele-string-wrapper" data-note="440" data-name="LA (A4)">
+                      <div class="ukulele-string"></div>
+                      <span style="position: absolute; right: 10px; font-family: monospace; font-size: 0.65rem; color: #94a3b8; text-shadow: 0 1px 2px #000;">LA (A4)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Column 2: Jukebox Controls -->
+                <div style="display: flex; flex-direction: column; gap: 10px; font-family: monospace;">
+                  <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(59,130,246,0.3); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 0.8rem; color: #60a5fa; font-weight: bold; margin-bottom: 4px;">MELODIES DE L'EXPÉRIENCE:</div>
+                    <p id="ukulele-play-info" style="margin: 0; font-size: 0.72rem; color: #94a3b8; line-height: 1.4; min-height: 38px;">
+                      Pincez une corde ou lancez une mélodie pour commencer à jouer.
+                    </p>
+                  </div>
+
+                  <button class="stitch-btn-music" id="btn-play-aloha">🌺 JOUER MELODIE (ALOHA OE)</button>
+                  <button class="stitch-btn-music" id="btn-toggle-waves">🌊 BRUIT DES VAGUES (AMBIENT : OFF)</button>
+                  <button class="stitch-btn-music" id="btn-stitch-screech">👽 CRI DE L'EXPÉRIENCE 626</button>
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(ukuleleWrapper);
+
+          // Engine Logic
+          const stringWrappers = ukuleleWrapper.querySelectorAll('.ukulele-string-wrapper');
+          const playInfo = ukuleleWrapper.querySelector('#ukulele-play-info');
+          const btnAloha = ukuleleWrapper.querySelector('#btn-play-aloha');
+          const btnWaves = ukuleleWrapper.querySelector('#btn-toggle-waves');
+          const btnScreech = ukuleleWrapper.querySelector('#btn-stitch-screech');
+
+          let wavesNode = null;
+          let wavesGain = null;
+          let wavesInterval = null;
+          let isPlayingWaves = false;
+
+          function playPluckSound(freq) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            try {
+              const actx = window.sovietAudioCtx || new AudioContextClass();
+              const osc = actx.createOscillator();
+              const gainNode = actx.createGain();
+              osc.connect(gainNode);
+              gainNode.connect(actx.destination);
+
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(freq, actx.currentTime);
+              osc.frequency.exponentialRampToValueAtTime(freq * 1.005, actx.currentTime + 0.05);
+
+              gainNode.gain.setValueAtTime(0.18, actx.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.45);
+
+              osc.start();
+              osc.stop(actx.currentTime + 0.5);
+            } catch(e) {}
+          }
+
+          // Plucking listeners
+          stringWrappers.forEach(wrap => {
+            const playNote = () => {
+              if (window.ensureAudioCtx) window.ensureAudioCtx();
+              const freq = parseFloat(wrap.getAttribute('data-note'));
+              const name = wrap.getAttribute('data-name');
+              
+              playPluckSound(freq);
+              
+              // Vibration animation
+              const str = wrap.querySelector('.ukulele-string');
+              if (str) {
+                str.classList.remove('vibrate');
+                void str.offsetWidth; // trigger reflow
+                str.classList.add('vibrate');
+                setTimeout(() => str.classList.remove('vibrate'), 300);
+              }
+              
+              playInfo.textContent = `Note pincée : ${name} (${freq} Hz). Belle résonance tropicale ! 🌴`;
+            };
+
+            wrap.addEventListener('mouseenter', playNote);
+            wrap.addEventListener('click', playNote);
+          });
+
+          // Aloha Oe melody sequence
+          const alohaMelody = [
+            { f: 329.63, d: 250 }, // MI
+            { f: 392, d: 250 },    // SOL
+            { f: 440, d: 500 },    // LA
+            { f: 392, d: 500 },    // SOL
+            { f: 329.63, d: 250 }, // MI
+            { f: 392, d: 250 },    // SOL
+            { f: 261.63, d: 500 }  // DO
+          ];
+
+          let alohaTimeout = null;
+          if (btnAloha) {
+            btnAloha.addEventListener('click', () => {
+              if (window.ensureAudioCtx) window.ensureAudioCtx();
+              if (alohaTimeout) clearTimeout(alohaTimeout);
+              
+              playInfo.textContent = "Lecture de 'Aloha Oe'... 🎶🌺";
+              btnAloha.classList.add('active');
+
+              let idx = 0;
+              const playNext = () => {
+                if (idx < alohaMelody.length) {
+                  const note = alohaMelody[idx];
+                  playPluckSound(note.f);
+                  
+                  const match = Array.from(stringWrappers).find(w => Math.abs(parseFloat(w.getAttribute('data-note')) - note.f) < 5);
+                  if (match) {
+                    const str = match.querySelector('.ukulele-string');
+                    if (str) {
+                      str.classList.remove('vibrate');
+                      void str.offsetWidth;
+                      str.classList.add('vibrate');
+                      setTimeout(() => str.classList.remove('vibrate'), 250);
+                    }
+                  }
+
+                  idx++;
+                  alohaTimeout = setTimeout(playNext, note.d);
+                } else {
+                  btnAloha.classList.remove('active');
+                  playInfo.textContent = "Mélodie terminée. Aloha ! 🌊🌴";
+                }
+              };
+              playNext();
+            });
+          }
+
+          // Ambient Waves Synthesizer using modulated noise filter
+          function toggleWaves() {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            try {
+              const actx = window.sovietAudioCtx || new AudioContextClass();
+              if (isPlayingWaves) {
+                isPlayingWaves = false;
+                btnWaves.classList.remove('active');
+                btnWaves.textContent = "🌊 BRUIT DES VAGUES (AMBIENT : OFF)";
+                playInfo.textContent = "Bruit des vagues désactivé.";
+                if (wavesGain) {
+                  wavesGain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+                  setTimeout(() => {
+                    if (wavesNode) {
+                      try { wavesNode.stop(); } catch(e) {}
+                    }
+                  }, 600);
+                }
+                if (wavesInterval) clearInterval(wavesInterval);
+              } else {
+                isPlayingWaves = true;
+                btnWaves.classList.add('active');
+                btnWaves.textContent = "🌊 BRUIT DES VAGUES (AMBIENT : ON)";
+                playInfo.textContent = "Bruit des vagues actif. Ambiance de la plage de Kauai... 🏖️";
+
+                const bufferSize = actx.sampleRate * 2;
+                const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                  data[i] = Math.random() * 2 - 1;
+                }
+
+                wavesNode = actx.createBufferSource();
+                wavesNode.buffer = buffer;
+                wavesNode.loop = true;
+
+                const filter = actx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.Q.setValueAtTime(1.0, actx.currentTime);
+                filter.frequency.setValueAtTime(350, actx.currentTime);
+
+                wavesGain = actx.createGain();
+                wavesGain.gain.setValueAtTime(0.001, actx.currentTime);
+                wavesGain.gain.linearRampToValueAtTime(0.12, actx.currentTime + 0.5);
+
+                wavesNode.connect(filter);
+                filter.connect(wavesGain);
+                wavesGain.connect(actx.destination);
+
+                wavesNode.start();
+
+                let time = 0;
+                wavesInterval = setInterval(() => {
+                  if (!isPlayingWaves) return;
+                  const cutoff = 250 + Math.sin(time) * 150;
+                  try {
+                    filter.frequency.linearRampToValueAtTime(cutoff, actx.currentTime + 0.1);
+                  } catch(e) {}
+                  time += 0.05;
+                }, 100);
+              }
+            } catch(e) {}
+          }
+
+          if (btnWaves) {
+            btnWaves.addEventListener('click', () => {
+              if (window.ensureAudioCtx) window.ensureAudioCtx();
+              toggleWaves();
+            });
+          }
+
+          if (btnScreech) {
+            btnScreech.addEventListener('click', () => {
+              if (window.ensureAudioCtx) window.ensureAudioCtx();
+              playInfo.textContent = "Stitch s'exclame en langue extraterrestre ! 👽💥";
+              
+              const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+              if (!AudioContextClass) return;
+              try {
+                const actx = window.sovietAudioCtx || new AudioContextClass();
+                const osc = actx.createOscillator();
+                const gain = actx.createGain();
+                osc.connect(gain);
+                gain.connect(actx.destination);
+
+                const now = actx.currentTime;
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(140, now);
+                osc.frequency.exponentialRampToValueAtTime(450, now + 0.15);
+                osc.frequency.linearRampToValueAtTime(80, now + 0.35);
+
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
+                osc.start();
+                osc.stop(now + 0.4);
+              } catch(e) {}
+            });
+          }
+        }
       }
     }
 
@@ -5459,7 +5733,7 @@
     function applyDragonTheme() {
       if (!isDragonUser()) {
         document.body.classList.remove('dragon-theme');
-        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container, .dragon-duel-container').forEach(el => el.remove());
+        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container, .dragon-duel-container, .dragon-encyclopedia-container, .dragon-rune-carver-container').forEach(el => el.remove());
         
         // Restore elements modified in applyDragonTheme
         const formTitle = document.querySelector('.task-form__title');
@@ -5709,6 +5983,8 @@
       }
       initDragonGame();
       initDragonDuel();
+      initDragonEncyclopedia();
+      initDragonRuneCarver();
     }
 
     function initDragonGame() {
@@ -7129,6 +7405,823 @@
       }
 
       requestAnimationFrame(updateDuelAnimation);
+    }
+
+    function initDragonEncyclopedia() {
+      if (document.querySelector('.dragon-encyclopedia-container')) return;
+
+      const container = document.querySelector('#dashboard-page .container');
+      if (!container) return;
+
+      const encWrapper = document.createElement('div');
+      encWrapper.className = 'dragon-encyclopedia-container dragon-widget fade-in visible';
+      encWrapper.innerHTML = `
+        <div class="dragon-game-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.3rem;">📜 REGISTRE & ENCYCLOPÉDIE DES DRAGONS</span>
+            </div>
+            <div style="font-family: monospace; font-size: 0.85rem; color: #ffaa44; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
+              CLASSEMENT D'ENTRAÎNEMENT (ENCYCLOPEDIA)
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start;">
+            <!-- Left: 3D interactive Card visualizer -->
+            <div class="dragon-card-3d" id="dragon-card-3d" style="cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: #81c784; font-family: monospace;">
+                <span id="enc-dragon-class">CLASSE: Strike</span>
+                <span id="enc-dragon-level" style="font-weight: bold; color: #ffaa44;">NIV. DRESSAGE: 1/100</span>
+              </div>
+
+              <!-- Canvas animation for wireframe silhouette -->
+              <div style="margin: 12px 0; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(61,106,79,0.3); border-radius: 6px; position: relative;">
+                <canvas id="encyclopedia-canvas" width="200" height="150" style="display: block; width: 100%; height: auto;"></canvas>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(45, 90, 63, 0.3); padding-top: 8px;">
+                <div style="display: flex; flex-direction: column;">
+                  <span id="enc-dragon-name" style="font-size: 1.25rem; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.2);">KROKMOU</span>
+                  <span id="enc-dragon-species" style="font-size: 0.7rem; color: #8c736e; font-family: monospace; margin-top: -3px;">Furie Nocturne</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Details, Stat progress bars & Interactive training slider -->
+            <div style="display: flex; flex-direction: column; gap: 14px; font-family: monospace;">
+              <!-- Description Box -->
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(61,106,79,0.3); border-radius: 6px; padding: 10px;">
+                <div style="font-family: 'MedievalSharp'; font-size: 0.9rem; color: #81c784; margin-bottom: 4px;">MANUEL DE L'ÉPREUVE (DETAILS):</div>
+                <p id="enc-dragon-desc" style="margin: 0; font-size: 0.75rem; color: #a5d6a7; line-height: 1.45; min-height: 48px;">
+                  Le rejeton diabolique de la foudre et de la mort elle-même. Vitesse extrême, fureur et tir plasma.
+                </p>
+              </div>
+
+              <!-- Stats bars -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <!-- Speed -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7; margin-bottom: 2px;">
+                    <span>VITESSE (SPEED):</span>
+                    <span id="stat-speed-txt">20/20</span>
+                  </div>
+                  <div class="dragon-stat-bar-container" style="height: 6px;">
+                    <div id="stat-speed-bar" class="dragon-stat-bar-fill-plasma" style="width: 100%;"></div>
+                  </div>
+                </div>
+
+                <!-- Firepower -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7; margin-bottom: 2px;">
+                    <span>PUISSANCE (FIREPOWER):</span>
+                    <span id="stat-power-txt">14/20</span>
+                  </div>
+                  <div class="dragon-stat-bar-container" style="height: 6px;">
+                    <div id="stat-power-bar" class="dragon-stat-bar-fill-plasma" style="width: 70%; background: linear-gradient(90deg, #ff8a50, #ffaa44);"></div>
+                  </div>
+                </div>
+
+                <!-- Armor -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7; margin-bottom: 2px;">
+                    <span>ARMURE (ARMOR):</span>
+                    <span id="stat-armor-txt">18/20</span>
+                  </div>
+                  <div class="dragon-stat-bar-container" style="height: 6px;">
+                    <div id="stat-armor-bar" class="dragon-stat-bar-fill-plasma" style="width: 90%;"></div>
+                  </div>
+                </div>
+
+                <!-- Stealth -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7; margin-bottom: 2px;">
+                    <span>FURTIVITÉ (STEALTH):</span>
+                    <span id="stat-stealth-txt">20/20</span>
+                  </div>
+                  <div class="dragon-stat-bar-container" style="height: 6px;">
+                    <div id="stat-stealth-bar" class="dragon-stat-bar-fill-plasma" style="width: 100%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controls row -->
+              <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(45, 90, 63, 0.2); padding-top: 10px; margin-top: 4px;">
+                <!-- Audio and Trainer buttons -->
+                <div style="display: flex; gap: 8px;">
+                  <button class="dragon-weapon-btn" id="btn-enc-roar" style="font-size: 0.72rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; width: auto;">🔊 ÉCOUTER LE CRI (ROAR)</button>
+                  <button class="dragon-weapon-btn active" id="btn-enc-train" style="font-size: 0.72rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; width: auto; font-family: 'MedievalSharp';">🛡️ ENTRAÎNER (TRAIN)</button>
+                </div>
+
+                <!-- Navigations -->
+                <div style="display: flex; gap: 6px;">
+                  <button class="dragon-weapon-btn" id="btn-enc-prev" style="font-size: 0.75rem; padding: 6px 10px; width: auto;">◀</button>
+                  <button class="dragon-weapon-btn" id="btn-enc-next" style="font-size: 0.75rem; padding: 6px 10px; width: auto;">▶</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(encWrapper);
+
+      // DOM Bindings
+      const card3D = document.getElementById('dragon-card-3d');
+      const canvasEnc = document.getElementById('encyclopedia-canvas');
+      const ctxEnc = canvasEnc.getContext('2d');
+
+      const txtClass = document.getElementById('enc-dragon-class');
+      const txtLvl = document.getElementById('enc-dragon-level');
+      const txtName = document.getElementById('enc-dragon-name');
+      const txtSpecies = document.getElementById('enc-dragon-species');
+      const txtDesc = document.getElementById('enc-dragon-desc');
+
+      const txtSpeed = document.getElementById('stat-speed-txt');
+      const txtPower = document.getElementById('stat-power-txt');
+      const txtArmor = document.getElementById('stat-armor-txt');
+      const txtStealth = document.getElementById('stat-stealth-txt');
+
+      const barSpeed = document.getElementById('stat-speed-bar');
+      const barPower = document.getElementById('stat-power-bar');
+      const barArmor = document.getElementById('stat-armor-bar');
+      const barStealth = document.getElementById('stat-stealth-bar');
+
+      const btnRoar = document.getElementById('btn-enc-roar');
+      const btnTrain = document.getElementById('btn-enc-train');
+      const btnPrev = document.getElementById('btn-enc-prev');
+      const btnNext = document.getElementById('btn-enc-next');
+
+      // Encyclopedia State
+      let currentIndex = 0;
+      let animTime = 0;
+      let particleList = [];
+
+      const dragonsDB = [
+        {
+          key: 'fury',
+          name: 'KROKMOU',
+          species: 'Furie Nocturne (Night Fury)',
+          class: 'Strike (Éclair)',
+          speed: 20,
+          power: 14,
+          armor: 18,
+          stealth: 20,
+          desc: 'Le rejeton diabolique de la foudre et de la mort elle-même. Vitesse extrême, fureur et tirs de plasma dévastateurs.',
+          color: '#81c784',
+          level: 1
+        },
+        {
+          key: 'nadder',
+          name: 'TEMPÊTE',
+          species: 'Nadder Mortel (Deadly Nadder)',
+          class: 'Tracker (Pisteur)',
+          speed: 8,
+          power: 12,
+          armor: 16,
+          stealth: 10,
+          desc: 'Reconnaissable par ses épines acérées projetées depuis sa queue réactive. Son feu de magnésium brille intensément.',
+          color: '#44aaff',
+          level: 1
+        },
+        {
+          key: 'nightmare',
+          name: 'KROCHEFER',
+          species: 'Cauchemar Monstrueux',
+          class: 'Stoker (Magma)',
+          speed: 16,
+          power: 15,
+          armor: 12,
+          stealth: 8,
+          desc: 'S\'enveloppe complètement de flammes liquides pour repousser ses agresseurs. Tempérament ardent et agressif.',
+          color: '#ffaa44',
+          level: 1
+        },
+        {
+          key: 'gronckle',
+          name: 'BOULEDOGUE',
+          species: 'Gronckle (Meatlug)',
+          class: 'Boulder (Roche)',
+          speed: 4,
+          power: 10,
+          armor: 20,
+          stealth: 2,
+          desc: 'Dort souvent en plein vol. Capable de digérer des roches solides et de recracher de la lave en fusion super-concentrée.',
+          color: '#8d6e63',
+          level: 1
+        }
+      ];
+
+      // Load saved levels if any
+      dragonsDB.forEach(d => {
+        const savedLvl = safeSession.getItem(`dragon_lvl_${d.key}`);
+        if (savedLvl) d.level = parseInt(savedLvl, 10);
+      });
+
+      function renderCurrentDragon() {
+        const d = dragonsDB[currentIndex];
+        
+        txtClass.textContent = `CLASSE: ${d.class}`;
+        txtLvl.textContent = `NIV. DRESSAGE: ${d.level}/100`;
+        txtName.textContent = d.name;
+        txtSpecies.textContent = d.species;
+        txtDesc.textContent = d.desc;
+
+        txtSpeed.textContent = `${d.speed}/20`;
+        txtPower.textContent = `${d.power}/20`;
+        txtArmor.textContent = `${d.armor}/20`;
+        txtStealth.textContent = `${d.stealth}/20`;
+
+        barSpeed.style.width = `${(d.speed / 20) * 100}%`;
+        barPower.style.width = `${(d.power / 20) * 100}%`;
+        barArmor.style.width = `${(d.armor / 20) * 100}%`;
+        barStealth.style.width = `${(d.stealth / 20) * 100}%`;
+
+        // Card glow highlights
+        card3D.style.borderColor = d.color;
+      }
+
+      function playRoarSynth(dragonKey) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        try {
+          const actx = window.sovietAudioCtx || new AudioContextClass();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          
+          const now = actx.currentTime;
+          
+          if (dragonKey === 'fury') {
+            // Sonar screech
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(320, now);
+            osc.frequency.exponentialRampToValueAtTime(1300, now + 0.18);
+            osc.frequency.exponentialRampToValueAtTime(140, now + 0.4);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.43);
+            osc.start(now);
+            osc.stop(now + 0.45);
+          } else if (dragonKey === 'nadder') {
+            // Whistle screech
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(750, now);
+            osc.frequency.exponentialRampToValueAtTime(240, now + 0.28);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+            osc.start(now);
+            osc.stop(now + 0.34);
+          } else if (dragonKey === 'nightmare') {
+            // Harsh rumble
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(100, now);
+            osc.frequency.linearRampToValueAtTime(230, now + 0.18);
+            osc.frequency.exponentialRampToValueAtTime(60, now + 0.5);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.54);
+            osc.start(now);
+            osc.stop(now + 0.56);
+          } else if (dragonKey === 'gronckle') {
+            // Deep hum
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(70, now);
+            osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+            osc.frequency.linearRampToValueAtTime(45, now + 0.6);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.62);
+            osc.start(now);
+            osc.stop(now + 0.65);
+          }
+        } catch(e) {}
+      }
+
+      function playChimeSynth() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        try {
+          const actx = window.sovietAudioCtx || new AudioContextClass();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          
+          const now = actx.currentTime;
+          osc.type = 'sine';
+          
+          const d = dragonsDB[currentIndex];
+          const baseFreq = 500 + d.level * 4;
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.linearRampToValueAtTime(baseFreq * 1.5, now + 0.15);
+          
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now);
+          osc.stop(now + 0.20);
+        } catch(e) {}
+      }
+
+      // 3D Card Hover highlights
+      if (card3D) {
+        card3D.addEventListener('mousemove', (e) => {
+          const rect = card3D.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card3D.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+          card3D.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+          
+          // Slight 3D rotation
+          const rx = ((y / rect.height) - 0.5) * -10;
+          const ry = ((x / rect.width) - 0.5) * 10;
+          card3D.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+        });
+
+        card3D.addEventListener('mouseleave', () => {
+          card3D.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0deg)';
+        });
+      }
+
+      // Actions Event Listeners
+      if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + dragonsDB.length) % dragonsDB.length;
+          renderCurrentDragon();
+        });
+      }
+
+      if (btnNext) {
+        btnNext.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % dragonsDB.length;
+          renderCurrentDragon();
+        });
+      }
+
+      if (btnRoar) {
+        btnRoar.addEventListener('click', () => {
+          if (window.ensureAudioCtx) window.ensureAudioCtx();
+          playRoarSynth(dragonsDB[currentIndex].key);
+        });
+      }
+
+      if (btnEncTrain) {
+        btnEncTrain.addEventListener('click', () => {
+          if (window.ensureAudioCtx) window.ensureAudioCtx();
+
+          const d = dragonsDB[currentIndex];
+          if (d.level < 100) {
+            d.level++;
+            safeSession.setItem(`dragon_lvl_${d.key}`, d.level);
+            renderCurrentDragon();
+            playChimeSynth();
+
+            // Burst runic particles
+            for (let i = 0; i < 15; i++) {
+              particleList.push({
+                x: canvasEnc.width / 2,
+                y: canvasEnc.height / 2,
+                vx: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 6,
+                color: d.color,
+                life: 30,
+                size: 2.5 + Math.random() * 2.5
+              });
+            }
+          }
+        });
+      }
+
+      // Animation Loop for Encyclopedia Canvas
+      function updateEncAnimation() {
+        if (!document.getElementById('encyclopedia-canvas')) return;
+
+        ctxEnc.fillStyle = '#060c08';
+        ctxEnc.fillRect(0, 0, canvasEnc.width, canvasEnc.height);
+
+        // Grid scanner lines
+        ctxEnc.strokeStyle = 'rgba(45, 90, 63, 0.15)';
+        ctxEnc.lineWidth = 1;
+        ctxEnc.beginPath();
+        for (let x = 20; x < canvasEnc.width; x += 20) {
+          ctxEnc.moveTo(x, 0); ctxEnc.lineTo(x, canvasEnc.height);
+        }
+        for (let y = 20; y < canvasEnc.height; y += 20) {
+          ctxEnc.moveTo(0, y); ctxEnc.lineTo(canvasEnc.width, y);
+        }
+        ctxEnc.stroke();
+
+        const currentDragon = dragonsDB[currentIndex];
+        ctxEnc.save();
+        ctxEnc.translate(canvasEnc.width / 2, canvasEnc.height / 2);
+
+        // Wireframe Vector drawing of dragon
+        ctxEnc.strokeStyle = currentDragon.color;
+        ctxEnc.lineWidth = 2;
+        ctxEnc.shadowColor = currentDragon.color;
+        ctxEnc.shadowBlur = 6;
+
+        const cycle = Math.sin(animTime * 0.1);
+        const cycleWings = Math.sin(animTime * 0.18) * 20;
+
+        if (currentDragon.key === 'fury') {
+          // Night fury vector
+          ctxEnc.beginPath();
+          // wings
+          ctxEnc.moveTo(-35, -cycleWings); ctxEnc.lineTo(-10, -5); ctxEnc.lineTo(-30, 25);
+          ctxEnc.moveTo(35, -cycleWings); ctxEnc.lineTo(10, -5); ctxEnc.lineTo(30, 25);
+          // body
+          ctxEnc.moveTo(0, -25); ctxEnc.lineTo(-10, -10); ctxEnc.lineTo(-6, 20); ctxEnc.lineTo(0, 35);
+          ctxEnc.lineTo(6, 20); ctxEnc.lineTo(10, -10); ctxEnc.closePath();
+          ctxEnc.stroke();
+
+          // draw red tail fin marker
+          ctxEnc.strokeStyle = '#ef5350';
+          ctxEnc.beginPath();
+          ctxEnc.moveTo(-6, 20); ctxEnc.lineTo(-15, 30); ctxEnc.lineTo(-10, 33);
+          ctxEnc.stroke();
+        } else if (currentDragon.key === 'nadder') {
+          // Deadly nadder tracker silhouette
+          ctxEnc.beginPath();
+          // spikes tails
+          ctxEnc.moveTo(0, -25); ctxEnc.lineTo(-8, -5); ctxEnc.lineTo(0, 32);
+          ctxEnc.lineTo(8, -5); ctxEnc.closePath();
+          // tail spikes
+          ctxEnc.moveTo(0, 32); ctxEnc.lineTo(-8, 38 + cycle * 4);
+          ctxEnc.moveTo(0, 32); ctxEnc.lineTo(8, 38 - cycle * 4);
+          // wings
+          ctxEnc.moveTo(-40, -5 - cycleWings); ctxEnc.lineTo(-10, 0);
+          ctxEnc.moveTo(40, -5 - cycleWings); ctxEnc.lineTo(10, 0);
+          ctxEnc.stroke();
+        } else if (currentDragon.key === 'nightmare') {
+          // Monstrous nightmare vector
+          ctxEnc.beginPath();
+          // long serpentine body
+          ctxEnc.moveTo(-4, -30); ctxEnc.lineTo(-8, -15); ctxEnc.lineTo(8, 15); ctxEnc.lineTo(0, 35);
+          ctxEnc.moveTo(-40, -15 - cycleWings); ctxEnc.lineTo(-8, -15);
+          ctxEnc.moveTo(40, -15 - cycleWings); ctxEnc.lineTo(8, -15);
+          ctxEnc.stroke();
+
+          // fire aura
+          ctxEnc.strokeStyle = 'rgba(255, 170, 68, 0.4)';
+          ctxEnc.beginPath();
+          ctxEnc.arc(0, 0, 42 + cycle * 5, 0, Math.PI*2);
+          ctxEnc.stroke();
+        } else if (currentDragon.key === 'gronckle') {
+          // Gronckle heavy round vector
+          ctxEnc.beginPath();
+          ctxEnc.arc(0, -5, 24, 0, Math.PI*2);
+          // tiny wings
+          ctxEnc.moveTo(-20, -15 - cycleWings * 0.4); ctxEnc.lineTo(-24, -20);
+          ctxEnc.moveTo(20, -15 - cycleWings * 0.4); ctxEnc.lineTo(24, -20);
+          // club tail
+          ctxEnc.moveTo(0, 19); ctxEnc.lineTo(0, 35);
+          ctxEnc.stroke();
+          ctxEnc.beginPath();
+          ctxEnc.arc(0, 35, 6, 0, Math.PI*2);
+          ctxEnc.stroke();
+        }
+
+        ctxEnc.restore();
+        ctxEnc.shadowBlur = 0;
+
+        // Draw active training level sparks
+        particleList.forEach((pt, ptIdx) => {
+          pt.x += pt.vx;
+          pt.y += pt.vy;
+          pt.life--;
+          
+          ctxEnc.fillStyle = pt.color;
+          ctxEnc.globalAlpha = pt.life / 30;
+          ctxEnc.beginPath();
+          ctxEnc.arc(pt.x, pt.y, pt.size, 0, Math.PI*2);
+          ctxEnc.fill();
+          ctxEnc.globalAlpha = 1.0;
+
+          if (pt.life <= 0) {
+            particleList.splice(ptIdx, 1);
+          }
+        });
+
+        animTime++;
+        requestAnimationFrame(updateEncAnimation);
+      }
+
+      renderCurrentDragon();
+      requestAnimationFrame(updateEncAnimation);
+    }
+
+    function initDragonRuneCarver() {
+      if (document.querySelector('.dragon-rune-carver-container')) return;
+
+      const container = document.querySelector('#dashboard-page .container');
+      if (!container) return;
+
+      const carverWrapper = document.createElement('div');
+      carverWrapper.className = 'dragon-rune-carver-container dragon-widget fade-in visible';
+      carverWrapper.innerHTML = `
+        <div class="dragon-game-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.3rem;">ᚱ GRAVEUR DE RUNES & ORACLE DE BERK</span>
+            </div>
+            <div style="font-family: monospace; font-size: 0.85rem; color: #39ff14; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
+              CARVER & ORACLE WIDGET
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start;">
+            <!-- Left: Runic inputs & Oracle -->
+            <div style="display: flex; flex-direction: column; gap: 14px; font-family: monospace;">
+              <!-- Carver Input -->
+              <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(61, 106, 79, 0.3); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-size: 0.8rem; color: #81c784; font-weight: bold;">TRADUCTEUR DE RUNES VIKINGS</span>
+                <input type="text" id="rune-input-text" placeholder="Entrez votre message..." style="background: rgba(0,0,0,0.6); border: 1px solid #2d5a3f; border-radius: 4px; padding: 8px; color: #fff; font-family: monospace; font-size: 0.8rem; width: 100%; outline: none;" value="KROKMOU">
+                <button class="dragon-weapon-btn active" id="btn-carve-rune" style="font-size: 0.72rem; padding: 6px 12px; text-align: center; font-family: 'MedievalSharp'; margin-top: 4px;">🔨 GRAVER SUR LA PIERRE (CARVE)</button>
+              </div>
+
+              <!-- Runic Oracle -->
+              <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(61, 106, 79, 0.3); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-size: 0.8rem; color: #81c784; font-weight: bold;">ORACLE DU JOUR (DAILY FORTUNE)</span>
+                
+                <div class="rune-oracle-card" id="rune-oracle-card">
+                  <div class="rune-oracle-inner">
+                    <!-- Front (Hidden card back) -->
+                    <div class="rune-oracle-front" style="cursor: pointer;">
+                      <span style="font-size: 2.2rem; filter: drop-shadow(0 0 5px #81c784);">ᛥ</span>
+                      <span style="font-size: 0.65rem; color: #6d8e78; margin-top: 4px; font-family: 'MedievalSharp';">CLIQUEZ POUR TIRER UNE RUNE</span>
+                    </div>
+                    <!-- Back (Revealed Fortune) -->
+                    <div class="rune-oracle-back">
+                      <span id="oracle-symbol" style="font-size: 2rem; color: #39ff14; font-weight: bold; margin-bottom: 2px;">ᚠ</span>
+                      <span id="oracle-title" style="font-size: 0.75rem; font-weight: bold; color: #ffaa44;">FEHU (Richesse)</span>
+                      <p id="oracle-desc" style="margin: 4px 0 0 0; font-size: 0.65rem; text-align: center; color: #a5d6a7; line-height: 1.3;">
+                        Vos récoltes de poissons seront abondantes. Vos dragons vous guideront vers un trésor caché.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="dragon-weapon-btn" id="btn-draw-rune" style="font-size: 0.68rem; padding: 6px; text-align: center;">🎴 TIRER UNE NOUVELLE RUNE</button>
+              </div>
+            </div>
+
+            <!-- Right: Glowing Basalt stone slab canvas -->
+            <div class="rune-stone-slab" style="height: 100%; min-height: 290px;">
+              <canvas id="rune-carver-canvas" width="460" height="280" style="display: block; width: 100%; height: auto;"></canvas>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(carverWrapper);
+
+      // DOM Bindings
+      const canvasCarve = document.getElementById('rune-carver-canvas');
+      const ctxCarve = canvasCarve.getContext('2d');
+      const txtInput = document.getElementById('rune-input-text');
+      const btnCarve = document.getElementById('btn-carve-rune');
+      const oracleCard = document.getElementById('rune-oracle-card');
+      const btnDraw = document.getElementById('btn-draw-rune');
+
+      const oracleSymbol = document.getElementById('oracle-symbol');
+      const oracleTitle = document.getElementById('oracle-title');
+      const oracleDesc = document.getElementById('oracle-desc');
+
+      // Futhark rune mapping dictionary
+      const runeMap = {
+        'a': 'ᚦ', 'b': 'ᛒ', 'c': 'ᚲ', 'd': 'ᛞ', 'e': 'ᛖ', 'f': 'ᚠ', 'g': 'ᚷ',
+        'h': 'ᚺ', 'i': 'ᛁ', 'j': 'ᛃ', 'k': 'ᚲ', 'l': 'ᛚ', 'm': 'ᛗ', 'n': 'ᚾ',
+        'o': 'ᛟ', 'p': 'ᛒ', 'q': 'ᚲ', 'r': 'ᚱ', 's': 'ᛊ', 't': 'ᛏ', 'u': 'ᚢ',
+        'v': 'ᚢ', 'w': 'ᚹ', 'x': 'ᛊ', 'y': 'ᛁ', 'z': 'ᛏ', ' ': ' '
+      };
+
+      const runesList = [
+        { symbol: 'ᚠ', name: 'FEHU (Richesse)', desc: 'Des récoltes de poissons abondantes s\'annoncent ! Vos dragons vous guideront vers un trésor caché dans les falaises.' },
+        { symbol: 'ᚢ', name: 'URUZ (Force)', desc: 'Une poussée d\'énergie sauvage parcourt Krokmou ! Sa force physique et sa vitesse de vol sont multipliées aujourd\'hui.' },
+        { symbol: 'ᚦ', name: 'THURISAZ (Protection)', desc: 'Le tonnerre de Thor protège votre enclos de dragons. Les chasseurs de Berk n\'oseront pas approcher votre île.' },
+        { symbol: 'ᚨ', name: 'ANSUZ (Sagesse)', desc: 'La complicité entre vous et votre dragon s\'illumine. Krokmou comprendra la moindre de vos directives sans mot dire.' },
+        { symbol: 'ᚱ', name: 'RAIDHO (Voyage)', desc: 'L\'horizon vous appelle ! Un voyage au-delà de Berk dévoilera de nouvelles terres et des espèces de dragons inconnues.' },
+        { symbol: 'ᚲ', name: 'KENAZ (Feu)', desc: 'Le feu ardent du grand livre brûle dans les yeux de votre dragon ! Ses attaques de souffle de feu feront des ravages.' },
+        { symbol: 'ᚷ', name: 'GEBO (Don)', desc: 'Un compagnon viking vous offre un équipement spécial (selle en cuir de Gronckle). La maniabilité de votre dragon s\'améliore.' },
+        { symbol: 'ᚹ', name: 'WUNJO (Joie)', desc: 'L\'harmonie règne à Berk. La santé globale de vos dragons est restaurée et ils ronronnent de satisfaction.' }
+      ];
+
+      // State
+      let textToCarve = "KROKMOU";
+      let displayRunes = "";
+      let carveIndex = 0;
+      let particleList = [];
+      let animTime = 0;
+      let isCarving = false;
+      let chiselTargetX = 0;
+      let chiselTargetY = 0;
+      let chiselCurrentX = 0;
+      let chiselCurrentY = 0;
+
+      function translateText(text) {
+        return text.toLowerCase().split('').map(char => runeMap[char] || char).join('');
+      }
+
+      function playCarverSound(type) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        try {
+          const actx = window.sovietAudioCtx || new AudioContextClass();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          
+          const now = actx.currentTime;
+          
+          if (type === 'clink') {
+            // High metal clink sound
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1500, now);
+            osc.frequency.linearRampToValueAtTime(1000, now + 0.04);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+            osc.start(now);
+            osc.stop(now + 0.05);
+          } else if (type === 'rumble') {
+            // Deep low Futhark oracle hum
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(90, now);
+            osc.frequency.linearRampToValueAtTime(180, now + 0.18);
+            osc.frequency.linearRampToValueAtTime(50, now + 0.45);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+            osc.start(now);
+            osc.stop(now + 0.5);
+          }
+        } catch(e) {}
+      }
+
+      // Trigger Carving Text Sequence
+      if (btnCarve) {
+        btnCarve.addEventListener('click', () => {
+          if (isCarving) return;
+          if (window.ensureAudioCtx) window.ensureAudioCtx();
+
+          const inputVal = txtInput.value.trim().toUpperCase();
+          textToCarve = inputVal || "KROKMOU";
+          displayRunes = translateText(textToCarve);
+          
+          isCarving = true;
+          carveIndex = 0;
+          
+          // Clear canvas
+          ctxCarve.clearRect(0,0,canvasCarve.width,canvasCarve.height);
+          particleList = [];
+          
+          carveNextCharacter();
+        });
+      }
+
+      function carveNextCharacter() {
+        if (carveIndex >= displayRunes.length) {
+          isCarving = false;
+          return;
+        }
+
+        const char = displayRunes[carveIndex];
+        
+        // Calculate drawing layout coordinates
+        const fontWidth = 26;
+        const startX = (canvasCarve.width - displayRunes.length * fontWidth) / 2;
+        const cy = canvasCarve.height / 2 + 10;
+        const cx = startX + carveIndex * fontWidth;
+
+        chiselTargetX = cx;
+        chiselTargetY = cy - 10;
+
+        playCarverSound('clink');
+
+        // Spawns orange sparks particles on canvas
+        for (let i = 0; i < 18; i++) {
+          particleList.push({
+            x: cx + 10,
+            y: cy - 10,
+            vx: (Math.random() - 0.5) * 5,
+            vy: (Math.random() - 0.5) * 5 - 1.5,
+            color: '#ffaa44',
+            life: 25,
+            size: 1.5 + Math.random() * 2
+          });
+        }
+
+        carveIndex++;
+        setTimeout(carveNextCharacter, 380);
+      }
+
+      // Draw oracle card
+      if (btnDraw) {
+        btnDraw.addEventListener('click', () => {
+          drawOracleRune();
+        });
+      }
+      if (oracleCard) {
+        oracleCard.addEventListener('click', () => {
+          drawOracleRune();
+        });
+      }
+
+      function drawOracleRune() {
+        if (window.ensureAudioCtx) window.ensureAudioCtx();
+
+        // Pick random rune card
+        const fortune = runesList[Math.floor(Math.random() * runesList.length)];
+        
+        // Flip animation
+        oracleCard.classList.remove('flipped');
+        
+        setTimeout(() => {
+          oracleSymbol.textContent = fortune.symbol;
+          oracleTitle.textContent = fortune.name;
+          oracleDesc.textContent = fortune.desc;
+          
+          oracleCard.classList.add('flipped');
+          playCarverSound('rumble');
+        }, 150);
+      }
+
+      // Visual Animation Loop for Stone Slab
+      function updateCarverAnimation() {
+        if (!document.getElementById('rune-carver-canvas')) return;
+
+        // Render basalt background onto the canvas
+        // Clear frame but let trace paths persist
+        ctxCarve.fillStyle = 'rgba(13, 18, 16, 0.95)';
+        ctxCarve.fillRect(0, 0, canvasCarve.width, canvasCarve.height);
+
+        // Basalt cracks & runic frame lines
+        ctxCarve.strokeStyle = 'rgba(45, 90, 63, 0.25)';
+        ctxCarve.lineWidth = 2;
+        ctxCarve.strokeRect(10, 10, canvasCarve.width - 20, canvasCarve.height - 20);
+
+        ctxCarve.strokeStyle = 'rgba(45, 90, 63, 0.1)';
+        ctxCarve.lineWidth = 1;
+        ctxCarve.beginPath();
+        // Basalt textures
+        ctxCarve.moveTo(20, 40); ctxCarve.lineTo(90, 110); ctxCarve.lineTo(80, 200);
+        ctxCarve.moveTo(400, 30); ctxCarve.lineTo(320, 150); ctxCarve.lineTo(440, 260);
+        ctxCarve.stroke();
+
+        // Render already carved characters
+        ctxCarve.fillStyle = '#39ff14';
+        ctxCarve.font = '30px Courier New, monospace';
+        ctxCarve.textAlign = 'center';
+        ctxCarve.shadowColor = '#39ff14';
+        ctxCarve.shadowBlur = 8;
+
+        const fontWidth = 26;
+        const startX = (canvasCarve.width - displayRunes.length * fontWidth) / 2;
+        const cy = canvasCarve.height / 2 + 10;
+
+        for (let i = 0; i < carveIndex; i++) {
+          const char = displayRunes[i];
+          const cx = startX + i * fontWidth + 10;
+          ctxCarve.fillText(char, cx, cy);
+        }
+
+        ctxCarve.shadowBlur = 0;
+
+        // Render current chiseling chisel indicator
+        if (isCarving) {
+          // Linear glide chisel
+          const dx = chiselTargetX - chiselCurrentX;
+          const dy = chiselTargetY - chiselCurrentY;
+          chiselCurrentX += dx * 0.15;
+          chiselCurrentY += dy * 0.15;
+
+          ctxCarve.fillStyle = '#ffffff';
+          ctxCarve.font = '10px Courier New, monospace';
+          ctxCarve.fillText("🔨", chiselCurrentX + 12, chiselCurrentY + 8);
+        }
+
+        // Draw active sparks
+        particleList.forEach((pt, ptIdx) => {
+          pt.x += pt.vx;
+          pt.y += pt.vy;
+          pt.vy += 0.08; // gravity
+          pt.life--;
+          
+          ctxCarve.fillStyle = pt.color;
+          ctxCarve.globalAlpha = pt.life / 25;
+          ctxCarve.beginPath();
+          ctxCarve.arc(pt.x, pt.y, pt.size, 0, Math.PI*2);
+          ctxCarve.fill();
+          ctxCarve.globalAlpha = 1.0;
+
+          if (pt.life <= 0) {
+            particleList.splice(ptIdx, 1);
+          }
+        });
+
+        animTime++;
+        requestAnimationFrame(updateCarverAnimation);
+      }
+
+      // Initial layout setup
+      displayRunes = translateText("KROKMOU");
+      carveIndex = displayRunes.length;
+      requestAnimationFrame(updateCarverAnimation);
     }
 
     function playDragonSong() {
