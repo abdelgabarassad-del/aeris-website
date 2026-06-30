@@ -8070,6 +8070,43 @@
       let missilesCount = 2;
       let weaponGuardOpen = false;
 
+      // Keyboard steering controls and key mapping
+      const activeKeys = {};
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('soviet-jet-panel') && document.activeElement === document.body) {
+          if (['KeyW', 'KeyS', 'KeyA', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+            e.preventDefault();
+          }
+        }
+        activeKeys[e.code] = true;
+        if (e.code === 'Space') {
+          const btnFire = document.getElementById('btn-fire-missile');
+          if (btnFire && !btnFire.disabled) {
+            btnFire.click();
+          }
+        }
+      });
+      document.addEventListener('keyup', (e) => {
+        activeKeys[e.code] = false;
+      });
+
+      // Air particles array (To see the air)
+      const airParticles = [];
+      for (let i = 0; i < 25; i++) {
+        airParticles.push({
+          x: Math.random() * 260 - 130,
+          y: Math.random() * 180 - 90,
+          z: Math.random() * 0.7 + 0.3
+        });
+      }
+
+      // Enemy shooting back and locking dynamics
+      let enemyMissileActive = false;
+      let enemyMissileProgress = 0;
+      let enemyShootTimer = 160; 
+      let hudCrackTimer = 0;
+      let targetTime = 0;
+
       // Audio Nodes for Jet Engine
       let jetSourceNode = null;
       let jetGainNode = null;
@@ -8326,7 +8363,25 @@
         jetCtx.lineTo(w * 2, -5);
         jetCtx.stroke();
 
-        // 5. Draw Horizon separating line
+        // 5. Draw air particles / wind streaks (See the air)
+        jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        airParticles.forEach(p => {
+          // Update particle position based on airspeed
+          p.y += (jetSpeed / 45) * p.z;
+          if (p.y > h) {
+            p.y = -h;
+            p.x = Math.random() * w * 2 - w;
+          }
+          
+          jetCtx.beginPath();
+          jetCtx.lineWidth = p.z * 1.5;
+          // draw wind line
+          jetCtx.moveTo(p.x, p.y);
+          jetCtx.lineTo(p.x, p.y + (jetSpeed / 90) * p.z);
+          jetCtx.stroke();
+        });
+
+        // 6. Draw Horizon separating line
         jetCtx.strokeStyle = '#ffffff';
         jetCtx.lineWidth = 1.5;
         jetCtx.beginPath();
@@ -8334,7 +8389,7 @@
         jetCtx.lineTo(w * 1.5, 0);
         jetCtx.stroke();
 
-        // 6. Draw Pitch Ladder Lines
+        // 7. Draw Pitch Ladder Lines
         jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
         jetCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         jetCtx.lineWidth = 1;
@@ -8365,17 +8420,17 @@
         const dist = Math.sqrt((targetScreenX - cx) ** 2 + (targetScreenY - cy) ** 2);
         const isLocked = weaponGuardOpen && (dist < 18) && !targetExploding;
 
-        // 7. Draw Enemy Target if not exploded
+        // 8. Draw Enemy Target if not exploded
         if (targetExploding) {
           // Draw explosion ring
           jetCtx.strokeStyle = '#ff5500';
-          jetCtx.lineWidth = 2;
+          jetCtx.lineWidth = 2.5;
           jetCtx.beginPath();
           jetCtx.arc(targetScreenX, targetScreenY, (30 - explosionTimer) * 1.2, 0, Math.PI * 2);
           jetCtx.stroke();
           
           jetCtx.fillStyle = '#ffaa00';
-          jetCtx.font = 'bold 9px monospace';
+          jetCtx.font = 'bold 10px monospace';
           jetCtx.fillText("HIT!", targetScreenX - 8, targetScreenY - 12);
         } else {
           // Draw wireframe enemy aircraft box
@@ -8385,22 +8440,25 @@
           // Target box corners
           jetCtx.strokeRect(targetScreenX - 10, targetScreenY - 10, 20, 20);
           
-          // Leader line
+          // Leader wings lines representing enemy aircraft
           jetCtx.beginPath();
           jetCtx.moveTo(targetScreenX - 14, targetScreenY);
           jetCtx.lineTo(targetScreenX - 10, targetScreenY);
           jetCtx.moveTo(targetScreenX + 14, targetScreenY);
           jetCtx.lineTo(targetScreenX + 10, targetScreenY);
+          // Tail wing indicator
+          jetCtx.moveTo(targetScreenX, targetScreenY - 10);
+          jetCtx.lineTo(targetScreenX, targetScreenY - 14);
           jetCtx.stroke();
 
           // Draw label
           jetCtx.fillStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.8)';
           jetCtx.font = '8px monospace';
-          jetCtx.fillText(`LOCK: ${isLocked ? 'ACQUIRED' : 'SEEKING'}`, targetScreenX - 35, targetScreenY - 14);
-          jetCtx.fillText(`MIG-21: ${Math.round(dist * 12)}m`, targetScreenX - 30, targetScreenY + 18);
+          jetCtx.fillText(`LOCK: ${isLocked ? 'ACQUIRED' : 'SEEKING'}`, targetScreenX - 35, targetScreenY - 18);
+          jetCtx.fillText(`MIG-21: ${Math.round(dist * 12)}m`, targetScreenX - 30, targetScreenY + 22);
         }
 
-        // 8. Draw Missile Projectile Trajectory if fired
+        // 9. Draw Missile Projectile Trajectory if fired
         if (missileActive) {
           jetCtx.strokeStyle = '#ffaa00';
           jetCtx.lineWidth = 2;
@@ -8423,7 +8481,35 @@
           jetCtx.fill();
         }
 
-        // 9. Draw static aircraft HUD reference crosshair in center (orange wings)
+        // 10. Draw Incoming Enemy Missile (Enemy Shooting Back)
+        if (enemyMissileActive) {
+          jetCtx.strokeStyle = '#ff3333';
+          jetCtx.lineWidth = 1.8;
+          
+          // Tracing from enemy coordinates to our center screen
+          const currentX = targetScreenX + (cx - targetScreenX) * enemyMissileProgress;
+          const currentY = targetScreenY + (cy - targetScreenY) * enemyMissileProgress;
+          
+          jetCtx.beginPath();
+          jetCtx.setLineDash([4, 4]); // dashed bullet trail
+          jetCtx.moveTo(targetScreenX, targetScreenY);
+          jetCtx.lineTo(currentX, currentY);
+          jetCtx.stroke();
+          jetCtx.setLineDash([]); // restore solid
+
+          // Draw red glowing incoming tracer dot
+          jetCtx.fillStyle = '#ff5533';
+          jetCtx.beginPath();
+          jetCtx.arc(currentX, currentY, 4, 0, Math.PI * 2);
+          jetCtx.fill();
+
+          // Threat alert text
+          jetCtx.fillStyle = '#ff3333';
+          jetCtx.font = 'bold 9px monospace';
+          jetCtx.fillText("⚠️ INCOMING MISSILE", cx - 48, cy - 35);
+        }
+
+        // 11. Draw static aircraft HUD reference crosshair in center (orange wings)
         jetCtx.strokeStyle = '#ff7f00';
         jetCtx.lineWidth = 2.5;
         
@@ -8452,7 +8538,24 @@
         jetCtx.lineWidth = 1;
         jetCtx.strokeRect(cx - 18, cy - 18, 36, 36);
 
-        // 10. Play locking sound beeps if targeted
+        // 12. Screen damage overlay (if we got hit by enemy missile)
+        if (hudCrackTimer > 0) {
+          // Draw red flash borders
+          jetCtx.strokeStyle = `rgba(255, 0, 0, ${hudCrackTimer / 40})`;
+          jetCtx.lineWidth = 6;
+          jetCtx.strokeRect(0, 0, w, h);
+          
+          // Draw structural cracks on windshield glass
+          jetCtx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+          jetCtx.lineWidth = 1.5;
+          jetCtx.beginPath();
+          jetCtx.moveTo(10, 10); jetCtx.lineTo(40, 25); jetCtx.lineTo(55, 15);
+          jetCtx.moveTo(40, 25); jetCtx.lineTo(35, 55);
+          jetCtx.moveTo(w - 15, h - 15); jetCtx.lineTo(w - 45, h - 30); jetCtx.lineTo(w - 55, h - 10);
+          jetCtx.stroke();
+        }
+
+        // 13. Play sound alerts
         if (isLocked) {
           lockSoundBeepTimer++;
           if (lockSoundBeepTimer % 5 === 0) {
@@ -8470,11 +8573,69 @@
             } catch(e) {}
           }
         }
+        
+        // Incoming missile alert beeping tone
+        if (enemyMissileActive) {
+          if (Math.round(enemyMissileProgress * 100) % 8 === 0) {
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(800, sovietAudioCtx.currentTime);
+              gain.gain.setValueAtTime(0.12, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.08);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.08);
+            } catch(e) {}
+          }
+        }
       }
 
       // MiG-29 loop integration inside Vostok animate()
       window.animateJetSimulator = () => {
         if (!document.getElementById('soviet-jet-panel')) return;
+
+        // 1. Keyboard Steering input processing (W/S/A/D or Arrows)
+        let steeredRoll = false;
+        let steeredPitch = false;
+
+        if (activeKeys['KeyW'] || activeKeys['ArrowUp']) {
+          jetPitch -= 1.8;
+          steeredPitch = true;
+        }
+        if (activeKeys['KeyS'] || activeKeys['ArrowDown']) {
+          jetPitch += 1.8;
+          steeredPitch = true;
+        }
+        if (activeKeys['KeyA'] || activeKeys['ArrowLeft']) {
+          jetRoll -= 2.2;
+          steeredRoll = true;
+        }
+        if (activeKeys['KeyD'] || activeKeys['ArrowRight']) {
+          jetRoll += 2.2;
+          steeredRoll = true;
+        }
+
+        // Apply auto-stabilization return-to-center if keys released
+        const toggleStab = document.getElementById('toggle-stabilizer');
+        const stabilizerOn = toggleStab ? toggleStab.checked : true;
+        
+        if (stabilizerOn) {
+          if (!steeredPitch) jetPitch += (0 - jetPitch) * 0.08;
+          if (!steeredRoll) jetRoll += (0 - jetRoll) * 0.08;
+        }
+
+        // Clamp attitude limits
+        jetPitch = Math.max(-35, Math.min(35, jetPitch));
+        jetRoll = Math.max(-55, Math.min(55, jetRoll));
+
+        // Sync slider controls values visually
+        const sliderRoll = document.getElementById('slider-jet-roll');
+        if (sliderRoll) sliderRoll.value = jetRoll;
+        const sliderPitch = document.getElementById('slider-jet-pitch');
+        if (sliderPitch) sliderPitch.value = jetPitch;
 
         // Dynamics Updates
         if (jetFuel > 0) {
@@ -8509,12 +8670,93 @@
           jetGForce = 1.0;
         }
 
-        // Enemy Target wandering simulation ( Lissajous Curve )
+        // 2. Logical Evading Target simulation
+        targetTime += 0.016;
         if (!targetExploding) {
-          targetOffsetX += targetSpeedX;
-          targetOffsetY += targetSpeedY;
-          if (Math.abs(targetOffsetX) > 75) targetSpeedX *= -1;
-          if (Math.abs(targetOffsetY) > 35) targetSpeedY *= -1;
+          // Compute baseline patrol path
+          const baseTx = Math.sin(targetTime * 0.8) * 48;
+          const baseTy = Math.cos(targetTime * 1.2) * 22;
+          
+          // Check distance to center reticle
+          const cx = (jetCanvas ? jetCanvas.offsetWidth : 150) / 2;
+          const cy = (jetCanvas ? jetCanvas.offsetHeight : 140) / 2;
+          const targetScreenX = cx + targetOffsetX - (jetRoll * 0.9);
+          const targetScreenY = cy + targetOffsetY + (jetPitch * 1.3);
+          const dist = Math.sqrt((targetScreenX - cx) ** 2 + (targetScreenY - cy) ** 2);
+          
+          // Active Evasive Jinking Maneuver if locking detected (dist < 40)
+          if (dist < 40 && weaponGuardOpen) {
+            const jinkX = Math.sin(targetTime * 4.8) * 16;
+            const jinkY = Math.cos(targetTime * 5.2) * 10;
+            targetOffsetX = baseTx + jinkX;
+            targetOffsetY = baseTy + jinkY;
+          } else {
+            // Smooth patrol route
+            targetOffsetX = baseTx;
+            targetOffsetY = baseTy;
+          }
+        }
+
+        // 3. Enemy Shoot Back simulation
+        if (!targetExploding && jetFuel > 0 && !crashed) {
+          enemyShootTimer--;
+          if (enemyShootTimer <= 0) {
+            enemyShootTimer = 180 + Math.random() * 150;
+            enemyMissileActive = true;
+            enemyMissileProgress = 0.0;
+            logTerminal("[TACTICAL] RWR WARNING: ENEMY MISSILE LAUNCH INBOUND!");
+          }
+        }
+
+        if (enemyMissileActive) {
+          enemyMissileProgress += 0.014;
+          
+          // Evasive Maneuver detection (sharp banking Roll > 30 or Pitch > 16)
+          const evasiveActive = (Math.abs(jetRoll) > 30 || Math.abs(jetPitch) > 16);
+          if (evasiveActive && enemyMissileProgress > 0.35 && enemyMissileProgress < 0.85) {
+            enemyMissileActive = false;
+            logTerminal("[TACTICAL] МИГ-29 EVASIVE MANEUVER SUCCESSFUL. MISSILE MISSED.");
+            // Swoosh sound
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(800, sovietAudioCtx.currentTime);
+              osc.frequency.exponentialRampToValueAtTime(150, sovietAudioCtx.currentTime + 0.4);
+              gain.gain.setValueAtTime(0.2, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.4);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.42);
+            } catch(e) {}
+          }
+          
+          if (enemyMissileProgress >= 1.0) {
+            enemyMissileActive = false;
+            hudCrackTimer = 50; // trigger glass structural cracks
+            jetFuel = Math.max(0, jetFuel - 15); // damage drains fuel system
+            logTerminal("[TACTICAL] МИГ-29 IMPACT WARNING: HULL DAMAGE SUSTAINED! FUEL LEAKED.");
+            
+            // Impact detonation sound
+            try {
+              const osc = sovietAudioCtx.createOscillator();
+              const gain = sovietAudioCtx.createGain();
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(90, sovietAudioCtx.currentTime);
+              osc.frequency.exponentialRampToValueAtTime(15, sovietAudioCtx.currentTime + 0.8);
+              gain.gain.setValueAtTime(0.4, sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.8);
+              osc.connect(gain);
+              gain.connect(sovietAudioCtx.destination);
+              osc.start();
+              osc.stop(sovietAudioCtx.currentTime + 0.85);
+            } catch(e) {}
+          }
+        }
+
+        if (hudCrackTimer > 0) {
+          hudCrackTimer--;
         }
 
         // Update ground grid scroll speed
@@ -8595,7 +8837,7 @@
         // Warnings logic
         const ledRwr = document.getElementById('led-rwr');
         if (ledRwr) {
-          if ((jetAlt < 300 && jetSpeed > 50) || jetGForce > 5.5) {
+          if ((jetAlt < 300 && jetSpeed > 50) || jetGForce > 5.5 || enemyMissileActive) {
             ledRwr.classList.add('active');
           } else {
             ledRwr.classList.remove('active');
