@@ -8433,29 +8433,42 @@
           jetCtx.font = 'bold 10px monospace';
           jetCtx.fillText("HIT!", targetScreenX - 8, targetScreenY - 12);
         } else {
-          // Draw wireframe enemy aircraft box
-          jetCtx.strokeStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.6)';
-          jetCtx.lineWidth = isLocked ? 2 : 1;
+          // Draw physical wireframe enemy jet silhouette
+          jetCtx.strokeStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.75)';
+          jetCtx.lineWidth = isLocked ? 1.8 : 1.2;
           
-          // Target box corners
-          jetCtx.strokeRect(targetScreenX - 10, targetScreenY - 10, 20, 20);
+          jetCtx.save();
+          jetCtx.translate(targetScreenX, targetScreenY);
           
-          // Leader wings lines representing enemy aircraft
+          // Bank the enemy jet silhouette relative to its current movement direction!
+          const enemyRoll = targetSpeedX * 55 * (Math.PI / 180);
+          jetCtx.rotate(enemyRoll);
+          
           jetCtx.beginPath();
-          jetCtx.moveTo(targetScreenX - 14, targetScreenY);
-          jetCtx.lineTo(targetScreenX - 10, targetScreenY);
-          jetCtx.moveTo(targetScreenX + 14, targetScreenY);
-          jetCtx.lineTo(targetScreenX + 10, targetScreenY);
-          // Tail wing indicator
-          jetCtx.moveTo(targetScreenX, targetScreenY - 10);
-          jetCtx.lineTo(targetScreenX, targetScreenY - 14);
+          // Main Fuselage Centerline
+          jetCtx.moveTo(0, -9); jetCtx.lineTo(0, 8);
+          // Swept-back Wings
+          jetCtx.moveTo(0, -2); jetCtx.lineTo(-12, 4); jetCtx.lineTo(-12, 6); jetCtx.lineTo(0, 2);
+          jetCtx.moveTo(0, -2); jetCtx.lineTo(12, 4); jetCtx.lineTo(12, 6); jetCtx.lineTo(0, 2);
+          // Rear Tail horizontal stabilizers
+          jetCtx.moveTo(0, 6); jetCtx.lineTo(-4, 8); jetCtx.lineTo(0, 7); jetCtx.lineTo(4, 8);
+          // Double Tail Fins vertical stabilizers
+          jetCtx.moveTo(-1.8, 6); jetCtx.lineTo(-1.8, 10);
+          jetCtx.moveTo(1.8, 6); jetCtx.lineTo(1.8, 10);
           jetCtx.stroke();
+          
+          jetCtx.restore();
 
-          // Draw label
+          // Target box corners (outer HUD frame)
+          jetCtx.strokeStyle = isLocked ? 'rgba(255, 51, 51, 0.3)' : 'rgba(0, 204, 102, 0.25)';
+          jetCtx.lineWidth = 1;
+          jetCtx.strokeRect(targetScreenX - 14, targetScreenY - 14, 28, 28);
+          
+          // Draw HUD info labels
           jetCtx.fillStyle = isLocked ? '#ff3333' : 'rgba(0, 204, 102, 0.8)';
           jetCtx.font = '8px monospace';
-          jetCtx.fillText(`LOCK: ${isLocked ? 'ACQUIRED' : 'SEEKING'}`, targetScreenX - 35, targetScreenY - 18);
-          jetCtx.fillText(`MIG-21: ${Math.round(dist * 12)}m`, targetScreenX - 30, targetScreenY + 22);
+          jetCtx.fillText(`LOCK: ${isLocked ? 'ACQUIRED' : 'SEEKING'}`, targetScreenX - 35, targetScreenY - 20);
+          jetCtx.fillText(`MIG-21: ${Math.round(dist * 12)}m`, targetScreenX - 30, targetScreenY + 24);
         }
 
         // 9. Draw Missile Projectile Trajectory if fired
@@ -8602,19 +8615,19 @@
         let steeredPitch = false;
 
         if (activeKeys['KeyW'] || activeKeys['ArrowUp']) {
-          jetPitch -= 1.8;
+          jetPitch -= 0.5;
           steeredPitch = true;
         }
         if (activeKeys['KeyS'] || activeKeys['ArrowDown']) {
-          jetPitch += 1.8;
+          jetPitch += 0.5;
           steeredPitch = true;
         }
         if (activeKeys['KeyA'] || activeKeys['ArrowLeft']) {
-          jetRoll -= 2.2;
+          jetRoll -= 0.7;
           steeredRoll = true;
         }
         if (activeKeys['KeyD'] || activeKeys['ArrowRight']) {
-          jetRoll += 2.2;
+          jetRoll += 0.7;
           steeredRoll = true;
         }
 
