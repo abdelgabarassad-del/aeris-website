@@ -11784,5 +11784,57 @@ body.totallyspies-theme .nav-link:hover {
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
 
+/* ========== ⚔️ HTTYD DRAGON DUEL SIMULATOR STYLE CLASSES ========== */
+.dragon-duel-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.dragon-combat-log {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1.5px solid rgba(45, 90, 63, 0.4) !important;
+  border-radius: 6px;
+  padding: 8px;
+  height: 120px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #a5d6a7;
+  line-height: 1.4;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+}
+
+.dragon-combat-log::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dragon-combat-log::-webkit-scrollbar-thumb {
+  background: #2d5a3f;
+  border-radius: 2px;
+}
+
+.dragon-stat-bar-container {
+  width: 100%;
+  height: 10px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dragon-stat-bar-fill-hp {
+  height: 100%;
+  background: linear-gradient(90deg, #ff5533, #d50000);
+  transition: width 0.3s ease;
+}
+
+.dragon-stat-bar-fill-plasma {
+  height: 100%;
+  background: linear-gradient(90deg, #39ff14, #00c853);
+  transition: width 0.3s ease;
+}
+
+
 
 

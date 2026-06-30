@@ -5459,7 +5459,7 @@
     function applyDragonTheme() {
       if (!isDragonUser()) {
         document.body.classList.remove('dragon-theme');
-        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container, .dragon-hatchery-container').forEach(el => el.remove());
+        document.querySelectorAll('.dragon-corner-br, .dragon-bubble, .dragon-music-card, .dragon-bg-glide, .dragon-game-container, .dragon-duel-container').forEach(el => el.remove());
         
         // Restore elements modified in applyDragonTheme
         const formTitle = document.querySelector('.task-form__title');
@@ -5708,7 +5708,7 @@
         });
       }
       initDragonGame();
-      initDragonHatchery();
+      initDragonDuel();
     }
 
     function initDragonGame() {
@@ -6431,129 +6431,140 @@
       }
     }
 
-    function initDragonHatchery() {
-      if (document.querySelector('.dragon-hatchery-container')) return;
+    function initDragonDuel() {
+      if (document.querySelector('.dragon-duel-container')) return;
 
       const container = document.querySelector('#dashboard-page .container');
       if (!container) return;
 
-      const hatcheryWrapper = document.createElement('div');
-      hatcheryWrapper.className = 'dragon-hatchery-container dragon-widget fade-in visible';
-      hatcheryWrapper.innerHTML = `
-        <div class="dragon-hatchery-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
+      const duelWrapper = document.createElement('div');
+      duelWrapper.className = 'dragon-duel-container dragon-widget fade-in visible';
+      duelWrapper.innerHTML = `
+        <div class="dragon-duel-panel" style="background: rgba(10, 20, 15, 0.95); border: 2px solid #2d5a3f; border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'MedievalSharp', cursive, sans-serif; margin-top: 24px;">
           <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(45, 90, 63, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 1.3rem;">🥚 COUVEUSE & ENCLOS DE DRAGONS (HATCHERY)</span>
+              <span style="font-size: 1.3rem;">⚔️ ARÈNE DE BERK : SIMULATEUR DE DUEL</span>
             </div>
-            <div style="font-family: monospace; font-size: 0.85rem; color: #ffaa44; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
-              POISSONS COLLECTÉS: <span id="hatchery-fish-count" style="color: #39ff14; font-weight: bold;">0</span> 🐟 (Fps: <span id="hatchery-fps-count">0</span>)
+            <div style="font-family: monospace; font-size: 0.85rem; color: #81c784; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(45, 90, 63, 0.4);">
+              ENTRAÎNEMENT COMBAT (DUEL SIMULATOR)
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-            <!-- Column 1: Clicker / Fishery -->
-            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
-              <div style="font-size: 0.9rem; color: #81c784; text-align: center;">🐟 PÊCHERIE DE BERK (CLICK TO FISH)</div>
+          <div style="display: grid; grid-template-columns: 1fr 310px; gap: 16px;">
+            <!-- Canvas Column -->
+            <div style="position: relative; background: #080f0c; border: 2px solid #274433; border-radius: 6px; overflow: hidden;">
+              <canvas id="dragon-duel-canvas" width="560" height="280" style="display: block; width: 100%; height: auto; background: radial-gradient(circle, #0e1e17 0%, #050b08 100%);"></canvas>
               
-              <!-- Big Fish Button -->
-              <button id="btn-hatchery-click" style="width: 105px; height: 105px; border-radius: 50%; background: radial-gradient(circle, #2d5a3f 0%, #102519 100%); border: 3px solid #39ff14; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); transition: transform 0.1s; outline: none;">
-                🐟
-              </button>
-
-              <div style="font-family: monospace; font-size: 0.72rem; color: #a5d6a7; text-align: center;">
-                +<span id="fish-per-click">1</span> Poisson par clic
-              </div>
-
-              <!-- Upgrades -->
-              <div style="width: 100%; border-top: 1px solid rgba(61, 106, 79, 0.2); padding-top: 8px; display: flex; flex-direction: column; gap: 6px;">
-                <button class="dragon-weapon-btn" id="btn-upgrade-net" style="font-size: 0.7rem; padding: 6px 10px; width: 100%;">🛡️ Filet de Pêche [Coût: 50 🐟] (+1 Fps)</button>
-                <button class="dragon-weapon-btn" id="btn-upgrade-boat" style="font-size: 0.7rem; padding: 6px 10px; width: 100%;">⛵ Barque Viking [Coût: 250 🐟] (+5 Fps)</button>
+              <!-- Start / End Overlays -->
+              <div id="dragon-duel-overlay" style="position: absolute; inset: 0; background: rgba(5, 11, 8, 0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #fff; text-align: center; padding: 20px;">
+                <h2 id="duel-overlay-title" style="margin:0; font-size: 2rem; color: #81c784; text-shadow: 0 0 8px #81c784;">ARÈNE DE COMBAT</h2>
+                <p id="duel-overlay-desc" style="margin:0; font-family: monospace; font-size: 0.85rem; color: #a5d6a7; max-width: 400px; line-height: 1.4;">
+                  Affrontez des dragons sauvages dans un combat tactique au tour par tour.<br>
+                  Gérez vos points de vie (PV) et votre réserve de Plasma !
+                </p>
+                <button class="soviet-console-btn" id="btn-start-dragon-duel" style="font-family: 'MedievalSharp', cursive, sans-serif; font-size: 1.1rem; padding: 8px 24px; border-color: #81c784; color: #81c784; background: transparent; cursor: pointer;">COMMENCER COMBAT</button>
               </div>
             </div>
 
-            <!-- Column 2: Incubator / Hatch Eggs -->
-            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; gap: 10px;">
-              <div style="font-size: 0.9rem; color: #ffaa44; text-align: center; font-family: 'MedievalSharp';">🥚 COUVEUSE D'ŒUFS (HATCHERY)</div>
-              
-              <div style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
-                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 1.2rem;">🥚</span>
-                    <div style="font-family: monospace; font-size: 0.72rem;">
-                      <div style="color: #fff;">Furie Nocturne</div>
-                      <div style="color: #8c736e;" id="cost-hatch-fury">Coût: 100 🐟</div>
-                    </div>
-                  </div>
-                  <button class="soviet-console-btn btn-sm" id="btn-hatch-fury" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+            <!-- Action panel & logs Column -->
+            <div style="display: flex; flex-direction: column; gap: 12px; font-family: monospace;">
+              <!-- HUD Panel -->
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(61,106,79,0.3); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
+                <div style="font-size: 0.8rem; color: #81c784; font-weight: bold; margin-bottom: 2px;">VOTRE DRAGON: KROKMOU (NIGHT FURY)</div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7;">
+                  <span>SANTÉ (HP): <span id="duel-player-hp-txt">100/100</span></span>
+                  <span>PLASMA: <span id="duel-player-plasma-txt">100/100</span></span>
                 </div>
-
-                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 1.2rem;">🥚</span>
-                    <div style="font-family: monospace; font-size: 0.72rem;">
-                      <div style="color: #fff;">Nadder Mortel</div>
-                      <div style="color: #8c736e;" id="cost-hatch-nadder">Coût: 400 🐟</div>
-                    </div>
-                  </div>
-                  <button class="soviet-console-btn btn-sm" id="btn-hatch-nadder" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+                <div class="dragon-stat-bar-container">
+                  <div id="duel-player-hp-bar" class="dragon-stat-bar-fill-hp" style="width: 100%;"></div>
                 </div>
-
-                <div class="egg-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px; border: 1px solid rgba(61,106,79,0.15);">
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 1.2rem;">🥚</span>
-                    <div style="font-family: monospace; font-size: 0.72rem;">
-                      <div style="color: #fff;">Cauchemar</div>
-                      <div style="color: #8c736e;" id="cost-hatch-nightmare">Coût: 1500 🐟</div>
-                    </div>
-                  </div>
-                  <button class="soviet-console-btn btn-sm" id="btn-hatch-nightmare" style="padding: 3px 6px !important; font-size: 0.65rem !important; border-color: #ffaa44; color: #ffaa44; min-width: 60px;">ÉCLORE</button>
+                <div class="dragon-stat-bar-container">
+                  <div id="duel-player-plasma-bar" class="dragon-stat-bar-fill-plasma" style="width: 100%;"></div>
                 </div>
               </div>
-            </div>
 
-            <!-- Column 3: Stable / Feeding Hatchlings -->
-            <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(61, 106, 79, 0.3); display: flex; flex-direction: column; gap: 8px;">
-              <div style="font-size: 0.9rem; color: #81c784; text-align: center; font-family: 'MedievalSharp';">🐉 ENCLOS DES DRAGONS (STABLES)</div>
-              
-              <div style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 4px;" id="hatchery-dragons-list">
-                <div style="font-size: 0.75rem; color: #8c736e; text-align: center; margin-top: 30px; font-family: monospace;">Aucun dragon éclos. Faites éclore des œufs!</div>
+              <!-- Actions Controls Grid -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="duel-actions-group">
+                <button class="dragon-weapon-btn" id="btn-duel-plasma" style="font-size: 0.7rem; padding: 6px; width: 100%;">🌀 Tir Plasma<br><span style="color: #ffaa44;">(Dgt: 24 | -20 Pl.)</span></button>
+                <button class="dragon-weapon-btn" id="btn-duel-fire" style="font-size: 0.7rem; padding: 6px; width: 100%;">🔥 Attaque Feu<br><span style="color: #ffaa44;">(Dgt: 15 | -10 Pl.)</span></button>
+                <button class="dragon-weapon-btn" id="btn-duel-dodge" style="font-size: 0.7rem; padding: 6px; width: 100%;">🍃 Esquive Vent<br><span style="color: #ffaa44;">(+15 Pl. | +45% Eq.)</span></button>
+                <button class="dragon-weapon-btn" id="btn-duel-heal" style="font-size: 0.7rem; padding: 6px; width: 100%;">🐟 Poisson Soin<br><span style="color: #ffaa44;">(Heal: +35 | -35 Pl.)</span></button>
+              </div>
+
+              <!-- Real-time logs -->
+              <div class="dragon-combat-log" id="duel-combat-log">
+                <div>[ARENE] Prêt pour l'entraînement de duel...</div>
               </div>
             </div>
           </div>
         </div>
       `;
-      container.appendChild(hatcheryWrapper);
+      container.appendChild(duelWrapper);
 
-      // DOM bindings
-      const txtFish = document.getElementById('hatchery-fish-count');
-      const txtFps = document.getElementById('hatchery-fps-count');
-      const btnClick = document.getElementById('btn-hatchery-click');
-      const btnNet = document.getElementById('btn-upgrade-net');
-      const btnBoat = document.getElementById('btn-upgrade-boat');
+      // GAME ENGINE CODE
+      const canvas = document.getElementById('dragon-duel-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
-      const btnHatchFury = document.getElementById('btn-hatch-fury');
-      const btnHatchNadder = document.getElementById('btn-hatch-nadder');
-      const btnHatchNightmare = document.getElementById('btn-hatch-nightmare');
+      const hpTxt = document.getElementById('duel-player-hp-txt');
+      const plasmaTxt = document.getElementById('duel-player-plasma-txt');
+      const hpBar = document.getElementById('duel-player-hp-bar');
+      const plasmaBar = document.getElementById('duel-player-plasma-bar');
 
-      const stablesList = document.getElementById('hatchery-dragons-list');
+      const btnStart = document.getElementById('btn-start-dragon-duel');
+      const overlay = document.getElementById('dragon-duel-overlay');
+      const overlayTitle = document.getElementById('duel-overlay-title');
+      const overlayDesc = document.getElementById('duel-overlay-desc');
+      const actionsGroup = document.getElementById('duel-actions-group');
+      const combatLog = document.getElementById('duel-combat-log');
+
+      const btnPlasma = document.getElementById('btn-duel-plasma');
+      const btnFire = document.getElementById('btn-duel-fire');
+      const btnDodge = document.getElementById('btn-duel-dodge');
+      const btnHeal = document.getElementById('btn-duel-heal');
 
       // State variables
-      let fish = 0;
-      let fps = 0;
-      let fpc = 1;
+      let playerHp = 100;
+      let playerMaxHp = 100;
+      let playerPlasma = 100;
+      let playerMaxPlasma = 100;
 
-      let netCost = 50;
-      let netLvl = 0;
-      let boatCost = 250;
-      let boatLvl = 0;
+      let enemyHp = 100;
+      let enemyMaxHp = 100;
+      let enemyName = '';
+      let enemyAttackName = '';
+      let enemyColor = '#ff5533';
+      let enemyIcon = '🔥';
 
-      let dragons = {
-        fury: { name: 'Krokmou (Night Fury)', hatched: false, level: 0, cost: 100, fpsBonus: 10, foodCost: 50, icon: '🐉', color: '#81c784' },
-        nadder: { name: 'Tempête (Deadly Nadder)', hatched: false, level: 0, cost: 400, fpsBonus: 40, foodCost: 180, icon: '🔥', color: '#44aaff' },
-        nightmare: { name: 'Krochefer (Monstrous Nightmare)', hatched: false, level: 0, cost: 1500, fpsBonus: 120, foodCost: 600, icon: '💥', color: '#ffaa44' }
-      };
+      let gameTurn = 'ended'; // 'player', 'enemy', 'ended'
+      let dodgeActive = false;
+      let gameTime = 0;
 
-      function playHatcherySound(type) {
+      // Animations state variables
+      let animProjectiles = [];
+      let animParticles = [];
+      let shakeIntensity = 0;
+      let flashAlpha = 0;
+      let flashColor = '';
+
+      let playerYOffset = 0;
+      let enemyYOffset = 0;
+
+      const opponentList = [
+        { name: 'Nadder Mortel', icon: '🔥', maxHp: 100, color: '#44aaff', attackName: 'Jet d\'Épines Ardent' },
+        { name: 'Cauchemar Monstrueux', icon: '💥', maxHp: 120, color: '#ff8a50', attackName: 'Tempête de Souffle Ardent' },
+        { name: 'Gronckle Captif', icon: '🪨', maxHp: 140, color: '#8d6e63', attackName: 'Lancer de Roche de Lave' }
+      ];
+
+      function logCombat(msg, color = '#a5d6a7') {
+        const div = document.createElement('div');
+        div.style.color = color;
+        div.textContent = msg;
+        combatLog.appendChild(div);
+        combatLog.scrollTop = combatLog.scrollHeight;
+      }
+
+      function playDuelSound(type) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         if (!AudioContextClass) return;
         try {
@@ -6565,236 +6576,559 @@
           
           const now = actx.currentTime;
           
-          if (type === 'click') {
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(450, now);
-            osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
-            gain.gain.setValueAtTime(0.02, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-            osc.start(now);
-            osc.stop(now + 0.09);
-          } else if (type === 'hatch') {
-            // Happy arpeggio
+          if (type === 'plasma') {
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(300, now);
-            osc.frequency.setValueAtTime(450, now + 0.06);
-            osc.frequency.setValueAtTime(600, now + 0.12);
-            osc.frequency.setValueAtTime(900, now + 0.18);
-            gain.gain.setValueAtTime(0.05, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-            osc.start(now);
-            osc.stop(now + 0.3);
-          } else if (type === 'feed') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(500, now);
-            osc.frequency.linearRampToValueAtTime(800, now + 0.05);
+            osc.frequency.setValueAtTime(200, now);
+            osc.frequency.exponentialRampToValueAtTime(1400, now + 0.16);
             gain.gain.setValueAtTime(0.04, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
             osc.start(now);
-            osc.stop(now + 0.14);
-          } else if (type === 'upgrade') {
+            osc.stop(now + 0.18);
+          } else if (type === 'fire') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, now);
+            osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            osc.start(now);
+            osc.stop(now + 0.24);
+          } else if (type === 'dodge') {
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(350, now);
-            osc.frequency.linearRampToValueAtTime(700, now + 0.18);
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(300, now + 0.2);
+            gain.gain.setValueAtTime(0.03, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            osc.start(now);
+            osc.stop(now + 0.24);
+          } else if (type === 'heal') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.setValueAtTime(650, now + 0.05);
+            osc.frequency.setValueAtTime(780, now + 0.1);
             gain.gain.setValueAtTime(0.04, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
             osc.start(now);
             osc.stop(now + 0.22);
+          } else if (type === 'hit') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.linearRampToValueAtTime(40, now + 0.25);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.27);
+            osc.start(now);
+            osc.stop(now + 0.29);
+          } else if (type === 'victory') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.setValueAtTime(554, now + 0.08);
+            osc.frequency.setValueAtTime(659, now + 0.16);
+            osc.frequency.setValueAtTime(880, now + 0.24);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+            osc.start(now);
+            osc.stop(now + 0.5);
+          } else if (type === 'defeat') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(60, now + 0.6);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+            osc.start(now);
+            osc.stop(now + 0.7);
           }
         } catch(e) {}
       }
 
-      // Fishing click event
-      if (btnClick) {
-        btnClick.addEventListener('click', () => {
-          if (window.ensureAudioCtx) window.ensureAudioCtx();
-          fish += fpc;
-          txtFish.textContent = Math.floor(fish);
-          playHatcherySound('click');
-          
-          btnClick.style.transform = 'scale(0.92)';
-          setTimeout(() => { btnClick.style.transform = 'scale(1)'; }, 80);
+      if (btnStart) {
+        btnStart.addEventListener('click', () => {
+          startDuel();
         });
       }
 
-      // Fishing Net Upgrade click
-      if (btnNet) {
-        btnNet.addEventListener('click', () => {
-          if (fish >= netCost) {
-            fish -= netCost;
-            netLvl++;
-            fps += 1;
-            netCost = Math.round(netCost * 1.4);
-            txtFish.textContent = Math.floor(fish);
-            txtFps.textContent = fps;
-            btnNet.innerHTML = `🛡️ Filet de Pêche [Coût: ${netCost} 🐟] (${netLvl} owned)`;
-            playHatcherySound('upgrade');
-          }
-        });
-      }
+      function startDuel() {
+        if (window.ensureAudioCtx) window.ensureAudioCtx();
 
-      // Viking Boat Upgrade click
-      if (btnBoat) {
-        btnBoat.addEventListener('click', () => {
-          if (fish >= boatCost) {
-            fish -= boatCost;
-            boatLvl++;
-            fps += 5;
-            boatCost = Math.round(boatCost * 1.45);
-            txtFish.textContent = Math.floor(fish);
-            txtFps.textContent = fps;
-            btnBoat.innerHTML = `⛵ Barque Viking [Coût: ${boatCost} 🐟] (${boatLvl} owned)`;
-            playHatcherySound('upgrade');
-          }
-        });
-      }
+        const opponent = opponentList[Math.floor(Math.random() * opponentList.length)];
+        enemyName = opponent.name;
+        enemyMaxHp = opponent.maxHp;
+        enemyHp = opponent.maxHp;
+        enemyColor = opponent.color;
+        enemyAttackName = opponent.attackName;
+        enemyIcon = opponent.icon;
 
-      // Hatching functions
-      if (btnHatchFury) {
-        btnHatchFury.addEventListener('click', () => {
-          const d = dragons.fury;
-          if (!d.hatched && fish >= d.cost) {
-            fish -= d.cost;
-            d.hatched = true;
-            d.level = 1;
-            fps += d.fpsBonus;
-            
-            txtFish.textContent = Math.floor(fish);
-            txtFps.textContent = fps;
-            btnHatchFury.disabled = true;
-            btnHatchFury.textContent = "ÉCLOS ✔";
-            playHatcherySound('hatch');
-            renderStables();
-          }
-        });
-      }
+        playerHp = 100;
+        playerPlasma = 100;
+        dodgeActive = false;
 
-      if (btnHatchNadder) {
-        btnHatchNadder.addEventListener('click', () => {
-          const d = dragons.nadder;
-          if (!d.hatched && fish >= d.cost) {
-            fish -= d.cost;
-            d.hatched = true;
-            d.level = 1;
-            fps += d.fpsBonus;
-            
-            txtFish.textContent = Math.floor(fish);
-            txtFps.textContent = fps;
-            btnHatchNadder.disabled = true;
-            btnHatchNadder.textContent = "ÉCLOS ✔";
-            playHatcherySound('hatch');
-            renderStables();
-          }
-        });
-      }
+        combatLog.innerHTML = '<div>[ARENE] Combat engagé dans l\'arène de Berk !</div>';
+        logCombat(`[ENNEMI] Un ${enemyName} sauvage (${enemyHp} PV) surgit devant Krokmou !`, '#ffaa44');
 
-      if (btnHatchNightmare) {
-        btnHatchNightmare.addEventListener('click', () => {
-          const d = dragons.nightmare;
-          if (!d.hatched && fish >= d.cost) {
-            fish -= d.cost;
-            d.hatched = true;
-            d.level = 1;
-            fps += d.fpsBonus;
-            
-            txtFish.textContent = Math.floor(fish);
-            txtFps.textContent = fps;
-            btnHatchNightmare.disabled = true;
-            btnHatchNightmare.textContent = "ÉCLOS ✔";
-            playHatcherySound('hatch');
-            renderStables();
-          }
-        });
-      }
-
-      // Render dragons stables
-      function renderStables() {
-        let html = '';
-        let count = 0;
+        updateHUD();
+        overlay.style.display = 'none';
+        gameTurn = 'player';
         
-        for (let key in dragons) {
-          const d = dragons[key];
-          if (d.hatched) {
-            count++;
-            const currentFpsProd = d.fpsBonus + (d.level - 1) * Math.round(d.fpsBonus * 0.4);
-            html += `
-              <div style="background: rgba(255,255,255,0.02); border: 1.5px solid ${d.color}; border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px; font-family: monospace;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: ${d.color};">
-                  <span>${d.icon} ${d.name}</span>
-                  <span>Niv. ${d.level}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #a5d6a7;">
-                  <span>PROD: +${currentFpsProd} Fps</span>
-                  <button class="soviet-console-btn btn-sm btn-feed-dragon" data-key="${key}" style="padding: 2px 5px !important; font-size: 0.65rem !important; border-color: #81c784; color: #81c784;">FEED (-${d.foodCost} 🐟)</button>
-                </div>
-              </div>
-            `;
-          }
-        }
+        animProjectiles = [];
+        animParticles = [];
 
-        if (count === 0) {
-          stablesList.innerHTML = `<div style="font-size: 0.75rem; color: #8c736e; text-align: center; margin-top: 30px; font-family: monospace;">Aucun dragon éclos. Faites éclore des œufs!</div>`;
-        } else {
-          stablesList.innerHTML = html;
-          
-          // Bind Feed buttons
-          document.querySelectorAll('.btn-feed-dragon').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              const key = e.target.getAttribute('data-key');
-              feedDragon(key);
+        enableControls(true);
+      }
+
+      function updateHUD() {
+        if (hpTxt) hpTxt.textContent = `${playerHp}/${playerMaxHp}`;
+        if (plasmaTxt) plasmaTxt.textContent = `${playerPlasma}/${playerMaxPlasma}`;
+        if (hpBar) hpBar.style.width = `${(playerHp / playerMaxHp) * 100}%`;
+        if (plasmaBar) plasmaBar.style.width = `${(playerPlasma / playerMaxPlasma) * 100}%`;
+      }
+
+      function enableControls(state) {
+        const buttons = [btnPlasma, btnFire, btnDodge, btnHeal];
+        buttons.forEach(btn => {
+          if (btn) btn.disabled = !state;
+        });
+        if (actionsGroup) {
+          actionsGroup.style.opacity = state ? '1' : '0.55';
+        }
+      }
+
+      if (btnPlasma) {
+        btnPlasma.addEventListener('click', () => {
+          if (gameTurn !== 'player') return;
+          if (playerPlasma < 20) {
+            logCombat("[SYS] Énergie Plasma insuffisante (20 requis) !", '#ef5350');
+            return;
+          }
+
+          playerPlasma -= 20;
+          updateHUD();
+          enableControls(false);
+          gameTurn = 'animation';
+          logCombat(`[TIR] Krokmou tire un projectile Plasma concentré ! -20 Plasma.`, '#81c784');
+
+          playDuelSound('plasma');
+          animProjectiles.push({
+            x: 150,
+            y: 140,
+            tx: 410,
+            ty: 140,
+            speed: 6,
+            color: '#39ff14',
+            size: 6,
+            type: 'plasma'
+          });
+        });
+      }
+
+      if (btnFire) {
+        btnFire.addEventListener('click', () => {
+          if (gameTurn !== 'player') return;
+          if (playerPlasma < 10) {
+            logCombat("[SYS] Énergie Plasma insuffisante (10 requis) !", '#ef5350');
+            return;
+          }
+
+          playerPlasma -= 10;
+          updateHUD();
+          enableControls(false);
+          gameTurn = 'animation';
+          logCombat(`[FEU] Krokmou crache une rafale de boules de feu ! -10 Plasma.`, '#81c784');
+
+          playDuelSound('fire');
+          for (let k = 0; k < 5; k++) {
+            setTimeout(() => {
+              if (gameTurn === 'ended') return;
+              animProjectiles.push({
+                x: 145,
+                y: 130 + k * 6,
+                tx: 410,
+                ty: 120 + Math.random() * 40,
+                speed: 5.5 + Math.random(),
+                color: '#ffaa44',
+                size: 4,
+                type: 'fire'
+              });
+            }, k * 80);
+          }
+
+          setTimeout(() => {
+            if (gameTurn === 'ended') return;
+            resolveHit(15);
+          }, 600);
+        });
+      }
+
+      if (btnDodge) {
+        btnDodge.addEventListener('click', () => {
+          if (gameTurn !== 'player') return;
+          playerPlasma = Math.min(100, playerPlasma + 15);
+          dodgeActive = true;
+          updateHUD();
+          enableControls(false);
+          logCombat(`[ESQUIVE] Krokmou prend de la hauteur ! +15 Plasma. Taux d'esquive +45%.`, '#e2e8f0');
+
+          playDuelSound('dodge');
+          playerYOffset = -22;
+          setTimeout(() => { playerYOffset = 0; }, 400);
+
+          setTimeout(() => {
+            if (gameTurn === 'ended') return;
+            enemyTurn();
+          }, 1000);
+        });
+      }
+
+      if (btnHeal) {
+        btnHeal.addEventListener('click', () => {
+          if (gameTurn !== 'player') return;
+          if (playerPlasma < 35) {
+            logCombat("[SYS] Énergie Plasma insuffisante (35 requis) !", '#ef5350');
+            return;
+          }
+
+          playerPlasma -= 35;
+          playerHp = Math.min(100, playerHp + 35);
+          updateHUD();
+          enableControls(false);
+          logCombat(`[SOIN] Krokmou mange un saumon frais de Berk ! +35 Santé.`, '#81c784');
+
+          playDuelSound('heal');
+          for (let k = 0; k < 8; k++) {
+            animParticles.push({
+              x: 120 + (Math.random() - 0.5) * 40,
+              y: 140 + (Math.random() - 0.5) * 30,
+              vx: (Math.random() - 0.5) * 2,
+              vy: -1.5 - Math.random() * 1.5,
+              color: '#39ff14',
+              life: 30,
+              size: 2 + Math.random() * 2
             });
+          }
+
+          setTimeout(() => {
+            if (gameTurn === 'ended') return;
+            enemyTurn();
+          }, 1000);
+        });
+      }
+
+      function resolveHit(dmg) {
+        enemyHp = Math.max(0, enemyHp - dmg);
+        flashColor = 'rgba(255, 255, 255, 0.4)';
+        flashAlpha = 1.0;
+        enemyYOffset = 8;
+        setTimeout(() => { enemyYOffset = 0; }, 150);
+
+        for (let k = 0; k < 12; k++) {
+          animParticles.push({
+            x: 420,
+            y: 140,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            color: '#ffaa44',
+            life: 25,
+            size: 2.5 + Math.random() * 2.5
           });
         }
-      }
 
-      function feedDragon(key) {
-        const d = dragons[key];
-        if (d.hatched && fish >= d.foodCost) {
-          fish -= d.foodCost;
-          d.level++;
-          
-          // Recalculate Fps contribution
-          const oldProd = d.fpsBonus + (d.level - 2) * Math.round(d.fpsBonus * 0.4);
-          const newProd = d.fpsBonus + (d.level - 1) * Math.round(d.fpsBonus * 0.4);
-          fps += (newProd - oldProd);
+        animParticles.push({
+          type: 'text',
+          text: `-${dmg}`,
+          x: 420,
+          y: 100,
+          vy: -0.8,
+          color: '#ffaa44',
+          life: 35
+        });
 
-          d.foodCost = Math.round(d.foodCost * 1.5);
-          
-          txtFish.textContent = Math.floor(fish);
-          txtFps.textContent = fps;
-          playHatcherySound('feed');
-          renderStables();
+        logCombat(`[COMBAT] Le ${enemyName} encaisse ${dmg} points de dégâts !`, '#e2e8f0');
+
+        if (enemyHp <= 0) {
+          triggerVictory();
+        } else {
+          setTimeout(() => {
+            if (gameTurn === 'ended') return;
+            enemyTurn();
+          }, 1000);
         }
       }
 
-      // Loop to calculate fish generation (runs every 100ms)
-      const hatcheryInterval = setInterval(() => {
-        if (!document.querySelector('.dragon-hatchery-container')) {
-          clearInterval(hatcheryInterval);
-          return;
+      function enemyTurn() {
+        gameTurn = 'enemy';
+        logCombat(`[ENNEMI] Le ${enemyName} prépare sa riposte...`, '#ff8a50');
+
+        setTimeout(() => {
+          if (gameTurn === 'ended') return;
+
+          if (dodgeActive && Math.random() < 0.45) {
+            logCombat(`[ESQUIVE] Krokmou esquive avec brio l'attaque de l'adversaire ! 🍃`, '#81c784');
+            dodgeActive = false;
+            playDuelSound('dodge');
+            
+            setTimeout(() => {
+              gameTurn = 'player';
+              enableControls(true);
+            }, 800);
+            return;
+          }
+
+          dodgeActive = false;
+          const isCritical = Math.random() < 0.22;
+          const dmg = isCritical ? 26 : 16;
+
+          logCombat(`[ENNEMI] Le ${enemyName} lance : ${enemyAttackName} ! ${isCritical ? 'COUP CRITIQUE!' : ''}`, '#ef5350');
+
+          playDuelSound('fire');
+          for (let k = 0; k < 6; k++) {
+            animProjectiles.push({
+              x: 420,
+              y: 130 + k * 5,
+              tx: 120,
+              ty: 140,
+              speed: 6.5,
+              color: enemyColor,
+              size: 5,
+              type: 'enemy'
+            });
+          }
+
+          setTimeout(() => {
+            if (gameTurn === 'ended') return;
+            playerHp = Math.max(0, playerHp - dmg);
+            updateHUD();
+
+            playDuelSound('hit');
+            shakeIntensity = 8;
+            flashColor = 'rgba(255, 68, 51, 0.3)';
+            flashAlpha = 1.0;
+            playerYOffset = 6;
+            setTimeout(() => { playerYOffset = 0; }, 120);
+
+            animParticles.push({
+              type: 'text',
+              text: `-${dmg}`,
+              x: 120,
+              y: 100,
+              vy: -0.8,
+              color: '#ef5350',
+              life: 35
+            });
+
+            if (playerHp <= 0) {
+              triggerDefeat();
+            } else {
+              gameTurn = 'player';
+              enableControls(true);
+              logCombat(`[COMBAT] Votre tour. Choisissez une directive !`, '#81c784');
+            }
+          }, 600);
+
+        }, 1100);
+      }
+
+      function triggerVictory() {
+        gameTurn = 'ended';
+        playDuelSound('victory');
+        enableControls(false);
+        overlay.style.display = 'flex';
+        overlayTitle.textContent = "VICTOIRE ECLATANTE 🏆";
+        overlayTitle.style.color = "#39ff14";
+        overlayDesc.innerHTML = `Krokmou a vaincu le <strong>${enemyName}</strong> avec courage !<br>L'Académie de Berk salue votre dressage de Furie Nocturne.`;
+        btnStart.textContent = "LANCER AUTRE DUEL";
+      }
+
+      function triggerDefeat() {
+        gameTurn = 'ended';
+        playDuelSound('defeat');
+        enableControls(false);
+        overlay.style.display = 'flex';
+        overlayTitle.textContent = "KROKMOU EST H.S. ☠️";
+        overlayTitle.style.color = "#ef5350";
+        overlayDesc.innerHTML = `Le <strong>${enemyName}</strong> a triomphé dans l'arène !<br>Reposez Krokmou et nourrissez-le de poissons de Berk.`;
+        btnStart.textContent = "RECOMMENCER DUEL";
+      }
+
+      function updateDuelAnimation() {
+        if (!document.getElementById('dragon-duel-canvas')) return;
+
+        ctx.fillStyle = '#080f0c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = 'rgba(61, 106, 79, 0.15)';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+        ctx.strokeStyle = 'rgba(61, 106, 79, 0.08)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 80, 0, Math.PI*2);
+        ctx.stroke();
+
+        if (shakeIntensity > 0) {
+          const sx = (Math.random() - 0.5) * shakeIntensity;
+          const sy = (Math.random() - 0.5) * shakeIntensity;
+          ctx.save();
+          ctx.translate(sx, sy);
+          shakeIntensity *= 0.85;
+          if (shakeIntensity < 0.2) shakeIntensity = 0;
         }
 
-        if (fps > 0) {
-          fish += fps / 10;
-          txtFish.textContent = Math.floor(fish);
+        const px = 120;
+        const py = 140 + playerYOffset;
+        const wingFlap = Math.sin(gameTime * 0.15) * 12;
+
+        ctx.fillStyle = '#090d14';
+        ctx.beginPath();
+        ctx.ellipse(px - 10, py - 4 - wingFlap, 6, 16, -Math.PI / 6, 0, Math.PI * 2);
+        ctx.ellipse(px - 10, py + 4 + wingFlap, 6, 16, Math.PI / 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0c111a';
+        ctx.beginPath();
+        ctx.ellipse(px, py, 18, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#0c111a';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(px - 15, py);
+        ctx.lineTo(px - 26, py);
+        ctx.stroke();
+
+        ctx.fillStyle = '#b71c1c';
+        ctx.beginPath();
+        ctx.moveTo(px - 26, py); ctx.lineTo(px - 32, py + 5); ctx.lineTo(px - 23, py + 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0c111a';
+        ctx.beginPath();
+        ctx.moveTo(px - 26, py); ctx.lineTo(px - 32, py - 5); ctx.lineTo(px - 23, py - 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0e1420';
+        ctx.beginPath();
+        ctx.ellipse(px + 12, py - 1, 8, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#39ff14';
+        ctx.beginPath();
+        ctx.arc(px + 14, py - 3, 2, 0, Math.PI*2);
+        ctx.arc(px + 14, py + 1, 2, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.fillStyle = '#a5d6a7';
+        ctx.font = 'bold 10px monospace';
+        ctx.fillText("KROKMOU", px - 25, py + 25);
+        if (dodgeActive) {
+          ctx.fillStyle = '#39ff14';
+          ctx.font = '9px monospace';
+          ctx.fillText("🍃 ESQUIVE", px - 26, py - 22);
         }
 
-        // Enable / Disable buttons depending on fish reserve
-        if (btnNet) btnNet.disabled = (fish < netCost);
-        if (btnBoat) btnBoat.disabled = (fish < boatCost);
+        if (gameTurn !== 'ended' || enemyHp > 0) {
+          const ex = 420;
+          const ey = 140 + enemyYOffset;
+          const enemyFlap = Math.sin(gameTime * 0.12) * 10;
 
-        if (btnHatchFury) btnHatchFury.disabled = (dragons.fury.hatched || fish < dragons.fury.cost);
-        if (btnHatchNadder) btnHatchNadder.disabled = (dragons.nadder.hatched || fish < dragons.nadder.cost);
-        if (btnHatchNightmare) btnHatchNightmare.disabled = (dragons.nightmare.hatched || fish < dragons.nightmare.cost);
+          ctx.fillStyle = enemyColor;
+          ctx.beginPath();
+          ctx.ellipse(ex - 8, ey - 4 - enemyFlap, 5, 14, -Math.PI / 4, 0, Math.PI * 2);
+          ctx.ellipse(ex - 8, ey + 4 + enemyFlap, 5, 14, Math.PI / 4, 0, Math.PI * 2);
+          ctx.fill();
 
-        document.querySelectorAll('.btn-feed-dragon').forEach(btn => {
-          const key = btn.getAttribute('data-key');
-          const d = dragons[key];
-          if (d) {
-            btn.disabled = (fish < d.foodCost);
+          ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          ctx.beginPath();
+          ctx.ellipse(ex, ey, 20, 9, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = enemyColor;
+          ctx.beginPath();
+          ctx.ellipse(ex, ey, 17, 8, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = enemyColor;
+          ctx.beginPath();
+          ctx.arc(ex - 12, ey - 1, 7, 0, Math.PI*2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffcc00';
+          ctx.beginPath();
+          ctx.arc(ex - 14, ey - 3, 1.8, 0, Math.PI*2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ff5533';
+          ctx.font = 'bold 9px monospace';
+          ctx.fillText(`${enemyIcon} ${enemyHp}/${enemyMaxHp} HP`, ex - 40, ey - 22);
+          
+          ctx.fillStyle = '#ffaa44';
+          ctx.font = 'bold 10px monospace';
+          ctx.fillText(enemyName, ex - 50, ey + 25);
+        }
+
+        animProjectiles.forEach((p, pIdx) => {
+          const dx = p.tx - p.x;
+          const dy = p.ty - p.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+
+          if (dist < p.speed) {
+            animProjectiles.splice(pIdx, 1);
+            if (p.type === 'plasma') {
+              resolveHit(24);
+            }
+          } else {
+            p.x += (dx / dist) * p.speed;
+            p.y += (dy / dist) * p.speed;
+
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath();
+            ctx.arc(p.x - (dx / dist) * 8, p.y - (dy / dist) * 8, p.size * 0.7, 0, Math.PI*2);
+            ctx.fill();
           }
         });
-      }, 100);
+
+        animParticles.forEach((pt, ptIdx) => {
+          pt.x += pt.vx || 0;
+          pt.y += pt.vy || 0;
+          pt.life--;
+          const alpha = pt.life / 35;
+
+          if (pt.type === 'text') {
+            ctx.fillStyle = `rgba(${pt.color === '#ef5350' ? '239, 83, 80' : '255, 170, 68'}, ${alpha})`;
+            ctx.font = 'bold 13px monospace';
+            ctx.fillText(pt.text, pt.x, pt.y);
+          } else {
+            ctx.fillStyle = pt.color;
+            ctx.globalAlpha = alpha;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI*2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+          }
+
+          if (pt.life <= 0) {
+            animParticles.splice(ptIdx, 1);
+          }
+        });
+
+        if (shakeIntensity > 0) {
+          ctx.restore();
+        }
+
+        if (flashAlpha > 0) {
+          ctx.fillStyle = flashColor;
+          ctx.globalAlpha = flashAlpha;
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.globalAlpha = 1.0;
+          flashAlpha -= 0.08;
+        }
+
+        gameTime++;
+        requestAnimationFrame(updateDuelAnimation);
+      }
+
+      requestAnimationFrame(updateDuelAnimation);
     }
 
     function playDragonSong() {
