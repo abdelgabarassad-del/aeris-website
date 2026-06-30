@@ -11560,3 +11560,179 @@ body.totallyspies-theme .nav-link:hover {
   animation: ledBlink 0.6s step-end infinite;
 }
 
+/* ========== 🚀 SOVIET MIG-25 TWIN-ENGINE CONSOLE CUSTOM STYLING ========== */
+.foxbat-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.foxbat-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.foxbat-engine-box {
+  background: rgba(10, 18, 14, 0.9);
+  border: 1.5px solid #546e7a;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.foxbat-engine-box.left-engine {
+  border-color: rgba(204, 68, 42, 0.45);
+}
+
+.foxbat-engine-box.right-engine {
+  border-color: rgba(66, 170, 244, 0.45);
+}
+
+.foxbat-engine-title {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid rgba(84, 110, 122, 0.35);
+  padding-bottom: 4px;
+}
+
+.foxbat-engine-title.left-title {
+  color: #ffaa44;
+  border-bottom-color: rgba(204, 68, 42, 0.35);
+}
+
+.foxbat-engine-title.right-title {
+  color: #44aaff;
+  border-bottom-color: rgba(66, 170, 244, 0.35);
+}
+
+.foxbat-controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.foxbat-lever-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.foxbat-lever-label {
+  font-family: monospace;
+  font-size: 0.68rem;
+  color: #8c736e;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.foxbat-slider-container {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Vertical slider for Soviet throttles */
+.foxbat-slider-vert {
+  -webkit-appearance: none;
+  width: 80px;
+  height: 8px;
+  background: #232c30;
+  border: 1px solid #546e7a;
+  border-radius: 4px;
+  transform: rotate(-90deg);
+  cursor: pointer;
+  outline: none;
+}
+
+.foxbat-slider-vert::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 24px;
+  background: #bf360c;
+  border: 1.5px solid #230802;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.foxbat-slider-vert.slider-blue::-webkit-slider-thumb {
+  background: #0277bd;
+  border-color: #012b44;
+}
+
+.foxbat-btn-starter {
+  background: linear-gradient(180deg, #37474f 0%, #21272a 100%) !important;
+  border: 2px solid #546e7a !important;
+  border-radius: 4px !important;
+  color: #b0bec5 !important;
+  font-family: 'Orbitron', monospace !important;
+  font-size: 0.72rem !important;
+  font-weight: bold !important;
+  padding: 6px 10px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.foxbat-btn-starter.starter-active {
+  background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%) !important;
+  border-color: #81c784 !important;
+  color: #e8f5e9 !important;
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.6) !important;
+}
+
+.foxbat-btn-starter:active {
+  transform: scale(0.95);
+}
+
+.foxbat-tank-bar-container {
+  width: 100%;
+  height: 12px;
+  background: #111a1e;
+  border: 1px solid #546e7a;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.foxbat-tank-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  width: 100%;
+  transition: width 0.1s linear;
+}
+
+.foxbat-btn-refill {
+  background: linear-gradient(180deg, #263238 0%, #37474f 100%) !important;
+  border: 1.5px solid #546e7a !important;
+  border-radius: 4px !important;
+  color: #81c784 !important;
+  font-family: 'Orbitron', monospace !important;
+  font-size: 0.72rem !important;
+  padding: 4px 8px !important;
+  cursor: pointer;
+}
+
+.foxbat-btn-refill:hover {
+  background: #37474f !important;
+  color: #a5d6a7 !important;
+}
+
+.foxbat-btn-refill:active {
+  transform: scale(0.96);
+}
+
+

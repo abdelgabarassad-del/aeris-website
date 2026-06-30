@@ -7161,84 +7161,255 @@
 
         <!-- МИГ-25 ФОКСРАТ THERMO-ATMOSPHERIC & ENGINE CONSOLE -->
         <div class="soviet-widget" id="soviet-foxbat-panel" style="margin-top: 24px;">
-          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #263238, #37474f) !important; border-bottom: 2px solid #546e7a !important;">
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #1f292e, #2a363b) !important; border-bottom: 2px solid #546e7a !important;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span>🚀 МИГ-25 ФОКСРАТ: THERMO-ATMOSPHERIC & TWIN-TURBOJET CONSOLE</span>
+              <span>🚀 МИГ-25 ФОКСРАТ: TWIN-TURBOJET CONSOLE & THERMODYNAMICS</span>
             </div>
             <span class="soviet-station-status" id="foxbat-sys-status" style="border-color: #546e7a; color: #81c784;">ДВИГАТЕЛЬ СТАБИЛЕН</span>
           </div>
           <div class="card-body" style="padding: 16px;">
-            <div class="jet-grid">
+            <div class="foxbat-layout">
               
-              <!-- Left Column: Engine Combustion visualizer -->
-              <div class="jet-col" style="flex: 1.3;">
-                <div class="jet-col-title">Tumansky R-15 Twin-Burner Cross-Section</div>
-                <div class="jet-canvas-wrapper" style="height: 150px; background: #000; border: 1.5px solid #546e7a;">
-                  <canvas id="foxbat-engine-canvas" style="width: 100%; height: 100%;"></canvas>
-                </div>
-                <div style="font-family: monospace; font-size: 0.72rem; color: #81c784; text-align: center; margin-top: 6px;">
-                  AIRFLOW INTAKE ➔ COMPRESSOR STAGES ➔ AFTERBURNER NOZZLE
-                </div>
-              </div>
-              
-              <!-- Right Column: Controls and Thermo readouts -->
-              <div class="jet-col">
-                <div class="jet-col-title">Foxbat Telemetry Adjustments</div>
+              <!-- First Row: Engine Visualizer Canvas and Core Systems -->
+              <div class="jet-grid" style="grid-template-columns: 1.4fr 1.6fr; padding: 0; gap: 16px;">
                 
-                <!-- Speed & Alt control sliders -->
-                <div class="jet-control-row">
-                  <div class="jet-control-label">
-                    <span>Flight Speed (Mach)</span>
-                    <span class="jet-control-value" id="lbl-foxbat-mach" style="color: #ffb703;">Mach 1.0</span>
+                <!-- Engine Cross-Section Drawing -->
+                <div class="jet-col">
+                  <div class="jet-col-title">Tumansky R-15 Twin-Turbojet Cross-Section</div>
+                  <div class="jet-canvas-wrapper" style="height: 160px; background: #000; border: 1.5px solid #546e7a;">
+                    <canvas id="foxbat-engine-canvas" style="width: 100%; height: 100%;"></canvas>
                   </div>
-                  <input type="range" id="slider-foxbat-mach" min="1.0" max="3.2" step="0.1" value="1.0" class="soviet-slider">
-                </div>
-                
-                <div class="jet-control-row">
-                  <div class="jet-control-label">
-                    <span>Altitude (m)</span>
-                    <span class="jet-control-value" id="lbl-foxbat-alt" style="color: #2a9d8f;">10,000m</span>
+                  <div style="font-family: monospace; font-size: 0.7rem; color: #81c784; text-align: center; margin-top: 4px; display: flex; justify-content: space-between;">
+                    <span>LEFT: COMPRESSOR ➔ NOZZLE</span>
+                    <span>RIGHT: COMPRESSOR ➔ NOZZLE</span>
                   </div>
-                  <input type="range" id="slider-foxbat-alt" min="10000" max="25000" step="500" value="10000" class="soviet-slider">
                 </div>
                 
-                <!-- Active Liquid Coolant Toggles -->
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                  <div class="afterburner-guard-wrapper" style="flex: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; border-color: rgba(84, 110, 122, 0.4);">
-                    <span style="font-family: monospace; font-size: 0.7rem; color: #81c784;">❄️ AFTERBURNER WATER-COOLANT (СНПБ)</span>
-                    <label class="switch" style="margin: 4px 0;">
-                      <input type="checkbox" id="toggle-foxbat-coolant">
-                      <span class="slider"></span>
-                    </label>
-                    <span style="font-family: monospace; font-size: 0.65rem; color: #8c736e;" id="status-foxbat-coolant">INACTIVE</span>
+                <!-- Environmental & General Navigation Panel -->
+                <div class="jet-col">
+                  <div class="jet-col-title">Environmental Telemetry & Controls</div>
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <!-- Auto Inlet Ramps -->
+                    <div class="afterburner-guard-wrapper" style="flex-direction: column; padding: 8px; align-items: flex-start; gap: 4px; background: rgba(84, 110, 122, 0.08); border-color: rgba(84, 110, 122, 0.25);">
+                      <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span style="font-family: monospace; font-size: 0.68rem; color: #81c784;">ВЗУ ДИФФУЗОР (INLET RAMPS)</span>
+                        <span style="font-family: monospace; font-size: 0.68rem; color: #ffaa44;" id="lbl-foxbat-ramp-angle">0°</span>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px;">
+                        <span style="font-family: monospace; font-size: 0.65rem; color: #8c736e;">AUTO MODE</span>
+                        <label class="switch" style="scale: 0.85;">
+                          <input type="checkbox" id="toggle-foxbat-ramp-auto" checked>
+                          <span class="slider"></span>
+                        </label>
+                      </div>
+                      <input type="range" id="slider-foxbat-ramp-angle" min="0" max="45" value="0" class="soviet-slider" style="width: 100%; margin-top: 4px;" disabled>
+                    </div>
+
+                    <!-- Exhaust Nozzles -->
+                    <div class="afterburner-guard-wrapper" style="flex-direction: column; padding: 8px; align-items: flex-start; gap: 4px; background: rgba(84, 110, 122, 0.08); border-color: rgba(84, 110, 122, 0.25);">
+                      <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span style="font-family: monospace; font-size: 0.68rem; color: #81c784;">СОПЛО ДВИГ. (EXHAUST NOZZLES)</span>
+                        <span style="font-family: monospace; font-size: 0.68rem; color: #ffaa44;" id="lbl-foxbat-nozzle-pos">20%</span>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px;">
+                        <span style="font-family: monospace; font-size: 0.65rem; color: #8c736e;">AUTO MODE</span>
+                        <label class="switch" style="scale: 0.85;">
+                          <input type="checkbox" id="toggle-foxbat-nozzle-auto" checked>
+                          <span class="slider"></span>
+                        </label>
+                      </div>
+                      <input type="range" id="slider-foxbat-nozzle-pos" min="0" max="100" value="20" class="soviet-slider" style="width: 100%; margin-top: 4px;" disabled>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-top: 4px;">
+                    <!-- Speed (Mach) slider -->
+                    <div class="jet-control-row">
+                      <div class="jet-control-label">
+                        <span>Speed (Mach)</span>
+                        <span class="jet-control-value" id="lbl-foxbat-mach" style="color: #ffb703;">Mach 1.0</span>
+                      </div>
+                      <input type="range" id="slider-foxbat-mach" min="0.0" max="3.2" step="0.1" value="1.0" class="soviet-slider">
+                    </div>
+                    <!-- Altitude slider -->
+                    <div class="jet-control-row">
+                      <div class="jet-control-label">
+                        <span>Altitude (m)</span>
+                        <span class="jet-control-value" id="lbl-foxbat-alt" style="color: #2a9d8f;">10,000m</span>
+                      </div>
+                      <input type="range" id="slider-foxbat-alt" min="0" max="25000" step="500" value="10000" class="soviet-slider">
+                    </div>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding: 4px 8px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(84, 110, 122, 0.15);">
+                    <span style="font-family: monospace; font-size: 0.72rem; color: #b0bec5;">РЕЖИМ ТЯГИ (FLIGHT PROPULSION MODE):</span>
+                    <button class="soviet-console-btn btn-sm" id="btn-foxbat-flightmode" style="min-width: 110px; padding: 3px 6px !important; font-size: 0.68rem !important; border-color: #81c784; color: #81c784;">MANUAL SLIDER</button>
                   </div>
                 </div>
 
               </div>
-              
-              <!-- Center Column: Thermo metrics readouts -->
-              <div class="jet-col" style="min-width: 170px;">
-                <div class="jet-col-title">Sensors Telemetry</div>
+
+              <!-- Second Row: Dual Independent Engine Control Panels -->
+              <div class="foxbat-panel-grid">
                 
-                <div class="jet-nixie-group" style="grid-template-columns: 1fr; gap: 8px;">
-                  <div class="jet-nixie-card" style="padding: 6px 10px;">
-                    <div class="jet-nixie-label">Skin Friction Temp</div>
-                    <div class="jet-nixie-digits" id="nixie-foxbat-temp" style="font-size: 1.3rem; color: #ffaa44;">025°C</div>
+                <!-- LEFT ENGINE PANEL -->
+                <div class="foxbat-engine-box left-engine">
+                  <div class="foxbat-engine-title left-title">
+                    <span>ЛЕВЫЙ ДВИГАТЕЛЬ (LEFT TUMANSKY R-15)</span>
                   </div>
-                  <div class="jet-nixie-card" style="padding: 6px 10px;">
-                    <div class="jet-nixie-label">Air Density (kg/m³)</div>
-                    <div class="jet-nixie-digits" id="nixie-foxbat-density" style="font-size: 1.3rem; color: #81c784;">0.413</div>
+                  
+                  <div class="foxbat-controls-row">
+                    <!-- Starter Button -->
+                    <div class="foxbat-lever-wrapper" style="flex: 1.1;">
+                      <span class="foxbat-lever-label">ЗАПУСК (STARTER)</span>
+                      <button class="foxbat-btn-starter" id="btn-left-starter">OFFLINE</button>
+                    </div>
+                    
+                    <!-- Vertical Throttle slider -->
+                    <div class="foxbat-lever-wrapper">
+                      <span class="foxbat-lever-label">ТЯГА (THROTTLE)</span>
+                      <span class="jet-control-value" id="lbl-left-throttle" style="font-size: 0.72rem; color: #ffaa44;">0%</span>
+                      <div class="foxbat-slider-container">
+                        <input type="range" id="slider-left-throttle" min="0" max="100" value="0" class="foxbat-slider-vert">
+                      </div>
+                    </div>
+
+                    <!-- Afterburner switch -->
+                    <div class="foxbat-lever-wrapper" style="flex: 1;">
+                      <span class="foxbat-lever-label">ФОРСАЖ (AB)</span>
+                      <div class="afterburner-guard-wrapper" style="padding: 6px 10px; width: 100%; border-color: rgba(204, 68, 42, 0.3);">
+                        <label class="switch" style="scale: 0.8; margin: 0 auto;">
+                          <input type="checkbox" id="toggle-left-afterburner" disabled>
+                          <span class="slider"></span>
+                        </label>
+                      </div>
+                      <span style="font-family: monospace; font-size: 0.6rem; color: #8c736e; text-align: center;" id="status-left-afterburner">SAFE</span>
+                    </div>
                   </div>
-                  <div class="jet-nixie-card" style="padding: 6px 10px;">
-                    <div class="jet-nixie-label">Est. Fuel Consumption</div>
-                    <div class="jet-nixie-digits" id="nixie-foxbat-fuelrate" style="font-size: 1.3rem; color: #ff5555;">0.45 kg/s</div>
+
+                  <!-- Engine readouts -->
+                  <div class="jet-nixie-group" style="margin-top: 4px; gap: 8px;">
+                    <div class="jet-nixie-card" style="padding: 4px 8px;">
+                      <div class="jet-nixie-label">RPM (ОБ/МИН)</div>
+                      <div class="jet-nixie-digits" id="nixie-left-rpm" style="font-size: 1.15rem; color: #ffaa44;">00.0%</div>
+                    </div>
+                    <div class="jet-nixie-card" style="padding: 4px 8px;">
+                      <div class="jet-nixie-label">EGT (ТЕМП. ГАЗОВ)</div>
+                      <div class="jet-nixie-digits" id="nixie-left-egt" style="font-size: 1.15rem; color: #ffaa44;">020°C</div>
+                    </div>
+                  </div>
+
+                  <!-- Warning indicators -->
+                  <div id="left-engine-alert" style="padding: 4px; background: rgba(255, 51, 51, 0.1); border: 1px solid rgba(255, 51, 51, 0.3); border-radius: 4px; display: none; align-items: center; gap: 6px; justify-content: center;">
+                    <div class="jet-warning-led active"></div>
+                    <span style="font-family: monospace; font-size: 0.65rem; color: #ff5555; font-weight: bold;" id="lbl-left-alert">COMPRESSOR STALL!</span>
                   </div>
                 </div>
-                
-                <div id="foxbat-overheat-alert" style="margin-top: 6px; padding: 4px; background: rgba(255, 51, 51, 0.1); border: 1px solid rgba(255, 51, 51, 0.3); border-radius: 4px; display: none; align-items: center; gap: 6px; justify-content: center;">
-                  <div class="jet-warning-led active"></div>
-                  <span style="font-family: monospace; font-size: 0.65rem; color: #ff5555; font-weight: bold; animation: alertFlash 1s infinite;">🚨 ПЕРЕГРЕВ: COOLANT REQUIRED!</span>
+
+                <!-- RIGHT ENGINE PANEL -->
+                <div class="foxbat-engine-box right-engine">
+                  <div class="foxbat-engine-title right-title">
+                    <span>ПРАВЫЙ ДВИГАТЕЛЬ (RIGHT TUMANSKY R-15)</span>
+                  </div>
+                  
+                  <div class="foxbat-controls-row">
+                    <!-- Starter Button -->
+                    <div class="foxbat-lever-wrapper" style="flex: 1.1;">
+                      <span class="foxbat-lever-label">ЗАПУСК (STARTER)</span>
+                      <button class="foxbat-btn-starter" id="btn-right-starter">OFFLINE</button>
+                    </div>
+                    
+                    <!-- Vertical Throttle slider -->
+                    <div class="foxbat-lever-wrapper">
+                      <span class="foxbat-lever-label">ТЯГА (THROTTLE)</span>
+                      <span class="jet-control-value" id="lbl-right-throttle" style="font-size: 0.72rem; color: #44aaff;">0%</span>
+                      <div class="foxbat-slider-container">
+                        <input type="range" id="slider-right-throttle" min="0" max="100" value="0" class="foxbat-slider-vert slider-blue">
+                      </div>
+                    </div>
+
+                    <!-- Afterburner switch -->
+                    <div class="foxbat-lever-wrapper" style="flex: 1;">
+                      <span class="foxbat-lever-label">ФОРСАЖ (AB)</span>
+                      <div class="afterburner-guard-wrapper" style="padding: 6px 10px; width: 100%; border-color: rgba(66, 170, 244, 0.3);">
+                        <label class="switch" style="scale: 0.8; margin: 0 auto;">
+                          <input type="checkbox" id="toggle-right-afterburner" disabled>
+                          <span class="slider"></span>
+                        </label>
+                      </div>
+                      <span style="font-family: monospace; font-size: 0.6rem; color: #8c736e; text-align: center;" id="status-right-afterburner">SAFE</span>
+                    </div>
+                  </div>
+
+                  <!-- Engine readouts -->
+                  <div class="jet-nixie-group" style="margin-top: 4px; gap: 8px;">
+                    <div class="jet-nixie-card" style="padding: 4px 8px;">
+                      <div class="jet-nixie-label">RPM (ОБ/МИН)</div>
+                      <div class="jet-nixie-digits" id="nixie-right-rpm" style="font-size: 1.15rem; color: #44aaff;">00.0%</div>
+                    </div>
+                    <div class="jet-nixie-card" style="padding: 4px 8px;">
+                      <div class="jet-nixie-label">EGT (ТЕМП. ГАЗОВ)</div>
+                      <div class="jet-nixie-digits" id="nixie-right-egt" style="font-size: 1.15rem; color: #44aaff;">020°C</div>
+                    </div>
+                  </div>
+
+                  <!-- Warning indicators -->
+                  <div id="right-engine-alert" style="padding: 4px; background: rgba(255, 51, 51, 0.1); border: 1px solid rgba(255, 51, 51, 0.3); border-radius: 4px; display: none; align-items: center; gap: 6px; justify-content: center;">
+                    <div class="jet-warning-led active"></div>
+                    <span style="font-family: monospace; font-size: 0.65rem; color: #ff5555; font-weight: bold;" id="lbl-right-alert">COMPRESSOR STALL!</span>
+                  </div>
                 </div>
+
+              </div>
+
+              <!-- Third Row: Cooling water injection & Wear Sensors -->
+              <div class="jet-grid" style="grid-template-columns: 1.5fr 1fr; padding: 0; gap: 16px;">
+                
+                <!-- SNP-B Liquid Cooling injection system -->
+                <div class="jet-col">
+                  <div class="jet-col-title">❄️ SNP-B WATER-METHANOL AFTERBURNER INJECTION (СНПБ)</div>
+                  <div style="display: flex; gap: 16px; align-items: center; flex: 1;">
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                      <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.72rem;">
+                        <span style="color: #8c736e;">COOLANT TANK CAPACITY</span>
+                        <span id="lbl-foxbat-coolant-qty" style="color: #00b4d8; font-weight: bold;">100%</span>
+                      </div>
+                      <div class="foxbat-tank-bar-container">
+                        <div class="foxbat-tank-bar-fill" id="bar-foxbat-coolant"></div>
+                      </div>
+                    </div>
+                    <button class="foxbat-btn-refill" id="btn-refill-coolant">REFILL TANK</button>
+                  </div>
+                  <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-family: monospace; font-size: 0.72rem; color: #8c736e;">INJECTION VALVE:</span>
+                    <div style="display: flex; gap: 4px; flex: 1;">
+                      <button class="soviet-console-btn btn-sm active" id="btn-coolant-off" style="flex: 1; font-size: 0.65rem !important;">OFF</button>
+                      <button class="soviet-console-btn btn-sm" id="btn-coolant-50" style="flex: 1; font-size: 0.65rem !important;">50% FLOW</button>
+                      <button class="soviet-console-btn btn-sm" id="btn-coolant-100" style="flex: 1; font-size: 0.65rem !important;">100% FLOW</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Combined Sensor Readouts -->
+                <div class="jet-col">
+                  <div class="jet-col-title">Airframe Heat & Wear Telemetry</div>
+                  <div class="jet-nixie-group" style="grid-template-columns: 1fr; gap: 6px; flex: 1; justify-content: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(84, 110, 122, 0.15);">
+                      <span style="font-family: monospace; font-size: 0.68rem; color: #8c736e;">SKIN FRICTION TEMP</span>
+                      <span id="nixie-foxbat-temp" style="font-family: 'Orbitron', monospace; font-size: 0.88rem; color: #ffaa44; font-weight: bold;">022°C</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(84, 110, 122, 0.15);">
+                      <span style="font-family: monospace; font-size: 0.68rem; color: #8c736e;">AIR DENSITY</span>
+                      <span id="nixie-foxbat-density" style="font-family: 'Orbitron', monospace; font-size: 0.88rem; color: #81c784; font-weight: bold;">0.413</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(84, 110, 122, 0.15);">
+                      <span style="font-family: monospace; font-size: 0.68rem; color: #8c736e;">COMBINED FUEL FLOW</span>
+                      <span id="nixie-foxbat-fuelrate" style="font-family: 'Orbitron', monospace; font-size: 0.88rem; color: #ff5555; font-weight: bold;">0.00 kg/s</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -8963,69 +9134,356 @@
       const foxbatCanvas = document.getElementById('foxbat-engine-canvas');
       const foxbatCtx = foxbatCanvas ? foxbatCanvas.getContext('2d') : null;
 
+      // Simulation States
+      let leftIgnition = false;
+      let leftRPM = 0;
+      let leftThrottle = 0;
+      let leftAfterburner = false;
+      let leftEGT = 20;
+      let leftStatus = 'OFFLINE'; // OFFLINE, STARTING, RUNNING, STALL, DAMAGED
+      let leftDamage = 0;
+
+      let rightIgnition = false;
+      let rightRPM = 0;
+      let rightThrottle = 0;
+      let rightAfterburner = false;
+      let rightEGT = 20;
+      let rightStatus = 'OFFLINE';
+      let rightDamage = 0;
+
+      let rampAuto = true;
+      let rampAngle = 0;
+      let nozzleAuto = true;
+      let nozzlePos = 20;
+
+      let coolantFlow = 0; // 0, 1, 2
+      let coolantQty = 100;
+
+      let flightMode = 'MANUAL'; // MANUAL vs DYNAMIC
       let foxbatMach = 1.0;
       let foxbatAlt = 10000;
-      let foxbatCoolantActive = false;
       let foxbatTemp = 22;
       let foxbatAirDensity = 0.413;
-      let foxbatFuelRate = 0.45;
+      let foxbatFuelRate = 0.0;
       let engineFlameTime = 0;
 
-      let foxbatAudioNode = null;
-      let foxbatGainNode = null;
-      let foxbatFilterNode = null;
+      // Audio variables
+      let leftAudioNode = null;
+      let leftGainNode = null;
+      let leftFilterNode = null;
+
+      let rightAudioNode = null;
+      let rightGainNode = null;
+      let rightFilterNode = null;
+
+      let coolantAudioNode = null;
+      let coolantGainNode = null;
+
       let foxbatAudioRunning = false;
 
       function updateFoxbatSound() {
-        if (!sovietAudioCtx) return;
+        if (!window.sovietAudioCtx) return;
         
-        // Start engine audio hum if not running
         if (!foxbatAudioRunning) {
           try {
-            const bufferSize = sovietAudioCtx.sampleRate * 2;
-            const buffer = sovietAudioCtx.createBuffer(1, bufferSize, sovietAudioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-              data[i] = Math.random() * 2 - 1;
-            }
-            
-            const noise = sovietAudioCtx.createBufferSource();
-            noise.buffer = buffer;
-            noise.loop = true;
+            const createNoiseSource = () => {
+              const bufferSize = window.sovietAudioCtx.sampleRate * 2;
+              const buffer = window.sovietAudioCtx.createBuffer(1, bufferSize, window.sovietAudioCtx.sampleRate);
+              const data = buffer.getChannelData(0);
+              for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+              }
+              const noise = window.sovietAudioCtx.createBufferSource();
+              noise.buffer = buffer;
+              noise.loop = true;
+              return noise;
+            };
 
-            foxbatFilterNode = sovietAudioCtx.createBiquadFilter();
-            foxbatFilterNode.type = 'bandpass';
-            foxbatFilterNode.frequency.value = 250;
-            foxbatFilterNode.Q.value = 1.2;
+            // Left engine
+            const noiseL = createNoiseSource();
+            leftFilterNode = window.sovietAudioCtx.createBiquadFilter();
+            leftFilterNode.type = 'bandpass';
+            leftFilterNode.frequency.value = 150;
+            leftFilterNode.Q.value = 1.0;
+            leftGainNode = window.sovietAudioCtx.createGain();
+            leftGainNode.gain.value = 0.0;
+            noiseL.connect(leftFilterNode);
+            leftFilterNode.connect(leftGainNode);
+            leftGainNode.connect(window.sovietAudioCtx.destination);
+            noiseL.start();
+            leftAudioNode = noiseL;
 
-            foxbatGainNode = sovietAudioCtx.createGain();
-            foxbatGainNode.gain.value = 0.02;
+            // Right engine
+            const noiseR = createNoiseSource();
+            rightFilterNode = window.sovietAudioCtx.createBiquadFilter();
+            rightFilterNode.type = 'bandpass';
+            rightFilterNode.frequency.value = 150;
+            rightFilterNode.Q.value = 1.0;
+            rightGainNode = window.sovietAudioCtx.createGain();
+            rightGainNode.gain.value = 0.0;
+            noiseR.connect(rightFilterNode);
+            rightFilterNode.connect(rightGainNode);
+            rightGainNode.connect(window.sovietAudioCtx.destination);
+            noiseR.start();
+            rightAudioNode = noiseR;
 
-            noise.connect(foxbatFilterNode);
-            foxbatFilterNode.connect(foxbatGainNode);
-            foxbatGainNode.connect(sovietAudioCtx.destination);
-            noise.start();
+            // Coolant hiss
+            const noiseC = createNoiseSource();
+            coolantGainNode = window.sovietAudioCtx.createGain();
+            coolantGainNode.gain.value = 0.0;
+            const coolantFilter = window.sovietAudioCtx.createBiquadFilter();
+            coolantFilter.type = 'highpass';
+            coolantFilter.frequency.value = 1800;
+            noiseC.connect(coolantFilter);
+            coolantFilter.connect(coolantGainNode);
+            coolantGainNode.connect(window.sovietAudioCtx.destination);
+            noiseC.start();
+            coolantAudioNode = noiseC;
 
-            foxbatAudioNode = noise;
             foxbatAudioRunning = true;
           } catch(e) {
-            console.warn("Foxbat audio failed:", e);
+            console.warn("Foxbat audio setup failed:", e);
           }
         }
 
-        if (foxbatAudioRunning && foxbatGainNode && foxbatFilterNode) {
-          const densityFactor = foxbatAirDensity / 1.225; // sound attenuates in thinner air!
-          const targetFreq = 160 + (foxbatMach * 180);
-          const targetGain = (0.015 + (foxbatMach - 1.0) * 0.04) * densityFactor;
+        const densityFactor = foxbatAirDensity / 1.225;
 
-          foxbatFilterNode.frequency.setValueAtTime(targetFreq, sovietAudioCtx.currentTime);
-          foxbatGainNode.gain.setValueAtTime(targetGain, sovietAudioCtx.currentTime);
+        if (leftGainNode && leftFilterNode) {
+          const rpmRatio = leftRPM / 100;
+          const targetFreq = 110 + (rpmRatio * 220) + (leftAfterburner ? 80 : 0);
+          const targetGain = (0.012 * rpmRatio + (leftAfterburner ? 0.045 : 0)) * densityFactor;
+          leftFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
+          leftGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
+        }
+
+        if (rightGainNode && rightFilterNode) {
+          const rpmRatio = rightRPM / 100;
+          const targetFreq = 105 + (rpmRatio * 225) + (rightAfterburner ? 85 : 0);
+          const targetGain = (0.012 * rpmRatio + (rightAfterburner ? 0.045 : 0)) * densityFactor;
+          rightFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
+          rightGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
+        }
+
+        if (coolantGainNode) {
+          const targetCgain = coolantFlow > 0 && coolantQty > 0 ? (coolantFlow === 2 ? 0.02 : 0.01) : 0.0;
+          coolantGainNode.gain.setValueAtTime(targetCgain, window.sovietAudioCtx.currentTime);
         }
       }
 
-      // Event listeners for Mach speed and altitude changes
+      // DOM Elements
+      const btnLeftStarter = document.getElementById('btn-left-starter');
+      const btnRightStarter = document.getElementById('btn-right-starter');
+      const sliderLeftThrottle = document.getElementById('slider-left-throttle');
+      const sliderRightThrottle = document.getElementById('slider-right-throttle');
+      const lblLeftThrottle = document.getElementById('lbl-left-throttle');
+      const lblRightThrottle = document.getElementById('lbl-right-throttle');
+      const toggleLeftAfterburner = document.getElementById('toggle-left-afterburner');
+      const toggleRightAfterburner = document.getElementById('toggle-right-afterburner');
+      const statusLeftAfterburner = document.getElementById('status-left-afterburner');
+      const statusRightAfterburner = document.getElementById('status-right-afterburner');
+
+      const toggleRampAuto = document.getElementById('toggle-foxbat-ramp-auto');
+      const sliderRampAngle = document.getElementById('slider-foxbat-ramp-angle');
+      const lblRampAngle = document.getElementById('lbl-foxbat-ramp-angle');
+
+      const toggleNozzleAuto = document.getElementById('toggle-foxbat-nozzle-auto');
+      const sliderNozzlePos = document.getElementById('slider-foxbat-nozzle-pos');
+      const lblNozzlePos = document.getElementById('lbl-foxbat-nozzle-pos');
+
       const sliderMach = document.getElementById('slider-foxbat-mach');
       const lblMach = document.getElementById('lbl-foxbat-mach');
+      const sliderAlt = document.getElementById('slider-foxbat-alt');
+      const lblAltVal = document.getElementById('lbl-foxbat-alt');
+
+      const btnFlightMode = document.getElementById('btn-foxbat-flightmode');
+
+      const barCoolant = document.getElementById('bar-foxbat-coolant');
+      const lblCoolantQty = document.getElementById('lbl-foxbat-coolant-qty');
+      const btnRefillCoolant = document.getElementById('btn-refill-coolant');
+
+      const btnCoolantOff = document.getElementById('btn-coolant-off');
+      const btnCoolant50 = document.getElementById('btn-coolant-50');
+      const btnCoolant100 = document.getElementById('btn-coolant-100');
+
+      // Bind Listeners
+      if (btnLeftStarter) {
+        btnLeftStarter.addEventListener('click', () => {
+          ensureAudioCtx();
+          if (leftStatus === 'DAMAGED') {
+            if (foxbatMach < 0.1) {
+              logTerminal("[SYS] LEFT ENGINE REPAIR DIRECTIVE INITIATED. STANDBY...");
+              btnLeftStarter.textContent = "REPAIRING...";
+              setTimeout(() => {
+                leftDamage = 0;
+                leftStatus = 'OFFLINE';
+                btnLeftStarter.textContent = "OFFLINE";
+                logTerminal("[SYS] LEFT ENGINE REPAIRED AND READY FOR COLD START.");
+              }, 3000);
+            } else {
+              logTerminal("[ERR] LEFT ENGINE DAMAGED. LANDING REQUIRED FOR MECHANICAL FIELD MAINTENANCE.");
+            }
+            return;
+          }
+          if (leftStatus === 'STALL') {
+            leftStatus = 'STARTING';
+            logTerminal("[SYS] LEFT ENGINE COMPRESSOR SURGE RECOVERY STARTED. SPOOLING...");
+            return;
+          }
+          leftIgnition = !leftIgnition;
+          if (leftIgnition) {
+            leftStatus = 'STARTING';
+            btnLeftStarter.classList.add('starter-active');
+            btnLeftStarter.textContent = "STARTING";
+            logTerminal("[SYS] МИГ-25 LEFT APU & TURBOJET STARTER ENGAGED.");
+          } else {
+            leftStatus = 'OFFLINE';
+            leftAfterburner = false;
+            if (toggleLeftAfterburner) toggleLeftAfterburner.checked = false;
+            btnLeftStarter.classList.remove('starter-active');
+            btnLeftStarter.textContent = "OFFLINE";
+            logTerminal("[SYS] МИГ-25 LEFT ENGINE FUEL ISOLATION COCK SHUT.");
+          }
+          updateFoxbatSound();
+        });
+      }
+
+      if (btnRightStarter) {
+        btnRightStarter.addEventListener('click', () => {
+          ensureAudioCtx();
+          if (rightStatus === 'DAMAGED') {
+            if (foxbatMach < 0.1) {
+              logTerminal("[SYS] RIGHT ENGINE REPAIR DIRECTIVE INITIATED. STANDBY...");
+              btnRightStarter.textContent = "REPAIRING...";
+              setTimeout(() => {
+                rightDamage = 0;
+                rightStatus = 'OFFLINE';
+                btnRightStarter.textContent = "OFFLINE";
+                logTerminal("[SYS] RIGHT ENGINE REPAIRED AND READY FOR COLD START.");
+              }, 3000);
+            } else {
+              logTerminal("[ERR] RIGHT ENGINE DAMAGED. LANDING REQUIRED FOR FIELD MAINTENANCE.");
+            }
+            return;
+          }
+          if (rightStatus === 'STALL') {
+            rightStatus = 'STARTING';
+            logTerminal("[SYS] RIGHT ENGINE COMPRESSOR SURGE RECOVERY STARTED. SPOOLING...");
+            return;
+          }
+          rightIgnition = !rightIgnition;
+          if (rightIgnition) {
+            rightStatus = 'STARTING';
+            btnRightStarter.classList.add('starter-active');
+            btnRightStarter.textContent = "STARTING";
+            logTerminal("[SYS] МИГ-25 RIGHT APU & TURBOJET STARTER ENGAGED.");
+          } else {
+            rightStatus = 'OFFLINE';
+            rightAfterburner = false;
+            if (toggleRightAfterburner) toggleRightAfterburner.checked = false;
+            btnRightStarter.classList.remove('starter-active');
+            btnRightStarter.textContent = "OFFLINE";
+            logTerminal("[SYS] МИГ-25 RIGHT ENGINE FUEL ISOLATION COCK SHUT.");
+          }
+          updateFoxbatSound();
+        });
+      }
+
+      if (sliderLeftThrottle) {
+        sliderLeftThrottle.addEventListener('input', (e) => {
+          ensureAudioCtx();
+          leftThrottle = parseInt(e.target.value);
+          if (lblLeftThrottle) lblLeftThrottle.textContent = `${leftThrottle}%`;
+          if (toggleLeftAfterburner) {
+            toggleLeftAfterburner.disabled = (leftThrottle < 85 || leftStatus !== 'RUNNING');
+            if (leftThrottle < 85 && leftAfterburner) {
+              leftAfterburner = false;
+              toggleLeftAfterburner.checked = false;
+              if (statusLeftAfterburner) {
+                statusLeftAfterburner.textContent = "SAFE";
+                statusLeftAfterburner.style.color = "#8c736e";
+              }
+              logTerminal("[SYS] LEFT AFTERBURNER DISENGAGED.");
+            }
+          }
+        });
+      }
+
+      if (sliderRightThrottle) {
+        sliderRightThrottle.addEventListener('input', (e) => {
+          ensureAudioCtx();
+          rightThrottle = parseInt(e.target.value);
+          if (lblRightThrottle) lblRightThrottle.textContent = `${rightThrottle}%`;
+          if (toggleRightAfterburner) {
+            toggleRightAfterburner.disabled = (rightThrottle < 85 || rightStatus !== 'RUNNING');
+            if (rightThrottle < 85 && rightAfterburner) {
+              rightAfterburner = false;
+              toggleRightAfterburner.checked = false;
+              if (statusRightAfterburner) {
+                statusRightAfterburner.textContent = "SAFE";
+                statusRightAfterburner.style.color = "#8c736e";
+              }
+              logTerminal("[SYS] RIGHT AFTERBURNER DISENGAGED.");
+            }
+          }
+        });
+      }
+
+      if (toggleLeftAfterburner) {
+        toggleLeftAfterburner.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          leftAfterburner = e.target.checked;
+          if (statusLeftAfterburner) {
+            statusLeftAfterburner.textContent = leftAfterburner ? "ZONE 3 (LIT)" : "SAFE";
+            statusLeftAfterburner.style.color = leftAfterburner ? "#ff5533" : "#8c736e";
+          }
+          logTerminal(`[SYS] LEFT AFTERBURNER COMBUSTION FIELD: ${leftAfterburner ? 'IGNITED' : 'SAFE'}`);
+          updateFoxbatSound();
+        });
+      }
+
+      if (toggleRightAfterburner) {
+        toggleRightAfterburner.addEventListener('change', (e) => {
+          ensureAudioCtx();
+          rightAfterburner = e.target.checked;
+          if (statusRightAfterburner) {
+            statusRightAfterburner.textContent = rightAfterburner ? "ZONE 3 (LIT)" : "SAFE";
+            statusRightAfterburner.style.color = rightAfterburner ? "#ff5533" : "#8c736e";
+          }
+          logTerminal(`[SYS] RIGHT AFTERBURNER COMBUSTION FIELD: ${rightAfterburner ? 'IGNITED' : 'SAFE'}`);
+          updateFoxbatSound();
+        });
+      }
+
+      if (toggleRampAuto) {
+        toggleRampAuto.addEventListener('change', (e) => {
+          rampAuto = e.target.checked;
+          if (sliderRampAngle) sliderRampAngle.disabled = rampAuto;
+          logTerminal(`[SYS] INTAKE DUCT GUIDES (RAMPS) MODE: ${rampAuto ? 'AUTO REGULATION' : 'MANUAL COMMAND'}`);
+        });
+      }
+
+      if (sliderRampAngle) {
+        sliderRampAngle.addEventListener('input', (e) => {
+          rampAngle = parseInt(e.target.value);
+          if (lblRampAngle) lblRampAngle.textContent = `${rampAngle}°`;
+        });
+      }
+
+      if (toggleNozzleAuto) {
+        toggleNozzleAuto.addEventListener('change', (e) => {
+          nozzleAuto = e.target.checked;
+          if (sliderNozzlePos) sliderNozzlePos.disabled = nozzleAuto;
+          logTerminal(`[SYS] EXHAUST NOZZLE ACTUATORS MODE: ${nozzleAuto ? 'PRESSURE REGULATION' : 'MANUAL OVERRIDE'}`);
+        });
+      }
+
+      if (sliderNozzlePos) {
+        sliderNozzlePos.addEventListener('input', (e) => {
+          nozzlePos = parseInt(e.target.value);
+          if (lblNozzlePos) lblNozzlePos.textContent = `${nozzlePos}%`;
+        });
+      }
+
       if (sliderMach) {
         sliderMach.addEventListener('input', (e) => {
           ensureAudioCtx();
@@ -9035,8 +9493,6 @@
         });
       }
 
-      const sliderAlt = document.getElementById('slider-foxbat-alt');
-      const lblAltVal = document.getElementById('lbl-foxbat-alt');
       if (sliderAlt) {
         sliderAlt.addEventListener('input', (e) => {
           ensureAudioCtx();
@@ -9046,145 +9502,471 @@
         });
       }
 
-      const toggleCoolant = document.getElementById('toggle-foxbat-coolant');
-      const statusCoolant = document.getElementById('status-foxbat-coolant');
-      if (toggleCoolant) {
-        toggleCoolant.addEventListener('change', (e) => {
+      if (btnFlightMode) {
+        btnFlightMode.addEventListener('click', () => {
           ensureAudioCtx();
-          foxbatCoolantActive = e.target.checked;
-          if (statusCoolant) {
-            statusCoolant.textContent = foxbatCoolantActive ? "ACTIVE (SNP-B ON)" : "INACTIVE";
-            statusCoolant.style.color = foxbatCoolantActive ? "#81c784" : "#8c736e";
+          if (flightMode === 'MANUAL') {
+            flightMode = 'DYNAMIC';
+            btnFlightMode.textContent = "DYNAMIC THRUST";
+            btnFlightMode.style.borderColor = "#ff5533";
+            btnFlightMode.style.color = "#ff5533";
+            if (sliderMach) sliderMach.disabled = true;
+            logTerminal("[SYS] FLIGHT SPEED RE-ROUTED: DYNAMIC EQUILIBRIUM THRUST LOADED.");
+          } else {
+            flightMode = 'MANUAL';
+            btnFlightMode.textContent = "MANUAL SLIDER";
+            btnFlightMode.style.borderColor = "#81c784";
+            btnFlightMode.style.color = "#81c784";
+            if (sliderMach) sliderMach.disabled = false;
+            logTerminal("[SYS] FLIGHT SPEED RETURNED TO MANUAL DIAL COMMANDS.");
           }
-          logTerminal(`[SYS] МИГ-25 LIQUID COOLANT COIL SYSTEM: ${foxbatCoolantActive ? 'ARMED' : 'OFFLINE'}`);
         });
       }
+
+      if (btnRefillCoolant) {
+        btnRefillCoolant.addEventListener('click', () => {
+          ensureAudioCtx();
+          coolantQty = 100;
+          if (barCoolant) barCoolant.style.width = '100%';
+          if (lblCoolantQty) lblCoolantQty.textContent = '100%';
+          logTerminal("[SYS] МИГ-25 WATER-METHANOL TANK SERVICED. RESERVOIR 100% FULL.");
+        });
+      }
+
+      const updateCoolantButtons = (flow) => {
+        coolantFlow = flow;
+        if (btnCoolantOff) btnCoolantOff.classList.toggle('active', flow === 0);
+        if (btnCoolant50) btnCoolant50.classList.toggle('active', flow === 1);
+        if (btnCoolant100) btnCoolant100.classList.toggle('active', flow === 2);
+        logTerminal(`[SYS] СНПБ COOLANT VALVE SET: ${flow === 0 ? 'OFF' : (flow === 1 ? '50% CAPACITY' : '100% FULL FLOW')}`);
+        updateFoxbatSound();
+      };
+
+      if (btnCoolantOff) btnCoolantOff.addEventListener('click', () => updateCoolantButtons(0));
+      if (btnCoolant50) btnCoolant50.addEventListener('click', () => updateCoolantButtons(1));
+      if (btnCoolant100) btnCoolant100.addEventListener('click', () => updateCoolantButtons(2));
 
       // Foxbat Engine simulation loop
       window.animateFoxbatEngine = () => {
         if (!document.getElementById('soviet-foxbat-panel')) {
           // Terminate audio if panel is closed
-          if (foxbatAudioNode) {
-            try { foxbatAudioNode.stop(); } catch(e) {}
-            foxbatAudioNode = null;
-            foxbatAudioRunning = false;
-          }
+          if (leftAudioNode) { try { leftAudioNode.stop(); } catch(e) {} leftAudioNode = null; }
+          if (rightAudioNode) { try { rightAudioNode.stop(); } catch(e) {} rightAudioNode = null; }
+          if (coolantAudioNode) { try { coolantAudioNode.stop(); } catch(e) {} coolantAudioNode = null; }
+          foxbatAudioRunning = false;
           return;
         }
 
-        // 1. Calculate thermodynamics friction and air density parameters
-        foxbatAirDensity = 1.225 * Math.exp(-foxbatAlt / 8500);
-        
-        // Stratosphere ambient base (approx -56C)
-        const ambientTemp = -56;
-        let targetTemp = ambientTemp + 70 * (foxbatMach ** 2);
-        if (foxbatCoolantActive) {
-          targetTemp -= 160; // cooling system reduces temperature
+        // 1. Spool & Status Management
+        // LEFT ENGINE Spooling
+        if (leftStatus === 'STARTING') {
+          leftRPM += (30 - leftRPM) * 0.04;
+          if (leftRPM >= 29.5) {
+            leftStatus = 'RUNNING';
+            if (btnLeftStarter) btnLeftStarter.textContent = "RUNNING";
+            logTerminal("[SYS] LEFT TUMANSKY R-15 DETECTED COMBUSTION STABILITY. TURBOJET ACTIVE.");
+          }
+        } else if (leftStatus === 'RUNNING') {
+          const target = leftAfterburner ? 100 : (30 + leftThrottle * 0.7);
+          leftRPM += (target - leftRPM) * 0.05;
+        } else if (leftStatus === 'OFFLINE') {
+          leftRPM += (0 - leftRPM) * 0.05;
+          if (leftRPM < 0.1) leftRPM = 0;
+        } else if (leftStatus === 'STALL') {
+          leftRPM += (10 - leftRPM) * 0.08;
+        } else if (leftStatus === 'DAMAGED') {
+          leftRPM += (0 - leftRPM) * 0.07;
+          if (leftRPM < 0.1) leftRPM = 0;
         }
-        
-        // Interpolate skin temp smoothly
-        foxbatTemp += (targetTemp - foxbatTemp) * 0.05;
-        if (foxbatTemp < 15) foxbatTemp = 15;
 
-        foxbatFuelRate = 0.3 + (foxbatMach * 0.95) * (foxbatAirDensity / 1.225) * 1.5;
+        // RIGHT ENGINE Spooling
+        if (rightStatus === 'STARTING') {
+          rightRPM += (30 - rightRPM) * 0.04;
+          if (rightRPM >= 29.5) {
+            rightStatus = 'RUNNING';
+            if (btnRightStarter) btnRightStarter.textContent = "RUNNING";
+            logTerminal("[SYS] RIGHT TUMANSKY R-15 DETECTED COMBUSTION STABILITY. TURBOJET ACTIVE.");
+          }
+        } else if (rightStatus === 'RUNNING') {
+          const target = rightAfterburner ? 100 : (30 + rightThrottle * 0.7);
+          rightRPM += (target - rightRPM) * 0.05;
+        } else if (rightStatus === 'OFFLINE') {
+          rightRPM += (0 - rightRPM) * 0.05;
+          if (rightRPM < 0.1) rightRPM = 0;
+        } else if (rightStatus === 'STALL') {
+          rightRPM += (10 - rightRPM) * 0.08;
+        } else if (rightStatus === 'DAMAGED') {
+          rightRPM += (0 - rightRPM) * 0.07;
+          if (rightRPM < 0.1) rightRPM = 0;
+        }
 
-        // 2. Render engine cross-section drawing
+        // 2. Airflow, Density, & Inlet Diffuser physics
+        foxbatAirDensity = 1.225 * Math.exp(-foxbatAlt / 8500);
+        const ambientTemp = -56;
+
+        // Supersonic inlet diffuser ramp physics
+        const idealRamp = foxbatMach > 1.0 ? Math.min(45, (foxbatMach - 1.0) * 20.4) : 0;
+        if (rampAuto) {
+          rampAngle = idealRamp;
+          if (sliderRampAngle) sliderRampAngle.value = rampAngle;
+          if (lblRampAngle) lblRampAngle.textContent = `${Math.round(rampAngle)}°`;
+        }
+
+        // Compressor Stall check
+        const rampMismatch = Math.abs(rampAngle - idealRamp);
+        if (foxbatMach > 1.5 && rampMismatch > 12) {
+          if (Math.random() < 0.008) {
+            if (leftStatus === 'RUNNING') {
+              leftStatus = 'STALL';
+              leftAfterburner = false;
+              if (toggleLeftAfterburner) toggleLeftAfterburner.checked = false;
+              if (btnLeftStarter) btnLeftStarter.textContent = "STALL ⚠️";
+              logTerminal("[ALERT] МИГ-25 LEFT COMPRESSOR SURGE DETECTED! INLET RAMP SHOCKWAVE MISMATCH.");
+            }
+            if (rightStatus === 'RUNNING') {
+              rightStatus = 'STALL';
+              rightAfterburner = false;
+              if (toggleRightAfterburner) toggleRightAfterburner.checked = false;
+              if (btnRightStarter) btnRightStarter.textContent = "STALL ⚠️";
+              logTerminal("[ALERT] МИГ-25 RIGHT COMPRESSOR SURGE DETECTED! INLET RAMP SHOCKWAVE MISMATCH.");
+            }
+          }
+        }
+        if (rampAngle > 20 && foxbatMach < 0.8) {
+          if (Math.random() < 0.008) {
+            if (leftStatus === 'RUNNING') {
+              leftStatus = 'STALL';
+              if (btnLeftStarter) btnLeftStarter.textContent = "STALL ⚠️";
+              logTerminal("[ALERT] LEFT ENGINE FLAMEOUT: AIRFLOW STARVATION FROM RETRACTED RAMPS.");
+            }
+            if (rightStatus === 'RUNNING') {
+              rightStatus = 'STALL';
+              if (btnRightStarter) btnRightStarter.textContent = "STALL ⚠️";
+              logTerminal("[ALERT] RIGHT ENGINE FLAMEOUT: AIRFLOW STARVATION FROM RETRACTED RAMPS.");
+            }
+          }
+        }
+
+        // Exhaust Nozzle Area physics
+        const idealNozzle = (leftAfterburner || rightAfterburner) ? 90 : (25 + (100 - (leftRPM + rightRPM) / 2) * 0.5);
+        if (nozzleAuto) {
+          nozzlePos = idealNozzle;
+          if (sliderNozzlePos) sliderNozzlePos.value = nozzlePos;
+          if (lblNozzlePos) lblNozzlePos.textContent = `${Math.round(nozzlePos)}%`;
+        }
+
+        let leftNozzleHeatPenalty = 0;
+        let rightNozzleHeatPenalty = 0;
+        let leftNozzleThrustPenalty = 1.0;
+        let rightNozzleThrustPenalty = 1.0;
+
+        if (leftAfterburner && nozzlePos < 55) {
+          leftNozzleHeatPenalty = (55 - nozzlePos) * 4.5;
+        }
+        if (!leftAfterburner && nozzlePos > 70) {
+          leftNozzleThrustPenalty = 0.6;
+        }
+        if (rightAfterburner && nozzlePos < 55) {
+          rightNozzleHeatPenalty = (55 - nozzlePos) * 4.5;
+        }
+        if (!rightAfterburner && nozzlePos > 70) {
+          rightNozzleThrustPenalty = 0.6;
+        }
+
+        // 3. SNP-B Cooling system
+        let activeCooling = 0;
+        if (coolantFlow > 0 && coolantQty > 0) {
+          activeCooling = coolantFlow === 2 ? 220 : 110;
+          coolantQty = Math.max(0, coolantQty - (coolantFlow === 2 ? 0.06 : 0.03));
+          if (barCoolant) barCoolant.style.width = `${coolantQty}%`;
+          if (lblCoolantQty) lblCoolantQty.textContent = `${Math.round(coolantQty)}%`;
+          
+          if (coolantQty <= 0) {
+            logTerminal("[SYS] СНПБ WATER-METHANOL RESERVOIR DEPLETED. INJECTION CUT-OFF.");
+            updateCoolantButtons(0);
+          }
+        }
+
+        // 4. Thermodynamics: Engine Temperatures (EGT)
+        let leftTargetEGT = ambientTemp + 200;
+        if (leftStatus === 'STARTING') {
+          leftTargetEGT = 350;
+        } else if (leftStatus === 'RUNNING') {
+          leftTargetEGT = 300 + (leftRPM / 100) * 420;
+          if (leftAfterburner) leftTargetEGT += 320;
+          leftTargetEGT += leftNozzleHeatPenalty;
+          leftTargetEGT -= activeCooling * 0.95;
+        } else if (leftStatus === 'STALL') {
+          leftTargetEGT = 680;
+        }
+        leftEGT += (leftTargetEGT - leftEGT) * 0.06;
+        if (leftEGT < ambientTemp) leftEGT = ambientTemp;
+
+        let rightTargetEGT = ambientTemp + 200;
+        if (rightStatus === 'STARTING') {
+          rightTargetEGT = 350;
+        } else if (rightStatus === 'RUNNING') {
+          rightTargetEGT = 300 + (rightRPM / 100) * 420;
+          if (rightAfterburner) rightTargetEGT += 320;
+          rightTargetEGT += rightNozzleHeatPenalty;
+          rightTargetEGT -= activeCooling * 0.95;
+        } else if (rightStatus === 'STALL') {
+          rightTargetEGT = 680;
+        }
+        rightEGT += (rightTargetEGT - rightEGT) * 0.06;
+        if (rightEGT < ambientTemp) rightEGT = ambientTemp;
+
+        // Update EGT/RPM readouts
+        const txtLeftEgt = document.getElementById('nixie-left-egt');
+        if (txtLeftEgt) txtLeftEgt.textContent = String(Math.round(leftEGT)).padStart(3, '0') + "°C";
+        const txtRightEgt = document.getElementById('nixie-right-egt');
+        if (txtRightEgt) txtRightEgt.textContent = String(Math.round(rightEGT)).padStart(3, '0') + "°C";
+
+        const txtLeftRpm = document.getElementById('nixie-left-rpm');
+        if (txtLeftRpm) txtLeftRpm.textContent = leftRPM.toFixed(1) + "%";
+        const txtRightRpm = document.getElementById('nixie-right-rpm');
+        if (txtRightRpm) txtRightRpm.textContent = rightRPM.toFixed(1) + "%";
+
+        // Wear and Thermal Damage
+        if (leftEGT > 850 && leftStatus === 'RUNNING') {
+          leftDamage += 0.07;
+          if (leftDamage >= 100) {
+            leftStatus = 'DAMAGED';
+            leftAfterburner = false;
+            leftIgnition = false;
+            if (btnLeftStarter) btnLeftStarter.textContent = "DAMAGE";
+            logTerminal("[ALERT] LEFT ENGINE THERMAL STRUCTURAL FAILURE! CORE COMPONENT MELT.");
+          }
+        }
+        if (rightEGT > 850 && rightStatus === 'RUNNING') {
+          rightDamage += 0.07;
+          if (rightDamage >= 100) {
+            rightStatus = 'DAMAGED';
+            rightAfterburner = false;
+            rightIgnition = false;
+            if (btnRightStarter) btnRightStarter.textContent = "DAMAGE";
+            logTerminal("[ALERT] RIGHT ENGINE THERMAL STRUCTURAL FAILURE! CORE COMPONENT MELT.");
+          }
+        }
+
+        // Warn Box toggling
+        const leftAlertBox = document.getElementById('left-engine-alert');
+        const lblLeftAlert = document.getElementById('lbl-left-alert');
+        if (leftAlertBox) {
+          if (leftStatus === 'STALL') {
+            leftAlertBox.style.display = 'flex';
+            if (lblLeftAlert) lblLeftAlert.textContent = "COMPRESSOR STALL!";
+          } else if (leftStatus === 'DAMAGED') {
+            leftAlertBox.style.display = 'flex';
+            if (lblLeftAlert) lblLeftAlert.textContent = "ENGINE BURNT!";
+          } else if (leftEGT > 800) {
+            leftAlertBox.style.display = 'flex';
+            if (lblLeftAlert) lblLeftAlert.textContent = "🚨 OVERHEAT ALERT!";
+          } else {
+            leftAlertBox.style.display = 'none';
+          }
+        }
+
+        const rightAlertBox = document.getElementById('right-engine-alert');
+        const lblRightAlert = document.getElementById('lbl-right-alert');
+        if (rightAlertBox) {
+          if (rightStatus === 'STALL') {
+            rightAlertBox.style.display = 'flex';
+            if (lblRightAlert) lblRightAlert.textContent = "COMPRESSOR STALL!";
+          } else if (rightStatus === 'DAMAGED') {
+            rightAlertBox.style.display = 'flex';
+            if (lblRightAlert) lblRightAlert.textContent = "ENGINE BURNT!";
+          } else if (rightEGT > 800) {
+            rightAlertBox.style.display = 'flex';
+            if (lblRightAlert) lblRightAlert.textContent = "🚨 OVERHEAT ALERT!";
+          } else {
+            rightAlertBox.style.display = 'none';
+          }
+        }
+
+        // 5. Propulsion & Dynamic flight physics
+        const tL = leftStatus === 'RUNNING' ? ((leftRPM / 100) * 80 + (leftAfterburner ? 32 : 0)) * leftNozzleThrustPenalty : 0;
+        const tR = rightStatus === 'RUNNING' ? ((rightRPM / 100) * 80 + (rightAfterburner ? 32 : 0)) * rightNozzleThrustPenalty : 0;
+        const totalThrust = (tL + tR) * (foxbatAirDensity / 0.413);
+
+        foxbatFuelRate = (leftStatus === 'RUNNING' ? (0.2 + (leftRPM / 100) * 0.4 + (leftAfterburner ? 1.2 : 0)) : 0) +
+                         (rightStatus === 'RUNNING' ? (0.2 + (rightRPM / 100) * 0.4 + (rightAfterburner ? 1.2 : 0)) : 0);
+
+        if (flightMode === 'DYNAMIC') {
+          let dragCoeff = 3.5;
+          if (foxbatMach > 0.85 && foxbatMach < 1.25) {
+            dragCoeff = 7.8;
+          }
+          const drag = dragCoeff * foxbatAirDensity * (foxbatMach ** 2) * 22;
+          const netForce = totalThrust - drag;
+          const accel = netForce * 0.00012;
+
+          foxbatMach = Math.max(0.0, Math.min(3.2, foxbatMach + accel));
+          
+          if (sliderMach) {
+            sliderMach.value = foxbatMach;
+            if (lblMach) lblMach.textContent = `Mach ${foxbatMach.toFixed(2)}`;
+          }
+        }
+
+        const skinTargetTemp = ambientTemp + 80 * (foxbatMach ** 2);
+        foxbatTemp += (skinTargetTemp - foxbatTemp) * 0.05;
+
+        // 6. Audio Modulator updates
+        updateFoxbatSound();
+
+        // 7. Visual Render twin spools on Canvas
         if (foxbatCtx && foxbatCanvas) {
           const cw = foxbatCanvas.width = foxbatCanvas.offsetWidth || 300;
-          const ch = foxbatCanvas.height = foxbatCanvas.offsetHeight || 150;
+          const ch = foxbatCanvas.height = foxbatCanvas.offsetHeight || 160;
           const cx = cw / 2;
           const cy = ch / 2;
 
           foxbatCtx.fillStyle = '#050505';
           foxbatCtx.fillRect(0, 0, cw, ch);
 
-          const drawEngineDuct = (yOffset) => {
+          const drawSingleEngineRow = (yOffset, rpm, status, isAB, damage, egt) => {
             const ey = cy + yOffset;
 
-            // Draw intake frame
-            foxbatCtx.strokeStyle = '#546e7a';
-            foxbatCtx.lineWidth = 1.8;
-            foxbatCtx.strokeRect(20, ey - 22, 25, 44);
+            // Draw intake boundary box
+            foxbatCtx.strokeStyle = status === 'DAMAGED' ? '#ef5350' : (status === 'STALL' ? '#ff8f00' : '#546e7a');
+            foxbatCtx.lineWidth = 1.5;
+            foxbatCtx.strokeRect(15, ey - 22, 22, 44);
 
-            // Compressors block
-            foxbatCtx.fillStyle = '#1e272c';
-            foxbatCtx.fillRect(45, ey - 20, 60, 40);
+            // Intake label
+            foxbatCtx.fillStyle = '#546e7a';
+            foxbatCtx.font = '7px monospace';
+            foxbatCtx.fillText("INLET", 16, ey - 25);
+
+            // Compressors casing
+            foxbatCtx.fillStyle = '#161d20';
+            foxbatCtx.fillRect(37, ey - 20, 55, 40);
 
             // Compressor blades lines rotating
-            foxbatCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            for (let i = 0; i < 6; i++) {
-              const bx = 45 + (i * 10);
-              const speedFactor = 0.3 + (foxbatMach * 0.25);
-              const offset = Math.sin(engineFlameTime * speedFactor + i) * 12;
+            foxbatCtx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+            const rotSpeed = (rpm / 100) * 1.5;
+            for (let i = 0; i < 5; i++) {
+              const bx = 37 + (i * 11);
+              const angle = Math.sin(engineFlameTime * rotSpeed + i) * 11;
               foxbatCtx.beginPath();
               foxbatCtx.moveTo(bx, ey - 20);
-              foxbatCtx.lineTo(bx + offset / 2, ey + 20);
+              foxbatCtx.lineTo(bx + angle / 2, ey + 20);
               foxbatCtx.stroke();
             }
 
             // Burner nozzle chamber
-            foxbatCtx.fillStyle = '#111113';
+            foxbatCtx.fillStyle = '#0f1112';
             foxbatCtx.beginPath();
-            foxbatCtx.moveTo(105, ey - 18);
-            foxbatCtx.lineTo(170, ey - 10);
-            foxbatCtx.lineTo(170, ey + 10);
-            foxbatCtx.lineTo(105, ey + 18);
+            foxbatCtx.moveTo(92, ey - 18);
+            foxbatCtx.lineTo(155, ey - 8);
+            foxbatCtx.lineTo(155, ey + 8);
+            foxbatCtx.lineTo(92, ey + 18);
             foxbatCtx.closePath();
             foxbatCtx.fill();
 
-            // Air intake molecules flowing
-            foxbatCtx.fillStyle = 'rgba(129, 207, 224, 0.55)'; // Cold air particles
-            for (let i = 0; i < 4; i++) {
-              const px = ((engineFlameTime * 2.8 + i * 38) % 150) + 15;
-              if (px < 165) {
-                const py = ey + Math.sin(engineFlameTime * 0.08 + px) * 10;
+            // Casing Heat Glow
+            if (egt > 400) {
+              const glowAlpha = Math.min(0.65, (egt - 400) / 450);
+              foxbatCtx.strokeStyle = `rgba(255, 69, 0, ${glowAlpha})`;
+              foxbatCtx.lineWidth = 2.5;
+              foxbatCtx.beginPath();
+              foxbatCtx.moveTo(92, ey - 18);
+              foxbatCtx.lineTo(155, ey - 8);
+              foxbatCtx.moveTo(92, ey + 18);
+              foxbatCtx.lineTo(155, ey + 8);
+              foxbatCtx.stroke();
+            }
+
+            // Coolant vapor mist spray
+            if (activeCooling > 0 && rpm > 20) {
+              foxbatCtx.fillStyle = 'rgba(0, 180, 216, 0.45)';
+              for (let d = 0; d < 8; d++) {
+                const px = 100 + (Math.random() * 50);
+                const py = ey + (Math.random() * 12 - 6);
                 foxbatCtx.beginPath();
-                foxbatCtx.arc(px, py, 2.5, 0, Math.PI * 2);
+                foxbatCtx.arc(px, py, 1.5, 0, Math.PI * 2);
                 foxbatCtx.fill();
               }
             }
 
-            // High energy combustion exhaust flame length
-            const flameLength = (foxbatMach - 0.4) * 44;
-            const alpha = 0.45 + Math.random() * 0.35;
+            // Combustion exhaust flames
+            if (rpm > 20 && status === 'RUNNING') {
+              const flameBaseLength = (rpm / 100) * 35;
+              const flameLength = isAB ? flameBaseLength + 45 : flameBaseLength;
+              const alpha = 0.4 + Math.random() * 0.4;
 
-            let flameGrad = foxbatCtx.createLinearGradient(170, ey, 170 + flameLength, ey);
-            if (foxbatMach > 2.6) {
-              flameGrad.addColorStop(0, `rgba(0, 150, 255, ${alpha})`);
-              flameGrad.addColorStop(0.5, `rgba(0, 240, 210, ${alpha * 0.65})`);
-              flameGrad.addColorStop(1, 'rgba(0, 150, 255, 0)');
-            } else if (foxbatMach > 1.8) {
-              flameGrad.addColorStop(0, `rgba(255, 220, 0, ${alpha})`);
-              flameGrad.addColorStop(0.6, `rgba(255, 110, 0, ${alpha * 0.5})`);
-              flameGrad.addColorStop(1, 'rgba(255, 100, 0, 0)');
-            } else {
-              flameGrad.addColorStop(0, `rgba(255, 120, 0, ${alpha * 0.7})`);
-              flameGrad.addColorStop(1, 'rgba(255, 50, 0, 0)');
+              let flameGrad = foxbatCtx.createLinearGradient(155, ey, 155 + flameLength, ey);
+              if (isAB) {
+                // Supersonic Afterburner blue shock diamonds
+                flameGrad.addColorStop(0, `rgba(0, 191, 255, ${alpha})`);
+                flameGrad.addColorStop(0.3, `rgba(0, 119, 182, ${alpha * 0.7})`);
+                flameGrad.addColorStop(0.8, `rgba(0, 180, 216, 0.2)`);
+                flameGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+                foxbatCtx.fillStyle = flameGrad;
+                foxbatCtx.beginPath();
+                foxbatCtx.moveTo(155, ey - 8);
+                const flutter = Math.sin(engineFlameTime * 2.5) * 3.0;
+                foxbatCtx.quadraticCurveTo(155 + flameLength * 0.5, ey - 10 + flutter, 155 + flameLength, ey + flutter);
+                foxbatCtx.quadraticCurveTo(155 + flameLength * 0.5, ey + 10 + flutter, 155, ey + 8);
+                foxbatCtx.closePath();
+                foxbatCtx.fill();
+
+                // Shock diamonds overlays
+                foxbatCtx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                for (let s = 0; s < 4; s++) {
+                  const sx = 158 + s * 16 + Math.sin(engineFlameTime * 0.2) * 2;
+                  if (sx < 155 + flameLength - 10) {
+                    foxbatCtx.beginPath();
+                    foxbatCtx.moveTo(sx, ey);
+                    foxbatCtx.lineTo(sx + 5, ey - 4);
+                    foxbatCtx.lineTo(sx + 10, ey);
+                    foxbatCtx.lineTo(sx + 5, ey + 4);
+                    foxbatCtx.closePath();
+                    foxbatCtx.fill();
+                  }
+                }
+              } else {
+                // Dry military power (amber/orange)
+                flameGrad.addColorStop(0, `rgba(255, 170, 0, ${alpha * 0.85})`);
+                flameGrad.addColorStop(0.6, `rgba(255, 85, 0, ${alpha * 0.4})`);
+                flameGrad.addColorStop(1, 'rgba(255, 50, 0, 0)');
+
+                foxbatCtx.fillStyle = flameGrad;
+                foxbatCtx.beginPath();
+                foxbatCtx.moveTo(155, ey - 8);
+                const flutter = Math.sin(engineFlameTime * 1.5) * 2.0;
+                foxbatCtx.quadraticCurveTo(155 + flameLength * 0.5, ey - 9 + flutter, 155 + flameLength, ey + flutter);
+                foxbatCtx.quadraticCurveTo(155 + flameLength * 0.5, ey + 9 + flutter, 155, ey + 8);
+                foxbatCtx.closePath();
+                foxbatCtx.fill();
+              }
+            } else if (status === 'STALL') {
+              // Compressor Stall sparks
+              if (Math.random() < 0.4) {
+                foxbatCtx.fillStyle = '#ff5533';
+                foxbatCtx.beginPath();
+                foxbatCtx.moveTo(155, ey - 6);
+                foxbatCtx.lineTo(170 + Math.random() * 20, ey + Math.random() * 12 - 6);
+                foxbatCtx.lineTo(155, ey + 6);
+                foxbatCtx.fill();
+                
+                foxbatCtx.fillStyle = '#ffaa00';
+                foxbatCtx.beginPath();
+                foxbatCtx.arc(10 + Math.random() * 10, ey + Math.random() * 20 - 10, 2, 0, Math.PI*2);
+                foxbatCtx.fill();
+              }
             }
 
-            foxbatCtx.fillStyle = flameGrad;
-            foxbatCtx.beginPath();
-            foxbatCtx.moveTo(170, ey - 10);
-            const flutter = Math.sin(engineFlameTime * 1.8) * 3.5;
-            foxbatCtx.quadraticCurveTo(170 + flameLength * 0.5, ey - 12 + flutter, 170 + flameLength, ey + flutter);
-            foxbatCtx.quadraticCurveTo(170 + flameLength * 0.5, ey + 12 + flutter, 170, ey + 10);
-            foxbatCtx.closePath();
-            foxbatCtx.fill();
-
-            // Fuel spray lines
-            foxbatCtx.strokeStyle = 'rgba(255, 153, 0, 0.6)';
-            foxbatCtx.lineWidth = 1.2;
-            foxbatCtx.beginPath();
-            foxbatCtx.moveTo(110, ey - 14);
-            foxbatCtx.lineTo(120, ey);
-            foxbatCtx.moveTo(110, ey + 14);
-            foxbatCtx.lineTo(120, ey);
-            foxbatCtx.stroke();
+            // Draw status tags on canvas
+            foxbatCtx.fillStyle = status === 'RUNNING' ? '#81c784' : (status === 'STARTING' ? '#ffb703' : '#ef5350');
+            foxbatCtx.font = '8px monospace';
+            foxbatCtx.fillText(status, 40, ey + 3);
           };
 
-          // Draw double twin burners
-          drawEngineDuct(-30);
-          drawEngineDuct(30);
+          // Draw dual twin burners
+          drawSingleEngineRow(-32, leftRPM, leftStatus, leftAfterburner, leftDamage, leftEGT);
+          drawSingleEngineRow(32, rightRPM, rightStatus, rightAfterburner, rightDamage, rightEGT);
 
           // Draw HUD altitude arrow visualizer
           const gy = 15;
@@ -9193,15 +9975,15 @@
 
           // Sky gradient background representing altitudes
           let skyGrad = foxbatCtx.createLinearGradient(gx, gy, gx, gy + gh);
-          skyGrad.addColorStop(0, '#000000'); // Edge of space (Black)
-          skyGrad.addColorStop(0.5, '#0c1a30'); // High Stratosphere
-          skyGrad.addColorStop(1, '#00b4d8'); // Lower sky
+          skyGrad.addColorStop(0, '#000000');
+          skyGrad.addColorStop(0.5, '#0c1a30');
+          skyGrad.addColorStop(1, '#00b4d8');
           
           foxbatCtx.fillStyle = skyGrad;
           foxbatCtx.fillRect(gx, gy, 12, gh);
 
           // Arrow indicator coordinate mapping
-          const altRatio = (foxbatAlt - 10000) / 15000;
+          const altRatio = foxbatAlt / 25000;
           const arrowY = gy + gh - (altRatio * gh);
 
           foxbatCtx.strokeStyle = '#ffb703';
@@ -9222,7 +10004,7 @@
 
         engineFlameTime++;
 
-        // Update readouts
+        // Update global readouts
         const nixieTemp = document.getElementById('nixie-foxbat-temp');
         if (nixieTemp) nixieTemp.textContent = String(Math.round(foxbatTemp)).padStart(3, '0') + "°C";
 
@@ -9232,42 +10014,53 @@
         const nixieFuelrate = document.getElementById('nixie-foxbat-fuelrate');
         if (nixieFuelrate) nixieFuelrate.textContent = foxbatFuelRate.toFixed(2) + " kg/s";
 
-        // Thermal warning flashing alert
-        const alertBox = document.getElementById('foxbat-overheat-alert');
+        // Thermal Warning sounding alert horn
         const sysStatus = document.getElementById('foxbat-sys-status');
-        if (foxbatTemp > 450) {
-          if (alertBox) alertBox.style.display = 'flex';
+        const isOverheated = (leftEGT > 800 || rightEGT > 800);
+        const isStalled = (leftStatus === 'STALL' || rightStatus === 'STALL');
+        const isDamaged = (leftStatus === 'DAMAGED' || rightStatus === 'DAMAGED');
+
+        if (isOverheated || isStalled || isDamaged) {
           if (sysStatus) {
-            sysStatus.textContent = "ДВИГАТЕЛЬ ПЕРЕГРЕТ";
-            sysStatus.style.color = "#ff5555";
+            if (isDamaged) {
+              sysStatus.textContent = "ОТКАЗ ДВИГ. (ENGINE FAILURE)";
+              sysStatus.style.color = "#ff3333";
+            } else if (isStalled) {
+              sysStatus.textContent = "ПОМПАЖ ДВИГ. (COMPRESSOR STALL)";
+              sysStatus.style.color = "#ffaa00";
+            } else {
+              sysStatus.textContent = "ПЕРЕГРЕВ ДВИГАТЕЛЯ (OVERHEAT)";
+              sysStatus.style.color = "#ff3333";
+            }
           }
-          if (Math.round(engineFlameTime) % 18 === 0) {
+
+          // Sound alarm buzzer periodically
+          if (Math.round(engineFlameTime) % 25 === 0) {
             try {
-              const osc = sovietAudioCtx.createOscillator();
-              const gain = sovietAudioCtx.createGain();
-              osc.type = 'triangle';
-              osc.frequency.setValueAtTime(620, sovietAudioCtx.currentTime);
-              gain.gain.setValueAtTime(0.06, sovietAudioCtx.currentTime);
-              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.15);
+              const osc = window.sovietAudioCtx.createOscillator();
+              const gain = window.sovietAudioCtx.createGain();
+              osc.type = isStalled ? 'sawtooth' : 'triangle';
+              osc.frequency.setValueAtTime(isStalled ? 480 : 720, window.sovietAudioCtx.currentTime);
+              gain.gain.setValueAtTime(0.05, window.sovietAudioCtx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, window.sovietAudioCtx.currentTime + 0.18);
               osc.connect(gain);
-              gain.connect(sovietAudioCtx.destination);
+              gain.connect(window.sovietAudioCtx.destination);
               osc.start();
-              osc.stop(sovietAudioCtx.currentTime + 0.16);
+              osc.stop(window.sovietAudioCtx.currentTime + 0.2);
             } catch(err) {}
           }
         } else {
-          if (alertBox) alertBox.style.display = 'none';
           if (sysStatus) {
             sysStatus.textContent = "ДВИГАТЕЛЬ СТАБИЛЕН";
             sysStatus.style.color = "#81c784";
           }
         }
 
-        requestAnimationFrame(animateFoxbatEngine);
+        window.sovietConsoleAnimationFrame = requestAnimationFrame(animateFoxbatEngine);
       };
 
       // Start the animation loop
-      requestAnimationFrame(animateFoxbatEngine);
+      window.sovietConsoleAnimationFrame = requestAnimationFrame(animateFoxbatEngine);
 
       window.sovietConsoleResizeHandler = () => {
         if (canvas.offsetWidth) {
