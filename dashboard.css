@@ -12302,6 +12302,63 @@ body.soviet-theme .edit-history-text {
   font-family: 'Courier New', monospace !important;
 }
 
+/* ========== FINANCE FILTER BAR STYLING ========== */
+.finance-filter-bar {
+  margin-top: 16px;
+}
+
+.finance-filter-bar input,
+.finance-filter-bar select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.finance-filter-bar input:focus,
+.finance-filter-bar select:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 10px var(--accent-glow) !important;
+}
+
+/* Soviet Theme overrides for Filter Bar */
+body.soviet-theme .finance-filter-bar {
+  background: #0a0302 !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+
+body.soviet-theme .finance-filter-bar label {
+  font-family: 'Courier New', monospace !important;
+  color: var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-filter-bar input,
+body.soviet-theme .finance-filter-bar select {
+  background: var(--soviet-border) !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  color: var(--soviet-cyan) !important;
+  font-family: 'Courier New', monospace !important;
+  border-radius: 0px !important;
+}
+
+body.soviet-theme .finance-filter-bar input:focus,
+body.soviet-theme .finance-filter-bar select:focus {
+  background: var(--soviet-border) !important;
+  box-shadow: 0 0 10px var(--soviet-cyan) !important;
+}
+
+body.soviet-theme #fin-filter-clear {
+  border: 2px solid var(--soviet-cyan) !important;
+  color: var(--soviet-cyan) !important;
+  font-family: 'Courier New', monospace !important;
+  border-radius: 0px !important;
+}
+
+body.soviet-theme #fin-filter-clear:hover {
+  background: var(--soviet-cyan) !important;
+  color: var(--soviet-border) !important;
+}
+
+
 
 
 

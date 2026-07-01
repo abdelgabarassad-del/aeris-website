@@ -403,7 +403,40 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span id="finance-export-text">Export Ledger</span>
                 </button>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="finance-filter-bar" style="margin-bottom: 20px; padding: 16px; border-radius: 8px; background: rgba(14, 28, 22, 0.4); border: 1px solid rgba(246, 242, 223, 0.08); display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;">
+              
+              <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 150px;">
+                <label for="fin-filter-date" id="lbl-fin-filter-date" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--white-muted); font-weight: 600;">Filter by Date</label>
+                <input type="date" id="fin-filter-date" style="padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; border: 1px solid rgba(246, 242, 223, 0.1); background: rgba(14, 28, 22, 0.6); color: var(--white); outline: none;" />
               </div>
+
+              <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 150px;">
+                <label for="fin-filter-type" id="lbl-fin-filter-type" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--white-muted); font-weight: 600;">Filter by Type</label>
+                <select id="fin-filter-type" style="padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; border: 1px solid rgba(246, 242, 223, 0.1); background: rgba(14, 28, 22, 0.6); color: var(--white); cursor: pointer; outline: none;">
+                  <option value="all" id="opt-fin-filter-type-all">All Transactions</option>
+                  <option value="income" id="opt-fin-filter-type-income">Income Only</option>
+                  <option value="spending" id="opt-fin-filter-type-spending">Spending Only</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 150px;">
+                <label for="fin-filter-sort" id="lbl-fin-filter-sort" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--white-muted); font-weight: 600;">Sort By</label>
+                <select id="fin-filter-sort" style="padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; border: 1px solid rgba(246, 242, 223, 0.1); background: rgba(14, 28, 22, 0.6); color: var(--white); cursor: pointer; outline: none;">
+                  <option value="default" id="opt-fin-filter-sort-default">Default (Newest First)</option>
+                  <option value="amount-desc" id="opt-fin-filter-sort-amtdesc">Amount: High to Low</option>
+                  <option value="amount-asc" id="opt-fin-filter-sort-amtasc">Amount: Low to High</option>
+                  <option value="date-asc" id="opt-fin-filter-sort-dateasc">Date: Oldest First</option>
+                </select>
+              </div>
+
+              <button class="btn-secondary" id="fin-filter-clear" style="height: 38px; padding: 0 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1); background: transparent;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span id="fin-filter-clear-text">Reset Filters</span>
+              </button>
+
             </div>
             
             <div class="tracker-table-container">
@@ -5489,6 +5522,35 @@
         const lblNetBudget = document.getElementById('lbl-net-budget');
         if (lblNetBudget) lblNetBudget.textContent = 'Net Budget';
 
+        // Restore finance filter labels
+        const lblFilterDate = document.getElementById('lbl-fin-filter-date');
+        if (lblFilterDate) lblFilterDate.textContent = 'Filter by Date';
+        
+        const lblFilterType = document.getElementById('lbl-fin-filter-type');
+        if (lblFilterType) lblFilterType.textContent = 'Filter by Type';
+        
+        const lblFilterSort = document.getElementById('lbl-fin-filter-sort');
+        if (lblFilterSort) lblFilterSort.textContent = 'Sort By';
+
+        const optTypeAll = document.getElementById('opt-fin-filter-type-all');
+        if (optTypeAll) optTypeAll.textContent = 'All Transactions';
+        const optTypeInc = document.getElementById('opt-fin-filter-type-income');
+        if (optTypeInc) optTypeInc.textContent = 'Income Only';
+        const optTypeSpe = document.getElementById('opt-fin-filter-type-spending');
+        if (optTypeSpe) optTypeSpe.textContent = 'Spending Only';
+
+        const optSortDef = document.getElementById('opt-fin-filter-sort-default');
+        if (optSortDef) optSortDef.textContent = 'Default (Newest First)';
+        const optSortAmtDesc = document.getElementById('opt-fin-filter-sort-amtdesc');
+        if (optSortAmtDesc) optSortAmtDesc.textContent = 'Amount: High to Low';
+        const optSortAmtAsc = document.getElementById('opt-fin-filter-sort-amtasc');
+        if (optSortAmtAsc) optSortAmtAsc.textContent = 'Amount: Low to High';
+        const optSortDateAsc = document.getElementById('opt-fin-filter-sort-dateasc');
+        if (optSortDateAsc) optSortDateAsc.textContent = 'Date: Oldest First';
+
+        const filterClearText = document.getElementById('fin-filter-clear-text');
+        if (filterClearText) filterClearText.textContent = 'Reset Filters';
+
         return;
       }
 
@@ -6272,6 +6334,35 @@
 
       const lblNetBudget = document.getElementById('lbl-net-budget');
       if (lblNetBudget) lblNetBudget.textContent = '🚩 Net Treasury Reserves (Net Budget)';
+
+      // Soviet overrides for finance filter labels
+      const lblFilterDate = document.getElementById('lbl-fin-filter-date');
+      if (lblFilterDate) lblFilterDate.textContent = '📅 Stardate Filter (Date)';
+      
+      const lblFilterType = document.getElementById('lbl-fin-filter-type');
+      if (lblFilterType) lblFilterType.textContent = '☭ Funds Filter (Type)';
+      
+      const lblFilterSort = document.getElementById('lbl-fin-filter-sort');
+      if (lblFilterSort) lblFilterSort.textContent = '⚙️ Allocation Sort (Sort)';
+
+      const optTypeAll = document.getElementById('opt-fin-filter-type-all');
+      if (optTypeAll) optTypeAll.textContent = '☭ All Directives';
+      const optTypeInc = document.getElementById('opt-fin-filter-type-income');
+      if (optTypeInc) optTypeInc.textContent = '☭ Subsidies Only (Income)';
+      const optTypeSpe = document.getElementById('opt-fin-filter-type-spending');
+      if (optTypeSpe) optTypeSpe.textContent = '⚙️ Procurement Only (Spending)';
+
+      const optSortDef = document.getElementById('opt-fin-filter-sort-default');
+      if (optSortDef) optSortDef.textContent = '📅 Sequential (Newest First)';
+      const optSortAmtDesc = document.getElementById('opt-fin-filter-sort-amtdesc');
+      if (optSortAmtDesc) optSortAmtDesc.textContent = '⚒️ Volume: High to Low';
+      const optSortAmtAsc = document.getElementById('opt-fin-filter-sort-amtasc');
+      if (optSortAmtAsc) optSortAmtAsc.textContent = '⚒️ Volume: Low to High';
+      const optSortDateAsc = document.getElementById('opt-fin-filter-sort-dateasc');
+      if (optSortDateAsc) optSortDateAsc.textContent = '📅 Chronicle (Oldest First)';
+
+      const filterClearText = document.getElementById('fin-filter-clear-text');
+      if (filterClearText) filterClearText.textContent = '❌ Disable Filters';
 
       // Initialize Soviet widgets
       initSovietWidgets();
@@ -14119,13 +14210,45 @@
         netBudgetEl.style.color = isSovietUser() ? 'var(--soviet-cyan)' : '#10b981';
       }
 
-      // Sort transactions by date descending, then by createdAt descending
-      const sortedTxs = [...txs].sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        if (dateA - dateB !== 0) return dateB - dateA;
-        return new Date(b.createdAt) - new Date(a.createdAt);
+      // Retrieve filters state
+      const filterDateEl = document.getElementById('fin-filter-date');
+      const filterTypeEl = document.getElementById('fin-filter-type');
+      const filterSortEl = document.getElementById('fin-filter-sort');
+
+      const filterDate = filterDateEl ? filterDateEl.value : '';
+      const filterType = filterTypeEl ? filterTypeEl.value : 'all';
+      const filterSort = filterSortEl ? filterSortEl.value : 'default';
+
+      // Apply filtering
+      let filteredTxs = txs.filter(tx => {
+        if (filterDate && tx.date !== filterDate) return false;
+        if (filterType !== 'all' && tx.type !== filterType) return false;
+        return true;
       });
+
+      // Apply sorting
+      if (filterSort === 'amount-desc') {
+        filteredTxs.sort((a, b) => b.amount - a.amount);
+      } else if (filterSort === 'amount-asc') {
+        filteredTxs.sort((a, b) => a.amount - b.amount);
+      } else if (filterSort === 'date-asc') {
+        filteredTxs.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          if (dateA - dateB !== 0) return dateA - dateB;
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        });
+      } else {
+        // Default sort (newest transaction date first, then newest createdAt first)
+        filteredTxs.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          if (dateA - dateB !== 0) return dateB - dateA;
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      }
+
+      const sortedTxs = filteredTxs;
 
       // Build Table HTML
       let html = `
@@ -14600,13 +14723,45 @@
 
         const txs = getTransactions();
         
-        // Sort transactions by date descending, then by createdAt descending (matching table view)
-        const sortedTxs = [...txs].sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          if (dateA - dateB !== 0) return dateB - dateA;
-          return new Date(b.createdAt) - new Date(a.createdAt);
+        // Retrieve filters state
+        const filterDateEl = document.getElementById('fin-filter-date');
+        const filterTypeEl = document.getElementById('fin-filter-type');
+        const filterSortEl = document.getElementById('fin-filter-sort');
+
+        const filterDate = filterDateEl ? filterDateEl.value : '';
+        const filterType = filterTypeEl ? filterTypeEl.value : 'all';
+        const filterSort = filterSortEl ? filterSortEl.value : 'default';
+
+        // Apply filtering
+        let filteredTxs = txs.filter(tx => {
+          if (filterDate && tx.date !== filterDate) return false;
+          if (filterType !== 'all' && tx.type !== filterType) return false;
+          return true;
         });
+
+        // Apply sorting
+        if (filterSort === 'amount-desc') {
+          filteredTxs.sort((a, b) => b.amount - a.amount);
+        } else if (filterSort === 'amount-asc') {
+          filteredTxs.sort((a, b) => a.amount - b.amount);
+        } else if (filterSort === 'date-asc') {
+          filteredTxs.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            if (dateA - dateB !== 0) return dateA - dateB;
+            return new Date(a.createdAt) - new Date(b.createdAt);
+          });
+        } else {
+          // Default sort (newest transaction date first, then newest createdAt first)
+          filteredTxs.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            if (dateA - dateB !== 0) return dateB - dateA;
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+        }
+
+        const sortedTxs = filteredTxs;
 
         // Add byte order mark \uFEFF for excel compatibility (shows accents correctly)
         let csvContent = 'data:text/csv;charset=utf-8,\uFEFF';
@@ -14649,6 +14804,24 @@
         document.body.removeChild(link);
         
         logToMailerConsole(`Finance ledger CSV sheet generated & exported.`, 'sys');
+      });
+    }
+
+    // Bind Finance Filters events
+    const finFilterDate = document.getElementById('fin-filter-date');
+    const finFilterType = document.getElementById('fin-filter-type');
+    const finFilterSort = document.getElementById('fin-filter-sort');
+    const finFilterClear = document.getElementById('fin-filter-clear');
+
+    if (finFilterDate) finFilterDate.addEventListener('input', renderFinanceSection);
+    if (finFilterType) finFilterType.addEventListener('change', renderFinanceSection);
+    if (finFilterSort) finFilterSort.addEventListener('change', renderFinanceSection);
+    if (finFilterClear) {
+      finFilterClear.addEventListener('click', () => {
+        if (finFilterDate) finFilterDate.value = '';
+        if (finFilterType) finFilterType.value = 'all';
+        if (finFilterSort) finFilterSort.value = 'default';
+        renderFinanceSection();
       });
     }
   </script>
