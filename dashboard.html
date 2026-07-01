@@ -16925,11 +16925,11 @@
     function getTransactions() {
       try {
         let txs = JSON.parse(safeLocal.getItem(FINANCE_STORAGE_KEY));
-        const migrated = safeLocal.getItem('aeris_finance_migrated_v1');
+        const migrated = safeLocal.getItem('aeris_finance_migrated_v2');
         if (!migrated || !Array.isArray(txs)) {
           txs = SEED_TRANSACTIONS;
           safeLocal.setItem(FINANCE_STORAGE_KEY, JSON.stringify(txs));
-          safeLocal.setItem('aeris_finance_migrated_v1', 'true');
+          safeLocal.setItem('aeris_finance_migrated_v2', 'true');
         }
         return txs;
       } catch (e) {
