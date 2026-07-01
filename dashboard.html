@@ -17296,14 +17296,43 @@
       if (viewTrackerBtn) viewTrackerBtn.classList.toggle('active', view === 'tracker');
       if (viewFinanceBtn) viewFinanceBtn.classList.toggle('active', view === 'finance');
       
-      // Update display of sections
+      // Update display of main sections
       const taskBoard = document.getElementById('task-board');
       const trackerSection = document.getElementById('tracker-section');
       const financeSection = document.getElementById('finance-section');
       
-      if (taskBoard) taskBoard.style.display = (view === 'kanban') ? 'grid' : 'none';
-      if (trackerSection) trackerSection.style.display = (view === 'tracker') ? 'block' : 'none';
-      if (financeSection) financeSection.style.display = (view === 'finance') ? 'block' : 'none';
+      // Hide/show kanban-specific elements (form, dept tabs, empty state)
+      const emptyState = document.getElementById('empty-state');
+      const taskForm = document.getElementById('task-form-wrapper');
+      const deptTabsEl = document.getElementById('dept-tabs');
+      
+      if (taskBoard) {
+        taskBoard.style.display = (view === 'kanban') ? 'grid' : 'none';
+        if (view === 'kanban') taskBoard.classList.add('visible');
+      }
+      if (trackerSection) {
+        trackerSection.style.display = (view === 'tracker') ? 'block' : 'none';
+        if (view === 'tracker') trackerSection.classList.add('visible');
+      }
+      if (financeSection) {
+        financeSection.style.display = (view === 'finance') ? 'block' : 'none';
+        if (view === 'finance') financeSection.classList.add('visible');
+      }
+      
+      // Hide kanban-only elements when not in kanban view
+      if (emptyState) emptyState.style.display = (view === 'kanban') ? 'flex' : 'none';
+      if (deptTabsEl) deptTabsEl.style.display = (view === 'kanban') ? 'flex' : 'none';
+      if (taskForm) {
+        // Only show task form in kanban view AND if user has head/ceo role
+        if (view === 'kanban') {
+          const regNum = safeSession.getItem('aeris_auth_reg');
+          const member = MEMBERS_DATABASE[regNum];
+          const isHead = member && (member.role === 'head' || member.role === 'ceo');
+          taskForm.style.display = isHead ? 'block' : 'none';
+        } else {
+          taskForm.style.display = 'none';
+        }
+      }
       
       if (view === 'kanban') {
         renderTasks();
