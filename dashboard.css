@@ -12067,6 +12067,243 @@ body.totallyspies-theme .nav-link:hover {
 }
 
 
+/* ========== FINANCE SECTION STYLING ========== */
+.finance-section {
+  margin-top: 24px;
+}
+
+.finance-widget-card {
+  background: rgba(30, 59, 45, 0.15);
+  border: 1px solid rgba(246, 242, 223, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.finance-widget-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.finance-widget-icon {
+  background: rgba(246, 242, 223, 0.05);
+  border: 1px solid rgba(246, 242, 223, 0.1);
+}
+
+.income-card {
+  border-left: 4px solid #10b981 !important;
+}
+.income-icon {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.spending-card {
+  border-left: 4px solid #ef4444 !important;
+}
+.spending-icon {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.budget-card {
+  border-left: 4px solid #3b82f6 !important;
+}
+.budget-icon {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.finance-widget-label {
+  color: var(--white-muted);
+}
+
+.finance-widget-value {
+  color: var(--white);
+  font-family: var(--font-heading);
+}
+
+.finance-form-card {
+  background: rgba(30, 59, 45, 0.15);
+  border: 1px solid rgba(246, 242, 223, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.finance-form-card h3 {
+  font-family: var(--font-heading);
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent-glow);
+}
+
+.finance-form-fields label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--white-muted);
+}
+
+.finance-form-fields input,
+.finance-form-fields select {
+  background: rgba(14, 28, 22, 0.6);
+  border: 1px solid rgba(246, 242, 223, 0.1);
+  color: var(--white);
+  font-family: var(--font-sub);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.finance-form-fields input:focus,
+.finance-form-fields select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Badge classes inside table */
+.finance-badge {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.finance-badge--income {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.finance-badge--spending {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Edit History style */
+.edit-history-text {
+  font-size: 0.75rem;
+  color: var(--white-muted);
+  font-style: italic;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ========== RETRO SOVIET THEME FINANCE OVERRIDES ========== */
+body.soviet-theme .finance-widget-card {
+  background: var(--soviet-border) !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1) !important;
+}
+
+body.soviet-theme .finance-widget-card:hover {
+  box-shadow: 0 0 20px var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-widget-icon {
+  background: transparent !important;
+  border: 1px solid var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+}
+
+body.soviet-theme .income-card {
+  border-left: 2px solid var(--soviet-cyan) !important;
+}
+body.soviet-theme .income-icon {
+  color: var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .spending-card {
+  border-left: 2px solid #ff3e3e !important;
+}
+body.soviet-theme .spending-icon {
+  color: #ff3e3e !important;
+  border-color: rgba(255, 62, 62, 0.3) !important;
+  background: rgba(255, 62, 62, 0.05) !important;
+}
+
+body.soviet-theme .budget-card {
+  border-left: 2px solid var(--soviet-cyan) !important;
+}
+body.soviet-theme .budget-icon {
+  color: var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-widget-label {
+  color: var(--soviet-grey) !important;
+  font-family: 'Courier New', monospace !important;
+  font-weight: bold !important;
+}
+
+body.soviet-theme .finance-widget-value {
+  color: var(--soviet-cyan) !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+body.soviet-theme .finance-form-card {
+  background: var(--soviet-border) !important;
+  border: 2.5px dashed var(--soviet-cyan) !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+
+body.soviet-theme .finance-form-card h3 {
+  font-family: 'Courier New', monospace !important;
+  color: var(--soviet-cyan) !important;
+  text-shadow: none !important;
+}
+
+body.soviet-theme .finance-form-fields label {
+  font-family: 'Courier New', monospace !important;
+  color: var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-form-fields input,
+body.soviet-theme .finance-form-fields select {
+  background: #0a0302 !important;
+  border: 2px solid var(--soviet-cyan) !important;
+  color: var(--soviet-cyan) !important;
+  font-family: 'Courier New', monospace !important;
+  border-radius: 0px !important;
+}
+
+body.soviet-theme .finance-form-fields input:focus,
+body.soviet-theme .finance-form-fields select:focus {
+  background: var(--soviet-border) !important;
+  box-shadow: 0 0 10px var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-badge {
+  border-radius: 0px !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+body.soviet-theme .finance-badge--income {
+  background: rgba(0, 240, 255, 0.05) !important;
+  color: var(--soviet-cyan) !important;
+  border: 1px solid var(--soviet-cyan) !important;
+}
+
+body.soviet-theme .finance-badge--spending {
+  background: rgba(255, 62, 62, 0.05) !important;
+  color: #ff3e3e !important;
+  border: 1px solid #ff3e3e !important;
+}
+
+body.soviet-theme .edit-history-text {
+  color: var(--soviet-grey) !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+
+
 
 
 
