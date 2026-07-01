@@ -661,7 +661,7 @@
       } else if (role === 'ceo' || (member && member.role === 'ceo')) {
         // CEO - Soviet Theme default
         title = "⚒️ AERIS COMMAND TELEMETRY DIRECTIVES";
-        welcome = "☭ Welcome, Comrade CEO Abduljabar Asaad. Command our collective's labor and coordinate division directives:";
+        welcome = "";
         items = [
           "<strong>Administrative Directives:</strong> Switch department tabs to inspect task progress in each front of the collective.",
           "<strong>Strategic Switcher:</strong> Switch views to inspect the <strong>Progress Matrix</strong> (Excel Tracker) and audit all department achievements.",
@@ -6305,12 +6305,12 @@
             </div>
 
             <!-- Manual Modal Overlay -->
-            <div id="dragon-game-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+            <div id="dragon-game-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 20px; font-family: monospace; max-height: 520px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
               <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a3f; padding-bottom: 8px; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Guide de Vol - Chasse aux Moutons</h3>
-                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+                <h3 style="margin: 0; font-size: 1.15rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Guide de Vol - Chasse aux Moutons</h3>
+                <button class="dragon-weapon-btn btn-sm" id="btn-dragon-game-manual-close" style="width: auto; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;">Fermer [X]</button>
               </div>
-              <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+              <div style="font-size: 0.88rem; line-height: 1.4; font-family: monospace;">
                 <strong style="color: #60a5fa;">💡 How it works:</strong><br>
                 Steer Krokmou (Toothless) to grab sheep while dodging hunter arrows.<br><br>
                 <strong style="color: #39ff14;">✔️ What to do:</strong><br>
@@ -7086,12 +7086,12 @@
           </div>
 
           <!-- Manual Modal Overlay -->
-          <div id="dragon-duel-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+          <div id="dragon-duel-manual-modal" style="display: none; position: absolute; top: 70px; left: 16px; right: 16px; background: rgba(10, 20, 15, 0.99); z-index: 10005; border-radius: 8px; padding: 20px; font-family: monospace; max-height: 520px; overflow-y: auto; color: #e2e8f0; border: 2px solid #2d5a3f; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a3f; padding-bottom: 8px; margin-bottom: 12px;">
-              <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Manuel d'Arène - Simulateur de Combat</h3>
-              <button class="dragon-weapon-btn btn-sm" id="btn-dragon-duel-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+              <h3 style="margin: 0; font-size: 1.15rem; color: #81c784; font-family: 'MedievalSharp', cursive;">📋 Manuel d'Arène - Simulateur de Combat</h3>
+              <button class="dragon-weapon-btn btn-sm" id="btn-dragon-duel-manual-close" style="width: auto; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;">Fermer [X]</button>
             </div>
-            <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+            <div style="font-size: 0.88rem; line-height: 1.4; font-family: monospace;">
               <strong style="color: #60a5fa;">💡 How it works:</strong><br>
               Dodge and attack the wild dragon in turn-based combat inside the Berk Academy ring.<br><br>
               <strong style="color: #39ff14;">✔️ What to do:</strong><br>
@@ -9876,13 +9876,35 @@
       const widgetsGrid = document.createElement('div');
       widgetsGrid.className = 'soviet-widgets-container fade-in visible';
       widgetsGrid.innerHTML = `
-        <div class="soviet-widget soviet-console-panel" id="soviet-mission-control">
-          <div class="soviet-widget__header">
-            <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="soviet-widget soviet-console-panel" id="soviet-mission-control" style="position: relative;">
+          <div class="soviet-widget__header" style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 .5-1.5V11a2 2 0 0 0-2-2h-3V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 .5 1.5M12 17h.01"/></svg>
               <span>VOSTOK-1 MISSION CONTROL & ORBITAL COMMAND CENTER</span>
+              <button class="stitch-btn-music" id="btn-vostok-mute" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 8px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">🔊 Mute</button>
+              <button class="stitch-btn-music" id="btn-vostok-manual" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">❔ Manuel</button>
+              <button class="stitch-btn-music" id="btn-vostok-reset" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; background: rgba(239, 68, 68, 0.15) !important; border: 1px solid rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; cursor: pointer;">🔄 Reset</button>
             </div>
-            <span class="soviet-station-status" id="soviet-station-status">STATUS: DEPLOYED</span>
+            <span class="soviet-station-status" id="soviet-station-status" style="margin-left: auto;">STATUS: DEPLOYED</span>
+
+            <!-- Manual Modal Overlay for Vostok-1 -->
+            <div id="vostok-manual-modal" style="display: none; position: absolute; top: 42px; left: 10px; right: 10px; background: rgba(10, 15, 20, 0.99); z-index: 10005; border-radius: 8px; padding: 20px; font-family: monospace; max-height: 520px; overflow-y: auto; color: #e2e8f0; border: 2px solid #546e7a; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #546e7a; padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.15rem; color: #81c784; text-transform: uppercase;">📋 Manual - Vostok-1 Command Center</h3>
+                <button class="stitch-btn-music" id="btn-vostok-manual-close" style="width: auto; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;">Fermer [X]</button>
+              </div>
+              <div style="font-size: 0.88rem; line-height: 1.4; font-family: monospace;">
+                <strong style="color: #60a5fa;">💡 How it works:</strong><br>
+                Monitor and command Vostok-1 orbital parameters. Steer thrust direction and vector modes to manage orbit stability.<br><br>
+                <strong style="color: #39ff14;">✔️ What to do:</strong><br>
+                - Click **<code>🛰️ EMIT PING</code>** to send a radar echo scan.<br>
+                - Adjust the **<code>THRUST DIRECTION</code>** slider or toggle vector modes between **<code>PROGRADE</code>**, **<code>RETROGRADE</code>**, or **<code>MANUAL DEG</code>** to steer.<br>
+                - Click **<code>ENGAGE ENGINE DIRECTIVE</code>** to fire engines and alter velocity.<br>
+                - Toggle switches like **<code>SPUTNIK BEACON</code>** to hear audio beacon signals.<br><br>
+                <strong style="color: #ff5555;">❌ Emergency / Escape:</strong><br>
+                - If alt &lt; 120km, re-entry starts. Click the **<code>CLICK TO FLIP COVER</code>** guard, then hit the big red **<code>EMERGENCY VEHICLE EJECT</code>** button to save the astronaut!
+              </div>
+            </div>
           </div>
           <div class="soviet-console-body">
             <div class="soviet-console-grid">
@@ -10020,12 +10042,32 @@
         </div>
         
         <!-- МИГ-29 ФУЛКРУМ Cockpit Simulator Card -->
-        <div class="soviet-widget soviet-jet-panel" id="soviet-jet-panel">
-          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #bf360c, #870000) !important;">
-            <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="soviet-widget soviet-jet-panel" id="soviet-jet-panel" style="position: relative;">
+          <div class="soviet-widget__header" style="background: linear-gradient(90deg, #bf360c, #870000) !important; position: relative;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span>✈️ МИГ-29 ФУЛКРУМ: COCKPIT TELEMETRY & FLIGHT SIMULATOR</span>
+              <button class="stitch-btn-music" id="btn-jet-mute" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 8px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">🔊 Mute</button>
+              <button class="stitch-btn-music" id="btn-jet-manual" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px solid rgba(84, 110, 122, 0.4); color: #fff;">❔ Manuel</button>
+              <button class="stitch-btn-music" id="btn-jet-reset" style="width: auto; padding: 2px 6px; font-size: 0.65rem; margin-left: 4px; background: rgba(239, 68, 68, 0.15) !important; border: 1px solid rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; cursor: pointer;">🔄 Reset</button>
             </div>
-            <span class="soviet-station-status" id="jet-radar-lock" style="border-color: #CC442A; color: #ff8877;">RADAR LOCK: STANDBY</span>
+            <span class="soviet-station-status" id="jet-radar-lock" style="border-color: #CC442A; color: #ff8877; margin-left: auto;">RADAR LOCK: STANDBY</span>
+
+            <!-- Manual Modal Overlay for MiG-29 -->
+            <div id="jet-manual-modal" style="display: none; position: absolute; top: 42px; left: 10px; right: 10px; background: rgba(10, 15, 20, 0.99); z-index: 10005; border-radius: 8px; padding: 20px; font-family: monospace; max-height: 520px; overflow-y: auto; color: #e2e8f0; border: 2px solid #546e7a; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #546e7a; padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.15rem; color: #81c784; text-transform: uppercase;">📋 Manual - MiG-29 Cockpit Simulator</h3>
+                <button class="stitch-btn-music" id="btn-jet-manual-close" style="width: auto; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;">Fermer [X]</button>
+              </div>
+              <div style="font-size: 0.88rem; line-height: 1.4; font-family: monospace;">
+                <strong style="color: #60a5fa;">💡 How it works:</strong><br>
+                Steer a MiG-29 fighter jet. Lock onto target and fire missiles.<br><br>
+                <strong style="color: #39ff14;">✔️ Controls:</strong><br>
+                - Pitch/Roll: Drag sliders or use **<code>W/S</code>** (Pitch) and **<code>A/D</code>** (Roll) keys.<br>
+                - Throttle: Use the **<code>Throttle Slider</code>** to adjust engine RPM.<br>
+                - Afterburner: Toggle afterburner switch for supersonic speed (consumes fuel faster).<br>
+                - Weapons: Click **<code>⚠️ SAFE: GUARD CLOSED</code>** cover to arm weapons, and click the big red **<code>🚀 ПУСК</code>** button (or press **<code>Spacebar</code>**) to fire at the locking target!
+              </div>
+            </div>
           </div>
           <div class="card-body" style="padding: 0;">
             <div class="jet-grid">
@@ -10136,12 +10178,12 @@
             <span class="soviet-station-status" id="foxbat-sys-status" style="border-color: #546e7a; color: #81c784; margin-left: auto;">ДВИГАТЕЛЬ СТАБИЛЕН</span>
 
             <!-- Manual Modal Overlay -->
-            <div id="foxbat-manual-modal" style="display: none; position: absolute; top: 42px; left: 10px; right: 10px; background: rgba(10, 15, 20, 0.99); z-index: 10005; border-radius: 8px; padding: 16px; font-family: monospace; max-height: 380px; overflow-y: auto; color: #e2e8f0; border: 2px solid #546e7a; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
+            <div id="foxbat-manual-modal" style="display: none; position: absolute; top: 42px; left: 10px; right: 10px; background: rgba(10, 15, 20, 0.99); z-index: 10005; border-radius: 8px; padding: 20px; font-family: monospace; max-height: 520px; overflow-y: auto; color: #e2e8f0; border: 2px solid #546e7a; box-shadow: 0 4px 20px rgba(0,0,0,0.8); text-align: left;">
               <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #546e7a; padding-bottom: 8px; margin-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 0.95rem; color: #81c784; text-transform: uppercase;">📋 Manual - MiG-25 Telemetry Console</h3>
-                <button class="stitch-btn-music" id="btn-foxbat-manual-close" style="width: auto; padding: 2px 8px; font-size: 0.65rem; cursor: pointer;">Fermer [X]</button>
+                <h3 style="margin: 0; font-size: 1.15rem; color: #81c784; text-transform: uppercase;">📋 Manual - MiG-25 Telemetry Console</h3>
+                <button class="stitch-btn-music" id="btn-foxbat-manual-close" style="width: auto; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;">Fermer [X]</button>
               </div>
-              <div style="font-size: 0.72rem; line-height: 1.4; font-family: monospace;">
+              <div style="font-size: 0.88rem; line-height: 1.4; font-family: monospace;">
                 <strong style="color: #60a5fa;">💡 How it works:</strong><br>
                 Simulate twin R-15 jet engines. Maximize speed up to Mach 3.2 without burning the engines.<br><br>
                 <strong style="color: #39ff14;">✔️ What to do:</strong><br>
@@ -10422,6 +10464,11 @@
       let crashed = false;
       let ejected = false;
       let gforce = 1.0;
+      let vostokMuted = false;
+      let mig29Muted = false;
+      let humGainNode = null;
+      let staticGainNode = null;
+      let sirenGainNode = null;
       
       let ejectPx = 0, ejectPy = 0;
       let ejectVx = 0, ejectVy = 0;
@@ -10460,7 +10507,7 @@
 
       function playSonarPing() {
         ensureAudioCtx();
-        if (!window.sovietAudioCtx) return;
+        if (!window.sovietAudioCtx || vostokMuted) return;
         const osc = window.sovietAudioCtx.createOscillator();
         const gainNode = window.sovietAudioCtx.createGain();
         osc.type = 'sine';
@@ -10478,7 +10525,7 @@
       function startSputnikBeep() {
         if (window.sovietConsoleBeepInterval) clearInterval(window.sovietConsoleBeepInterval);
         window.sovietConsoleBeepInterval = setInterval(() => {
-          if (!window.sovietAudioCtx || !sputnikActive) return;
+          if (!window.sovietAudioCtx || !sputnikActive || vostokMuted) return;
           const osc = window.sovietAudioCtx.createOscillator();
           const gainNode = window.sovietAudioCtx.createGain();
           osc.type = 'sine';
@@ -10509,9 +10556,10 @@
         // Cabin hum
         window.sovietHumOsc = window.sovietAudioCtx.createOscillator();
         const humGain = window.sovietAudioCtx.createGain();
+        humGainNode = humGain;
         window.sovietHumOsc.type = 'triangle';
         window.sovietHumOsc.frequency.value = 60; // low frequency hum
-        humGain.gain.value = 0.06;
+        humGain.gain.value = vostokMuted ? 0 : 0.06;
         
         window.sovietHumOsc.connect(humGain);
         humGain.connect(window.sovietAudioCtx.destination);
@@ -10534,7 +10582,8 @@
         filter.Q.value = 0.6;
         
         const staticGain = window.sovietAudioCtx.createGain();
-        staticGain.gain.value = 0.012;
+        staticGainNode = staticGain;
+        staticGain.gain.value = vostokMuted ? 0 : 0.012;
         
         window.sovietStaticNoise.connect(filter);
         filter.connect(staticGain);
@@ -10562,9 +10611,10 @@
           
           window.sovietSirenOsc = window.sovietAudioCtx.createOscillator();
           const sirenGain = window.sovietAudioCtx.createGain();
+          sirenGainNode = sirenGain;
           window.sovietSirenOsc.type = 'sawtooth';
           window.sovietSirenOsc.frequency.value = 400;
-          sirenGain.gain.value = 0.04;
+          sirenGain.gain.value = vostokMuted ? 0 : 0.04;
           
           const filter = window.sovietAudioCtx.createBiquadFilter();
           filter.type = 'lowpass';
@@ -10592,6 +10642,18 @@
             try { window.sovietSirenOsc.stop(); } catch(e) {}
             window.sovietSirenOsc = null;
           }
+        }
+      }
+
+      function updateVostokSound() {
+        if (humGainNode && window.sovietAudioCtx) {
+          humGainNode.gain.setValueAtTime(vostokMuted ? 0 : 0.06, window.sovietAudioCtx.currentTime);
+        }
+        if (staticGainNode && window.sovietAudioCtx) {
+          staticGainNode.gain.setValueAtTime(vostokMuted ? 0 : 0.012, window.sovietAudioCtx.currentTime);
+        }
+        if (sirenGainNode && window.sovietAudioCtx) {
+          sirenGainNode.gain.setValueAtTime(vostokMuted ? 0 : 0.04, window.sovietAudioCtx.currentTime);
         }
       }
 
@@ -11401,10 +11463,10 @@
       function updateJetEngineSound() {
         if (!jetAudioRunning || !sovietAudioCtx) return;
         let targetFreq = 70 + (jetThrottle / 100) * 160;
-        let targetGain = 0.02 + (jetThrottle / 100) * 0.06;
+        let targetGain = mig29Muted ? 0 : (0.02 + (jetThrottle / 100) * 0.06);
         if (jetAfterburner) {
           targetFreq += 350;
-          targetGain += 0.10;
+          if (!mig29Muted) targetGain += 0.10;
         }
         if (jetFuel <= 0) {
           targetFreq = 0;
@@ -11819,7 +11881,7 @@
         }
 
         // 13. Play sound alerts
-        if (isLocked) {
+        if (isLocked && !mig29Muted) {
           lockSoundBeepTimer++;
           if (lockSoundBeepTimer % 5 === 0) {
             try {
@@ -11838,7 +11900,7 @@
         }
         
         // Incoming missile alert beeping tone
-        if (enemyMissileActive) {
+        if (enemyMissileActive && !mig29Muted) {
           if (Math.round(enemyMissileProgress * 100) % 8 === 0) {
             try {
               const osc = sovietAudioCtx.createOscillator();
@@ -11981,17 +12043,19 @@
             logTerminal("[TACTICAL] МИГ-29 EVASIVE MANEUVER SUCCESSFUL. MISSILE MISSED.");
             // Swoosh sound
             try {
-              const osc = sovietAudioCtx.createOscillator();
-              const gain = sovietAudioCtx.createGain();
-              osc.type = 'triangle';
-              osc.frequency.setValueAtTime(800, sovietAudioCtx.currentTime);
-              osc.frequency.exponentialRampToValueAtTime(150, sovietAudioCtx.currentTime + 0.4);
-              gain.gain.setValueAtTime(0.2, sovietAudioCtx.currentTime);
-              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.4);
-              osc.connect(gain);
-              gain.connect(sovietAudioCtx.destination);
-              osc.start();
-              osc.stop(sovietAudioCtx.currentTime + 0.42);
+              if (!mig29Muted) {
+                const osc = sovietAudioCtx.createOscillator();
+                const gain = sovietAudioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, sovietAudioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, sovietAudioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.2, sovietAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(sovietAudioCtx.destination);
+                osc.start();
+                osc.stop(sovietAudioCtx.currentTime + 0.42);
+              }
             } catch(e) {}
           }
           
@@ -12003,17 +12067,19 @@
             
             // Impact detonation sound
             try {
-              const osc = sovietAudioCtx.createOscillator();
-              const gain = sovietAudioCtx.createGain();
-              osc.type = 'sawtooth';
-              osc.frequency.setValueAtTime(90, sovietAudioCtx.currentTime);
-              osc.frequency.exponentialRampToValueAtTime(15, sovietAudioCtx.currentTime + 0.8);
-              gain.gain.setValueAtTime(0.4, sovietAudioCtx.currentTime);
-              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.8);
-              osc.connect(gain);
-              gain.connect(sovietAudioCtx.destination);
-              osc.start();
-              osc.stop(sovietAudioCtx.currentTime + 0.85);
+              if (!mig29Muted) {
+                const osc = sovietAudioCtx.createOscillator();
+                const gain = sovietAudioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(90, sovietAudioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(15, sovietAudioCtx.currentTime + 0.8);
+                gain.gain.setValueAtTime(0.4, sovietAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.8);
+                osc.connect(gain);
+                gain.connect(sovietAudioCtx.destination);
+                osc.start();
+                osc.stop(sovietAudioCtx.currentTime + 0.85);
+              }
             } catch(e) {}
           }
         }
@@ -12036,17 +12102,19 @@
             
             // Play synthetic crash explosion noise burst
             try {
-              const osc = sovietAudioCtx.createOscillator();
-              const gain = sovietAudioCtx.createGain();
-              osc.type = 'sawtooth';
-              osc.frequency.setValueAtTime(120, sovietAudioCtx.currentTime);
-              osc.frequency.exponentialRampToValueAtTime(10, sovietAudioCtx.currentTime + 0.6);
-              gain.gain.setValueAtTime(0.3, sovietAudioCtx.currentTime);
-              gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.6);
-              osc.connect(gain);
-              gain.connect(sovietAudioCtx.destination);
-              osc.start();
-              osc.stop(sovietAudioCtx.currentTime + 0.6);
+              if (!mig29Muted) {
+                const osc = sovietAudioCtx.createOscillator();
+                const gain = sovietAudioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, sovietAudioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(10, sovietAudioCtx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.3, sovietAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, sovietAudioCtx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(sovietAudioCtx.destination);
+                osc.start();
+                osc.stop(sovietAudioCtx.currentTime + 0.6);
+              }
             } catch(e) {}
           }
         }
@@ -12161,7 +12229,7 @@
       let foxbatFuelRate = 0.0;
       let engineFlameTime = 0;
 
-      let jetMuted = false;
+      let mig25Muted = false;
 
       // Audio variables
       let leftAudioNode = null;
@@ -12247,7 +12315,7 @@
         if (leftGainNode && leftFilterNode) {
           const rpmRatio = leftRPM / 100;
           const targetFreq = 110 + (rpmRatio * 220) + (leftAfterburner ? 80 : 0);
-          const targetGain = jetMuted ? 0 : (0.012 * rpmRatio + (leftAfterburner ? 0.045 : 0)) * densityFactor;
+          const targetGain = mig25Muted ? 0 : (0.012 * rpmRatio + (leftAfterburner ? 0.045 : 0)) * densityFactor;
           leftFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
           leftGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
         }
@@ -12255,13 +12323,13 @@
         if (rightGainNode && rightFilterNode) {
           const rpmRatio = rightRPM / 100;
           const targetFreq = 105 + (rpmRatio * 225) + (rightAfterburner ? 85 : 0);
-          const targetGain = jetMuted ? 0 : (0.012 * rpmRatio + (rightAfterburner ? 0.045 : 0)) * densityFactor;
+          const targetGain = mig25Muted ? 0 : (0.012 * rpmRatio + (rightAfterburner ? 0.045 : 0)) * densityFactor;
           rightFilterNode.frequency.setValueAtTime(targetFreq, window.sovietAudioCtx.currentTime);
           rightGainNode.gain.setValueAtTime(targetGain, window.sovietAudioCtx.currentTime);
         }
 
         if (coolantGainNode) {
-          const targetCgain = jetMuted ? 0 : (coolantFlow > 0 && coolantQty > 0 ? (coolantFlow === 2 ? 0.02 : 0.01) : 0.0);
+          const targetCgain = mig25Muted ? 0 : (coolantFlow > 0 && coolantQty > 0 ? (coolantFlow === 2 ? 0.02 : 0.01) : 0.0);
           coolantGainNode.gain.setValueAtTime(targetCgain, window.sovietAudioCtx.currentTime);
         }
       }
@@ -12656,6 +12724,129 @@
         });
       }
 
+      // Vostok-1 Mute, Manual and Reset
+      const btnVostokMute = document.getElementById('btn-vostok-mute');
+      const btnVostokManual = document.getElementById('btn-vostok-manual');
+      const btnVostokManualClose = document.getElementById('btn-vostok-manual-close');
+      const btnVostokReset = document.getElementById('btn-vostok-reset');
+      const vostokManualModal = document.getElementById('vostok-manual-modal');
+
+      if (btnVostokMute) {
+        btnVostokMute.addEventListener('click', () => {
+          vostokMuted = !vostokMuted;
+          btnVostokMute.textContent = vostokMuted ? "🔈 Muted" : "🔊 Mute";
+          btnVostokMute.classList.toggle('active', vostokMuted);
+          updateVostokSound();
+        });
+      }
+
+      if (btnVostokManual && vostokManualModal) {
+        btnVostokManual.addEventListener('click', () => {
+          vostokManualModal.style.display = 'block';
+        });
+      }
+
+      if (btnVostokManualClose && vostokManualModal) {
+        btnVostokManualClose.addEventListener('click', () => {
+          vostokManualModal.style.display = 'none';
+        });
+      }
+
+      if (btnVostokReset) {
+        btnVostokReset.addEventListener('click', () => {
+          const btnSimReset = document.getElementById('btn-sim-reset');
+          if (btnSimReset) btnSimReset.click();
+        });
+      }
+
+      // MiG-29 Mute, Manual and Reset
+      const btnJetMute = document.getElementById('btn-jet-mute');
+      const btnJetManual = document.getElementById('btn-jet-manual');
+      const btnJetManualClose = document.getElementById('btn-jet-manual-close');
+      const btnJetReset = document.getElementById('btn-jet-reset');
+      const jetManualModal = document.getElementById('jet-manual-modal');
+
+      if (btnJetMute) {
+        btnJetMute.addEventListener('click', () => {
+          mig29Muted = !mig29Muted;
+          btnJetMute.textContent = mig29Muted ? "🔈 Muted" : "🔊 Mute";
+          btnJetMute.classList.toggle('active', mig29Muted);
+          updateJetEngineSound();
+        });
+      }
+
+      if (btnJetManual && jetManualModal) {
+        btnJetManual.addEventListener('click', () => {
+          jetManualModal.style.display = 'block';
+        });
+      }
+
+      if (btnJetManualClose && jetManualModal) {
+        btnJetManualClose.addEventListener('click', () => {
+          jetManualModal.style.display = 'none';
+        });
+      }
+
+      if (btnJetReset) {
+        btnJetReset.addEventListener('click', () => {
+          jetPitch = 0;
+          jetRoll = 0;
+          jetThrottle = 30;
+          jetSpeed = 450;
+          jetAlt = 1500;
+          jetFuel = 100.0;
+          jetAfterburner = false;
+          jetGForce = 1.0;
+          jetLockActive = false;
+          jetLockBlink = false;
+          missilesCount = 2;
+          weaponGuardOpen = false;
+          enemyMissileActive = false;
+          enemyMissileProgress = 0;
+          enemyShootTimer = 160;
+          hudCrackTimer = 0;
+          targetTime = 0;
+          targetExploding = false;
+
+          if (sliderPitch) sliderPitch.value = 0;
+          if (sliderRoll) sliderRoll.value = 0;
+          if (sliderThrottle) sliderThrottle.value = 30;
+
+          const lblPitch = document.getElementById('lbl-jet-pitch');
+          const lblRoll = document.getElementById('lbl-jet-roll');
+          const lblThrottle = document.getElementById('lbl-jet-throttle');
+          if (lblPitch) lblPitch.textContent = "0°";
+          if (lblRoll) lblRoll.textContent = "0°";
+          if (lblThrottle) lblThrottle.textContent = "30%";
+
+          if (toggleAfterburner) toggleAfterburner.checked = false;
+          const ledAfterburner = document.getElementById('led-afterburner');
+          if (ledAfterburner) ledAfterburner.classList.remove('active');
+
+          const jetWeaponGuardCover = document.getElementById('jet-weapon-guard-cover');
+          if (jetWeaponGuardCover) {
+            jetWeaponGuardCover.classList.remove('flipped');
+            jetWeaponGuardCover.textContent = "⚠️ SAFE: GUARD CLOSED";
+          }
+
+          const btnFire = document.getElementById('btn-fire-missile');
+          if (btnFire) btnFire.disabled = true;
+
+          const lblActiveMissile = document.getElementById('lbl-active-missile');
+          if (lblActiveMissile) lblActiveMissile.textContent = "AA-10 ALAMO (2)";
+
+          const radarLockStatus = document.getElementById('jet-radar-lock');
+          if (radarLockStatus) {
+            radarLockStatus.textContent = "RADAR LOCK: STANDBY";
+            radarLockStatus.style.color = "#ff8877";
+            radarLockStatus.style.borderColor = "#CC442A";
+          }
+
+          updateJetEngineSound();
+          logTerminal("[SYS] МИГ-29 SYSTEMS REBOOT COMPLETED. FUEL TANKS REPLENISHED.");
+        });
+      }
+
       // Foxbat Mute, Manual and Reset
       const btnFoxbatMute = document.getElementById('btn-foxbat-mute');
       const btnFoxbatManual = document.getElementById('btn-foxbat-manual');
@@ -12665,9 +12856,9 @@
 
       if (btnFoxbatMute) {
         btnFoxbatMute.addEventListener('click', () => {
-          jetMuted = !jetMuted;
-          btnFoxbatMute.textContent = jetMuted ? "🔈 Muted" : "🔊 Mute";
-          btnFoxbatMute.classList.toggle('active', jetMuted);
+          mig25Muted = !mig25Muted;
+          btnFoxbatMute.textContent = mig25Muted ? "🔈 Muted" : "🔊 Mute";
+          btnFoxbatMute.classList.toggle('active', mig25Muted);
           updateFoxbatSound();
         });
       }
@@ -13268,7 +13459,7 @@
           }
 
           // Sound alarm buzzer periodically
-          if (Math.round(engineFlameTime) % 25 === 0 && !jetMuted) {
+          if (Math.round(engineFlameTime) % 25 === 0 && !mig25Muted) {
             try {
               const osc = window.sovietAudioCtx.createOscillator();
               const gain = window.sovietAudioCtx.createGain();
