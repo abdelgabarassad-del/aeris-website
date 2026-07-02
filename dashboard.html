@@ -1786,10 +1786,10 @@
           viewTabs.style.display = hasAccess ? 'flex' : 'none';
         }
 
-        // Show finance tab button if user is Omar or Abduljabar
+        // Show finance tab button if user is Omar, Abduljabar, or Hala
         const viewFinanceBtn = document.getElementById('view-finance-btn');
         if (viewFinanceBtn) {
-          const hasFinanceAccess = regNum === '231012318' || regNum === '231002350';
+          const hasFinanceAccess = regNum === '231012318' || regNum === '231002350' || regNum === '251011829';
           viewFinanceBtn.style.display = hasFinanceAccess ? 'inline-flex' : 'none';
         }
 
@@ -14168,7 +14168,7 @@
     
     function isFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return currentReg === '231012318' || currentReg === '231002350';
+      return currentReg === '231012318' || currentReg === '231002350' || currentReg === '251011829';
     }
 
     const SEED_TRANSACTIONS = [
