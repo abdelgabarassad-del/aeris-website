@@ -5325,7 +5325,8 @@
     function applyMickeyTheme() {
       if (!isMickeyUser()) {
         document.body.classList.remove('mickey-theme');
-        document.querySelectorAll('.mickey-corner, .mickey-corner-tl, .mickey-bubble, .mickey-footprints').forEach(el => el.remove());
+        document.querySelectorAll('.mickey-corner, .mickey-corner-tl, .mickey-bubble, .mickey-footprints, .mickey-widgets-container').forEach(el => el.remove());
+        cleanupMickeyWidgets();
         return;
       }
 
@@ -5412,6 +5413,457 @@
         prioritySelect.querySelector('option[value="high"]').textContent = '🐭 Grande Magie (Haute)';
         prioritySelect.querySelector('option[value="urgent"]').textContent = '🏰 Magie Spectaculaire (Urgente)';
       }
+
+      // Initialize the Mickey memory match game widget
+      initMickeyWidgets();
+    }
+
+    /* ========== MICKEY MAGICAL GAME & SOUND SYNTHESIS ENGINE ========== */
+    let mickeyAudioCtx = null;
+    let mickeyAudioMuted = false;
+    let mickeyGameTimer = null;
+    let mickeyGameSeconds = 0;
+    let mickeyGameMoves = 0;
+    let mickeyGameMatches = 0;
+    let mickeyGameFlippedCards = [];
+    let mickeyGameIsLocked = false;
+    let mickeyFireworksAnimation = null;
+    let mickeyFireworksParticles = [];
+
+    const MICKEY_CARD_ITEMS = [
+      { id: 1, icon: '🏰', name: 'Château' }, // Cinderella Castle / Magic
+      { id: 2, icon: '🎈', name: 'Logistique' }, // Balloons / Event Logistics
+      { id: 3, icon: '📢', name: 'Relations Publiques' }, // Megaphone / PR
+      { id: 4, icon: '💼', name: 'Ressources Humaines' }, // Briefcase / HR
+      { id: 5, icon: '📊', name: 'Finances' }, // Charts / Budgeting
+      { id: 6, icon: '🎩', name: 'Chapeau Magicien' }, // Mickey's Sorcerer Hat
+      { id: 7, icon: '✍️', name: 'Rédaction' }, // Pen / Press / Writing
+      { id: 8, icon: '🪄', name: 'Design Créatif' } // Magic Wand / Design
+    ];
+
+    function ensureMickeyAudio() {
+      if (!mickeyAudioCtx) {
+        mickeyAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (mickeyAudioCtx && mickeyAudioCtx.state === 'suspended') {
+        mickeyAudioCtx.resume();
+      }
+    }
+
+    function playMickeySound(type) {
+      if (mickeyAudioMuted) return;
+      ensureMickeyAudio();
+      if (!mickeyAudioCtx) return;
+
+      const osc = mickeyAudioCtx.createOscillator();
+      const gain = mickeyAudioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(mickeyAudioCtx.destination);
+
+      const now = mickeyAudioCtx.currentTime;
+
+      if (type === 'flip') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(700, now + 0.12);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      } else if (type === 'match') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.07); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.14); // G5
+        osc.frequency.setValueAtTime(1046.50, now + 0.21); // C6
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.setValueAtTime(0.12, now + 0.21);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.36);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.linearRampToValueAtTime(120, now + 0.22);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+        osc.start(now);
+        osc.stop(now + 0.23);
+      } else if (type === 'win') {
+        osc.type = 'sine';
+        const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00];
+        freqs.forEach((f, idx) => {
+          osc.frequency.setValueAtTime(f, now + idx * 0.08);
+        });
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+        osc.start(now);
+        osc.stop(now + 0.9);
+      }
+    }
+
+    function initMickeyWidgets() {
+      if (document.querySelector('.mickey-widgets-container')) return;
+
+      const container = document.querySelector('#dashboard-page .container');
+      if (!container) return;
+
+      const widgetsGrid = document.createElement('div');
+      widgetsGrid.className = 'mickey-widgets-container fade-in visible';
+
+      const cachedMoves = localStorage.getItem('mickey_hs_moves') || '--';
+      const cachedTime = localStorage.getItem('mickey_hs_time') || '--';
+
+      widgetsGrid.innerHTML = `
+        <div class="mickey-widget" id="mickey-game-widget">
+          <div class="mickey-widget__header">
+            <div class="mickey-widget__header-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx='7' cy='7' r='5'/><circle cx='17' cy='7' r='5'/><circle cx='12' cy='14' r='7'/></svg>
+              <span>LE STUDIO DE MAGIE DE HALA: NON-TECH MATCH MATCH</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="mickey-widget__header-btn" id="btn-mickey-mute">🔊 Mute</button>
+              <button class="mickey-widget__header-btn" id="btn-mickey-reset" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">🔄 Reset</button>
+            </div>
+          </div>
+          <div class="mickey-game-panel">
+            <div style="position: relative; overflow: hidden; border-radius: 8px; background: rgba(0,0,0,0.15); padding: 10px;">
+              <div class="mickey-game-grid" id="mickey-game-grid"></div>
+              
+              <!-- Win Overlay -->
+              <div class="mickey-game-win-overlay" id="mickey-win-overlay" style="display: none;">
+                <h3 style="color: var(--mickey-yellow); font-size: 1.8rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Félicitations, Hala ! 🪄✨</h3>
+                <p style="margin: 0; font-size: 0.95rem; color: #d1d5db; max-width: 350px; line-height: 1.4;">
+                  Tu as fait de la magie aujourd'hui ! Toutes les tâches de la division Non-Technique ont été harmonisées !
+                </p>
+                <div style="display: flex; gap: 15px; font-family: monospace; font-size: 0.9rem; color: #a1a1aa; margin: 10px 0;">
+                  <span>Temps: <strong style="color: #fff;" id="win-time">0:00</strong></span>
+                  <span>Mouvements: <strong style="color: #fff;" id="win-moves">0</strong></span>
+                </div>
+                <button class="mickey-game-btn" id="btn-mickey-replay" style="font-size: 0.9rem; padding: 8px 18px;">Jouer à Nouveau</button>
+              </div>
+
+              <canvas class="mickey-fireworks-canvas" id="mickey-fireworks-canvas"></canvas>
+            </div>
+
+            <!-- Right Side Stats -->
+            <div class="mickey-game-sidebar">
+              <div>
+                <h4 style="margin: 0 0 16px; font-size: 1.05rem; border-bottom: 2px solid var(--mickey-red); padding-bottom: 6px; color: var(--mickey-yellow);">STATS DU CONSEIL</h4>
+                <div class="mickey-game-stats">
+                  <div class="mickey-game-stat">
+                    <span class="mickey-game-stat__label">Temps Écoulé</span>
+                    <span class="mickey-game-stat__value" id="mickey-stat-time">0:00</span>
+                  </div>
+                  <div class="mickey-game-stat">
+                    <span class="mickey-game-stat__label">Essais (Mouvements)</span>
+                    <span class="mickey-game-stat__value" id="mickey-stat-moves">0</span>
+                  </div>
+                  <div class="mickey-game-stat">
+                    <span class="mickey-game-stat__label">Paires Trouvées</span>
+                    <span class="mickey-game-stat__value" id="mickey-stat-matches">0 / 8</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 20px;">
+                <h4 style="margin: 0 0 12px; font-size: 0.85rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Record Personnel</h4>
+                <div style="font-family: monospace; font-size: 0.85rem; color: #d1d5db; line-height: 1.5; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; border: 1px solid rgba(250,204,21,0.1);">
+                  <div>Essais Min: <strong style="color: var(--mickey-yellow);" id="mickey-hs-moves">${cachedMoves}</strong></div>
+                  <div>Temps Min: <strong style="color: var(--mickey-yellow);" id="mickey-hs-time">${cachedTime}</strong></div>
+                </div>
+              </div>
+
+              <div class="mickey-game-actions" style="margin-top: auto;">
+                <button class="mickey-game-btn" id="btn-mickey-new-game">Nouvelle Partie</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Insert widget container above the task board or at the top of the container
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard) {
+        taskBoard.parentNode.insertBefore(widgetsGrid, taskBoard);
+      } else {
+        container.appendChild(widgetsGrid);
+      }
+
+      // Add event listeners
+      document.getElementById('btn-mickey-mute').addEventListener('click', toggleMickeyMute);
+      document.getElementById('btn-mickey-reset').addEventListener('click', resetMickeyGame);
+      document.getElementById('btn-mickey-new-game').addEventListener('click', resetMickeyGame);
+      document.getElementById('btn-mickey-replay').addEventListener('click', resetMickeyGame);
+
+      resetMickeyGame();
+    }
+
+    function shuffleMickeyCards(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function toggleMickeyMute() {
+      mickeyAudioMuted = !mickeyAudioMuted;
+      const muteBtn = document.getElementById('btn-mickey-mute');
+      if (muteBtn) {
+        muteBtn.textContent = mickeyAudioMuted ? '🔇 Unmute' : '🔊 Mute';
+      }
+    }
+
+    function resetMickeyGame() {
+      if (mickeyGameTimer) {
+        clearInterval(mickeyGameTimer);
+        mickeyGameTimer = null;
+      }
+      mickeyGameSeconds = 0;
+      mickeyGameMoves = 0;
+      mickeyGameMatches = 0;
+      mickeyGameFlippedCards = [];
+      mickeyGameIsLocked = false;
+
+      const statTime = document.getElementById('mickey-stat-time');
+      const statMoves = document.getElementById('mickey-stat-moves');
+      const statMatches = document.getElementById('mickey-stat-matches');
+      const winOverlay = document.getElementById('mickey-win-overlay');
+
+      if (statTime) statTime.textContent = "0:00";
+      if (statMoves) statMoves.textContent = "0";
+      if (statMatches) statMatches.textContent = "0 / 8";
+      if (winOverlay) winOverlay.style.display = "none";
+
+      stopMickeyFireworks();
+
+      const grid = document.getElementById('mickey-game-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const deck = [];
+      MICKEY_CARD_ITEMS.forEach(item => {
+        deck.push({ ...item });
+        deck.push({ ...item });
+      });
+
+      shuffleMickeyCards(deck);
+
+      deck.forEach((cardData, idx) => {
+        const card = document.createElement('div');
+        card.className = 'mickey-game-card';
+        card.dataset.id = cardData.id;
+        card.dataset.index = idx;
+
+        card.innerHTML = `
+          <div class="mickey-game-card__inner">
+            <div class="mickey-game-card__back">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><circle cx="7" cy="7" r="5"/><circle cx="17" cy="7" r="5"/><circle cx="12" cy="14" r="7"/></svg>
+            </div>
+            <div class="mickey-game-card__front">
+              ${cardData.icon}
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => handleMickeyCardClick(card));
+        grid.appendChild(card);
+      });
+    }
+
+    function handleMickeyCardClick(card) {
+      if (mickeyGameIsLocked) return;
+      if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+      playMickeySound('flip');
+
+      if (mickeyGameMoves === 0 && !mickeyGameTimer) {
+        startMickeyTimer();
+      }
+
+      card.classList.add('flipped');
+      mickeyGameFlippedCards.push(card);
+
+      if (mickeyGameFlippedCards.length === 2) {
+        mickeyGameMoves++;
+        const statMoves = document.getElementById('mickey-stat-moves');
+        if (statMoves) statMoves.textContent = mickeyGameMoves;
+
+        const card1 = mickeyGameFlippedCards[0];
+        const card2 = mickeyGameFlippedCards[1];
+
+        if (card1.dataset.id === card2.dataset.id) {
+          mickeyGameIsLocked = true;
+          setTimeout(() => {
+            card1.classList.add('matched');
+            card2.classList.add('matched');
+            mickeyGameMatches++;
+
+            const statMatches = document.getElementById('mickey-stat-matches');
+            if (statMatches) statMatches.textContent = `${mickeyGameMatches} / 8`;
+
+            playMickeySound('match');
+            mickeyGameFlippedCards = [];
+            mickeyGameIsLocked = false;
+
+            if (mickeyGameMatches === 8) {
+              winMickeyGame();
+            }
+          }, 350);
+        } else {
+          mickeyGameIsLocked = true;
+          setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            playMickeySound('miss');
+            mickeyGameFlippedCards = [];
+            mickeyGameIsLocked = false;
+          }, 1000);
+        }
+      }
+    }
+
+    function startMickeyTimer() {
+      mickeyGameTimer = setInterval(() => {
+        mickeyGameSeconds++;
+        const mins = Math.floor(mickeyGameSeconds / 60);
+        const secs = mickeyGameSeconds % 60;
+        const timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        const statTime = document.getElementById('mickey-stat-time');
+        if (statTime) statTime.textContent = timeStr;
+      }, 1000);
+    }
+
+    function winMickeyGame() {
+      if (mickeyGameTimer) {
+        clearInterval(mickeyGameTimer);
+        mickeyGameTimer = null;
+      }
+
+      playMickeySound('win');
+
+      const mins = Math.floor(mickeyGameSeconds / 60);
+      const secs = mickeyGameSeconds % 60;
+      const finalTimeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+      const winTime = document.getElementById('win-time');
+      const winMoves = document.getElementById('win-moves');
+      const winOverlay = document.getElementById('mickey-win-overlay');
+
+      if (winTime) winTime.textContent = finalTimeStr;
+      if (winMoves) winMoves.textContent = mickeyGameMoves;
+      if (winOverlay) winOverlay.style.display = 'flex';
+
+      const storedMoves = localStorage.getItem('mickey_hs_moves');
+      const storedSecs = localStorage.getItem('mickey_hs_secs');
+
+      if (!storedMoves || mickeyGameMoves < parseInt(storedMoves)) {
+        localStorage.setItem('mickey_hs_moves', mickeyGameMoves);
+        localStorage.setItem('mickey_hs_time', finalTimeStr);
+        localStorage.setItem('mickey_hs_secs', mickeyGameSeconds);
+
+        const hsMoves = document.getElementById('mickey-hs-moves');
+        const hsTime = document.getElementById('mickey-hs-time');
+        if (hsMoves) hsMoves.textContent = mickeyGameMoves;
+        if (hsTime) hsTime.textContent = finalTimeStr;
+      } else if (mickeyGameMoves === parseInt(storedMoves)) {
+        if (!storedSecs || mickeyGameSeconds < parseInt(storedSecs)) {
+          localStorage.setItem('mickey_hs_time', finalTimeStr);
+          localStorage.setItem('mickey_hs_secs', mickeyGameSeconds);
+          const hsTime = document.getElementById('mickey-hs-time');
+          if (hsTime) hsTime.textContent = finalTimeStr;
+        }
+      }
+
+      startMickeyFireworks();
+    }
+
+    function startMickeyFireworks() {
+      const canvas = document.getElementById('mickey-fireworks-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      mickeyFireworksParticles = [];
+      let frameCount = 0;
+
+      function createExplosion(x, y) {
+        const colors = ['#ef4444', '#facc15', '#ffffff', '#60a5fa', '#34d399'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        for (let i = 0; i < 35; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 3.5 + 1;
+          mickeyFireworksParticles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color,
+            radius: Math.random() * 2 + 1
+          });
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (frameCount % 45 === 0) {
+          createExplosion(Math.random() * canvas.width, Math.random() * (canvas.height * 0.7));
+        }
+
+        for (let i = mickeyFireworksParticles.length - 1; i >= 0; i--) {
+          const p = mickeyFireworksParticles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.06; // gravity
+          p.alpha -= 0.016;
+
+          if (p.alpha <= 0) {
+            mickeyFireworksParticles.splice(i, 1);
+          } else {
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
+        frameCount++;
+        mickeyFireworksAnimation = requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    function stopMickeyFireworks() {
+      if (mickeyFireworksAnimation) {
+        cancelAnimationFrame(mickeyFireworksAnimation);
+        mickeyFireworksAnimation = null;
+      }
+      const canvas = document.getElementById('mickey-fireworks-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      mickeyFireworksParticles = [];
+    }
+
+    function cleanupMickeyWidgets() {
+      if (mickeyGameTimer) {
+        clearInterval(mickeyGameTimer);
+        mickeyGameTimer = null;
+      }
+      stopMickeyFireworks();
+      const mc = document.querySelector('.mickey-widgets-container');
+      if (mc) mc.remove();
     }
 
     /* ========== RETRO SOVIET THEME (231002350 only) ========== */
