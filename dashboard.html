@@ -3271,6 +3271,31 @@
         gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.0);
         osc.start(now);
         osc.stop(now + 1.0);
+      } else if (type === 'zap') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.linearRampToValueAtTime(800, now + 0.15);
+        osc.frequency.linearRampToValueAtTime(150, now + 0.3);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.31);
+      } else if (type === 'bubble') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(1600, now + 0.1);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.11);
+      } else if (type === 'swoosh') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.12);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.13);
       }
     }
 
@@ -3284,19 +3309,27 @@
       widgetsGrid.className = 'spongebob-widgets-container fade-in visible';
 
       const cachedHighScore = localStorage.getItem('sb_hs_score') || '0';
+      const cachedJfHighScore = localStorage.getItem('sb_jf_hs_score') || '0';
 
       widgetsGrid.innerHTML = `
         <div class="spongebob-widget" id="spongebob-game-widget">
           <div class="spongebob-widget__header">
             <div class="spongebob-widget__header-title">
-              <span>🍍 KRUSTY KRAB MECHANICAL FRY COOK ASSEMBLY 🍍</span>
+              <span id="sb-game-title">🍍 KRUSTY KRAB MECHANICAL FRY COOK ASSEMBLY 🍍</span>
             </div>
             <div style="display: flex; gap: 8px;">
               <button class="spongebob-widget__header-btn" id="btn-sb-mute">🔊 Mute</button>
               <button class="spongebob-widget__header-btn" id="btn-sb-reset" style="background: #ef4444; border-color: #b91c1c; color: #fff;">🔄 Reset</button>
             </div>
           </div>
-          <div class="spongebob-game-panel">
+          
+          <div class="spongebob-game-tabs">
+            <button class="spongebob-game-tab active" id="tab-sb-cook">🍔 Krabby Patty Cook</button>
+            <button class="spongebob-game-tab" id="tab-sb-jellyfish">⚡ Jellyfish Fields</button>
+          </div>
+
+          <!-- Fry Cook Game Panel (View 1) -->
+          <div class="spongebob-game-panel-view active" id="panel-sb-cook">
             <!-- Kitchen Sandbox -->
             <div class="spongebob-kitchen-area">
               <!-- Order Header -->
@@ -3370,6 +3403,58 @@
               </div>
             </div>
           </div>
+
+          <!-- Jellyfish Catching Game Panel (View 2) -->
+          <div class="spongebob-game-panel-view" id="panel-sb-jellyfish">
+            <!-- Canvas Container -->
+            <div class="spongebob-canvas-container">
+              <div class="spongebob-canvas-overlay">
+                <div class="spongebob-canvas-lives" id="sb-jf-lives">❤️❤️❤️</div>
+                <div class="spongebob-canvas-score">Score: <span id="sb-jf-current-score">0</span></div>
+              </div>
+              <canvas class="spongebob-game-canvas" id="spongebob-jf-canvas" width="600" height="380"></canvas>
+              
+              <!-- Win / Game Over Overlay -->
+              <div class="spongebob-win-overlay" id="sb-jf-win-overlay" style="display: none;">
+                <h3 style="color: #0369a1; font-size: 1.8rem; margin: 0;" id="sb-jf-win-title">Jellyfish Jammer! ⚡</h3>
+                <p style="margin: 0; font-size: 0.95rem; color: #0c4a6e; max-width: 350px; line-height: 1.4;">
+                  You ran out of lives or time, Hunter Hana! Let's see your jellyfish catching record.
+                </p>
+                <div style="display: flex; gap: 15px; font-family: monospace; font-size: 0.95rem; color: #0c4a6e; margin: 10px 0; background: rgba(0,0,0,0.05); padding: 8px 16px; border-radius: 6px;">
+                  <span>Score Final: <strong style="color: #0369a1;" id="sb-jf-final-score">0</strong></span>
+                </div>
+                <button class="spongebob-game-btn" id="btn-sb-jf-replay" style="background: #0284c7; border-color: #0369a1; box-shadow: 0 3px 0 #0369a1;">Catch Again</button>
+              </div>
+            </div>
+
+            <!-- Jellyfish Sidebar Stats -->
+            <div class="spongebob-game-sidebar">
+              <div>
+                <h4 style="margin: 0 0 16px; font-size: 1.05rem; border-bottom: 3px solid #0284c7; padding-bottom: 6px; color: #0284c7; text-transform: uppercase;">JELLYFISH STATS</h4>
+                <div class="spongebob-game-stats">
+                  <div class="spongebob-game-stat">
+                    <span class="spongebob-game-stat__label">Temps Restant</span>
+                    <span class="spongebob-game-stat__value" id="sb-jf-stat-time" style="color: #0284c7;">45s</span>
+                  </div>
+                  <div class="spongebob-game-stat">
+                    <span class="spongebob-game-stat__label">Jelly Caught</span>
+                    <span class="spongebob-game-stat__value" id="sb-jf-stat-caught" style="color: #0284c7;">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 15px;">
+                <h4 style="margin: 0 0 8px; font-size: 0.85rem; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em;">Best Hunter Score</h4>
+                <div style="font-family: monospace; font-size: 0.85rem; color: #0c4a6e; background: rgba(224, 242, 254, 0.4); padding: 8px; border-radius: 4px; border: 1px solid rgba(2, 132, 199, 0.2);">
+                  <div>High Score: <strong style="color: #0284c7;" id="sb-jf-hs-score">${cachedJfHighScore}</strong> pts</div>
+                </div>
+              </div>
+
+              <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px;">
+                <button class="spongebob-game-btn" id="btn-sb-jf-start" style="background: #0284c7; border-color: #0369a1; box-shadow: 0 3px 0 #0369a1;">Start Hunting</button>
+              </div>
+            </div>
+          </div>
         </div>
       `;
 
@@ -3381,9 +3466,43 @@
         container.appendChild(widgetsGrid);
       }
 
-      // Add event listeners
+      // Add event listeners for global game buttons
       document.getElementById('btn-sb-mute').addEventListener('click', toggleSpongebobMute);
-      document.getElementById('btn-sb-reset').addEventListener('click', resetSpongebobGame);
+      
+      const tabCook = document.getElementById('tab-sb-cook');
+      const tabJelly = document.getElementById('tab-sb-jellyfish');
+      const panelCook = document.getElementById('panel-sb-cook');
+      const panelJelly = document.getElementById('panel-sb-jellyfish');
+      const gameTitle = document.getElementById('sb-game-title');
+
+      document.getElementById('btn-sb-reset').addEventListener('click', () => {
+        if (panelCook.classList.contains('active')) {
+          resetSpongebobGame();
+        } else {
+          resetJellyfishGame();
+        }
+      });
+
+      tabCook.addEventListener('click', () => {
+        tabCook.classList.add('active');
+        tabJelly.classList.remove('active');
+        panelCook.classList.add('active');
+        panelJelly.classList.remove('active');
+        if (gameTitle) gameTitle.textContent = "🍍 KRUSTY KRAB MECHANICAL FRY COOK ASSEMBLY 🍍";
+        resetJellyfishGame();
+      });
+
+      tabJelly.addEventListener('click', () => {
+        tabJelly.classList.add('active');
+        tabCook.classList.remove('active');
+        panelJelly.classList.add('active');
+        panelCook.classList.remove('active');
+        if (gameTitle) gameTitle.textContent = "⚡ JELLYFISH FIELDS CATCHING ADVENTURE ⚡";
+        initJellyfishGame();
+        resetSpongebobGame();
+      });
+
+      // Fry Cook event listeners
       document.getElementById('btn-sb-replay').addEventListener('click', startSpongebobGame);
       document.getElementById('btn-sb-start').addEventListener('click', startSpongebobGame);
       document.getElementById('btn-sb-trash').addEventListener('click', trashSpongebobBurger);
@@ -3396,7 +3515,16 @@
         });
       });
 
+      // Jellyfish event listeners
+      document.getElementById('btn-sb-jf-replay').addEventListener('click', startJellyfishGame);
+      document.getElementById('btn-sb-jf-start').addEventListener('click', startJellyfishGame);
+
+      // Initial setup
       resetSpongebobGame();
+      
+      // Bind window listeners for keyboard controls
+      window.addEventListener('keydown', handleJfKeyDown);
+      window.addEventListener('keyup', handleJfKeyUp);
     }
 
     function shuffleSpongebobCards(array) {
@@ -3561,11 +3689,788 @@
       }
     }
 
+    /* ========== JELLYFISH FIELDS CATCHING GAME SYSTEM ========== */
+    let jfCanvas = null;
+    let jfCtx = null;
+    let jfGameIsPlaying = false;
+    let jfGameTimer = null;
+    let jfGameSeconds = 45;
+    let jfGameScore = 0;
+    let jfGameLives = 3;
+    let jfJellyCaughtCount = 0;
+    let jfAnimFrameId = null;
+    let jfJellyfishList = [];
+    let jfBubbles = [];
+    let jfParticles = [];
+    let shakeDuration = 0;
+
+    let jfPlayer = {
+      x: 260,
+      y: 285,
+      width: 75,
+      height: 75,
+      targetX: 260,
+      swinging: false,
+      swingTimer: 0
+    };
+
+    let jfKeys = {
+      ArrowLeft: false,
+      ArrowRight: false
+    };
+
+    function initJellyfishGame() {
+      jfCanvas = document.getElementById('spongebob-jf-canvas');
+      if (!jfCanvas) return;
+      jfCtx = jfCanvas.getContext('2d');
+      
+      // Remove old listeners just in case
+      jfCanvas.removeEventListener('mousemove', handleJfMouseMove);
+      jfCanvas.removeEventListener('click', handleJfClick);
+
+      // Register canvas input events
+      jfCanvas.addEventListener('mousemove', handleJfMouseMove);
+      jfCanvas.addEventListener('click', handleJfClick);
+      
+      // Touch support
+      jfCanvas.addEventListener('touchmove', handleJfTouchMove, { passive: true });
+      jfCanvas.addEventListener('touchstart', handleJfClick, { passive: true });
+
+      resetJellyfishGame();
+    }
+
+    function handleJfMouseMove(e) {
+      if (!jfCanvas) return;
+      const rect = jfCanvas.getBoundingClientRect();
+      const scaleX = jfCanvas.width / rect.width;
+      const mouseX = (e.clientX - rect.left) * scaleX;
+      jfPlayer.targetX = Math.max(0, Math.min(jfCanvas.width - jfPlayer.width, mouseX - jfPlayer.width / 2));
+    }
+
+    function handleJfTouchMove(e) {
+      if (!jfCanvas || e.touches.length === 0) return;
+      const rect = jfCanvas.getBoundingClientRect();
+      const scaleX = jfCanvas.width / rect.width;
+      const touchX = (e.touches[0].clientX - rect.left) * scaleX;
+      jfPlayer.targetX = Math.max(0, Math.min(jfCanvas.width - jfPlayer.width, touchX - jfPlayer.width / 2));
+    }
+
+    function handleJfClick() {
+      if (!jfGameIsPlaying) return;
+      if (!jfPlayer.swinging) {
+        jfPlayer.swinging = true;
+        jfPlayer.swingTimer = 12;
+        playSpongebobSound('swoosh');
+      }
+    }
+
+    function handleJfKeyDown(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
+        if (e.key === ' ') {
+          handleJfClick();
+        } else {
+          jfKeys[e.key] = true;
+        }
+        if (jfGameIsPlaying) e.preventDefault();
+      }
+    }
+
+    function handleJfKeyUp(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        jfKeys[e.key] = false;
+        if (jfGameIsPlaying) e.preventDefault();
+      }
+    }
+
+    function resetJellyfishGame() {
+      if (jfGameTimer) {
+        clearInterval(jfGameTimer);
+        jfGameTimer = null;
+      }
+      if (jfAnimFrameId) {
+        cancelAnimationFrame(jfAnimFrameId);
+        jfAnimFrameId = null;
+      }
+      jfGameSeconds = 45;
+      jfGameScore = 0;
+      jfGameLives = 3;
+      jfJellyCaughtCount = 0;
+      jfGameIsPlaying = false;
+      jfJellyfishList = [];
+      jfBubbles = [];
+      jfParticles = [];
+      shakeDuration = 0;
+
+      jfPlayer.x = 260;
+      jfPlayer.targetX = 260;
+      jfPlayer.swinging = false;
+      jfPlayer.swingTimer = 0;
+
+      const livesEl = document.getElementById('sb-jf-lives');
+      const scoreEl = document.getElementById('sb-jf-current-score');
+      const timeEl = document.getElementById('sb-jf-stat-time');
+      const caughtEl = document.getElementById('sb-jf-stat-caught');
+      const hsScoreEl = document.getElementById('sb-jf-hs-score');
+      const winOverlay = document.getElementById('sb-jf-win-overlay');
+      const startBtn = document.getElementById('btn-sb-jf-start');
+
+      if (livesEl) livesEl.textContent = "❤️❤️❤️";
+      if (scoreEl) scoreEl.textContent = "0";
+      if (timeEl) timeEl.textContent = "45s";
+      if (caughtEl) caughtEl.textContent = "0";
+      if (winOverlay) winOverlay.style.display = "none";
+      if (startBtn) startBtn.style.display = "block";
+
+      const currentHs = localStorage.getItem('sb_jf_hs_score') || '0';
+      if (hsScoreEl) hsScoreEl.textContent = currentHs;
+
+      drawJellyfishGameFrame();
+    }
+
+    function startJellyfishGame() {
+      resetJellyfishGame();
+      ensureSpongebobAudio();
+      jfGameIsPlaying = true;
+
+      const startBtn = document.getElementById('btn-sb-jf-start');
+      if (startBtn) startBtn.style.display = "none";
+
+      jfGameTimer = setInterval(() => {
+        jfGameSeconds--;
+        const timeEl = document.getElementById('sb-jf-stat-time');
+        if (timeEl) timeEl.textContent = jfGameSeconds + "s";
+
+        if (jfGameSeconds <= 0) {
+          endJellyfishGame();
+        }
+      }, 1000);
+
+      jfAnimFrameId = requestAnimationFrame(updateJellyfishGame);
+    }
+
+    function endJellyfishGame() {
+      jfGameIsPlaying = false;
+      if (jfGameTimer) {
+        clearInterval(jfGameTimer);
+        jfGameTimer = null;
+      }
+      if (jfAnimFrameId) {
+        cancelAnimationFrame(jfAnimFrameId);
+        jfAnimFrameId = null;
+      }
+
+      playSpongebobSound('victory');
+
+      const currentHs = localStorage.getItem('sb_jf_hs_score') || '0';
+      if (jfGameScore > parseInt(currentHs)) {
+        localStorage.setItem('sb_jf_hs_score', jfGameScore);
+        const hsScoreEl = document.getElementById('sb-jf-hs-score');
+        if (hsScoreEl) hsScoreEl.textContent = jfGameScore;
+      }
+
+      const winOverlay = document.getElementById('sb-jf-win-overlay');
+      const finalScore = document.getElementById('sb-jf-final-score');
+      const winTitle = document.getElementById('sb-jf-win-title');
+
+      if (winTitle) {
+        winTitle.textContent = jfGameLives <= 0 ? "Ouch! Shocked! ⚡" : "Jellyfish Jammer! 🎷";
+      }
+      if (finalScore) finalScore.textContent = jfGameScore;
+      if (winOverlay) winOverlay.style.display = "flex";
+    }
+
+    function triggerScreenShake() {
+      shakeDuration = 12;
+    }
+
+    function spawnParticles(x, y, color, count) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3 + 1.2;
+        jfParticles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          radius: Math.random() * 3.5 + 1.5,
+          alpha: 1,
+          life: 25 + Math.random() * 15,
+          color: color
+        });
+      }
+    }
+
+    function updateJellyfishGame() {
+      if (!jfGameIsPlaying) return;
+
+      const kSpeed = 8;
+      if (jfKeys.ArrowLeft) {
+        jfPlayer.targetX = Math.max(0, jfPlayer.x - kSpeed);
+      } else if (jfKeys.ArrowRight) {
+        jfPlayer.targetX = Math.min(jfCanvas.width - jfPlayer.width, jfPlayer.x + kSpeed);
+      }
+
+      jfPlayer.x += (jfPlayer.targetX - jfPlayer.x) * 0.18;
+
+      if (jfPlayer.swinging) {
+        jfPlayer.swingTimer--;
+        if (jfPlayer.swingTimer <= 0) {
+          jfPlayer.swinging = false;
+        }
+      }
+
+      if (Math.random() < 0.038) {
+        const types = ['pink', 'pink', 'pink', 'golden', 'plankton', 'bubble', 'bubble'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        const radius = type === 'golden' ? 12 : (type === 'bubble' ? 10 : 15);
+        const speedY = type === 'golden' ? (Math.random() * 2.5 + 3.8) : (type === 'bubble' ? (Math.random() * 1.5 + 1.2) : (Math.random() * 2.0 + 1.8));
+        jfJellyfishList.push({
+          x: Math.random() * (jfCanvas.width - radius * 4) + radius * 2,
+          y: -radius * 2,
+          radius: radius,
+          speedY: speedY,
+          type: type,
+          wiggleTimer: Math.random() * 100,
+          wiggleSpeed: 0.08 + Math.random() * 0.05
+        });
+      }
+
+      if (Math.random() < 0.045) {
+        jfBubbles.push({
+          x: Math.random() * jfCanvas.width,
+          y: jfCanvas.height + 10,
+          radius: Math.random() * 7 + 3,
+          speedY: Math.random() * 1.4 + 0.7
+        });
+      }
+
+      for (let i = jfBubbles.length - 1; i >= 0; i--) {
+        const b = jfBubbles[i];
+        b.y -= b.speedY;
+        if (b.y < -20) {
+          jfBubbles.splice(i, 1);
+        }
+      }
+
+      const netX = jfPlayer.x + jfPlayer.width / 2 + (jfPlayer.swinging ? 30 : 0);
+      const netY = jfPlayer.y + jfPlayer.height / 2 - (jfPlayer.swinging ? 10 : 0);
+      const netRadius = jfPlayer.swinging ? 45 : 30;
+
+      for (let i = jfJellyfishList.length - 1; i >= 0; i--) {
+        const j = jfJellyfishList[i];
+        j.y += j.speedY;
+        j.wiggleTimer += j.wiggleSpeed;
+
+        const dx = j.x - netX;
+        const dy = j.y - netY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        const bodyDx = j.x - (jfPlayer.x + jfPlayer.width / 2);
+        const bodyDy = j.y - (jfPlayer.y + jfPlayer.height / 2);
+        const bodyDist = Math.sqrt(bodyDx * bodyDx + bodyDy * bodyDy);
+
+        let hit = false;
+        if (dist < (j.radius + netRadius) || bodyDist < (j.radius + 30)) {
+          hit = true;
+        }
+
+        if (hit) {
+          if (j.type === 'plankton') {
+            jfGameLives--;
+            jfGameScore = Math.max(0, jfGameScore - 15);
+            playSpongebobSound('zap');
+            triggerScreenShake();
+            spawnParticles(j.x, j.y, '#f87171', 12);
+
+            const livesEl = document.getElementById('sb-jf-lives');
+            if (livesEl) {
+              livesEl.textContent = "❤️".repeat(Math.max(0, jfGameLives)) + "🖤".repeat(Math.max(0, 3 - jfGameLives));
+            }
+
+            if (jfGameLives <= 0) {
+              endJellyfishGame();
+              return;
+            }
+          } else if (j.type === 'bubble') {
+            jfGameScore += 5;
+            playSpongebobSound('bubble');
+            spawnParticles(j.x, j.y, '#e0f2fe', 8);
+          } else {
+            let pts = j.type === 'golden' ? 30 : 10;
+            jfGameScore += pts;
+            jfJellyCaughtCount++;
+            playSpongebobSound('pop');
+            spawnParticles(j.x, j.y, j.type === 'golden' ? '#fbbf24' : '#f472b6', 10);
+            
+            jfParticles.push({
+              x: j.x,
+              y: j.y,
+              vx: 0,
+              vy: -1.5,
+              alpha: 1,
+              life: 30,
+              text: `+${pts}`,
+              color: j.type === 'golden' ? '#fbbf24' : '#f472b6'
+            });
+
+            const caughtEl = document.getElementById('sb-jf-stat-caught');
+            if (caughtEl) caughtEl.textContent = jfJellyCaughtCount;
+          }
+
+          const scoreEl = document.getElementById('sb-jf-current-score');
+          if (scoreEl) scoreEl.textContent = jfGameScore;
+
+          jfJellyfishList.splice(i, 1);
+          continue;
+        }
+
+        if (j.y > jfCanvas.height + j.radius * 2) {
+          jfJellyfishList.splice(i, 1);
+        }
+      }
+
+      for (let i = jfParticles.length - 1; i >= 0; i--) {
+        const p = jfParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        if (p.life <= 0) {
+          jfParticles.splice(i, 1);
+        }
+      }
+
+      if (shakeDuration > 0) {
+        shakeDuration--;
+      }
+
+      drawJellyfishGameFrame();
+
+      jfAnimFrameId = requestAnimationFrame(updateJellyfishGame);
+    }
+
+    function drawJellyfishGameFrame() {
+      if (!jfCtx || !jfCanvas) return;
+
+      jfCtx.clearRect(0, 0, jfCanvas.width, jfCanvas.height);
+
+      jfCtx.save();
+      if (shakeDuration > 0) {
+        const dx = (Math.random() - 0.5) * 6;
+        const dy = (Math.random() - 0.5) * 6;
+        jfCtx.translate(dx, dy);
+      }
+
+      // Draw bottom sand
+      jfCtx.fillStyle = '#fef08a';
+      jfCtx.beginPath();
+      jfCtx.moveTo(0, jfCanvas.height);
+      jfCtx.lineTo(0, jfCanvas.height - 30);
+      for (let x = 0; x <= jfCanvas.width; x += 30) {
+        const y = jfCanvas.height - 30 + Math.sin(x * 0.05) * 5;
+        jfCtx.lineTo(x, y);
+      }
+      jfCtx.lineTo(jfCanvas.width, jfCanvas.height);
+      jfCtx.closePath();
+      jfCtx.fill();
+
+      // Sand border line
+      jfCtx.strokeStyle = '#ac620b';
+      jfCtx.lineWidth = 3;
+      jfCtx.beginPath();
+      jfCtx.moveTo(0, jfCanvas.height - 30);
+      for (let x = 0; x <= jfCanvas.width; x += 30) {
+        const y = jfCanvas.height - 30 + Math.sin(x * 0.05) * 5;
+        jfCtx.lineTo(x, y);
+      }
+      jfCtx.stroke();
+
+      // Draw bubbles
+      jfBubbles.forEach(b => {
+        jfCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        jfCtx.lineWidth = 1.5;
+        jfCtx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        jfCtx.beginPath();
+        jfCtx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+        jfCtx.fill();
+        jfCtx.stroke();
+
+        jfCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        jfCtx.beginPath();
+        jfCtx.arc(b.x - b.radius * 0.3, b.y - b.radius * 0.3, b.radius * 0.15, 0, Math.PI * 2);
+        jfCtx.fill();
+      });
+
+      // Draw SpongeBob Character
+      drawSpongeBobCharacter(jfCtx, jfPlayer.x, jfPlayer.y, jfPlayer.width, jfPlayer.height, jfPlayer.swinging);
+
+      // Draw Jellyfish
+      jfJellyfishList.forEach(j => {
+        if (j.type === 'plankton') {
+          drawPlanktonCharacter(jfCtx, j.x, j.y, j.radius);
+        } else if (j.type === 'bubble') {
+          jfCtx.strokeStyle = 'rgba(255,255,255,0.85)';
+          jfCtx.lineWidth = 2;
+          jfCtx.fillStyle = 'rgba(186, 230, 253, 0.3)';
+          jfCtx.beginPath();
+          jfCtx.arc(j.x, j.y, j.radius, 0, Math.PI * 2);
+          jfCtx.fill();
+          jfCtx.stroke();
+          
+          jfCtx.fillStyle = '#fff';
+          jfCtx.beginPath();
+          jfCtx.arc(j.x - j.radius * 0.4, j.y - j.radius * 0.4, 2, 0, Math.PI * 2);
+          jfCtx.fill();
+        } else {
+          drawJellyfishCharacter(jfCtx, j.x, j.y, j.radius, j.type, j.wiggleTimer);
+        }
+      });
+
+      // Draw Particles & text popups
+      jfParticles.forEach(p => {
+        jfCtx.save();
+        jfCtx.globalAlpha = p.alpha * (p.life / 30);
+        if (p.text) {
+          jfCtx.font = 'bold 16px Fredoka, sans-serif';
+          jfCtx.fillStyle = p.color;
+          jfCtx.shadowColor = '#000';
+          jfCtx.shadowBlur = 3;
+          jfCtx.fillText(p.text, p.x - 10, p.y);
+        } else {
+          jfCtx.fillStyle = p.color;
+          jfCtx.beginPath();
+          jfCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          jfCtx.fill();
+        }
+        jfCtx.restore();
+      });
+
+      jfCtx.restore();
+    }
+
+    function drawSpongeBobCharacter(ctx, x, y, width, height, swinging) {
+      ctx.save();
+      
+      const swingAngle = swinging ? (Math.PI / 4) * Math.sin((jfPlayer.swingTimer / 12) * Math.PI) : 0;
+      
+      ctx.save();
+      ctx.translate(x + 45, y + 45);
+      ctx.rotate(swingAngle);
+      
+      // Stick
+      ctx.strokeStyle = '#854d0e';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(40, -30);
+      ctx.stroke();
+
+      // Net hoop
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 3.5;
+      ctx.fillStyle = 'rgba(186, 230, 254, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(40, -30, 18, 10, -Math.PI / 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Net tail (mesh bag)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(40 - 15, -30 + 5);
+      ctx.quadraticCurveTo(40, -10, 40 + 10, -30 - 5);
+      ctx.quadraticCurveTo(40, -45, 40 - 15, -30 + 5);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+
+      const bodyX = x + 15;
+      const bodyY = y + 15;
+      const bodyW = 45;
+      const bodyH = 45;
+
+      ctx.fillStyle = '#facc15';
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.rect(bodyX, bodyY, bodyW, bodyH);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#ca8a04';
+      const holes = [
+        { cx: bodyX + 8, cy: bodyY + 8, r: 3 },
+        { cx: bodyX + 38, cy: bodyY + 7, r: 2.5 },
+        { cx: bodyX + 7, cy: bodyY + 36, r: 3.5 },
+        { cx: bodyX + 39, cy: bodyY + 39, r: 4 },
+        { cx: bodyX + 22, cy: bodyY + 41, r: 2 }
+      ];
+      holes.forEach(h => {
+        ctx.beginPath();
+        ctx.arc(h.cx, h.cy, h.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      const leftEyeX = bodyX + 15;
+      const rightEyeX = bodyX + 30;
+      const eyeY = bodyY + 16;
+      const eyeR = 7;
+
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      
+      ctx.beginPath();
+      ctx.arc(leftEyeX, eyeY, eyeR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(rightEyeX, eyeY, eyeR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(leftEyeX + 1, eyeY, 3, 0, Math.PI * 2);
+      ctx.arc(rightEyeX + 1, eyeY, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(leftEyeX + 1.5, eyeY, 1.5, 0, Math.PI * 2);
+      ctx.arc(rightEyeX + 1.5, eyeY, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#facc15';
+      ctx.fillStyle = '#fde047';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(bodyX + 22.5, eyeY + 4, 3, 6, Math.PI / 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.strokeStyle = '#ca8a04';
+      ctx.beginPath();
+      ctx.ellipse(bodyX + 22.5, eyeY + 4, 3, 6, Math.PI / 2, -Math.PI, 0);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(bodyX + 22.5, eyeY + 12, 10, 0, Math.PI);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#f87171';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(leftEyeX - 6, eyeY + 5, 3, Math.PI, Math.PI * 1.8);
+      ctx.arc(rightEyeX + 6, eyeY + 5, 3, Math.PI * 1.2, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(bodyX + 17, eyeY + 22, 5, 6);
+      ctx.rect(bodyX + 23, eyeY + 22, 5, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      const shirtY = bodyY + bodyH;
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.rect(bodyX, shirtY, bodyW, 7);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.moveTo(bodyX + 16, shirtY);
+      ctx.lineTo(bodyX + 20, shirtY + 5);
+      ctx.lineTo(bodyX + 23, shirtY);
+      ctx.moveTo(bodyX + 29, shirtY);
+      ctx.lineTo(bodyX + 26, shirtY + 5);
+      ctx.lineTo(bodyX + 23, shirtY);
+      ctx.fill();
+
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.moveTo(bodyX + 21, shirtY);
+      ctx.lineTo(bodyX + 24, shirtY);
+      ctx.lineTo(bodyX + 22.5, shirtY + 9);
+      ctx.closePath();
+      ctx.fill();
+
+      const pantsY = shirtY + 6;
+      ctx.fillStyle = '#78350f';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.rect(bodyX, pantsY, bodyW, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#facc15';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      
+      ctx.beginPath();
+      ctx.rect(bodyX + 10, pantsY + 8, 4, 10);
+      ctx.rect(bodyX + bodyW - 14, pantsY + 8, 4, 10);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(bodyX + 12, pantsY + 18, 5, 0, Math.PI * 2);
+      ctx.arc(bodyX + bodyW - 12, pantsY + 18, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#facc15';
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(bodyX + bodyW, bodyY + 30, 4, 8, -Math.PI / 4 + swingAngle, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawJellyfishCharacter(ctx, x, y, radius, type, wiggleTimer) {
+      ctx.save();
+
+      const color = type === 'golden' ? '#f59e0b' : '#f472b6';
+      const darkColor = type === 'golden' ? '#b45309' : '#db2777';
+      const lightColor = type === 'golden' ? '#fef08a' : '#fbcfe8';
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      
+      const tSpacing = radius / 2;
+      for (let i = -1; i <= 1; i++) {
+        const tx = x + i * tSpacing;
+        const ty = y + radius * 0.4;
+        
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        
+        const w1 = Math.sin(wiggleTimer + i) * 6;
+        const w2 = Math.cos(wiggleTimer + i * 0.5) * 6;
+        
+        ctx.bezierCurveTo(
+          tx - w1, ty + radius * 0.5,
+          tx + w2, ty + radius * 1.0,
+          tx + w1 * 0.5, ty + radius * 1.5
+        );
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = color;
+      ctx.strokeStyle = darkColor;
+      ctx.lineWidth = 2;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, radius, Math.PI, 0, false);
+      ctx.quadraticCurveTo(x + radius * 0.5, y + 4, x + radius, y);
+      ctx.quadraticCurveTo(x, y + 6, x - radius, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = lightColor;
+      const spots = [
+        { cx: x - radius * 0.4, cy: y - radius * 0.4, r: radius * 0.15 },
+        { cx: x + radius * 0.2, cy: y - radius * 0.5, r: radius * 0.2 },
+        { cx: x + radius * 0.5, cy: y - radius * 0.2, r: radius * 0.12 }
+      ];
+      spots.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.cx, s.cy, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    function drawPlanktonCharacter(ctx, x, y, radius) {
+      ctx.save();
+
+      ctx.strokeStyle = '#065f46';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      
+      ctx.beginPath();
+      ctx.moveTo(x - 3, y - radius);
+      ctx.quadraticCurveTo(x - 12, y - radius - 15, x - 18, y - radius - 8);
+      ctx.moveTo(x + 3, y - radius);
+      ctx.quadraticCurveTo(x + 12, y - radius - 15, x + 18, y - radius - 8);
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f766e';
+      ctx.strokeStyle = '#042f2e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(x, y, radius * 0.8, radius * 1.3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      const eyeX = x;
+      const eyeY = y - 4;
+      const eyeR = 6;
+
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(eyeX, eyeY, eyeR, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(eyeX, eyeY, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(eyeX, eyeY, 1, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(eyeX - 8, eyeY - 8);
+      ctx.lineTo(eyeX + 8, eyeY - 8);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(x, y + 6, 4, 0, Math.PI);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     function cleanupSpongebobWidgets() {
       if (sbGameTimer) {
         clearInterval(sbGameTimer);
         sbGameTimer = null;
       }
+      if (jfGameTimer) {
+        clearInterval(jfGameTimer);
+        jfGameTimer = null;
+      }
+      if (jfAnimFrameId) {
+        cancelAnimationFrame(jfAnimFrameId);
+        jfAnimFrameId = null;
+      }
+      window.removeEventListener('keydown', handleJfKeyDown);
+      window.removeEventListener('keyup', handleJfKeyUp);
+
       const mc = document.querySelector('.spongebob-widgets-container');
       if (mc) mc.remove();
 
