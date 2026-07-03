@@ -2948,6 +2948,354 @@ body.spongebob-theme {
   text-shadow: 0 0 8px rgba(255, 225, 53, 0.3) !important;
 }
 
+/* Spongebob Music Card Override */
+.spongebob-music-card {
+  position: fixed;
+  top: 95px;
+  right: 24px;
+  width: 320px;
+  background: rgba(254, 240, 138, 0.94) !important; /* Soft yellow glass */
+  border: 2.5px solid #eab308 !important; /* Yellow border */
+  border-radius: 20px !important;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 32px rgba(234, 179, 8, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(12px);
+  z-index: 1001;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  animation: hmcSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  color: #78350f !important; /* Brown text matching spongebob */
+}
+
+.spongebob-music-card.playing .hmc-vinyl {
+  animation-play-state: running;
+}
+
+.spongebob-music-card .hmc-music-note {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 14px;
+  animation: floatNote 2s ease-in-out infinite;
+  color: #eab308;
+}
+
+.spongebob-music-card .hmc-bar {
+  background: #3b82f6 !important; /* Blue visualizer (ocean) */
+}
+
+.spongebob-music-card .hmc-btn {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+.spongebob-music-card .hmc-btn:hover {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+
+.spongebob-music-card .hmc-progress-bar {
+  background: #22c55e !important; /* Green progress bar */
+}
+
+.spongebob-music-card .hmc-progress-container {
+  background: rgba(120, 53, 15, 0.15) !important;
+}
+
+.spongebob-music-card.minimized {
+  width: 72px;
+  padding: 10px;
+}
+
+.spongebob-music-card.minimized .hmc-info {
+  display: none;
+}
+
+.spongebob-music-card.minimized .hmc-album-art {
+  margin: 0;
+}
+
+.spongebob-music-card .spongebob-volume-slider {
+  flex: 1;
+  accent-color: #eab308;
+  cursor: pointer;
+  background: rgba(120, 53, 15, 0.15);
+  height: 8px;
+  border-radius: 4px;
+  -webkit-appearance: none;
+}
+
+/* SpongeBob Krabby Patty Mini Game Widget */
+.spongebob-widgets-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 1000px;
+  margin: 24px auto 32px;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+}
+
+.spongebob-widget {
+  background: #fffbef; /* Light sandy color */
+  border: 3px solid #facc15; /* Bright yellow */
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(250, 204, 21, 0.2);
+  color: #78350f; /* SpongeBob brown text */
+  position: relative;
+}
+
+.spongebob-widget__header {
+  background: linear-gradient(90deg, #ffe135, #eab308);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #ac620b;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #78350f;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.spongebob-widget__header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spongebob-widget__header-btn {
+  background: #3b82f6;
+  border: 1px solid #1d4ed8;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.spongebob-widget__header-btn:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+.spongebob-game-panel {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .spongebob-game-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spongebob-kitchen-area {
+  position: relative;
+  background: radial-gradient(circle at center, #bfdbfe, #3b82f6); /* Ocean background */
+  border: 3px solid #78350f;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spongebob-order-display {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #78350f;
+  border-radius: 8px;
+  padding: 10px 16px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.spongebob-order-label {
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #92400e;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+
+.spongebob-order-ingredients {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.spongebob-patty-plate {
+  position: relative;
+  width: 240px;
+  height: 200px;
+  display: flex;
+  flex-direction: column-reverse; /* Stacks upwards */
+  align-items: center;
+  padding-bottom: 24px;
+}
+
+.spongebob-plate-line {
+  position: absolute;
+  bottom: 12px;
+  width: 200px;
+  height: 12px;
+  background: #e2e8f0;
+  border: 2px solid #64748b;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+/* Stacking ingredients animations */
+.spongebob-stacked-ingredient {
+  height: 24px;
+  font-size: 2.2rem;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  animation: pattyDrop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+  z-index: 10;
+}
+
+@keyframes pattyDrop {
+  0% { transform: translateY(-150px) scaleY(1.4); opacity: 0; }
+  70% { transform: translateY(5px) scaleY(0.85); }
+  100% { transform: translateY(0) scaleY(1); opacity: 1; }
+}
+
+.spongebob-cooking-controls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.spongebob-ingredient-btn {
+  background: #fef08a;
+  border: 2px solid #ac620b;
+  border-radius: 8px;
+  font-size: 1.8rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #ac620b;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.spongebob-ingredient-btn:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.spongebob-ingredient-btn:hover {
+  background: #fde047;
+}
+
+.spongebob-game-sidebar {
+  background: rgba(254, 243, 199, 0.5);
+  border: 2px solid #fde047;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.spongebob-game-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spongebob-game-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed rgba(172, 98, 11, 0.2);
+  padding-bottom: 6px;
+}
+
+.spongebob-game-stat__label {
+  font-weight: bold;
+}
+
+.spongebob-game-stat__value {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #ac620b;
+}
+
+.spongebob-game-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: 2px solid #1d4ed8;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Fredoka', sans-serif;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 3px 0 #1d4ed8;
+}
+
+.spongebob-game-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.spongebob-game-btn:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.spongebob-game-btn--danger {
+  background: #ef4444;
+  border-color: #b91c1c;
+  box-shadow: 0 3px 0 #b91c1c;
+}
+
+.spongebob-game-btn--danger:hover {
+  background: #dc2626;
+}
+
+.spongebob-win-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(254, 252, 232, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  text-align: center;
+  padding: 20px;
+  z-index: 100;
+}
+
 /* ---------- Task Details & Feedback Modal ---------- */
 .task-modal {
   position: fixed;
