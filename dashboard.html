@@ -19312,8 +19312,13 @@
             mode: 'cors'
           });
           if (response.ok) {
-            feedbackList = await response.json();
-            isSynced = true;
+            const data = await response.json();
+            if (Array.isArray(data)) {
+              feedbackList = data;
+              isSynced = true;
+            } else {
+              throw new Error('Response is not a valid feedback list');
+            }
           } else {
             throw new Error('Server returned ' + response.status);
           }
@@ -19323,7 +19328,7 @@
       }
       
       // Fallback to local storage if empty or failed
-      if (feedbackList.length === 0) {
+      if (!Array.isArray(feedbackList) || feedbackList.length === 0) {
         try {
           feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
         } catch (e) {
