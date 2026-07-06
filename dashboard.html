@@ -14,6 +14,34 @@
     @keyframes spinner {
       to { transform: rotate(360deg); }
     }
+    body.not-kanban-view .spongebob-widgets-container,
+    body.not-kanban-view .soviet-widgets-container,
+    body.not-kanban-view .mickey-widgets-container,
+    body.not-kanban-view .dragon-game-container,
+    body.not-kanban-view .dragon-duel-container,
+    body.not-kanban-view .dragon-encyclopedia-container,
+    body.not-kanban-view .dragon-rune-carver-container,
+    body.not-kanban-view .totallyspies-gadget-card,
+    body.not-kanban-view .sb-corner,
+    body.not-kanban-view .sb-corner-tl,
+    body.not-kanban-view .sb-bubble,
+    body.not-kanban-view .sb-footprints,
+    body.not-kanban-view .soviet-star,
+    body.not-kanban-view .soviet-corner,
+    body.not-kanban-view .soviet-corner-tl,
+    body.not-kanban-view .soviet-bubble,
+    body.not-kanban-view .soviet-telemetry-left,
+    body.not-kanban-view .soviet-telemetry-right,
+    body.not-kanban-view .soviet-dial-container,
+    body.not-kanban-view .mickey-corner,
+    body.not-kanban-view .mickey-corner-tl,
+    body.not-kanban-view .mickey-bubble,
+    body.not-kanban-view .mickey-footprints,
+    body.not-kanban-view .dragon-corner-br,
+    body.not-kanban-view .dragon-bubble,
+    body.not-kanban-view .dragon-music-card {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -19366,6 +19394,9 @@
     
     function setView(view) {
       currentView = view;
+      
+      // Toggle not-kanban-view class on body to hide theme game/telemetry widgets
+      document.body.classList.toggle('not-kanban-view', view !== 'kanban');
       
       // Update tab active states
       if (viewKanbanBtn) viewKanbanBtn.classList.toggle('active', view === 'kanban');
