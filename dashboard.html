@@ -539,36 +539,49 @@
 
       <!-- Website Feedbacks Section -->
       <div class="feedback-section fade-in" id="website-feedback-section" style="display: none; margin-top: 24px;">
-        <div class="tracker-card">
+        
+        <!-- Submit Feedback Form -->
+        <div class="tracker-card" style="margin-bottom: 24px;">
           <div class="tracker-card__header">
             <div class="tracker-card__title-group">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <h2>Website Feedbacks</h2>
-            </div>
-            <div class="tracker-card__actions">
-              <button class="btn-primary" id="feedback-refresh-btn" style="display: inline-flex; align-items: center; gap: 6px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                <span>Refresh</span>
-              </button>
+              <h2>Submit Feedback</h2>
             </div>
           </div>
-          
-          <div class="tracker-table-container" style="overflow-x: auto;">
-            <table class="tracker-table" style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
-              <thead>
-                <tr style="border-bottom: 2px solid rgba(246, 242, 223, 0.15);">
-                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 25%;">Date/Time</th>
-                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 25%;">Identifier</th>
-                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 50%;">Feedback</th>
-                </tr>
-              </thead>
-              <tbody id="website-feedback-table-body">
-                <!-- Rendered Dynamically -->
-              </tbody>
-            </table>
-            <div id="website-feedback-empty-state" style="text-align: center; padding: 40px; display: none;">
-              <p style="color: var(--white-muted); font-family: var(--font-sub); font-size: 1.1rem;">No feedback responses found.</p>
+          <form id="dashboard-feedback-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="dash-fb-identifier" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Identifier (min 6 characters)</label>
+              <input type="text" id="dash-fb-identifier" placeholder="Enter your name, alias, or ID..." minlength="6" required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246,242,223,0.12); background: rgba(30,59,45,0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; transition: border-color 0.3s ease;" />
+              <span id="dash-fb-id-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Identifier must be at least 6 characters.</span>
             </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="dash-fb-message" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Your Feedback</label>
+              <textarea id="dash-fb-message" rows="4" placeholder="Share your thoughts, suggestions, or report issues..." required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246,242,223,0.12); background: rgba(30,59,45,0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; resize: vertical; min-height: 80px; transition: border-color 0.3s ease;"></textarea>
+              <span id="dash-fb-msg-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Feedback message cannot be empty.</span>
+            </div>
+            <button type="submit" id="dash-fb-submit" class="btn-primary" style="align-self: flex-start; padding: 10px 28px; font-weight: 600; font-size: 0.95rem; border-radius: 10px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Submit Feedback
+            </button>
+            <div id="dash-fb-success" style="display: none; padding: 12px 16px; border-radius: 10px; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86efac; font-family: var(--font-sub); font-size: 0.9rem;">
+              ✅ Your feedback has been submitted successfully!
+            </div>
+          </form>
+        </div>
+
+        <!-- Previous Feedbacks List -->
+        <div class="tracker-card">
+          <div class="tracker-card__header">
+            <div class="tracker-card__title-group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <h2>All Feedback Submissions</h2>
+            </div>
+          </div>
+          <div id="dash-fb-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Rendered dynamically -->
+          </div>
+          <div id="dash-fb-empty" style="text-align: center; padding: 40px;">
+            <p style="color: var(--white-muted); font-family: var(--font-sub); font-size: 1.1rem;">No feedback submissions yet. Be the first to share your thoughts!</p>
           </div>
         </div>
       </div>
@@ -660,24 +673,6 @@
   </footer>
 
   <script>
-
-    // Diagnostic error logger to capture and display any browser console failures directly on the screen
-    window.onerror = function(message, source, lineno, colno, error) {
-      const errDiv = document.createElement('div');
-      errDiv.style = "position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: #fff; padding: 15px; z-index: 999999; font-family: monospace; font-size: 14px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5);";
-      errDiv.innerHTML = `<strong>⚠️ Javascript Error on Page:</strong><br>${message}<br>File: ${source}:${lineno}:${colno}`;
-      document.body.appendChild(errDiv);
-      return false;
-    };
-    window.addEventListener('unhandledrejection', function(event) {
-      const errDiv = document.createElement('div');
-      errDiv.style = "position: fixed; top: 0; left: 0; right: 0; background: #f97316; color: #fff; padding: 15px; z-index: 999999; font-family: monospace; font-size: 14px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5);";
-      errDiv.innerHTML = `<strong>⚠️ Unhandled Promise Rejection:</strong><br>${event.reason}`;
-      document.body.appendChild(errDiv);
-    });
-
-    // Configuration: Paste your deployed Google Apps Script URL here!
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
 
     // State (initialized early to prevent TDZ errors in session restore calls)
     let currentRole = 'member';
@@ -19278,7 +19273,6 @@
       const activeReg = safeSession.getItem('aeris_auth_reg');
       const activeName = MEMBERS_DATABASE[activeReg]?.name || 'Unknown User';
 
-      // Log edit history details
       tx.edits = tx.edits || [];
       tx.edits.push({
         editor: activeName,
@@ -19288,7 +19282,6 @@
         prevSourcePurpose: tx.source_purpose
       });
 
-      // Update values
       tx.date = dateVal;
       tx.type = typeVal;
       tx.amount = amountVal;
@@ -19303,7 +19296,6 @@
     }
 
     /* ========== BIND EVENTS AND ACTIONS ========== */
-    // Patches to department selectors to update excel grid
     deptTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         if (currentView === 'tracker') {
@@ -19312,7 +19304,6 @@
       });
     });
 
-    // Patch to task submit button to update excel columns dynamically
     const originalSubmitAction = submitBtn.onclick;
     submitBtn.addEventListener('click', () => {
       setTimeout(() => {
@@ -19328,85 +19319,111 @@
     const viewFinanceBtn = document.getElementById('view-finance-btn');
     const viewFeedbackBtn = document.getElementById('view-feedback-btn');
 
-    // Renders website feedback responses from Google Sheet or LocalStorage fallback
-    async function renderWebsiteFeedbacks() {
-      const tableBody = document.getElementById('website-feedback-table-body');
-      const emptyState = document.getElementById('website-feedback-empty-state');
-      if (!tableBody) return;
-      
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="3" style="text-align: center; padding: 30px; color: var(--white-muted);">
-            <div style="display: inline-block; width: 20px; height: 20px; border: 2.5px solid rgba(246, 242, 223, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spinner 0.8s linear infinite; margin-right: 10px; vertical-align: middle;"></div>
-            Loading feedback responses...
-          </td>
-        </tr>
-      `;
-      if (emptyState) emptyState.style.display = 'none';
-      
-      const isDefaultUrl = !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_SCRIPT_URL_HERE');
+    // ========== WEBSITE FEEDBACK (embedded form + localStorage) ==========
+    function renderWebsiteFeedbacks() {
+      const listEl = document.getElementById('dash-fb-list');
+      const emptyEl = document.getElementById('dash-fb-empty');
+      if (!listEl) return;
+
       let feedbackList = [];
-      let isSynced = false;
-      
-      if (!isDefaultUrl) {
-        try {
-          const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'GET',
-            mode: 'cors'
-          });
-          if (response.ok) {
-            const data = await response.json();
-            if (Array.isArray(data)) {
-              feedbackList = data;
-              isSynced = true;
-            } else {
-              throw new Error('Response is not a valid feedback list');
-            }
-          } else {
-            throw new Error('Server returned ' + response.status);
-          }
-        } catch (err) {
-          console.warn('Failed to fetch from Google Sheet, falling back to local storage:', err);
-        }
+      try {
+        feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+      } catch (e) {
+        feedbackList = [];
       }
-      
-      // Fallback to local storage if empty or failed
-      if (!Array.isArray(feedbackList) || feedbackList.length === 0) {
-        try {
-          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
-        } catch (e) {
-          feedbackList = [];
-        }
-        isSynced = false;
-      }
-      
+
       if (feedbackList.length === 0) {
-        tableBody.innerHTML = '';
-        if (emptyState) emptyState.style.display = 'block';
+        listEl.innerHTML = '';
+        if (emptyEl) emptyEl.style.display = 'block';
         return;
       }
-      
-      // Sort: newest first
-      try {
-        feedbackList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      } catch (e) {}
-      
-      tableBody.innerHTML = feedbackList.map(item => {
-        const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
-        const sourceBadge = isSynced 
-          ? `<span style="display: inline-block; padding: 2px 6px; font-size: 0.7rem; font-family: var(--font-heading); background: rgba(30, 150, 45, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 4px; margin-left: 8px; text-transform: uppercase;">Synced</span>`
-          : `<span style="display: inline-block; padding: 2px 6px; font-size: 0.7rem; font-family: var(--font-heading); background: rgba(234, 179, 8, 0.15); color: #fef08a; border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 4px; margin-left: 8px; text-transform: uppercase;">Local</span>`;
-          
-        return `
-          <tr style="border-bottom: 1px solid rgba(246, 242, 223, 0.08); transition: background 0.3s ease;">
-            <td style="padding: 14px 12px; font-size: 0.9rem; color: var(--white-muted); white-space: nowrap;">${dateStr}</td>
-            <td style="padding: 14px 12px; font-size: 0.95rem; font-weight: 600; color: var(--accent);">${escapeHtml(item.identifier || '')}${sourceBadge}</td>
-            <td style="padding: 14px 12px; font-size: 0.95rem; color: var(--white-soft); line-height: 1.5; word-break: break-word;">${escapeHtml(item.feedback || '').replace(/\n/g, '<br>')}</td>
-          </tr>
-        `;
+
+      if (emptyEl) emptyEl.style.display = 'none';
+
+      // Sort newest first
+      feedbackList.sort(function(a, b) {
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      });
+
+      listEl.innerHTML = feedbackList.map(function(item) {
+        var dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+        var idText = escapeHtml(item.identifier || '');
+        var fbText = escapeHtml(item.feedback || '').replace(/\n/g, '<br>');
+        return '<div style="padding: 16px; border-radius: 10px; background: rgba(30,59,45,0.2); border: 1px solid rgba(246,242,223,0.08);">' +
+          '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">' +
+            '<span style="font-weight: 600; color: var(--accent); font-size: 0.95rem;">' + idText + '</span>' +
+            '<span style="font-size: 0.8rem; color: var(--white-muted);">' + dateStr + '</span>' +
+          '</div>' +
+          '<p style="margin: 0; color: var(--white-soft); font-size: 0.95rem; line-height: 1.6; word-break: break-word;">' + fbText + '</p>' +
+        '</div>';
       }).join('');
     }
-    
+
+    // Bind feedback form submission
+    var dashFbForm = document.getElementById('dashboard-feedback-form');
+    if (dashFbForm) {
+      dashFbForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var idInput = document.getElementById('dash-fb-identifier');
+        var msgInput = document.getElementById('dash-fb-message');
+        var idError = document.getElementById('dash-fb-id-error');
+        var msgError = document.getElementById('dash-fb-msg-error');
+        var successEl = document.getElementById('dash-fb-success');
+
+        // Reset
+        idError.style.display = 'none';
+        msgError.style.display = 'none';
+        successEl.style.display = 'none';
+
+        var idVal = idInput.value.trim();
+        var msgVal = msgInput.value.trim();
+        var valid = true;
+
+        if (idVal.length < 6) {
+          idError.style.display = 'block';
+          idInput.focus();
+          valid = false;
+        }
+        if (!msgVal) {
+          msgError.style.display = 'block';
+          if (valid) msgInput.focus();
+          valid = false;
+        }
+        if (!valid) return;
+
+        // Save to localStorage
+        var feedbackList = [];
+        try {
+          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+        } catch (ex) {
+          feedbackList = [];
+        }
+        feedbackList.push({
+          timestamp: new Date().toISOString(),
+          identifier: idVal,
+          feedback: msgVal
+        });
+        localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
+
+        // Also POST to Google Sheet if configured
+        var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
+        try {
+          var formData = new URLSearchParams();
+          formData.append('identifier', idVal);
+          formData.append('feedback', msgVal);
+          fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData }).catch(function(){});
+        } catch (ex) {}
+
+        // Show success, reset form, re-render list
+        successEl.style.display = 'block';
+        idInput.value = '';
+        msgInput.value = '';
+        setTimeout(function() { successEl.style.display = 'none'; }, 4000);
+        renderWebsiteFeedbacks();
+      });
+    }
+
     function setView(view) {
       currentView = view;
       
@@ -19490,10 +19507,6 @@
     }
     if (viewFeedbackBtn) {
       viewFeedbackBtn.addEventListener('click', () => setView('website-feedback'));
-    }
-    const feedbackRefreshBtn = document.getElementById('feedback-refresh-btn');
-    if (feedbackRefreshBtn) {
-      feedbackRefreshBtn.addEventListener('click', () => renderWebsiteFeedbacks());
     }
 
     // CSV Exporter Action (Applies same member segmentation and permissions)
