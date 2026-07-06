@@ -661,6 +661,21 @@
 
   <script>
 
+    // Diagnostic error logger to capture and display any browser console failures directly on the screen
+    window.onerror = function(message, source, lineno, colno, error) {
+      const errDiv = document.createElement('div');
+      errDiv.style = "position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: #fff; padding: 15px; z-index: 999999; font-family: monospace; font-size: 14px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5);";
+      errDiv.innerHTML = `<strong>⚠️ Javascript Error on Page:</strong><br>${message}<br>File: ${source}:${lineno}:${colno}`;
+      document.body.appendChild(errDiv);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      const errDiv = document.createElement('div');
+      errDiv.style = "position: fixed; top: 0; left: 0; right: 0; background: #f97316; color: #fff; padding: 15px; z-index: 999999; font-family: monospace; font-size: 14px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.5);";
+      errDiv.innerHTML = `<strong>⚠️ Unhandled Promise Rejection:</strong><br>${event.reason}`;
+      document.body.appendChild(errDiv);
+    });
+
     // Configuration: Paste your deployed Google Apps Script URL here!
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
 
