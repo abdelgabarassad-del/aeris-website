@@ -82,61 +82,6 @@
           <button type="button" class="btn-primary" id="btnReset">Submit Another Response</button>
         </div>
       </div>
-
-      <!-- Collapsible Developer Instructions Panel -->
-      <details class="dev-instructions" id="devInstructionsPanel" style="display: none;">
-        <summary>⚙️ Admin / Developer Setup Guide</summary>
-        <div class="dev-content">
-          <p>This form is set to save submissions to <strong>local storage</strong> for testing because the Google Apps Script URL has not been configured yet.</p>
-          <p>To connect this form to a live Google Spreadsheet, follow these steps:</p>
-          <ol>
-             <li>Open a Google Spreadsheet where you want to collect feedback.</li>
-             <li>Click on <strong>Extensions</strong> &gt; <strong>Apps Script</strong>.</li>
-             <li>Delete any code in the editor, and paste the following Google Apps Script:</li>
-          </ol>
-          <textarea class="code-textarea" id="scriptCode" readonly>function doPost(e) {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var timestamp = new Date();
-    
-    // Support JSON or URL-encoded form POST
-    var data = e.parameter;
-    if (e.postData && e.postData.contents) {
-      try {
-        data = JSON.parse(e.postData.contents);
-      } catch(err) {}
-    }
-    
-    var identifier = data.identifier || '';
-    var feedback = data.feedback || '';
-    
-    sheet.appendRow([timestamp, identifier, feedback]);
-    
-    return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader("Access-Control-Allow-Origin", "*");
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader("Access-Control-Allow-Origin", "*");
-  }
-}
-
-function doGet(e) {
-  return ContentService.createTextOutput("A.E.R.I.S. Feedback Sheet Script Active.");
-}</textarea>
-          <button type="button" class="btn-copy-code" id="btnCopyCode">Copy Apps Script Code</button>
-          <ol start="4" style="margin-top: 10px;">
-             <li>Click <strong>Deploy</strong> &gt; <strong>New deployment</strong>.</li>
-             <li>Select <strong>Web app</strong> as the deployment type (click the gear icon next to "Select type").</li>
-             <li>Set <em>Execute as:</em> <strong>"Me"</strong>, and <em>Who has access:</em> <strong>"Anyone"</strong>.</li>
-             <li>Click <strong>Deploy</strong>, authorize the permissions, and copy the generated <strong>Web App URL</strong>.</li>
-             <li>Open <code>feedback.html</code> in your editor and paste the URL in the JavaScript section:
-               <br><code>const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_URL_HERE';</code>
-             </li>
-          </ol>
-        </div>
-      </details>
     </div>
   </main>
 
@@ -171,7 +116,7 @@ function doGet(e) {
   <!-- ========== SCRIPTS ========== -->
   <script>
     // Configuration: Paste your deployed Google Apps Script URL here!
-    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE'; 
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec'; 
 
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('feedbackForm');
@@ -183,29 +128,6 @@ function doGet(e) {
       const successView = document.getElementById('successView');
       const submitBtn = document.getElementById('submitBtn');
       const btnReset = document.getElementById('btnReset');
-      const devInstructionsPanel = document.getElementById('devInstructionsPanel');
-      const btnCopyCode = document.getElementById('btnCopyCode');
-      const scriptCodeTextarea = document.getElementById('scriptCode');
-
-      // Show developer instructions only if script URL is not configured
-      const isDefaultUrl = GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_SCRIPT_URL_HERE') || GOOGLE_SCRIPT_URL === '';
-      if (isDefaultUrl) {
-        devInstructionsPanel.style.display = 'block';
-      } else {
-        devInstructionsPanel.style.display = 'none';
-      }
-
-      // Copy apps script code helper
-      if (btnCopyCode) {
-        btnCopyCode.addEventListener('click', () => {
-          scriptCodeTextarea.select();
-          document.execCommand('copy');
-          btnCopyCode.textContent = 'Copied!';
-          setTimeout(() => {
-            btnCopyCode.textContent = 'Copy Apps Script Code';
-          }, 2000);
-        });
-      }
 
       // Handle Form Submission
       form.addEventListener('submit', async (e) => {
@@ -238,43 +160,33 @@ function doGet(e) {
         // Proceed to submit
         setLoading(true);
         
-        if (isDefaultUrl) {
-          // Mock Submission (local storage backup)
-          console.log('Mock submission running (Local Storage)');
-          saveToLocalStorage(identifierVal, feedbackVal);
-          setTimeout(() => {
+        // Real Submission to Google Sheets
+        try {
+          const formData = new URLSearchParams();
+          formData.append('identifier', identifierVal);
+          formData.append('feedback', feedbackVal);
+          
+          const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+          });
+          
+          const result = await response.json();
+          
+          if (result.status === 'success' || result.result === 'success') {
             setLoading(false);
-            showSuccessView(true);
-          }, 1000);
-        } else {
-          // Real Submission to Google Sheets
-          try {
-            const formData = new URLSearchParams();
-            formData.append('identifier', identifierVal);
-            formData.append('feedback', feedbackVal);
-            
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              body: formData,
-              mode: 'cors'
-            });
-            
-            const result = await response.json();
-            
-            if (result.status === 'success' || result.result === 'success') {
-              setLoading(false);
-              showSuccessView(false);
-            } else {
-              throw new Error(result.message || 'Unknown server error');
-            }
-          } catch (err) {
-            console.error('Submission error:', err);
-            // Fallback: save locally and notify user
-            saveToLocalStorage(identifierVal, feedbackVal);
-            setLoading(false);
-            alert('Network submission failed, but your feedback has been saved locally on this browser.\nError: ' + err.message);
-            showSuccessView(true);
+            showSuccessView(false);
+          } else {
+            throw new Error(result.message || 'Unknown server error');
           }
+        } catch (err) {
+          console.error('Submission error:', err);
+          // Fallback: save locally and notify user
+          saveToLocalStorage(identifierVal, feedbackVal);
+          setLoading(false);
+          alert('Network submission failed, but your feedback has been saved locally on this browser.\nError: ' + err.message);
+          showSuccessView(true);
         }
       });
 
@@ -302,7 +214,7 @@ function doGet(e) {
         successView.style.display = 'block';
         const msg = successView.querySelector('p');
         if (isMock) {
-          msg.innerHTML = 'Thank you! (Dev Mode: Saved locally in your browser storage since Google Script is not yet linked).';
+          msg.innerHTML = 'Thank you! (Saved locally in your browser storage since connection was interrupted).';
         } else {
           msg.innerHTML = 'Thank you! Your feedback has been successfully sent to our Google Spreadsheet.';
         }
