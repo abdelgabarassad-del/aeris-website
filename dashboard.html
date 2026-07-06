@@ -10,6 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Luckiest+Guy&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=2.2" />
   <link rel="stylesheet" href="dashboard.css?v=2.2" />
+  <style>
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
@@ -34,7 +39,7 @@
         <li><a href="sponsors.html">Sponsors</a></li>
         <li><a href="index.html#contact">Contact</a></li>
         <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li><a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
@@ -245,6 +250,10 @@
         <button class="view-tab" data-view="finance" id="view-finance-btn" style="display: none;">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span id="finance-tab-text">Budget Tracker (Excel)</span>
+        </button>
+        <button class="view-tab" data-view="website-feedback" id="view-feedback-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Website Feedbacks</span>
         </button>
       </div>
 
@@ -500,6 +509,42 @@
         </div>
       </div>
 
+      <!-- Website Feedbacks Section -->
+      <div class="feedback-section fade-in" id="website-feedback-section" style="display: none; margin-top: 24px;">
+        <div class="tracker-card">
+          <div class="tracker-card__header">
+            <div class="tracker-card__title-group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <h2>Website Feedbacks</h2>
+            </div>
+            <div class="tracker-card__actions">
+              <button class="btn-primary" id="feedback-refresh-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                <span>Refresh</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="tracker-table-container" style="overflow-x: auto;">
+            <table class="tracker-table" style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+              <thead>
+                <tr style="border-bottom: 2px solid rgba(246, 242, 223, 0.15);">
+                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 25%;">Date/Time</th>
+                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 25%;">Identifier</th>
+                  <th style="padding: 12px; font-family: var(--font-heading); color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; width: 50%;">Feedback</th>
+                </tr>
+              </thead>
+              <tbody id="website-feedback-table-body">
+                <!-- Rendered Dynamically -->
+              </tbody>
+            </table>
+            <div id="website-feedback-empty-state" style="text-align: center; padding: 40px; display: none;">
+              <p style="color: var(--white-muted); font-family: var(--font-sub); font-size: 1.1rem;">No feedback responses found.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- ========== TASK DETAILS & FEEDBACK MODAL ========== -->
       <div class="task-modal" id="task-modal" style="display: none;">
@@ -575,7 +620,7 @@
           <a href="sponsors.html">Sponsors</a>
           <a href="index.html#contact">Contact</a>
           <a href="dashboard.html">Dashboard</a>
-          <a href="https://forms.gle/4wWEVgQ8LcqpDJLd9" target="_blank" rel="noopener noreferrer">Feedback</a>
+          <a href="feedback.html">Feedback</a>
         </div>
         <div class="footer-branch">
           <img src="images/academpic.png" alt="AASTMT Logo" class="footer-branch-logo" />
@@ -587,6 +632,9 @@
   </footer>
 
   <script>
+
+    // Configuration: Paste your deployed Google Apps Script URL here!
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
 
     // State (initialized early to prevent TDZ errors in session restore calls)
     let currentRole = 'member';
@@ -19235,6 +19283,81 @@
     const viewKanbanBtn = document.getElementById('view-kanban-btn');
     const viewTrackerBtn = document.getElementById('view-tracker-btn');
     const viewFinanceBtn = document.getElementById('view-finance-btn');
+    const viewFeedbackBtn = document.getElementById('view-feedback-btn');
+
+    // Renders website feedback responses from Google Sheet or LocalStorage fallback
+    async function renderWebsiteFeedbacks() {
+      const tableBody = document.getElementById('website-feedback-table-body');
+      const emptyState = document.getElementById('website-feedback-empty-state');
+      if (!tableBody) return;
+      
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="3" style="text-align: center; padding: 30px; color: var(--white-muted);">
+            <div style="display: inline-block; width: 20px; height: 20px; border: 2.5px solid rgba(246, 242, 223, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spinner 0.8s linear infinite; margin-right: 10px; vertical-align: middle;"></div>
+            Loading feedback responses...
+          </td>
+        </tr>
+      `;
+      if (emptyState) emptyState.style.display = 'none';
+      
+      const isDefaultUrl = !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_SCRIPT_URL_HERE');
+      let feedbackList = [];
+      let isSynced = false;
+      
+      if (!isDefaultUrl) {
+        try {
+          const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'GET',
+            mode: 'cors'
+          });
+          if (response.ok) {
+            feedbackList = await response.json();
+            isSynced = true;
+          } else {
+            throw new Error('Server returned ' + response.status);
+          }
+        } catch (err) {
+          console.warn('Failed to fetch from Google Sheet, falling back to local storage:', err);
+        }
+      }
+      
+      // Fallback to local storage if empty or failed
+      if (feedbackList.length === 0) {
+        try {
+          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+        } catch (e) {
+          feedbackList = [];
+        }
+        isSynced = false;
+      }
+      
+      if (feedbackList.length === 0) {
+        tableBody.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      
+      // Sort: newest first
+      try {
+        feedbackList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } catch (e) {}
+      
+      tableBody.innerHTML = feedbackList.map(item => {
+        const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+        const sourceBadge = isSynced 
+          ? `<span style="display: inline-block; padding: 2px 6px; font-size: 0.7rem; font-family: var(--font-heading); background: rgba(30, 150, 45, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 4px; margin-left: 8px; text-transform: uppercase;">Synced</span>`
+          : `<span style="display: inline-block; padding: 2px 6px; font-size: 0.7rem; font-family: var(--font-heading); background: rgba(234, 179, 8, 0.15); color: #fef08a; border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 4px; margin-left: 8px; text-transform: uppercase;">Local</span>`;
+          
+        return `
+          <tr style="border-bottom: 1px solid rgba(246, 242, 223, 0.08); transition: background 0.3s ease;">
+            <td style="padding: 14px 12px; font-size: 0.9rem; color: var(--white-muted); white-space: nowrap;">${dateStr}</td>
+            <td style="padding: 14px 12px; font-size: 0.95rem; font-weight: 600; color: var(--accent);">${escapeHtml(item.identifier || '')}${sourceBadge}</td>
+            <td style="padding: 14px 12px; font-size: 0.95rem; color: var(--white-soft); line-height: 1.5; word-break: break-word;">${escapeHtml(item.feedback || '').replace(/\n/g, '<br>')}</td>
+          </tr>
+        `;
+      }).join('');
+    }
     
     function setView(view) {
       currentView = view;
@@ -19243,11 +19366,13 @@
       if (viewKanbanBtn) viewKanbanBtn.classList.toggle('active', view === 'kanban');
       if (viewTrackerBtn) viewTrackerBtn.classList.toggle('active', view === 'tracker');
       if (viewFinanceBtn) viewFinanceBtn.classList.toggle('active', view === 'finance');
+      if (viewFeedbackBtn) viewFeedbackBtn.classList.toggle('active', view === 'website-feedback');
       
       // Update display of main sections
       const taskBoard = document.getElementById('task-board');
       const trackerSection = document.getElementById('tracker-section');
       const financeSection = document.getElementById('finance-section');
+      const websiteFeedbackSection = document.getElementById('website-feedback-section');
       
       // Hide/show kanban-specific elements (form, dept tabs, empty state)
       const emptyState = document.getElementById('empty-state');
@@ -19265,6 +19390,10 @@
       if (financeSection) {
         financeSection.style.display = (view === 'finance') ? 'block' : 'none';
         if (view === 'finance') financeSection.classList.add('visible');
+      }
+      if (websiteFeedbackSection) {
+        websiteFeedbackSection.style.display = (view === 'website-feedback') ? 'block' : 'none';
+        if (view === 'website-feedback') websiteFeedbackSection.classList.add('visible');
       }
       
       // Hide kanban-only elements when not in kanban view
@@ -19288,6 +19417,8 @@
         renderProgressTracker();
       } else if (view === 'finance') {
         renderFinanceSection();
+      } else if (view === 'website-feedback') {
+        renderWebsiteFeedbacks();
       }
     }
     
@@ -19305,6 +19436,13 @@
         }
         setView('finance');
       });
+    }
+    if (viewFeedbackBtn) {
+      viewFeedbackBtn.addEventListener('click', () => setView('website-feedback'));
+    }
+    const feedbackRefreshBtn = document.getElementById('feedback-refresh-btn');
+    if (feedbackRefreshBtn) {
+      feedbackRefreshBtn.addEventListener('click', () => renderWebsiteFeedbacks());
     }
 
     // CSV Exporter Action (Applies same member segmentation and permissions)

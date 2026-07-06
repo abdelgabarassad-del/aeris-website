@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Submit your feedback directly to the A.E.R.I.S. team." />
+  <title>Feedback | A.E.R.I.S.</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" id="site-header">
+    <nav class="nav-wrapper">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-group">
+          <img src="images/academpic.png" alt="AASTMT Logo" class="nav-inst-logo" />
+          <img src="images/CoET%20Logo.png" alt="CoET Logo" class="nav-inst-logo" />
+          <span class="nav-logo-divider"></span>
+        </div>
+        <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="nav-logo-img" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="workshops.html">Workshops</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="competitions.html">Competitions</a></li>
+        <li><a href="sponsors.html">Sponsors</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="feedback.html" class="active">Feedback</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ========== FEEDBACK CONTAINER ========== -->
+  <main class="feedback-page">
+    <div class="container fade-in visible">
+      <div class="feedback-container">
+        
+        <!-- Form Section -->
+        <div id="feedbackFormContainer">
+          <h2>Send Your Feedback</h2>
+          <p class="feedback-desc">We value your input. Please fill in the details below to submit your feedback directly.</p>
+          <form class="feedback-form" id="feedbackForm" novalidate>
+            
+            <div class="feedback-field">
+              <label for="identifier">Q1. Identifier (Min. 6 Characters)</label>
+              <input type="text" id="identifier" name="identifier" required placeholder="e.g., Name, Email, or Member ID">
+              <span class="helper-text">This helps us know who you are (minimum 6 characters).</span>
+              <div class="feedback-error" id="identifierError">The identifier must be at least 6 characters long.</div>
+            </div>
+            
+            <div class="feedback-field">
+              <label for="feedback">Q2. Your Feedback</label>
+              <textarea id="feedback" name="feedback" required placeholder="Describe your feedback, suggestion, or question here..."></textarea>
+              <div class="feedback-error" id="feedbackError">Feedback cannot be empty.</div>
+            </div>
+            
+            <div class="feedback-btn-wrapper">
+              <button type="submit" class="btn-primary full-width" id="submitBtn">
+                <span class="btn-text">Submit Feedback</span>
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Success View (Hidden initially) -->
+        <div class="feedback-success-view" id="successView">
+          <div class="success-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3>Thank You!</h3>
+          <p>Your feedback has been successfully captured and sent to our team spreadsheet.</p>
+          <button type="button" class="btn-primary" id="btnReset">Submit Another Response</button>
+        </div>
+      </div>
+
+      <!-- Collapsible Developer Instructions Panel -->
+      <details class="dev-instructions" id="devInstructionsPanel" style="display: none;">
+        <summary>⚙️ Admin / Developer Setup Guide</summary>
+        <div class="dev-content">
+          <p>This form is set to save submissions to <strong>local storage</strong> for testing because the Google Apps Script URL has not been configured yet.</p>
+          <p>To connect this form to a live Google Spreadsheet, follow these steps:</p>
+          <ol>
+             <li>Open a Google Spreadsheet where you want to collect feedback.</li>
+             <li>Click on <strong>Extensions</strong> &gt; <strong>Apps Script</strong>.</li>
+             <li>Delete any code in the editor, and paste the following Google Apps Script:</li>
+          </ol>
+          <textarea class="code-textarea" id="scriptCode" readonly>function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var timestamp = new Date();
+    
+    // Support JSON or URL-encoded form POST
+    var data = e.parameter;
+    if (e.postData && e.postData.contents) {
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch(err) {}
+    }
+    
+    var identifier = data.identifier || '';
+    var feedback = data.feedback || '';
+    
+    sheet.appendRow([timestamp, identifier, feedback]);
+    
+    return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput("A.E.R.I.S. Feedback Sheet Script Active.");
+}</textarea>
+          <button type="button" class="btn-copy-code" id="btnCopyCode">Copy Apps Script Code</button>
+          <ol start="4" style="margin-top: 10px;">
+             <li>Click <strong>Deploy</strong> &gt; <strong>New deployment</strong>.</li>
+             <li>Select <strong>Web app</strong> as the deployment type (click the gear icon next to "Select type").</li>
+             <li>Set <em>Execute as:</em> <strong>"Me"</strong>, and <em>Who has access:</em> <strong>"Anyone"</strong>.</li>
+             <li>Click <strong>Deploy</strong>, authorize the permissions, and copy the generated <strong>Web App URL</strong>.</li>
+             <li>Open <code>feedback.html</code> in your editor and paste the URL in the JavaScript section:
+               <br><code>const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_URL_HERE';</code>
+             </li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo%202.png" alt="A.E.R.I.S. Logo" class="footer-logo-img" />
+        </a>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="events.html">Events</a>
+          <a href="workshops.html">Workshops</a>
+          <a href="projects.html">Projects</a>
+          <a href="competitions.html">Competitions</a>
+          <a href="sponsors.html">Sponsors</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="feedback.html">Feedback</a>
+        </div>
+        <div class="footer-branch">
+          <img src="images/academpic.png" alt="AASTMT Logo" class="footer-branch-logo" />
+          <span>AASTMT — El Alamein Branch</span>
+        </div>
+        <p class="footer-copy">&copy; 2026 A.E.R.I.S. — Advanced Engineering &amp; Robotics in Flight Systems. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // Configuration: Paste your deployed Google Apps Script URL here!
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE'; 
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('feedbackForm');
+      const identifierInput = document.getElementById('identifier');
+      const feedbackInput = document.getElementById('feedback');
+      const identifierError = document.getElementById('identifierError');
+      const feedbackError = document.getElementById('feedbackError');
+      const formContainer = document.getElementById('feedbackFormContainer');
+      const successView = document.getElementById('successView');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnReset = document.getElementById('btnReset');
+      const devInstructionsPanel = document.getElementById('devInstructionsPanel');
+      const btnCopyCode = document.getElementById('btnCopyCode');
+      const scriptCodeTextarea = document.getElementById('scriptCode');
+
+      // Show developer instructions only if script URL is not configured
+      const isDefaultUrl = GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_SCRIPT_URL_HERE') || GOOGLE_SCRIPT_URL === '';
+      if (isDefaultUrl) {
+        devInstructionsPanel.style.display = 'block';
+      } else {
+        devInstructionsPanel.style.display = 'none';
+      }
+
+      // Copy apps script code helper
+      if (btnCopyCode) {
+        btnCopyCode.addEventListener('click', () => {
+          scriptCodeTextarea.select();
+          document.execCommand('copy');
+          btnCopyCode.textContent = 'Copied!';
+          setTimeout(() => {
+            btnCopyCode.textContent = 'Copy Apps Script Code';
+          }, 2000);
+        });
+      }
+
+      // Handle Form Submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Reset errors
+        identifierError.style.display = 'none';
+        feedbackError.style.display = 'none';
+        
+        let isValid = true;
+        const identifierVal = identifierInput.value.trim();
+        const feedbackVal = feedbackInput.value.trim();
+        
+        // Q1 Validation (identifier >= 6 chars)
+        if (identifierVal.length < 6) {
+          identifierError.style.display = 'block';
+          identifierInput.focus();
+          isValid = false;
+        }
+        
+        // Q2 Validation (feedback not empty)
+        if (!feedbackVal) {
+          feedbackError.style.display = 'block';
+          if (isValid) feedbackInput.focus();
+          isValid = false;
+        }
+        
+        if (!isValid) return;
+        
+        // Proceed to submit
+        setLoading(true);
+        
+        if (isDefaultUrl) {
+          // Mock Submission (local storage backup)
+          console.log('Mock submission running (Local Storage)');
+          saveToLocalStorage(identifierVal, feedbackVal);
+          setTimeout(() => {
+            setLoading(false);
+            showSuccessView(true);
+          }, 1000);
+        } else {
+          // Real Submission to Google Sheets
+          try {
+            const formData = new URLSearchParams();
+            formData.append('identifier', identifierVal);
+            formData.append('feedback', feedbackVal);
+            
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              body: formData,
+              mode: 'cors'
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success' || result.result === 'success') {
+              setLoading(false);
+              showSuccessView(false);
+            } else {
+              throw new Error(result.message || 'Unknown server error');
+            }
+          } catch (err) {
+            console.error('Submission error:', err);
+            // Fallback: save locally and notify user
+            saveToLocalStorage(identifierVal, feedbackVal);
+            setLoading(false);
+            alert('Network submission failed, but your feedback has been saved locally on this browser.\nError: ' + err.message);
+            showSuccessView(true);
+          }
+        }
+      });
+
+      // Reset form helper
+      btnReset.addEventListener('click', () => {
+        form.reset();
+        formContainer.style.display = 'block';
+        successView.style.display = 'none';
+      });
+
+      function setLoading(loading) {
+        if (loading) {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.7';
+          submitBtn.innerHTML = '<span class="btn-text">Submitting...</span>';
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          submitBtn.innerHTML = '<span class="btn-text">Submit Feedback</span>';
+        }
+      }
+
+      function showSuccessView(isMock) {
+        formContainer.style.display = 'none';
+        successView.style.display = 'block';
+        const msg = successView.querySelector('p');
+        if (isMock) {
+          msg.innerHTML = 'Thank you! (Dev Mode: Saved locally in your browser storage since Google Script is not yet linked).';
+        } else {
+          msg.innerHTML = 'Thank you! Your feedback has been successfully sent to our Google Spreadsheet.';
+        }
+      }
+
+      function saveToLocalStorage(identifier, feedback) {
+        const feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+        feedbackList.push({
+          timestamp: new Date().toISOString(),
+          identifier,
+          feedback
+        });
+        localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
+      }
+    });
+
+    /* Mobile nav toggle */
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    /* Scroll-triggered fade-in */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
