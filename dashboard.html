@@ -50,6 +50,54 @@
   </style>
 </head>
 <body>
+  <div id="page-debug-console" style="position: fixed; bottom: 10px; right: 10px; width: 400px; max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.9); border: 2px solid #ff0055; color: #00ff66; font-family: monospace; font-size: 11px; padding: 10px; z-index: 100000; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+    <h3 style="margin: 0 0 8px 0; font-size: 12px; border-bottom: 2px solid #ff0055; padding-bottom: 4px; color: #ff0055; display: flex; justify-content: space-between;">
+      <span>On-Screen Debug Console</span>
+      <button onclick="document.getElementById('page-debug-console').style.display='none'" style="background: transparent; border: none; color: #ff0055; cursor: pointer; font-weight: bold;">[X]</button>
+    </h3>
+    <div id="debug-log-list"></div>
+  </div>
+  <script>
+    (function() {
+      // Create logger
+      window.addPageDebugLog = function(msg, color) {
+        const logList = document.getElementById('debug-log-list');
+        if (!logList) return;
+        const div = document.createElement('div');
+        div.style.color = color || '#00ff66';
+        div.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+        div.style.padding = '4px 0';
+        div.style.wordBreak = 'break-all';
+        div.textContent = new Date().toLocaleTimeString() + ': ' + msg;
+        logList.appendChild(div);
+        logList.scrollTop = logList.scrollHeight;
+      };
+      
+      // Intercept console.log
+      const oldLog = console.log;
+      console.log = function() {
+        oldLog.apply(console, arguments);
+        window.addPageDebugLog(Array.prototype.slice.call(arguments).join(' '), '#00ff66');
+      };
+      
+      // Intercept console.error
+      const oldError = console.error;
+      console.error = function() {
+        oldError.apply(console, arguments);
+        window.addPageDebugLog(Array.prototype.slice.call(arguments).join(' '), '#ff0055');
+      };
+      
+      // Intercept errors
+      window.onerror = function(message, source, lineno, colno, error) {
+        window.addPageDebugLog('ERROR: ' + message + ' at ' + source + ':' + lineno + ':' + colno, '#ff0055');
+        return false;
+      };
+      
+      setTimeout(function() {
+        window.addPageDebugLog("On-screen debug logger loaded!");
+      }, 100);
+    })();
+  </script>
 
   <!-- ========== HEADER ========== -->
   <header class="site-header" id="site-header">
