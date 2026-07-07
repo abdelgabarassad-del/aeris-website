@@ -42,6 +42,11 @@
     body.not-kanban-view .dragon-music-card {
       display: none !important;
     }
+    #feedback-section.visible {
+      display: block !important;
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
 <body>
@@ -19301,6 +19306,7 @@
     const viewFeedbackBtn = document.getElementById('view-feedback-btn');
 
     function setView(view) {
+      console.log("setView called with view:", view);
       currentView = view;
       
       // Toggle not-kanban-view class on body to hide theme game/telemetry widgets
@@ -19336,8 +19342,14 @@
         if (view === 'finance') financeSection.classList.add('visible');
       }
       if (feedbackSection) {
+        console.log("feedbackSection found:", feedbackSection);
         feedbackSection.style.display = (view === 'feedback') ? 'block' : 'none';
-        if (view === 'feedback') feedbackSection.classList.add('visible');
+        if (view === 'feedback') {
+          feedbackSection.classList.add('visible');
+          console.log("feedbackSection style display after setting:", feedbackSection.style.display);
+        }
+      } else {
+        console.log("feedbackSection NOT found in DOM!");
       }
       
       // Hide kanban-only elements when not in kanban view
@@ -19380,7 +19392,12 @@
       });
     }
     if (viewFeedbackBtn) {
-      viewFeedbackBtn.addEventListener('click', () => setView('feedback'));
+      viewFeedbackBtn.addEventListener('click', () => {
+        console.log("Feedback tab button clicked!");
+        setView('feedback');
+      });
+    } else {
+      console.log("viewFeedbackBtn NOT found in DOM during click binding!");
     }
 
     const dashFbForm = document.getElementById('dashboard-feedback-form');
