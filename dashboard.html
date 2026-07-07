@@ -19416,6 +19416,17 @@
         }
         if (!valid) return;
 
+        // Retrieve active session user information
+        const currentReg = safeSession.getItem('aeris_auth_reg') || 'unknown';
+        let submitterName = 'Unknown User';
+        if (MEMBERS_DATABASE[currentReg]) {
+          submitterName = MEMBERS_DATABASE[currentReg].name;
+        } else if (ADVISORS[currentReg]) {
+          submitterName = ADVISORS[currentReg].name;
+        } else if (PERSONAL_GREETINGS[currentReg]) {
+          submitterName = PERSONAL_GREETINGS[currentReg].name;
+        }
+
         // Save to localStorage
         let feedbackList = [];
         try {
@@ -19426,7 +19437,9 @@
         feedbackList.push({
           timestamp: new Date().toISOString(),
           identifier: idVal,
-          feedback: msgVal
+          feedback: msgVal,
+          loggedInUserReg: currentReg,
+          loggedInUserName: submitterName
         });
         localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
 
@@ -19437,6 +19450,8 @@
           formData.append('identifier', idVal);
           formData.append('feedback', msgVal);
           formData.append('timestamp', new Date().toISOString());
+          formData.append('loggedInUserReg', currentReg);
+          formData.append('loggedInUserName', submitterName);
           
           fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
