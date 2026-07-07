@@ -533,8 +533,37 @@
         </div>
       </div>
 
-
-
+      <!-- Collapsible Feedback Card -->
+      <div class="tracker-card fade-in" id="dashboard-feedback-card" style="margin-top: 24px; display: none;">
+        <div class="tracker-card__header" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;" id="feedback-card-header">
+          <div class="tracker-card__title-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <h2 style="font-size: 1.25rem;">Submit Website Feedback</h2>
+          </div>
+          <span id="feedback-card-toggle" style="font-size: 0.85rem; color: var(--accent); font-weight: bold; background: rgba(246, 242, 223, 0.08); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(246,242,223,0.15); transition: background-color 0.2s;">Expand [+]</span>
+        </div>
+        <div id="feedback-card-body" style="display: none; margin-top: 20px;">
+          <form id="dashboard-feedback-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="dash-fb-identifier" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Identifier (min 6 characters)</label>
+              <input type="text" id="dash-fb-identifier" placeholder="Enter your name, alias, or ID..." minlength="6" required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246, 242, 223, 0.12); background: rgba(30, 59, 45, 0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; transition: border-color 0.3s ease;" />
+              <span id="dash-fb-id-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Identifier must be at least 6 characters.</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="dash-fb-message" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Your Feedback</label>
+              <textarea id="dash-fb-message" rows="4" placeholder="Share your thoughts, suggestions, or report issues..." required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246, 242, 223, 0.12); background: rgba(30, 59, 45, 0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; resize: vertical; min-height: 80px; transition: border-color 0.3s ease;"></textarea>
+              <span id="dash-fb-msg-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Feedback message cannot be empty.</span>
+            </div>
+            <button type="submit" id="dash-fb-submit" class="btn-primary" style="align-self: flex-start; padding: 10px 28px; font-weight: 600; font-size: 0.95rem; border-radius: 10px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Submit Feedback
+            </button>
+            <div id="dash-fb-success" style="display: none; padding: 12px 16px; border-radius: 10px; background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); color: #86efac; font-family: var(--font-sub); font-size: 0.9rem;">
+              ✅ Your feedback has been submitted successfully!
+            </div>
+          </form>
+        </div>
+      </div>
 
       <!-- ========== TASK DETAILS & FEEDBACK MODAL ========== -->
       <div class="task-modal" id="task-modal" style="display: none;">
@@ -1989,6 +2018,12 @@
         }
         welcomeBanner.innerHTML = bannerHTML;
         welcomeBanner.style.display = 'flex';
+
+        // Show feedback card
+        const feedbackCard = document.getElementById('dashboard-feedback-card');
+        if (feedbackCard) {
+          feedbackCard.style.display = 'block';
+        }
 
         // Show task form if head
         taskFormWrapper.style.display = role === 'head' ? 'block' : 'none';
@@ -19337,6 +19372,81 @@
           return;
         }
         setView('finance');
+      });
+    }
+
+    // ========== WEBSITE FEEDBACK CARD LOGIC ==========
+    const feedbackHeader = document.getElementById('feedback-card-header');
+    const feedbackBody = document.getElementById('feedback-card-body');
+    const feedbackToggle = document.getElementById('feedback-card-toggle');
+    if (feedbackHeader && feedbackBody && feedbackToggle) {
+      feedbackHeader.addEventListener('click', () => {
+        const isCollapsed = feedbackBody.style.display === 'none';
+        feedbackBody.style.display = isCollapsed ? 'block' : 'none';
+        feedbackToggle.textContent = isCollapsed ? 'Collapse [-]' : 'Expand [+]';
+      });
+    }
+
+    const dashFbForm = document.getElementById('dashboard-feedback-form');
+    if (dashFbForm) {
+      dashFbForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const idInput = document.getElementById('dash-fb-identifier');
+        const msgInput = document.getElementById('dash-fb-message');
+        const idError = document.getElementById('dash-fb-id-error');
+        const msgError = document.getElementById('dash-fb-msg-error');
+        const successEl = document.getElementById('dash-fb-success');
+
+        // Reset
+        idError.style.display = 'none';
+        msgError.style.display = 'none';
+        successEl.style.display = 'none';
+
+        const idVal = idInput.value.trim();
+        const msgVal = msgInput.value.trim();
+        let valid = true;
+
+        if (idVal.length < 6) {
+          idError.style.display = 'block';
+          idInput.focus();
+          valid = false;
+        }
+        if (!msgVal) {
+          msgError.style.display = 'block';
+          if (valid) msgInput.focus();
+          valid = false;
+        }
+        if (!valid) return;
+
+        // Save to localStorage
+        let feedbackList = [];
+        try {
+          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+        } catch (ex) {
+          feedbackList = [];
+        }
+        feedbackList.push({
+          timestamp: new Date().toISOString(),
+          identifier: idVal,
+          feedback: msgVal
+        });
+        localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
+
+        // Attempt POST to Google Sheet Script
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
+        try {
+          const formData = new URLSearchParams();
+          formData.append('identifier', idVal);
+          formData.append('feedback', msgVal);
+          fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData }).catch(function(){});
+        } catch (ex) {}
+
+        // Show success, reset form
+        successEl.style.display = 'block';
+        idInput.value = '';
+        msgInput.value = '';
+        setTimeout(function() { successEl.style.display = 'none'; }, 4000);
       });
     }
 
