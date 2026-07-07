@@ -1375,6 +1375,62 @@
     function playHannahSong() {
       if (document.getElementById('hannah-music-card')) return;
 
+      const HANNAH_PLAYLIST = [
+        {
+          title: "Arabella",
+          artist: "Arctic Monkeys",
+          file: "images/arabella.webm",
+          label: "ARABELLA",
+          shortLabel: "AM"
+        },
+        {
+          title: "Do I Wanna Know?",
+          artist: "Arctic Monkeys",
+          file: "images/do_i_wanna_know.webm",
+          label: "DO I WANNA",
+          shortLabel: "AM"
+        },
+        {
+          title: "Take Me to Church",
+          artist: "Hozier",
+          file: "images/take_me_to_church.webm",
+          label: "HOZIER",
+          shortLabel: "TMTC"
+        },
+        {
+          title: "5am in Paris",
+          artist: "Saint Levant",
+          file: "images/five_am_in_paris.webm",
+          label: "5AM PARIS",
+          shortLabel: "SL"
+        },
+        {
+          title: "Comme C'est Beau",
+          artist: "Saint Levant",
+          file: "images/comme_cest_beau.webm",
+          label: "COMME BEAU",
+          shortLabel: "SL"
+        }
+      ];
+
+      // Shuffle logic
+      let shuffleQueue = [];
+      let currentQueueIndex = 0;
+
+      function generateShuffleQueue() {
+        const indexes = Array.from({ length: HANNAH_PLAYLIST.length }, (_, i) => i);
+        for (let i = indexes.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+        }
+        shuffleQueue = indexes;
+        currentQueueIndex = 0;
+      }
+
+      generateShuffleQueue();
+      let currentSongIndex = shuffleQueue[currentQueueIndex];
+      let currentSong = HANNAH_PLAYLIST[currentSongIndex];
+
       const musicCardHTML = `
         <div class="hannah-music-card" id="hannah-music-card">
           <div class="hmc-album-art">
@@ -1386,8 +1442,8 @@
                 <circle cx="50" cy="50" r="32" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="3 2"/>
                 <!-- Label -->
                 <circle cx="50" cy="50" r="18" fill="#ff7fa5"/>
-                <text x="50" y="47" font-size="6" font-family="'Fredoka', sans-serif" font-weight="bold" fill="#0b2240" text-anchor="middle">HOZIER</text>
-                <text x="50" y="55" font-size="4" font-family="'Fredoka', sans-serif" fill="#0b2240" text-anchor="middle">TMTC</text>
+                <text x="50" y="47" font-size="5" font-family="'Fredoka', sans-serif" font-weight="bold" fill="#0b2240" text-anchor="middle" id="hmc-vinyl-label-1">${currentSong.shortLabel}</text>
+                <text x="50" y="55" font-size="4" font-family="'Fredoka', sans-serif" fill="#0b2240" text-anchor="middle" id="hmc-vinyl-label-2">${currentSong.label}</text>
                 <!-- Center hole -->
                 <circle cx="50" cy="50" r="3" fill="#0b2240"/>
               </svg>
@@ -1396,8 +1452,8 @@
           </div>
           
           <div class="hmc-info">
-            <div class="hmc-track-title">Take Me to Church</div>
-            <div class="hmc-artist">Hozier — Stitch Mix 🌺</div>
+            <div class="hmc-track-title" id="hmc-track-title">${currentSong.title}</div>
+            <div class="hmc-artist" id="hmc-artist">${currentSong.artist} — Stitch Mix 🌺</div>
             
             <div class="hmc-controls-row">
               <!-- Equalizer / Visualizer -->
@@ -1410,9 +1466,15 @@
               
               <!-- Buttons -->
               <div class="hmc-buttons">
+                <button class="hmc-btn" id="hmc-prev" title="Previous Song">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="4" height="16"/></svg>
+                </button>
                 <button class="hmc-btn" id="hmc-play-pause" title="Play/Pause">
                   <svg class="hmc-icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                   <svg class="hmc-icon-play" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="hmc-btn" id="hmc-next" title="Next Song">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="15" y="4" width="4" height="16"/></svg>
                 </button>
                 <button class="hmc-btn" id="hmc-minimize" title="Minimize">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1440,23 +1502,25 @@
       const cardEl = tempDiv.firstElementChild;
       document.body.appendChild(cardEl);
 
-      const audio = new Audio('images/take_me_to_church.mp3');
-      audio.volume = 0.5;
-
       const playPauseBtn = document.getElementById('hmc-play-pause');
+      const prevBtn = document.getElementById('hmc-prev');
+      const nextBtn = document.getElementById('hmc-next');
       const minimizeBtn = document.getElementById('hmc-minimize');
       const closeBtn = document.getElementById('hmc-close');
       const volumeSlider = document.getElementById('hmc-volume');
       const progressBar = document.getElementById('hmc-progress-bar');
+      const trackTitleEl = document.getElementById('hmc-track-title');
+      const artistEl = document.getElementById('hmc-artist');
+      const vinylLabel1 = document.getElementById('hmc-vinyl-label-1');
+      const vinylLabel2 = document.getElementById('hmc-vinyl-label-2');
       const iconPause = playPauseBtn.querySelector('.hmc-icon-pause');
       const iconPlay = playPauseBtn.querySelector('.hmc-icon-play');
 
+      let audio = new Audio(currentSong.file);
+      audio.volume = 0.5;
+
       let isPlaying = false;
-      let playDuration = 15; // plays for 15 seconds
       let progressInterval = null;
-      let startTime = 0;
-      let elapsedTime = 0;
-      let fadeInterval = null;
 
       function updateUI(playing) {
         isPlaying = playing;
@@ -1473,18 +1537,11 @@
 
       function startProgress() {
         clearInterval(progressInterval);
-        startTime = Date.now() - (elapsedTime * 1000);
         progressInterval = setInterval(() => {
-          if (!isPlaying) return;
-          const currentElapsed = (Date.now() - startTime) / 1000;
-          elapsedTime = currentElapsed;
-          const percentage = Math.min((elapsedTime / playDuration) * 100, 100);
+          if (!isPlaying || !audio) return;
+          const duration = audio.duration || 180;
+          const percentage = Math.min((audio.currentTime / duration) * 100, 100);
           progressBar.style.width = percentage + '%';
-          
-          if (elapsedTime >= playDuration) {
-            clearInterval(progressInterval);
-            fadeOutAndStop();
-          }
         }, 100);
       }
 
@@ -1493,7 +1550,7 @@
       }
 
       function playAudio() {
-        if (fadeInterval) clearInterval(fadeInterval);
+        if (!audio) return;
         audio.volume = volumeSlider.value;
         audio.play().then(() => {
           updateUI(true);
@@ -1505,41 +1562,73 @@
       }
 
       function pauseAudio() {
-        audio.pause();
+        if (audio) {
+          audio.pause();
+        }
         updateUI(false);
         pauseProgress();
       }
 
-      function fadeOutAndStop() {
-        clearInterval(progressInterval);
-        if (fadeInterval) clearInterval(fadeInterval);
+      function loadAndPlaySong(index) {
+        const wasPlaying = isPlaying;
+        pauseAudio();
         
-        fadeInterval = setInterval(() => {
-          if (audio.volume > 0.05) {
-            audio.volume -= 0.05;
-          } else {
-            clearInterval(fadeInterval);
-            audio.pause();
-            audio.currentTime = 0;
-            elapsedTime = 0;
-            progressBar.style.width = '0%';
-            updateUI(false);
-          }
-        }, 100);
+        currentSongIndex = index;
+        currentSong = HANNAH_PLAYLIST[currentSongIndex];
+
+        // Replace audio src
+        audio.src = currentSong.file;
+        audio.currentTime = 0;
+
+        // Update Metadata UI
+        trackTitleEl.textContent = currentSong.title;
+        artistEl.textContent = `${currentSong.artist} — Stitch Mix 🌺`;
+        vinylLabel1.textContent = currentSong.shortLabel;
+        vinylLabel2.textContent = currentSong.label;
+        progressBar.style.width = '0%';
+
+        if (wasPlaying) {
+          playAudio();
+        } else {
+          playAudio();
+        }
       }
+
+      function playNext() {
+        currentQueueIndex = (currentQueueIndex + 1) % shuffleQueue.length;
+        if (currentQueueIndex === 0) {
+          generateShuffleQueue();
+        }
+        loadAndPlaySong(shuffleQueue[currentQueueIndex]);
+      }
+
+      function playPrev() {
+        currentQueueIndex = (currentQueueIndex - 1 + shuffleQueue.length) % shuffleQueue.length;
+        loadAndPlaySong(shuffleQueue[currentQueueIndex]);
+      }
+
+      // Handle song ending
+      audio.addEventListener('ended', () => {
+        playNext();
+      });
 
       playPauseBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (isPlaying) {
           pauseAudio();
         } else {
-          if (elapsedTime >= playDuration) {
-            elapsedTime = 0;
-            progressBar.style.width = '0%';
-            audio.currentTime = 0;
-          }
           playAudio();
         }
+      });
+
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playPrev();
+      });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playNext();
       });
 
       minimizeBtn.addEventListener('click', (e) => {
@@ -1557,9 +1646,7 @@
 
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        audio.pause();
-        clearInterval(progressInterval);
-        if (fadeInterval) clearInterval(fadeInterval);
+        pauseAudio();
         cardEl.style.opacity = '0';
         cardEl.style.transform = 'translateX(120%) scale(0.9)';
         setTimeout(() => {
@@ -1568,7 +1655,9 @@
       });
 
       volumeSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
+        if (audio) {
+          audio.volume = e.target.value;
+        }
       });
 
       volumeSlider.addEventListener('click', (e) => {
@@ -1580,7 +1669,7 @@
 
       // Fallback: Play on first document interaction
       const autoplayFallback = () => {
-        if (!isPlaying && elapsedTime === 0) {
+        if (!isPlaying) {
           playAudio();
         }
         document.removeEventListener('click', autoplayFallback);
