@@ -67,7 +67,6 @@
         <li><a href="sponsors.html">Sponsors</a></li>
         <li><a href="index.html#contact">Contact</a></li>
         <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li><a href="feedback.html">Feedback</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
@@ -279,10 +278,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span id="finance-tab-text">Budget Tracker (Excel)</span>
         </button>
-        <button class="view-tab" data-view="website-feedback" id="view-feedback-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span>Website Feedbacks</span>
-        </button>
+
       </div>
 
       <!-- Task Board -->
@@ -537,54 +533,7 @@
         </div>
       </div>
 
-      <!-- Website Feedbacks Section -->
-      <div class="feedback-section fade-in" id="website-feedback-section" style="display: none; margin-top: 24px;">
-        
-        <!-- Submit Feedback Form -->
-        <div class="tracker-card" style="margin-bottom: 24px;">
-          <div class="tracker-card__header">
-            <div class="tracker-card__title-group">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <h2>Submit Feedback</h2>
-            </div>
-          </div>
-          <form id="dashboard-feedback-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 16px;">
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <label for="dash-fb-identifier" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Identifier (min 6 characters)</label>
-              <input type="text" id="dash-fb-identifier" placeholder="Enter your name, alias, or ID..." minlength="6" required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246,242,223,0.12); background: rgba(30,59,45,0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; transition: border-color 0.3s ease;" />
-              <span id="dash-fb-id-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Identifier must be at least 6 characters.</span>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <label for="dash-fb-message" style="font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Your Feedback</label>
-              <textarea id="dash-fb-message" rows="4" placeholder="Share your thoughts, suggestions, or report issues..." required style="padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(246,242,223,0.12); background: rgba(30,59,45,0.25); color: var(--white); font-size: 0.95rem; font-family: var(--font-sub); outline: none; resize: vertical; min-height: 80px; transition: border-color 0.3s ease;"></textarea>
-              <span id="dash-fb-msg-error" style="display: none; color: #f87171; font-size: 0.8rem; font-family: var(--font-sub);">Feedback message cannot be empty.</span>
-            </div>
-            <button type="submit" id="dash-fb-submit" class="btn-primary" style="align-self: flex-start; padding: 10px 28px; font-weight: 600; font-size: 0.95rem; border-radius: 10px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Submit Feedback
-            </button>
-            <div id="dash-fb-success" style="display: none; padding: 12px 16px; border-radius: 10px; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86efac; font-family: var(--font-sub); font-size: 0.9rem;">
-              ✅ Your feedback has been submitted successfully!
-            </div>
-          </form>
-        </div>
 
-        <!-- Previous Feedbacks List -->
-        <div class="tracker-card">
-          <div class="tracker-card__header">
-            <div class="tracker-card__title-group">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracker-header-icon" style="color: var(--accent);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              <h2>All Feedback Submissions</h2>
-            </div>
-          </div>
-          <div id="dash-fb-list" style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Rendered dynamically -->
-          </div>
-          <div id="dash-fb-empty" style="text-align: center; padding: 40px;">
-            <p style="color: var(--white-muted); font-family: var(--font-sub); font-size: 1.1rem;">No feedback submissions yet. Be the first to share your thoughts!</p>
-          </div>
-        </div>
-      </div>
 
 
       <!-- ========== TASK DETAILS & FEEDBACK MODAL ========== -->
@@ -661,7 +610,6 @@
           <a href="sponsors.html">Sponsors</a>
           <a href="index.html#contact">Contact</a>
           <a href="dashboard.html">Dashboard</a>
-          <a href="feedback.html">Feedback</a>
         </div>
         <div class="footer-branch">
           <img src="images/academpic.png" alt="AASTMT Logo" class="footer-branch-logo" />
@@ -19317,112 +19265,6 @@
     const viewKanbanBtn = document.getElementById('view-kanban-btn');
     const viewTrackerBtn = document.getElementById('view-tracker-btn');
     const viewFinanceBtn = document.getElementById('view-finance-btn');
-    const viewFeedbackBtn = document.getElementById('view-feedback-btn');
-
-    // ========== WEBSITE FEEDBACK (embedded form + localStorage) ==========
-    function renderWebsiteFeedbacks() {
-      const listEl = document.getElementById('dash-fb-list');
-      const emptyEl = document.getElementById('dash-fb-empty');
-      if (!listEl) return;
-
-      let feedbackList = [];
-      try {
-        feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
-      } catch (e) {
-        feedbackList = [];
-      }
-
-      if (feedbackList.length === 0) {
-        listEl.innerHTML = '';
-        if (emptyEl) emptyEl.style.display = 'block';
-        return;
-      }
-
-      if (emptyEl) emptyEl.style.display = 'none';
-
-      // Sort newest first
-      feedbackList.sort(function(a, b) {
-        return new Date(b.timestamp) - new Date(a.timestamp);
-      });
-
-      listEl.innerHTML = feedbackList.map(function(item) {
-        var dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
-        var idText = escapeHtml(item.identifier || '');
-        var fbText = escapeHtml(item.feedback || '').replace(/\n/g, '<br>');
-        return '<div style="padding: 16px; border-radius: 10px; background: rgba(30,59,45,0.2); border: 1px solid rgba(246,242,223,0.08);">' +
-          '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">' +
-            '<span style="font-weight: 600; color: var(--accent); font-size: 0.95rem;">' + idText + '</span>' +
-            '<span style="font-size: 0.8rem; color: var(--white-muted);">' + dateStr + '</span>' +
-          '</div>' +
-          '<p style="margin: 0; color: var(--white-soft); font-size: 0.95rem; line-height: 1.6; word-break: break-word;">' + fbText + '</p>' +
-        '</div>';
-      }).join('');
-    }
-
-    // Bind feedback form submission
-    var dashFbForm = document.getElementById('dashboard-feedback-form');
-    if (dashFbForm) {
-      dashFbForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var idInput = document.getElementById('dash-fb-identifier');
-        var msgInput = document.getElementById('dash-fb-message');
-        var idError = document.getElementById('dash-fb-id-error');
-        var msgError = document.getElementById('dash-fb-msg-error');
-        var successEl = document.getElementById('dash-fb-success');
-
-        // Reset
-        idError.style.display = 'none';
-        msgError.style.display = 'none';
-        successEl.style.display = 'none';
-
-        var idVal = idInput.value.trim();
-        var msgVal = msgInput.value.trim();
-        var valid = true;
-
-        if (idVal.length < 6) {
-          idError.style.display = 'block';
-          idInput.focus();
-          valid = false;
-        }
-        if (!msgVal) {
-          msgError.style.display = 'block';
-          if (valid) msgInput.focus();
-          valid = false;
-        }
-        if (!valid) return;
-
-        // Save to localStorage
-        var feedbackList = [];
-        try {
-          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
-        } catch (ex) {
-          feedbackList = [];
-        }
-        feedbackList.push({
-          timestamp: new Date().toISOString(),
-          identifier: idVal,
-          feedback: msgVal
-        });
-        localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
-
-        // Also POST to Google Sheet if configured
-        var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
-        try {
-          var formData = new URLSearchParams();
-          formData.append('identifier', idVal);
-          formData.append('feedback', msgVal);
-          fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData }).catch(function(){});
-        } catch (ex) {}
-
-        // Show success, reset form, re-render list
-        successEl.style.display = 'block';
-        idInput.value = '';
-        msgInput.value = '';
-        setTimeout(function() { successEl.style.display = 'none'; }, 4000);
-        renderWebsiteFeedbacks();
-      });
-    }
 
     function setView(view) {
       currentView = view;
@@ -19434,13 +19276,11 @@
       if (viewKanbanBtn) viewKanbanBtn.classList.toggle('active', view === 'kanban');
       if (viewTrackerBtn) viewTrackerBtn.classList.toggle('active', view === 'tracker');
       if (viewFinanceBtn) viewFinanceBtn.classList.toggle('active', view === 'finance');
-      if (viewFeedbackBtn) viewFeedbackBtn.classList.toggle('active', view === 'website-feedback');
       
       // Update display of main sections
       const taskBoard = document.getElementById('task-board');
       const trackerSection = document.getElementById('tracker-section');
       const financeSection = document.getElementById('finance-section');
-      const websiteFeedbackSection = document.getElementById('website-feedback-section');
       
       // Hide/show kanban-specific elements (form, dept tabs, empty state)
       const emptyState = document.getElementById('empty-state');
@@ -19458,10 +19298,6 @@
       if (financeSection) {
         financeSection.style.display = (view === 'finance') ? 'block' : 'none';
         if (view === 'finance') financeSection.classList.add('visible');
-      }
-      if (websiteFeedbackSection) {
-        websiteFeedbackSection.style.display = (view === 'website-feedback') ? 'block' : 'none';
-        if (view === 'website-feedback') websiteFeedbackSection.classList.add('visible');
       }
       
       // Hide kanban-only elements when not in kanban view
@@ -19485,8 +19321,6 @@
         renderProgressTracker();
       } else if (view === 'finance') {
         renderFinanceSection();
-      } else if (view === 'website-feedback') {
-        renderWebsiteFeedbacks();
       }
     }
     
@@ -19504,9 +19338,6 @@
         }
         setView('finance');
       });
-    }
-    if (viewFeedbackBtn) {
-      viewFeedbackBtn.addEventListener('click', () => setView('website-feedback'));
     }
 
     // CSV Exporter Action (Applies same member segmentation and permissions)
