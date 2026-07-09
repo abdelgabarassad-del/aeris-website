@@ -698,7 +698,7 @@
 
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
-      '251001377', '241012132', '251002119',
+      '251001377', '241012132',
       '231012588', '251011829', '231012318', '241003033', '231002350', '2006'
     ]);
 
@@ -706,9 +706,9 @@
       '251000861', '251012364', '221011368', '251001249', '251010424',
       '251000305', '241012132', '231003934', '251001767', '251000553',
       '251001377', '251010151', '241003033', '251001035',
-      '251002119', '251010536', '231012588', '241002278', '251003016',
+      '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '231004251', '241000881', '251011829', '231002350', '2006'
+      '241002229', '241000881', '251011829', '231002350', '2006'
     ]);
 
     // Theme Customization Registration Numbers
@@ -722,7 +722,7 @@
     const TOMJERRY_REG = '231003587';
     const TWEETY_REG = '251012364';
     const TOTALLY_SPIES_REG = '251001767';
-    const SCHNOZ_REG = '251002119';
+    const SCHNOZ_REG = 'none';
     const POOH_REG = '221011368';
     const IRONMAN_REG = '251010536';
     const BLOODBORNE_REG = '241012132';
@@ -739,7 +739,6 @@
       '2006': { name: 'Hanah', depts: [], role: 'vice_head', email: 'hanah@aeris-team.org', hide: true },
       
       // Software Division (Pure SW)
-      '251002119': { name: 'Absher Sorour', depts: ['software'], role: 'head', email: 'abshersorour@gmail.com' },
       '251010424': { name: 'Sara Ahmed', depts: ['software'], role: 'member', email: 'saragaber382007@gmail.com' },
       '251000553': { name: 'Khalid Ahmed Mohamed', depts: ['software'], role: 'member', email: 'Khalidsalama010@gmail.com' },
       '251000861': { name: 'Hazem Walid', depts: ['mechanical'], role: 'member', email: 'Hazemwalid00@gmail.com' },
@@ -769,7 +768,6 @@
       '251001767': { name: 'Esraa Mohammed', depts: ['mechanical'], role: 'member', email: 'esraamohamedahmed255@gmail.com' },
       '231010429': { name: 'Abdelrahman Aly', depts: ['mechanical'], role: 'member', email: 'abdelrahman.aly@aeris-team.org' },
       '221003996': { name: 'Ahmed Tarek', depts: ['mechanical'], role: 'member', email: 'ahmadtarekk17@gmail.com' },
-      '231004251': { name: 'Adham Khattab', depts: ['mechanical'], role: 'member', email: 'adhamkhattab055@gmail.com' },
       
       // Overlapping mappings
       // Hannah Ahmed: electrical and mechanical
@@ -877,7 +875,6 @@
       else if (regNum === '251010424') activeTheme = "sonic";
       else if (regNum === '231003587') activeTheme = "tomjerry";
       else if (regNum === '251012364') activeTheme = "tweety";
-      else if (regNum === '251002119') activeTheme = "schnoz";
       else if (regNum === '221011368') activeTheme = "pooh";
       else if (regNum === '251010536') activeTheme = "ironman";
       else if (regNum === '241012132') activeTheme = "bloodborne";
@@ -934,16 +931,7 @@
         ];
       } else if (role === 'head' || (member && member.role === 'head')) {
         // Division Heads
-        if (activeTheme === 'schnoz') {
-          title = "🌑 Eclipse Battle Command HUD";
-          welcome = "⚔️ Welcome, Commander Absher Sorour. The software division struggles against the darkness. Command your band of hawks:";
-          items = [
-            "<strong>Beast Directives:</strong> Compose and upload new software tasks using the <strong>Task Upload Form</strong>.",
-            "<strong>Eclipse Matrix:</strong> Switch views to the <strong>Progress Tracker (Excel)</strong> to monitor the fate of all members.",
-            "<strong>Purge Directives:</strong> Delete obsolete tasks directly using the delete option on cards.",
-            "<strong>Announcements:</strong> Publish announcements to guide the software division."
-          ];
-        } else if (activeTheme === 'bloodborne') {
+        if (activeTheme === 'bloodborne') {
           title = "🩸 Hunter's Dream Workshop Reference";
           welcome = "🕯️ Ah, Bassem Toulan. The electrical hunt begins anew. Do not let the beastly tasks consume you. Guide your fellow hunters:";
           items = [
@@ -1132,7 +1120,6 @@
       '5970',      // Professor Alaa Ossman
       '8383',      // Professor Aly Haridi
       '9749',      // Professor Ahmad El Safty
-      '251002119', // Software Head
       '231012318', // Mechanical Head
       '241012132', // Electrical Head
       '231012588', // Non-Tech Head
@@ -1313,7 +1300,6 @@
       '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
       '231002350': { name: 'Abduljabar asaad', message: 'Greetings, CGS!' },
       '251001035': { name: 'Yousef Ashraf Sakr', message: 'malk el need for speed irl' },
-      '251002119': { name: 'Absher Sorour', message: 'sba7 el btats' },
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
       '231012588': { name: 'judy samer', message: 'hi' },
       '241002278': { name: 'Marwan mohamed elghazaly', message: 'howa el ghazaly' },
@@ -1324,7 +1310,6 @@
       '251001982': { name: 'ahmad aziz', message: 'sba7 el fol' },
       '221003996': { name: 'ahmed tarek', message: 'malk el gym kolo' },
       '241002229': { name: 'amir abbas', message: 'sba7 el fol' },
-      '231004251': { name: 'Adham Khattab', message: 'bobos 3aml ehhh' },
       '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' }
     };
 
@@ -1367,7 +1352,6 @@
       if (sessionReg === '221011368') document.body.classList.add('pooh-theme');
       if (sessionReg === '251012364') document.body.classList.add('tweety-theme');
       if (sessionReg === '251001767') document.body.classList.add('totallyspies-theme');
-      if (sessionReg === '251002119') document.body.classList.add('schnoz-theme');
       grantAccess(sessionRole, sessionReg);
     }
 
@@ -2301,7 +2285,6 @@
       if (regNum === IRONMAN_REG) document.body.classList.add('ironman-theme');
       if (regNum === POOH_REG) document.body.classList.add('pooh-theme');
       if (regNum === TWEETY_REG) document.body.classList.add('tweety-theme');
-      if (regNum === '251002119') document.body.classList.add('schnoz-theme');
       showGrantedMessage(role, regNum);
       authInput.disabled = true;
       authSubmit.disabled = true;
@@ -16580,18 +16563,6 @@
         "edits": []
     },
     {
-        "id": "tx_inc_27",
-        "date": "2025-03-11",
-        "type": "income",
-        "amount": 1000.0,
-        "source_purpose": "From Absher sorour",
-        "notes": "Payment: instapay, Fund: team fund",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
         "id": "tx_inc_28",
         "date": "2025-04-11",
         "type": "income",
@@ -16945,30 +16916,6 @@
         "type": "income",
         "amount": 1500.0,
         "source_purpose": "From abdelrahman ali",
-        "notes": "Payment: instapay, Fund: team fund",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
-        "id": "tx_inc_58",
-        "date": "2026-03-17",
-        "type": "income",
-        "amount": 1000.0,
-        "source_purpose": "From absher",
-        "notes": "Payment: instapay, Fund: team fund",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
-        "id": "tx_inc_59",
-        "date": "2026-05-03",
-        "type": "income",
-        "amount": 1500.0,
-        "source_purpose": "From adham khattab",
         "notes": "Payment: instapay, Fund: team fund",
         "addedBy": "Budget Import",
         "createdAt": "2026-07-02T00:00:00.000Z",
@@ -17648,18 +17595,6 @@
         "edits": []
     },
     {
-        "id": "tx_inc_116",
-        "date": "2026-01-06",
-        "type": "income",
-        "amount": 2500.0,
-        "source_purpose": "From adham khattab",
-        "notes": "Payment: instapay, Fund: team fund",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
         "id": "tx_inc_117",
         "date": "2026-02-06",
         "type": "income",
@@ -18301,30 +18236,6 @@
         "type": "spending",
         "amount": 150.0,
         "source_purpose": "To Omar atwan: Motors (Team)",
-        "notes": "Payment: instapay",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
-        "id": "tx_sp_34",
-        "date": "2026-02-13",
-        "type": "spending",
-        "amount": 1580.0,
-        "source_purpose": "To Absher: Rechargeable batteries and camera (Team)",
-        "notes": "Payment: instapay",
-        "addedBy": "Budget Import",
-        "createdAt": "2026-07-02T00:00:00.000Z",
-        "updatedAt": "2026-07-02T00:00:00.000Z",
-        "edits": []
-    },
-    {
-        "id": "tx_sp_35",
-        "date": "2026-02-14",
-        "type": "spending",
-        "amount": 575.0,
-        "source_purpose": "To Absher: camera 2 (team)",
         "notes": "Payment: instapay",
         "addedBy": "Budget Import",
         "createdAt": "2026-07-02T00:00:00.000Z",
@@ -19020,11 +18931,11 @@
     function getTransactions() {
       try {
         let txs = JSON.parse(safeLocal.getItem(FINANCE_STORAGE_KEY));
-        const migrated = safeLocal.getItem('aeris_finance_migrated_v2');
+        const migrated = safeLocal.getItem('aeris_finance_migrated_v3');
         if (!migrated || !Array.isArray(txs)) {
           txs = SEED_TRANSACTIONS;
           safeLocal.setItem(FINANCE_STORAGE_KEY, JSON.stringify(txs));
-          safeLocal.setItem('aeris_finance_migrated_v2', 'true');
+          safeLocal.setItem('aeris_finance_migrated_v3', 'true');
         }
         return txs;
       } catch (e) {
