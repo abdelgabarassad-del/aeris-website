@@ -347,6 +347,109 @@
       border: 1px solid rgba(246, 242, 223, 0.1);
       max-height: 250px;
     }
+
+    /* Collapsible Terms and Conditions */
+    .terms-container {
+      background: rgba(20, 40, 31, 0.4);
+      border: 1px solid rgba(246, 242, 223, 0.15);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .terms-container:hover {
+      border-color: rgba(246, 242, 223, 0.3);
+    }
+    .terms-header {
+      background: rgba(246, 242, 223, 0.05);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition);
+    }
+    .terms-header:hover {
+      background: rgba(246, 242, 223, 0.1);
+    }
+    .terms-header-title {
+      font-family: var(--font-sub);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+    .terms-toggle-icon {
+      font-size: 0.8rem;
+      color: var(--accent-dim);
+      transition: transform 0.3s ease;
+    }
+    .terms-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .terms-body.open {
+      max-height: 250px;
+      border-top: 1px solid rgba(246, 242, 223, 0.1);
+    }
+    .terms-content {
+      padding: 16px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--white-muted);
+      max-height: 240px;
+      overflow-y: auto;
+    }
+    .terms-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .terms-content::-webkit-scrollbar-track {
+      background: rgba(246, 242, 223, 0.03);
+    }
+    .terms-content::-webkit-scrollbar-thumb {
+      background: rgba(246, 242, 223, 0.15);
+      border-radius: 3px;
+    }
+    .terms-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(246, 242, 223, 0.3);
+    }
+    .terms-content p {
+      margin-bottom: 12px;
+    }
+    .terms-content p:last-child {
+      margin-bottom: 0;
+    }
+    .terms-content strong {
+      color: var(--accent-dim);
+    }
+    .form-group-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+    .form-group-checkbox input[type="checkbox"] {
+      margin-top: 4px;
+      cursor: pointer;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+    }
+    .form-group-checkbox label {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--white-soft);
+      cursor: pointer;
+      user-select: none;
+    }
+    .form-group-checkbox label:hover {
+      color: var(--white);
+    }
   </style>
 </head>
 <body>
@@ -554,15 +657,54 @@
                 <input type="url" id="portfolioLink" name="portfolioLink" placeholder="e.g., https://github.com/yourprofile or Google Drive link" required />
               </div>
 
-              <!-- Recruitment Closed Alert -->
-              <div class="info-banner" style="border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); color: #fca5a5; margin-bottom: 20px;">
-                <strong>Recruitment Season Closed</strong>
-                Applications are currently unavailable. Kindly wait for our upcoming recruitment season announcements!
+              <!-- Terms & Conditions Section -->
+              <div class="terms-container">
+                <div class="terms-header" onclick="toggleTerms()">
+                  <span class="terms-header-title">📋 A.E.R.I.S. Membership Terms & Conditions</span>
+                  <span class="terms-toggle-icon" id="termsToggleIcon">▲</span>
+                </div>
+                <div class="terms-body" id="termsBody">
+                  <div class="terms-content">
+                    <p><strong>A.E.R.I.S. Membership Terms and Conditions</strong><br>
+                    By joining and participating in the Advanced Engineering and Robotics in Flight Systems (A.E.R.I.S.) team, you agree to abide by the following terms and conditions.</p>
+                    
+                    <p><strong>1. General Conduct and Expectations</strong><br>
+                    <em>Professionalism:</em> Members must maintain a respectful, professional, and collaborative environment at all times, both in internal meetings and when representing the team externally at competitions, exhibitions, or conferences.<br>
+                    <em>Commitment:</em> Active participation in assigned subteam tasks, design reviews, and project milestones is expected. Consistent communication with team leadership regarding progress and roadblocks is required.</p>
+                    
+                    <p><strong>2. Financial Contributions and Non-Refundability</strong><br>
+                    <em>Dues and Costs:</em> Members may be required to contribute funds for team operations, including but not limited to hardware procurement, component shipping, and competition registration fees.<br>
+                    <em>Strictly Non-Refundable:</em> All financial contributions and payments made to the team are strictly non-refundable. Once funds are submitted, they are immediately allocated toward organizational expenses. Refunds will not be issued under any circumstances, including voluntary resignation, membership termination, or project cancellations.</p>
+                    
+                    <p><strong>3. Safety and Equipment Usage</strong><br>
+                    <em>Protocol Adherence:</em> Strict adherence to all safety protocols is mandatory when handling UAV hardware, electronics, tools, and laboratory spaces.<br>
+                    <em>Asset Ownership:</em> All team equipment, procured components, and testing gear remain the property of the organization.<br>
+                    <em>Damage Reporting:</em> Any accidental damage to equipment or hardware must be reported immediately to team leadership. Negligent use of equipment may result in disciplinary action.</p>
+                    
+                    <p><strong>4. Intellectual Property and Confidentiality</strong><br>
+                    <em>Team Ownership:</em> All engineering deliverables—including CAD models, CFD/FEA simulations, MATLAB/Simulink scripts, software codebases, and flight data—generated during your time on the team are the intellectual property of the organization.<br>
+                    <em>Confidentiality:</em> Members may not share proprietary team designs, technical blueprints, or competition strategies with external parties, competing teams, or unauthorized individuals without explicit permission from team leadership.</p>
+                    
+                    <p><strong>5. Review and Termination</strong><br>
+                    <em>Performance:</em> Leadership will monitor engineering benchmarks and task completion.<br>
+                    <em>Termination:</em> The team manager reserves the right to suspend or terminate membership due to consistent failure to meet project deadlines, unexcused absences, severe safety violations, or any breach of these Terms and Conditions.</p>
+                    
+                    <p><strong>6. External Communications</strong><br>
+                    <em>Official Representation:</em> Only designated leadership may officially represent the team in communications with university faculty, external delegates, technical suppliers, and competition organizers.<br>
+                    <em>Sponsorships and Media:</em> Members must not solicit sponsorships, make financial agreements, or speak to external media on behalf of the organization without explicit approval from the Team Lead.</p>
+                  </div>
+                </div>
               </div>
 
-              <!-- Submit Button (Disabled) -->
-              <button type="button" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px; background: rgba(30, 59, 45, 0.6); color: var(--white-muted); cursor: not-allowed; box-shadow: none; pointer-events: none;" disabled>
-                <span class="btn-text">Recruitment Closed</span>
+              <!-- Terms Checkbox Group -->
+              <div class="form-group-checkbox">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" required onchange="toggleSubmitButton()" />
+                <label for="agreeTerms">I have read, understood, and agree to the A.E.R.I.S. Membership Terms and Conditions</label>
+              </div>
+
+              <!-- Submit Button (Enabled dynamically based on checkbox) -->
+              <button type="submit" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px; background: rgba(30, 59, 45, 0.4); color: var(--white-muted); cursor: not-allowed; box-shadow: none; pointer-events: none;" disabled>
+                <span class="btn-text">Submit Application</span>
               </button>
 
             </form>
@@ -659,10 +801,43 @@
   <!-- ========== SCRIPTS ========== -->
   <script>
     // ----------------------------------------------------
-    // CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT URL HERE
-    // ----------------------------------------------------
     const GOOGLE_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhJBeQL91cCpvvLTMDkkvyE-SZcNVgWMlta8HEBhZzZB6eTqpTxnVgVWdUi92bcH5F/exec';
     // ----------------------------------------------------
+
+    /* Terms accordion toggle */
+    window.toggleTerms = function() {
+      const body = document.getElementById('termsBody');
+      const icon = document.getElementById('termsToggleIcon');
+      if (body.classList.contains('open')) {
+        body.classList.remove('open');
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        body.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    };
+
+    /* Handle checkbox change to enable/disable submit button */
+    const agreeCheckbox = document.getElementById('agreeTerms');
+    window.toggleSubmitButton = function() {
+      if (agreeCheckbox && submitBtn) {
+        if (agreeCheckbox.checked) {
+          submitBtn.disabled = false;
+          submitBtn.style.background = '';
+          submitBtn.style.color = '';
+          submitBtn.style.cursor = 'pointer';
+          submitBtn.style.pointerEvents = 'auto';
+          submitBtn.style.boxShadow = '';
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.style.background = 'rgba(30, 59, 45, 0.4)';
+          submitBtn.style.color = 'var(--white-muted)';
+          submitBtn.style.cursor = 'not-allowed';
+          submitBtn.style.pointerEvents = 'none';
+          submitBtn.style.boxShadow = 'none';
+        }
+      }
+    };
 
     /* Toggle instructions card visibility */
     const setupCard = document.getElementById('setupCard');
@@ -762,6 +937,7 @@
       successHUD.style.display = 'none';
       formCard.style.display = 'block';
       form.reset();
+      toggleSubmitButton();
       window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
     });
   </script>
