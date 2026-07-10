@@ -16303,6 +16303,16 @@
       const table = document.getElementById('leaderboard-table');
       if (!table) return;
 
+      const currentReg = safeSession.getItem('aeris_auth_reg');
+      const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
+
+      // Full access roles: CEO, Head, Vice Head, or Eng. Mohamad (registration ID '5550')
+      const hasFullAccess = (activeUser && (
+        activeUser.role === 'ceo' ||
+        activeUser.role === 'head' ||
+        activeUser.role === 'vice_head'
+      )) || currentReg === '5550';
+
       const tasks = getTasks().filter(t => t.department === dept);
       const bonuses = getMemberBonuses();
 
@@ -16365,6 +16375,11 @@
       `;
 
       deptMembers.forEach((m, idx) => {
+        // Standard members can only see the 1st place (idx === 0) and their own row
+        if (!hasFullAccess && idx !== 0 && m.id !== currentReg) {
+          return;
+        }
+
         const rank = idx + 1;
         let rankBadge = '';
         if (rank === 1) rankBadge = '<span style="font-size: 1.3rem;" title="1st Place Gold 🥇">🥇</span>';
