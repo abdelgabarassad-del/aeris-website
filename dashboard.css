@@ -8591,49 +8591,73 @@ body.stitch-theme {
 
 /* Animations based on state */
 
-/* WALKING (WADDLE) */
+/* WALKING (WADDLE WITH INDEPENDENT LIMB MOVEMENT) */
 .sea-otter-container.walking .sea-otter-character {
   animation: otterWaddle 0.6s infinite alternate ease-in-out;
 }
+.sea-otter-container.walking .otter-head {
+  animation: headBob 0.6s infinite alternate ease-in-out;
+}
+.sea-otter-container.walking .otter-paw-l {
+  animation: pawSwingL 0.6s infinite alternate ease-in-out;
+}
+.sea-otter-container.walking .otter-paw-r {
+  animation: pawSwingR 0.6s infinite alternate ease-in-out 0.3s;
+}
 .sea-otter-container.walking .otter-foot-l {
-  animation: footWobbleL 0.6s infinite alternate ease-in-out;
+  animation: legWalkL 0.6s infinite alternate ease-in-out 0.3s;
 }
 .sea-otter-container.walking .otter-foot-r {
-  animation: footWobbleR 0.6s infinite alternate ease-in-out 0.3s;
+  animation: legWalkR 0.6s infinite alternate ease-in-out;
 }
 .sea-otter-container.walking .otter-tail {
-  animation: tailWiggle 0.6s infinite alternate ease-in-out;
+  animation: tailWalk 0.6s infinite alternate ease-in-out;
 }
 
 /* SWIMMING / FLOATING (IDLE ON BACK) */
 .sea-otter-container.floating .sea-otter-character {
   animation: otterFloat 2.5s infinite ease-in-out;
 }
-.sea-otter-container.floating .otter-tail {
-  animation: tailWiggleSlow 2s infinite alternate ease-in-out;
+.sea-otter-container.floating .otter-head {
+  animation: headFloat 3s infinite ease-in-out;
 }
-.sea-otter-container.floating .otter-foot-l,
+.sea-otter-container.floating .otter-paw-l {
+  animation: pawGroomL 4s infinite ease-in-out;
+}
+.sea-otter-container.floating .otter-paw-r {
+  animation: pawGroomR 4s infinite ease-in-out 1.5s;
+}
+.sea-otter-container.floating .otter-foot-l {
+  animation: pedalL 1.5s infinite linear;
+}
 .sea-otter-container.floating .otter-foot-r {
-  animation: feetPedalSlow 1.5s infinite alternate ease-in-out;
+  animation: pedalR 1.5s infinite linear 0.75s;
+}
+.sea-otter-container.floating .otter-tail {
+  animation: tailSwim 3s infinite ease-in-out;
 }
 
-/* DRAGGED (DANGLE) */
+/* DRAGGED (DANGLE / FRANTIC FLAILING) */
 .sea-otter-container.dragged {
   filter: drop-shadow(0 12px 20px rgba(0,0,0,0.5));
 }
 .sea-otter-container.dragged .sea-otter-character {
   animation: otterDangle 0.3s infinite alternate ease-in-out;
 }
-.sea-otter-container.dragged .otter-paw-l,
-.sea-otter-container.dragged .otter-paw-r {
-  animation: pawWiggle 0.2s infinite alternate ease-in-out;
+.sea-otter-container.dragged .otter-paw-l {
+  animation: flailPawL 0.15s infinite linear;
 }
-.sea-otter-container.dragged .otter-foot-l,
+.sea-otter-container.dragged .otter-paw-r {
+  animation: flailPawR 0.15s infinite linear 0.07s;
+}
+.sea-otter-container.dragged .otter-foot-l {
+  animation: flailLegL 0.2s infinite linear;
+}
 .sea-otter-container.dragged .otter-foot-r {
-  animation: feetWiggle 0.25s infinite alternate ease-in-out;
+  animation: flailLegR 0.2s infinite linear 0.1s;
 }
 .sea-otter-container.dragged .otter-tail {
-  animation: tailWiggleFast 0.2s infinite alternate ease-in-out;
+  animation: flailTail 0.1s infinite linear;
 }
 
 /* FALLING */
@@ -8642,81 +8666,173 @@ body.stitch-theme {
 }
 .sea-otter-container.falling .otter-paw-l,
 .sea-otter-container.falling .otter-paw-r {
-  transform-origin: top center;
   transform: translateY(-8px) scaleY(1.2);
 }
 
-/* HAPPY SPIN (INTERACTIVE) */
+/* HAPPY SPIN & CLAPPING (INTERACTIVE) */
 .sea-otter-container.happy .sea-otter-character {
   animation: otterSpin 0.6s ease-in-out forwards;
 }
+.sea-otter-container.happy .otter-paw-l {
+  animation: pawClapL 0.15s infinite ease-in-out;
+}
+.sea-otter-container.happy .otter-paw-r {
+  animation: pawClapR 0.15s infinite ease-in-out;
+}
+.sea-otter-container.happy .otter-foot-l,
+.sea-otter-container.happy .otter-foot-r {
+  animation: feetHappyKicking 0.3s infinite alternate ease-in-out;
+}
 
 /* KEYFRAMES */
+
+/* WALKING KEYFRAMES */
 @keyframes otterWaddle {
-  0% { transform: rotate(-5deg) translateY(0); }
-  100% { transform: rotate(5deg) translateY(-2px); }
+  0% { transform: rotate(-3deg) translateY(0); }
+  100% { transform: rotate(3deg) translateY(-2px); }
 }
 
-@keyframes footWobbleL {
-  0% { transform: translateY(0) scaleY(1); }
-  100% { transform: translateY(-3px) scaleY(0.8); }
+@keyframes headBob {
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-2px) rotate(1deg); }
 }
 
-@keyframes footWobbleR {
-  0% { transform: translateY(0) scaleY(1); }
-  100% { transform: translateY(-3px) scaleY(0.8); }
-}
-
-@keyframes tailWiggle {
-  0% { transform: rotate(-5deg) translate(-2px, 0); }
-  100% { transform: rotate(8deg) translate(2px, -1px); }
-}
-
-@keyframes tailWiggleSlow {
-  0% { transform: rotate(-10deg); }
+@keyframes pawSwingL {
+  0% { transform: rotate(-15deg); }
   100% { transform: rotate(15deg); }
 }
 
-@keyframes tailWiggleFast {
-  0% { transform: rotate(-15deg) translate(-4px, 0); }
-  100% { transform: rotate(20deg) translate(4px, -2px); }
+@keyframes pawSwingR {
+  0% { transform: rotate(15deg); }
+  100% { transform: rotate(-15deg); }
 }
 
-@keyframes feetPedalSlow {
-  0% { transform: translateY(0) rotate(-5deg); }
-  100% { transform: translateY(-2px) rotate(10deg); }
+@keyframes legWalkL {
+  0% { transform: translateY(0) rotate(8deg); }
+  100% { transform: translateY(-2px) rotate(-8deg); }
 }
 
+@keyframes legWalkR {
+  0% { transform: translateY(-2px) rotate(-8deg); }
+  100% { transform: translateY(0) rotate(8deg); }
+}
+
+@keyframes tailWalk {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(6deg); }
+}
+
+/* FLOATING KEYFRAMES */
 @keyframes otterFloat {
   0% { transform: rotate(80deg) translateY(0); }
   50% { transform: rotate(74deg) translateY(-6px); }
   100% { transform: rotate(80deg) translateY(0); }
 }
 
+@keyframes headFloat {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(1px, -1.5px) rotate(1.5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes pawGroomL {
+  0% { transform: rotate(0); }
+  30% { transform: rotate(20deg) translate(2px, -3px); }
+  50% { transform: rotate(10deg) translate(1px, -1px); }
+  70% { transform: rotate(25deg) translate(3px, -4px); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes pawGroomR {
+  0% { transform: rotate(0); }
+  35% { transform: rotate(-25deg) translate(-2px, -3px); }
+  55% { transform: rotate(-12deg) translate(-1px, -1px); }
+  75% { transform: rotate(-30deg) translate(-3px, -4px); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes pedalL {
+  0% { transform: translateY(0) scaleY(1) rotate(0); }
+  50% { transform: translateY(-4px) scaleY(0.95) rotate(-10deg); }
+  100% { transform: translateY(0) scaleY(1) rotate(0); }
+}
+
+@keyframes pedalR {
+  0% { transform: translateY(0) scaleY(1) rotate(0); }
+  50% { transform: translateY(-4px) scaleY(0.95) rotate(-10deg); }
+  100% { transform: translateY(0) scaleY(1) rotate(0); }
+}
+
+@keyframes tailSwim {
+  0% { transform: rotate(-5deg); }
+  50% { transform: rotate(15deg); }
+  100% { transform: rotate(-5deg); }
+}
+
+/* DRAGGED KEYFRAMES */
 @keyframes otterDangle {
   0% { transform: scale(1.05, 0.95) translateY(0); }
   100% { transform: scale(0.95, 1.05) translateY(-5px); }
 }
 
-@keyframes pawWiggle {
-  0% { transform: rotate(-15deg); }
-  100% { transform: rotate(15deg); }
+@keyframes flailPawL {
+  0% { transform: rotate(-35deg); }
+  50% { transform: rotate(45deg); }
+  100% { transform: rotate(-35deg); }
 }
 
-@keyframes feetWiggle {
-  0% { transform: rotate(-20deg) translateY(-2px); }
-  100% { transform: rotate(20deg) translateY(2px); }
+@keyframes flailPawR {
+  0% { transform: rotate(45deg); }
+  50% { transform: rotate(-35deg); }
+  100% { transform: rotate(45deg); }
 }
 
+@keyframes flailLegL {
+  0% { transform: translateY(0) rotate(-20deg); }
+  50% { transform: translateY(-3px) rotate(15deg); }
+  100% { transform: translateY(0) rotate(-20deg); }
+}
+
+@keyframes flailLegR {
+  0% { transform: translateY(-3px) rotate(15deg); }
+  50% { transform: translateY(0) rotate(-20deg); }
+  100% { transform: translateY(-3px) rotate(15deg); }
+}
+
+@keyframes flailTail {
+  0% { transform: rotate(-20deg) scaleY(0.9); }
+  50% { transform: rotate(25deg) scaleY(1.1); }
+  100% { transform: rotate(-20deg) scaleY(0.9); }
+}
+
+/* FALLING KEYFRAMES */
 @keyframes otterFall {
   0% { transform: scale(0.9, 1.1) rotate(-3deg); }
   100% { transform: scale(1.1, 0.9) rotate(3deg); }
 }
 
+/* HAPPY KEYFRAMES */
 @keyframes otterSpin {
   0% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.2) rotate(180deg); }
   100% { transform: scale(1) rotate(360deg); }
+}
+
+@keyframes pawClapL {
+  0% { transform: rotate(0); }
+  50% { transform: rotate(28deg); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes pawClapR {
+  0% { transform: rotate(0); }
+  50% { transform: rotate(-28deg); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes feetHappyKicking {
+  0% { transform: translateY(0) rotate(-5deg); }
+  100% { transform: translateY(-5px) rotate(10deg); }
 }
 
 /* Particles & effects */
