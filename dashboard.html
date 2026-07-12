@@ -5391,67 +5391,151 @@
       container.innerHTML = `
         <div class="sea-otter-character">
           <svg class="sea-otter-svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <defs>
+              <!-- Gradients for premium 3D/soft shading -->
+              <linearGradient id="otterBody" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#b67f57" />
+                <stop offset="100%" stop-color="#734221" />
+              </linearGradient>
+              <linearGradient id="otterDarkBrown" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#8c532e" />
+                <stop offset="100%" stop-color="#552c11" />
+              </linearGradient>
+              <radialGradient id="otterFace" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fefbf7" />
+                <stop offset="70%" stop-color="#fdf4eb" />
+                <stop offset="100%" stop-color="#ebcfb7" />
+              </radialGradient>
+              <linearGradient id="otterBelly" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fbf4ec" />
+                <stop offset="100%" stop-color="#dcc1ab" />
+              </linearGradient>
+              <radialGradient id="otterBlush" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffa3b1" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="#ffa3b1" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="toeBeans" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fca5a5" />
+                <stop offset="100%" stop-color="#f87171" />
+              </linearGradient>
+              <linearGradient id="shellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffedd5" />
+                <stop offset="50%" stop-color="#fed7aa" />
+                <stop offset="100%" stop-color="#fdbb2d" />
+              </linearGradient>
+              <radialGradient id="starGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fda4af" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </radialGradient>
+              <radialGradient id="flowerGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#f3e8ff" />
+                <stop offset="100%" stop-color="#d8b4fe" />
+              </radialGradient>
+            </defs>
+
             <!-- Tail -->
-            <g class="otter-tail" style="transform-origin: 30px 65px;">
-              <path d="M 30,70 Q 15,75 10,65 Q 15,55 35,62 Z" fill="#8a532b" />
+            <g class="otter-tail" style="transform-origin: 32px 70px;">
+              <path d="M 32,68 C 18,70 12,58 7,62 C 2,66 12,78 28,74 C 32,73 34,70 32,68 Z" fill="url(#otterDarkBrown)" />
             </g>
-            <!-- Feet -->
+
+            <!-- Feet with Cute Toe Beans -->
             <g class="otter-feet" style="transform-origin: 50px 80px;">
-              <ellipse cx="38" cy="82" rx="7" ry="4" fill="#70411d" class="otter-foot-l" style="transform-origin: 38px 82px;" />
-              <ellipse cx="62" cy="82" rx="7" ry="4" fill="#70411d" class="otter-foot-r" style="transform-origin: 62px 82px;" />
+              <!-- Left Foot -->
+              <g class="otter-foot-l" style="transform-origin: 38px 81px;">
+                <ellipse cx="38" cy="81" rx="8" ry="5" fill="url(#otterDarkBrown)" />
+                <circle cx="34" cy="79" r="1.5" fill="url(#toeBeans)" />
+                <circle cx="38" cy="78" r="1.6" fill="url(#toeBeans)" />
+                <circle cx="42" cy="79" r="1.5" fill="url(#toeBeans)" />
+                <ellipse cx="38" cy="82" rx="4" ry="2.5" fill="url(#toeBeans)" />
+              </g>
+              <!-- Right Foot -->
+              <g class="otter-foot-r" style="transform-origin: 62px 81px;">
+                <ellipse cx="62" cy="81" rx="8" ry="5" fill="url(#otterDarkBrown)" />
+                <circle cx="58" cy="79" r="1.5" fill="url(#toeBeans)" />
+                <circle cx="62" cy="78" r="1.6" fill="url(#toeBeans)" />
+                <circle cx="66" cy="79" r="1.5" fill="url(#toeBeans)" />
+                <ellipse cx="62" cy="82" rx="4" ry="2.5" fill="url(#toeBeans)" />
+              </g>
             </g>
+
             <!-- Body -->
-            <path d="M 30,50 Q 25,75 50,80 Q 75,75 70,50 Q 68,38 50,38 Q 32,38 30,50 Z" fill="#a0653c" class="otter-body" />
-            <!-- Belly Patch -->
-            <path d="M 36,54 Q 32,70 50,75 Q 68,70 64,54 Q 60,46 50,46 Q 40,46 36,54 Z" fill="#e8d5c4" class="otter-belly" />
+            <path d="M 28,50 Q 22,78 50,82 Q 78,78 72,50 Q 68,36 50,36 Q 32,36 28,50 Z" fill="url(#otterBody)" class="otter-body" />
+            
+            <!-- Belly Patch (Soft cream color) -->
+            <path d="M 34,54 Q 30,73 50,77 Q 70,73 66,54 Q 60,43 50,43 Q 40,43 34,54 Z" fill="url(#otterBelly)" class="otter-belly" />
+
             <!-- Head Group -->
-            <g class="otter-head" style="transform-origin: 50px 30px;">
+            <g class="otter-head" style="transform-origin: 50px 28px;">
               <!-- Ears -->
-              <circle cx="34" cy="24" r="6" fill="#8a532b" />
-              <circle cx="34" cy="24" r="3.5" fill="#f8c3cd" />
-              <circle cx="66" cy="24" r="6" fill="#8a532b" />
-              <circle cx="66" cy="24" r="3.5" fill="#f8c3cd" />
+              <circle cx="32" cy="22" r="7" fill="url(#otterDarkBrown)" />
+              <circle cx="32" cy="22" r="4.5" fill="#fca5a5" />
+              <circle cx="68" cy="22" r="7" fill="url(#otterDarkBrown)" />
+              <circle cx="68" cy="22" r="4.5" fill="#fca5a5" />
+              
               <!-- Main Head -->
-              <circle cx="50" cy="30" r="18" fill="#a0653c" />
-              <!-- Face Patch -->
-              <path d="M 34,32 C 34,22 66,22 66,32 C 66,42 34,42 34,32 Z" fill="#fcf3eb" />
-              <!-- Eyes -->
-              <circle cx="43" cy="28" r="2" fill="#2d2d2d" />
-              <circle cx="43.5" cy="27.5" r="0.6" fill="#ffffff" />
-              <circle cx="57" cy="28" r="2" fill="#2d2d2d" />
-              <circle cx="56.5" cy="27.5" r="0.6" fill="#ffffff" />
+              <circle cx="50" cy="28" r="19" fill="url(#otterBody)" />
+              
+              <!-- Cute Face Mask/Patch -->
+              <path d="M 33,31 C 31,19 69,19 67,31 C 65,41 35,41 33,31 Z" fill="url(#otterFace)" />
+              
+              <!-- Anime Sparkly Eyes -->
+              <g class="otter-eye-l">
+                <circle cx="42" cy="26" r="3.2" fill="#1f2937" />
+                <circle cx="41" cy="24.5" r="1" fill="#ffffff" />
+                <circle cx="43.2" cy="27.2" r="0.5" fill="#ffffff" />
+              </g>
+              <g class="otter-eye-r">
+                <circle cx="58" cy="26" r="3.2" fill="#1f2937" />
+                <circle cx="57" cy="24.5" r="1" fill="#ffffff" />
+                <circle cx="59.2" cy="27.2" r="0.5" fill="#ffffff" />
+              </g>
+              
               <!-- Blush -->
-              <circle cx="38" cy="32" r="2.5" fill="#ffb3ba" opacity="0.7" />
-              <circle cx="62" cy="32" r="2.5" fill="#ffb3ba" opacity="0.7" />
-              <!-- Nose/Muzzle -->
-              <path d="M 46,32 Q 50,30 54,32 Q 54,36 50,36 Q 46,36 46,32 Z" fill="#e8d5c4" />
-              <ellipse cx="50" cy="31.5" rx="2" ry="1.2" fill="#1f1f1f" />
-              <!-- Mouth -->
-              <path d="M 48.5,33 Q 50,34.5 50,33 Q 50,34.5 51.5,33" fill="none" stroke="#2d2d2d" stroke-width="0.8" stroke-linecap="round" />
+              <circle cx="37" cy="31" r="4" fill="url(#otterBlush)" />
+              <circle cx="63" cy="31" r="4" fill="url(#otterBlush)" />
+              
+              <!-- Whiskers -->
+              <path d="M 34,31 Q 25,30 20,32 M 34,33 Q 26,34 19,37" stroke="#9ca3af" stroke-width="0.75" stroke-linecap="round" fill="none" />
+              <path d="M 66,31 Q 75,30 80,32 M 66,33 Q 74,34 81,37" stroke="#9ca3af" stroke-width="0.75" stroke-linecap="round" fill="none" />
+
+              <!-- Muzzle & Nose -->
+              <ellipse cx="50" cy="31" rx="5" ry="3.5" fill="#f3f4f6" />
+              <ellipse cx="50" cy="29.5" rx="2.5" ry="1.6" fill="#111827" />
+              <circle cx="49.3" cy="28.8" r="0.4" fill="#ffffff" />
+              <!-- Mouth (:3 shape) -->
+              <path d="M 47,31.5 Q 48.5,33.5 50,31.8 Q 51.5,33.5 53,31.5" fill="none" stroke="#111827" stroke-width="1.2" stroke-linecap="round" />
             </g>
-            <!-- Held Items -->
+
+            <!-- Held Items (Shell, Starfish, Flower) -->
             <g class="otter-held-item shell" style="display: none;">
-              <path d="M 45,55 C 43,50 57,50 55,55 C 57,58 43,58 45,55" fill="#ffdfba" stroke="#b88a5c" stroke-width="0.5" />
-              <line x1="47" y1="52" x2="48" y2="56" stroke="#b88a5c" stroke-width="0.4" />
-              <line x1="50" y1="51" x2="50" y2="56" stroke="#b88a5c" stroke-width="0.4" />
-              <line x1="53" y1="52" x2="52" y2="56" stroke="#b88a5c" stroke-width="0.4" />
+              <path d="M 44,57 C 41,51 59,51 56,57 C 58,61 42,61 44,57" fill="url(#shellGrad)" stroke="#c2410c" stroke-width="0.5" />
+              <path d="M 47,53 Q 48,58 48,59" stroke="#ea580c" stroke-width="0.4" />
+              <path d="M 50,52 Q 50,58 50,59" stroke="#ea580c" stroke-width="0.4" />
+              <path d="M 53,53 Q 52,58 52,59" stroke="#ea580c" stroke-width="0.4" />
             </g>
             <g class="otter-held-item starfish" style="display: none;">
-              <path d="M 50,46 L 53,52 L 60,53 L 55,57 L 57,64 L 50,60 L 43,64 L 45,57 L 40,53 L 47,52 Z" fill="#ffb3ba" stroke="#e06a74" stroke-width="0.5" />
-              <circle cx="48" cy="53" r="0.5" fill="#2d2d2d" />
-              <circle cx="52" cy="53" r="0.5" fill="#2d2d2d" />
+              <path d="M 50,45 L 53.5,52 L 61,53.5 L 56,58.5 L 57.5,66 L 50,62 L 42.5,66 L 44,58.5 L 39,53.5 L 46.5,52 Z" fill="url(#starGrad)" stroke="#be123c" stroke-width="0.5" />
+              <circle cx="48.5" cy="54.5" r="0.5" fill="#111827" />
+              <circle cx="51.5" cy="54.5" r="0.5" fill="#111827" />
+              <circle cx="47.5" cy="55.5" r="0.4" fill="#f43f5e" />
+              <circle cx="52.5" cy="55.5" r="0.4" fill="#f43f5e" />
             </g>
             <g class="otter-held-item flower" style="display: none;">
-              <circle cx="50" cy="54" r="2.5" fill="#ffcc00" />
-              <circle cx="45" cy="54" r="3" fill="#ff7fa5" />
-              <circle cx="55" cy="54" r="3" fill="#ff7fa5" />
-              <circle cx="50" cy="49" r="3" fill="#ff7fa5" />
-              <circle cx="50" cy="59" r="3" fill="#ff7fa5" />
+              <g transform="translate(50,55) scale(0.9)">
+                <circle cx="0" cy="0" r="3.5" fill="#eab308" />
+                <path d="M -2,-2 C -8,-8 -8,-2 -4,-1 Z" fill="#ffffff" stroke="#f472b6" stroke-width="0.4" />
+                <path d="M 2,-2 C 8,-8 8,-2 4,-1 Z" fill="#ffffff" stroke="#f472b6" stroke-width="0.4" />
+                <path d="M 2,2 C 8,8 2,8 1,4 Z" fill="#ffffff" stroke="#f472b6" stroke-width="0.4" />
+                <path d="M -2,2 C -8,8 -2,8 -1,4 Z" fill="#ffffff" stroke="#f472b6" stroke-width="0.4" />
+                <path d="M 0,-5 C 0,-10 -5,-7 -1,-4 Z" fill="#ffffff" stroke="#f472b6" stroke-width="0.4" />
+                <circle cx="0" cy="0" r="2" fill="#facc15" />
+              </g>
             </g>
+
             <!-- Paws / Arms -->
             <g class="otter-paws">
-              <path d="M 32,50 Q 42,54 46,52" fill="none" stroke="#a0653c" stroke-width="5" stroke-linecap="round" class="otter-paw-l" style="transform-origin: 32px 50px;" />
-              <path d="M 68,50 Q 58,54 54,52" fill="none" stroke="#a0653c" stroke-width="5" stroke-linecap="round" class="otter-paw-r" style="transform-origin: 68px 50px;" />
+              <path d="M 30,50 Q 42,56 46,52" fill="none" stroke="url(#otterBody)" stroke-width="6.5" stroke-linecap="round" class="otter-paw-l" style="transform-origin: 30px 50px;" />
+              <path d="M 70,50 Q 58,56 54,52" fill="none" stroke="url(#otterBody)" stroke-width="6.5" stroke-linecap="round" class="otter-paw-r" style="transform-origin: 70px 50px;" />
             </g>
           </svg>
         </div>
