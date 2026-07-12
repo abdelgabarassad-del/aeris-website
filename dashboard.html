@@ -535,7 +535,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </div>
             <div>
-              <span class="finance-widget-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Agreed Target</span>
+              <span class="finance-widget-label" id="funding-lbl-target" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Agreed Target</span>
               <strong class="finance-widget-value" id="funding-total-target" style="font-size: 1.5rem; font-weight: bold; display: block;">0.00 EGP</strong>
             </div>
           </div>
@@ -545,7 +545,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div>
-              <span class="finance-widget-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Collected</span>
+              <span class="finance-widget-label" id="funding-lbl-collected" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Collected</span>
               <strong class="finance-widget-value" id="funding-total-collected" style="font-size: 1.5rem; font-weight: bold; display: block;">0.00 EGP</strong>
             </div>
           </div>
@@ -555,7 +555,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <div>
-              <span class="finance-widget-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Remaining Debt</span>
+              <span class="finance-widget-label" id="funding-lbl-debt" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Total Remaining Debt</span>
               <strong class="finance-widget-value" id="funding-total-debt" style="font-size: 1.5rem; font-weight: bold; display: block;">0.00 EGP</strong>
             </div>
           </div>
@@ -564,7 +564,7 @@
         <!-- Progress Bar -->
         <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.05);">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem;">
-            <span style="color: var(--white-muted);">Collection Progress</span>
+            <span id="funding-lbl-progress" style="color: var(--white-muted);">Collection Progress</span>
             <span id="funding-progress-percentage" style="font-weight: bold; color: var(--accent);">0%</span>
           </div>
           <div style="background: rgba(0,0,0,0.3); border-radius: 4px; height: 10px; overflow: hidden; width: 100%;">
@@ -601,7 +601,7 @@
                     <th>Agreed Amount</th>
                     <th>Paid Amount</th>
                     <th>Debt / Remaining</th>
-                    <th style="width: 180px; text-align: center;">Actions</th>
+                    <th id="funding-members-actions-head" style="width: 180px; text-align: center;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="funding-members-tbody">
@@ -628,7 +628,7 @@
                     <th>Amount Paid</th>
                     <th>Recorded By</th>
                     <th>Notes / Details</th>
-                    <th style="width: 100px; text-align: center;">Actions</th>
+                    <th id="funding-history-actions-head" style="width: 100px; text-align: center;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="funding-history-tbody">
@@ -2376,10 +2376,10 @@
           viewFinanceBtn.style.display = hasFinanceAccess ? 'inline-flex' : 'none';
         }
 
-        // Show funding tab button if user is Omar or Abduljabar
+        // Show funding tab button if user is in ALL_MEMBERS
         const viewFundingBtn = document.getElementById('view-funding-btn');
         if (viewFundingBtn) {
-          const hasFundingAccess = regNum === '231012318' || regNum === '231002350';
+          const hasFundingAccess = ALL_MEMBERS.has(regNum);
           viewFundingBtn.style.display = hasFundingAccess ? 'inline-flex' : 'none';
         }
 
@@ -17359,6 +17359,11 @@
       return currentReg === '231012318' || currentReg === '231002350';
     }
 
+    function isFundingAuthorized() {
+      const currentReg = safeSession.getItem('aeris_auth_reg');
+      return ALL_MEMBERS.has(currentReg);
+    }
+
     const SEED_TRANSACTIONS = [
     {
         "id": "tx_inc_1",
@@ -20425,7 +20430,7 @@
 
     function renderFundingSection() {
       const activeReg = safeSession.getItem('aeris_auth_reg');
-      if (activeReg !== '231012318' && activeReg !== '231002350') {
+      if (!isFundingAuthorized()) {
         const fundingSection = document.getElementById('funding-section');
         if (fundingSection) {
           fundingSection.innerHTML = `<div style="text-align: center; padding: 40px; color: #ef4444; font-weight: bold; font-size: 1.1rem;">🚫 Access Denied: Unauthorized.</div>`;
@@ -20433,18 +20438,49 @@
         return;
       }
 
+      const isFullViewer = activeReg === '231012318' || activeReg === '231002350';
+
+      // Update Labels
+      const lblTarget = document.getElementById('funding-lbl-target');
+      const lblCollected = document.getElementById('funding-lbl-collected');
+      const lblDebt = document.getElementById('funding-lbl-debt');
+      const lblProgress = document.getElementById('funding-lbl-progress');
+      
+      if (lblTarget) lblTarget.textContent = isFullViewer ? 'Total Agreed Target' : 'My Agreed Target';
+      if (lblCollected) lblCollected.textContent = isFullViewer ? 'Total Collected' : 'My Paid Contributions';
+      if (lblDebt) lblDebt.textContent = isFullViewer ? 'Total Remaining Debt' : 'My Remaining Debt';
+      if (lblProgress) lblProgress.textContent = isFullViewer ? 'Collection Progress' : 'My Payment Progress';
+
+      // Show/Hide top headers
+      const searchInput = document.getElementById('funding-search-input');
+      const setAllBtn = document.getElementById('funding-set-all-targets-btn');
+      const addPayBtn = document.getElementById('funding-add-payment-btn');
+      
+      if (searchInput) searchInput.style.display = isFullViewer ? 'inline-block' : 'none';
+      if (setAllBtn) setAllBtn.style.display = isFullViewer ? 'inline-flex' : 'none';
+      if (addPayBtn) addPayBtn.style.display = isFullViewer ? 'inline-flex' : 'none';
+
+      // Show/Hide actions table headers
+      const actionsHead = document.getElementById('funding-members-actions-head');
+      const historyActionsHead = document.getElementById('funding-history-actions-head');
+      
+      if (actionsHead) actionsHead.style.display = isFullViewer ? 'table-cell' : 'none';
+      if (historyActionsHead) historyActionsHead.style.display = isFullViewer ? 'table-cell' : 'none';
+
       const data = getFundingData();
       const agreed = data.agreedAmounts;
       const payments = data.payments;
 
-      // Calculate totals for summary cards
+      // Calculate metrics & build balances list
       let totalTarget = 0;
       let totalCollected = 0;
 
-      // Populate member balances
       const memberBalances = {};
       for (const reg in MEMBERS_DATABASE) {
         if (MEMBERS_DATABASE[reg].hide) continue;
+        // If not full viewer, only process for the logged-in user
+        if (!isFullViewer && reg !== activeReg) continue;
+
         const target = agreed[reg] !== undefined ? agreed[reg] : 0;
         totalTarget += target;
         memberBalances[reg] = {
@@ -20481,19 +20517,31 @@
       if (barEl) barEl.style.width = progressPercent + '%';
 
       // Render Member Balances Ledger
-      const searchInput = document.getElementById('funding-search-input');
       const searchValue = searchInput ? searchInput.value.trim().toLowerCase() : '';
       const tbody = document.getElementById('funding-members-tbody');
       
       if (tbody) {
         let html = '';
         const membersList = Object.values(memberBalances).sort((a, b) => a.name.localeCompare(b.name));
+        
+        // Filter based on search (only relevant for full viewer anyway)
         const filteredMembers = membersList.filter(m => m.name.toLowerCase().includes(searchValue) || m.reg.includes(searchValue));
 
         if (filteredMembers.length === 0) {
-          html = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--white-muted);">No members found.</td></tr>`;
+          html = `<tr><td colspan="${isFullViewer ? 6 : 5}" style="text-align: center; padding: 20px; color: var(--white-muted);">No members found.</td></tr>`;
         } else {
           filteredMembers.forEach(m => {
+            let actionCol = '';
+            if (isFullViewer) {
+              actionCol = `
+                <td style="text-align: center;">
+                  <div style="display: flex; gap: 8px; justify-content: center;">
+                    <button class="btn-primary btn-sm btn-edit-target" data-reg="${m.reg}" data-name="${escapeHtml(m.name)}" data-target="${m.target}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: none;">Set Target</button>
+                    <button class="btn-secondary btn-sm btn-add-payment-member" data-reg="${m.reg}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent;">+ Pay</button>
+                  </div>
+                </td>
+              `;
+            }
             html += `
               <tr>
                 <td style="font-weight: 600;">${escapeHtml(m.name)}</td>
@@ -20501,12 +20549,7 @@
                 <td style="font-weight: bold;">${m.target.toFixed(2)} EGP</td>
                 <td style="color: #10b981; font-weight: bold;">${m.paid.toFixed(2)} EGP</td>
                 <td style="color: ${m.debt > 0 ? '#ef4444' : '#10b981'}; font-weight: bold;">${m.debt.toFixed(2)} EGP</td>
-                <td style="text-align: center;">
-                  <div style="display: flex; gap: 8px; justify-content: center;">
-                    <button class="btn-primary btn-sm btn-edit-target" data-reg="${m.reg}" data-name="${escapeHtml(m.name)}" data-target="${m.target}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: none;">Set Target</button>
-                    <button class="btn-secondary btn-sm btn-add-payment-member" data-reg="${m.reg}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent;">+ Pay</button>
-                  </div>
-                </td>
+                ${actionCol}
               </tr>
             `;
           });
@@ -20514,16 +20557,18 @@
         tbody.innerHTML = html;
 
         // Attach listeners
-        tbody.querySelectorAll('.btn-edit-target').forEach(btn => {
-          btn.onclick = () => {
-            openAgreedModal(btn.dataset.reg, btn.dataset.name, parseFloat(btn.dataset.target));
-          };
-        });
-        tbody.querySelectorAll('.btn-add-payment-member').forEach(btn => {
-          btn.onclick = () => {
-            openPaymentModal(btn.dataset.reg);
-          };
-        });
+        if (isFullViewer) {
+          tbody.querySelectorAll('.btn-edit-target').forEach(btn => {
+            btn.onclick = () => {
+              openAgreedModal(btn.dataset.reg, btn.dataset.name, parseFloat(btn.dataset.target));
+            };
+          });
+          tbody.querySelectorAll('.btn-add-payment-member').forEach(btn => {
+            btn.onclick = () => {
+              openPaymentModal(btn.dataset.reg);
+            };
+          });
+        }
       }
 
       // Render Payments History List
@@ -20531,15 +20576,18 @@
       if (historyTbody) {
         let html = '';
         
+        // Filter payments: if not full viewer, only show current user's payments
+        const filteredPaymentsList = payments.filter(p => isFullViewer || p.regNum === activeReg);
+
         // Sort payments by date desc, then by createdAt desc
-        const sortedPayments = [...payments].sort((a, b) => {
+        const sortedPayments = filteredPaymentsList.sort((a, b) => {
           const dateDiff = new Date(b.date) - new Date(a.date);
           if (dateDiff !== 0) return dateDiff;
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
         if (sortedPayments.length === 0) {
-          html = `<tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--white-muted);">No payment records found.</td></tr>`;
+          html = `<tr><td colspan="${isFullViewer ? 7 : 6}" style="text-align: center; padding: 20px; color: var(--white-muted);">No payment records found.</td></tr>`;
         } else {
           sortedPayments.forEach(p => {
             const memberName = MEMBERS_DATABASE[p.regNum]?.name || 'Unknown Member';
@@ -20548,6 +20596,14 @@
               day: 'numeric',
               year: 'numeric'
             });
+            let deleteCol = '';
+            if (isFullViewer) {
+              deleteCol = `
+                <td style="text-align: center;">
+                  <button class="btn-secondary btn-sm btn-delete-payment" data-id="${p.id}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent;">Delete</button>
+                </td>
+              `;
+            }
             html += `
               <tr>
                 <td style="font-weight: 600;">${payDateStr}</td>
@@ -20556,9 +20612,7 @@
                 <td style="font-weight: bold; color: #10b981;">${p.amount.toFixed(2)} EGP</td>
                 <td style="font-size: 0.8rem; color: var(--white-muted);">${escapeHtml(p.recordedBy)}</td>
                 <td>${p.notes ? escapeHtml(p.notes) : '<span style="color: var(--white-muted); font-style: italic;">None</span>'}</td>
-                <td style="text-align: center;">
-                  <button class="btn-secondary btn-sm btn-delete-payment" data-id="${p.id}" style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent;">Delete</button>
-                </td>
+                ${deleteCol}
               </tr>
             `;
           });
@@ -20566,11 +20620,13 @@
         historyTbody.innerHTML = html;
 
         // Attach listeners
-        historyTbody.querySelectorAll('.btn-delete-payment').forEach(btn => {
-          btn.onclick = () => {
-            deletePaymentRecord(btn.dataset.id);
-          };
-        });
+        if (isFullViewer) {
+          historyTbody.querySelectorAll('.btn-delete-payment').forEach(btn => {
+            btn.onclick = () => {
+              deletePaymentRecord(btn.dataset.id);
+            };
+          });
+        }
       }
     }
 
@@ -20880,7 +20936,7 @@
     }
     if (viewFundingBtn) {
       viewFundingBtn.addEventListener('click', () => {
-        if (!isFinanceAuthorized()) {
+        if (!isFundingAuthorized()) {
           alert("Access Denied: You are not authorized to view this tracker.");
           return;
         }
