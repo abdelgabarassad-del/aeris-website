@@ -20388,7 +20388,7 @@
     }
 
     /* ========== FUNDING & CONTRIBUTIONS TRACKER SYSTEM ========== */
-    const FUNDING_STORAGE_KEY = 'aeris_funding_data';
+    const FUNDING_STORAGE_KEY = 'aeris_funding_data_v2';
 
     function getFundingData() {
       try {
@@ -20403,12 +20403,12 @@
         console.warn("Failed to read funding data:", e);
       }
       
-      // Fallback/initialization: default 500 EGP for everyone in MEMBERS_DATABASE
+      // Fallback/initialization: default 0 EGP for everyone in MEMBERS_DATABASE
       const initialAgreed = {};
       for (const reg in MEMBERS_DATABASE) {
         // Exclude members marked with hide: true
         if (!MEMBERS_DATABASE[reg].hide) {
-          initialAgreed[reg] = 500;
+          initialAgreed[reg] = 0;
         }
       }
       const initialData = {
@@ -20445,7 +20445,7 @@
       const memberBalances = {};
       for (const reg in MEMBERS_DATABASE) {
         if (MEMBERS_DATABASE[reg].hide) continue;
-        const target = agreed[reg] !== undefined ? agreed[reg] : 500;
+        const target = agreed[reg] !== undefined ? agreed[reg] : 0;
         totalTarget += target;
         memberBalances[reg] = {
           name: MEMBERS_DATABASE[reg].name,
