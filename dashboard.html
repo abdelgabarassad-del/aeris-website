@@ -582,6 +582,10 @@
               </div>
               <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="funding-search-input" placeholder="Search by name..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: inherit; font-size: 0.85rem;" />
+                <button class="btn-secondary" id="funding-set-all-targets-btn" style="height: 38px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1); background: transparent;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span>Set Target for All</span>
+                </button>
                 <button class="btn-primary" id="funding-add-payment-btn" style="height: 38px; display: inline-flex; align-items: center; gap: 6px;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   <span>Record Payment</span>
@@ -743,6 +747,27 @@
             <div style="display: flex; justify-content: flex-end; gap: 12px;">
               <button class="btn-secondary" id="funding-agreed-cancel" style="padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: transparent; cursor: pointer; font-weight: 600;">Cancel</button>
               <button class="btn-primary" id="funding-agreed-save" style="padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;">Save Target</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== FUNDING SET TARGET FOR ALL MODAL ========== -->
+      <div class="task-modal" id="funding-all-targets-modal" style="display: none;">
+        <div class="task-modal__overlay" id="funding-all-targets-overlay"></div>
+        <div class="task-modal__content">
+          <button class="task-modal__close" id="funding-all-targets-close" aria-label="Close modal">&times;</button>
+          <h2 class="task-modal__title" style="text-transform: uppercase; margin-bottom: 20px; font-size: 1.4rem;">Set Target for All Members</h2>
+          <div class="news-form" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px;">
+              <label for="funding-all-targets-amount" style="font-weight: 600; font-size: 0.85rem;">Agreed Contribution Amount for EVERY Member (EGP)</label>
+              <input type="number" id="funding-all-targets-amount" min="0" step="any" placeholder="e.g. 500" style="padding: 10px; border-radius: 8px;" />
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+              <button class="btn-secondary" id="funding-all-targets-cancel" style="padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: transparent; cursor: pointer; font-weight: 600;">Cancel</button>
+              <button class="btn-primary" id="funding-all-targets-save" style="padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;">Apply to All</button>
             </div>
           </div>
         </div>
@@ -20690,6 +20715,46 @@
       logToMailerConsole(`Updated target agreed contribution for ${MEMBERS_DATABASE[regVal]?.name || regVal} to ${amountVal.toFixed(2)} EGP.`, 'sys');
     }
 
+    function openAllTargetsModal() {
+      const amountInput = document.getElementById('funding-all-targets-amount');
+      if (amountInput) amountInput.value = '';
+      const modal = document.getElementById('funding-all-targets-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAllTargetsModal() {
+      const modal = document.getElementById('funding-all-targets-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function saveAllTargetsAmount() {
+      const amountInput = document.getElementById('funding-all-targets-amount');
+      if (!amountInput) return;
+
+      const amountVal = parseFloat(amountInput.value);
+      if (isNaN(amountVal) || amountVal < 0) {
+        amountInput.focus();
+        amountInput.style.borderColor = '#f87171';
+        setTimeout(() => amountInput.style.borderColor = '', 2000);
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to set the agreed target contribution to ${amountVal.toFixed(2)} EGP for ALL members?`)) {
+        return;
+      }
+
+      const data = getFundingData();
+      for (const reg in MEMBERS_DATABASE) {
+        if (!MEMBERS_DATABASE[reg].hide) {
+          data.agreedAmounts[reg] = amountVal;
+        }
+      }
+      saveFundingData(data);
+      closeAllTargetsModal();
+      renderFundingSection();
+      logToMailerConsole(`Updated target agreed contribution for ALL members to ${amountVal.toFixed(2)} EGP.`, 'sys');
+    }
+
     /* ========== BIND EVENTS AND ACTIONS ========== */
     deptTabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -21256,6 +21321,31 @@
     const fundingSearchInput = document.getElementById('funding-search-input');
     if (fundingSearchInput) {
       fundingSearchInput.addEventListener('input', renderFundingSection);
+    }
+
+    const fundingSetAllTargetsBtn = document.getElementById('funding-set-all-targets-btn');
+    if (fundingSetAllTargetsBtn) {
+      fundingSetAllTargetsBtn.addEventListener('click', openAllTargetsModal);
+    }
+
+    const fundingAllTargetsClose = document.getElementById('funding-all-targets-close');
+    if (fundingAllTargetsClose) {
+      fundingAllTargetsClose.addEventListener('click', closeAllTargetsModal);
+    }
+
+    const fundingAllTargetsCancel = document.getElementById('funding-all-targets-cancel');
+    if (fundingAllTargetsCancel) {
+      fundingAllTargetsCancel.addEventListener('click', closeAllTargetsModal);
+    }
+
+    const fundingAllTargetsSave = document.getElementById('funding-all-targets-save');
+    if (fundingAllTargetsSave) {
+      fundingAllTargetsSave.addEventListener('click', saveAllTargetsAmount);
+    }
+
+    const fundingAllTargetsOverlay = document.getElementById('funding-all-targets-overlay');
+    if (fundingAllTargetsOverlay) {
+      fundingAllTargetsOverlay.addEventListener('click', closeAllTargetsModal);
     }
   </script>
 
