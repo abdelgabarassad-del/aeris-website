@@ -12987,6 +12987,7 @@ body.totallyspies-theme .nav-link:hover {
 .stitch-ukulele-container {
   margin-top: 24px;
   width: 100%;
+  animation: none !important;
 }
 
 .ukulele-board-panel {
@@ -13067,6 +13068,7 @@ body.totallyspies-theme .nav-link:hover {
 .stitch-badness-container {
   margin-top: 24px;
   width: 100%;
+  animation: none !important;
 }
 
 .badness-thermometer {

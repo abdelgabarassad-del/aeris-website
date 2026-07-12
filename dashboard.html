@@ -5789,27 +5789,7 @@
       }
 
       function spawnHearts() {
-        const rect = container.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + rect.height / 2 - 20;
-
-        for (let i = 0; i < 4; i++) {
-          const heart = document.createElement('div');
-          heart.className = 'otter-heart-particle';
-          heart.textContent = ['❤️', '💖', '🌺', '✨'][Math.floor(Math.random() * 4)];
-          heart.style.position = 'fixed';
-          heart.style.left = `${startX}px`;
-          heart.style.top = `${startY}px`;
-          
-          const dx = (Math.random() - 0.5) * 80;
-          const dy = -(Math.random() * 60 + 40);
-          heart.style.setProperty('--dx', `${dx}px`);
-          heart.style.setProperty('--dy', `${dy}px`);
-          heart.style.animationDelay = `${i * 0.1}s`;
-          
-          document.body.appendChild(heart);
-          setTimeout(() => heart.remove(), 1200);
-        }
+        // Disabled: do not spawn any hearts
       }
 
       let bubbleTimer = Math.random() * 8000 + 4000;
