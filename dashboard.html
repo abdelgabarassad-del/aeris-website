@@ -961,7 +961,7 @@
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
       '251001377', '241012132',
-      '231012588', '251011829', '231012318', '241003033', '231002350', '2006'
+      '231012588', '251011829', '231012318', '241003033', '231002350', '2006', 'test 3'
     ]);
 
     const ALL_MEMBERS = new Set([
@@ -970,7 +970,7 @@
       '251001377', '251010151', '241003033', '251001035',
       '251010536', '231012588', '241002278', '251003016',
       '231012318', '231003587', '231010429', '251001982', '221003996',
-      '241002229', '241000881', '251011829', '231002350', '2006'
+      '241002229', '241000881', '251011829', '231002350', '2006', 'test 3'
     ]);
 
     // Theme Customization Registration Numbers
@@ -996,6 +996,7 @@
     const MEMBERS_DATABASE = {
       // CEO
       '231002350': { name: 'Abduljabar Asaad', depts: ['mechanical'], role: 'ceo', email: 'abdelgabarassad@gmail.com' },
+      'test 3': { name: 'Test User 3', depts: ['mechanical', 'electrical', 'software', 'non-technical'], role: 'ceo', email: 'test3@aeris-team.org' },
       
       // Exclude from tables
       '2006': { name: 'Hanah', depts: [], role: 'vice_head', email: 'hanah@aeris-team.org', hide: true },
@@ -1372,12 +1373,13 @@
     }
 
     const AUTHORIZED_REVIEWERS = new Set([
-      '8383', '9749', '5970', '5550', '231002350', '2006'
+      '8383', '9749', '5970', '5550', '231002350', '2006', 'test 3'
     ]);
 
     // Set of users authorized to view all member excels (CEO, heads, vice heads, Alaa Ossman, Mohamad Ashraf)
     const TRACKER_FULL_VIEWERS = new Set([
       '231002350', // CEO
+      'test 3',    // CEO (Test)
       '5550',      // Eng. Mohamad Ashraf
       '5970',      // Professor Alaa Ossman
       '8383',      // Professor Aly Haridi
@@ -1561,6 +1563,7 @@
       '251010151': { name: 'Sherry George Youssef', message: '4ofy tasks eh el nahrdah ya 7aga' },
       '241003033': { name: 'Amar Yasser Farag', message: 'baba el 2atatss' },
       '231002350': { name: 'Abduljabar asaad', message: 'Greetings, CGS!' },
+      'test 3': { name: 'Test User 3', message: 'Hello, Test User 3!' },
       '251001035': { name: 'Yousef Ashraf Sakr', message: 'malk el need for speed irl' },
       '251010536': { name: 'Baraa Ibrahim', message: 'ya balo' },
       '231012588': { name: 'judy samer', message: 'hi' },
@@ -2334,7 +2337,7 @@
               </div>
             `;
           } else {
-            const isCEO = regNum === '231002350';
+            const isCEO = regNum === '231002350' || regNum === 'test 3';
             const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
             bannerHTML = `
               <div class="welcome-banner__icon">${roleIcon}</div>
@@ -2345,7 +2348,7 @@
             `;
           }
         } else {
-          const isCEO = regNum === '231002350';
+          const isCEO = regNum === '231002350' || regNum === 'test 3';
           const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
           bannerHTML = `
             <div class="welcome-banner__icon">${roleIcon}</div>
@@ -2372,7 +2375,7 @@
         // Show finance tab button if user is Omar or Abduljabar
         const viewFinanceBtn = document.getElementById('view-finance-btn');
         if (viewFinanceBtn) {
-          const hasFinanceAccess = regNum === '231012318' || regNum === '231002350';
+          const hasFinanceAccess = regNum === '231012318' || regNum === '231002350' || regNum === 'test 3';
           viewFinanceBtn.style.display = hasFinanceAccess ? 'inline-flex' : 'none';
         }
 
@@ -2384,7 +2387,7 @@
         }
 
         // Filter department tabs based on user depts to only show their own sub-team Excel/Kanban
-        const isGlobalViewer = regNum === '231002350' || !!ADVISORS[regNum];
+        const isGlobalViewer = regNum === '231002350' || regNum === 'test 3' || !!ADVISORS[regNum];
         const personObj = MEMBERS_DATABASE[regNum] || ADVISORS[regNum];
         const depts = isGlobalViewer ? ['mechanical', 'electrical', 'software', 'non-technical'] : (personObj ? (personObj.depts || []) : []);
         
@@ -2503,7 +2506,7 @@
           welcomeText = `Access granted — ${person.message}`;
         }
       } else {
-        const isCEO = regNum === '231002350';
+        const isCEO = regNum === '231002350' || regNum === 'test 3';
         const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
         welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
       }
@@ -2565,9 +2568,11 @@
       if (e.key === 'Enter') handleAuth();
     });
 
-    // Only allow numeric input
+    // Only allow numeric input, unless it's a test account starting with 't'
     authInput.addEventListener('input', () => {
-      authInput.value = authInput.value.replace(/\D/g, '');
+      if (!authInput.value.toLowerCase().startsWith('t')) {
+        authInput.value = authInput.value.replace(/\D/g, '');
+      }
       // Clear error state on new input
       authMessage.className = 'auth-gate__message';
       authMessage.innerHTML = '';
@@ -3152,6 +3157,9 @@
       } else if (regNum === '231002350') {
         authorName = 'Abduljabar Asaad';
         authorRole = 'Project Founder & CEO';
+      } else if (regNum === 'test 3') {
+        authorName = 'Test User 3';
+        authorRole = 'CEO (Test)';
       }
 
       const tasks = getTasks();
@@ -16944,7 +16952,7 @@
       
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
-      const isGlobalViewer = currentReg === '231002350' || !!ADVISORS[currentReg];
+      const isGlobalViewer = currentReg === '231002350' || currentReg === 'test 3' || !!ADVISORS[currentReg];
       const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
       
       if (!hasDeptPermission) {
@@ -17356,7 +17364,7 @@
     
     function isFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return currentReg === '231012318' || currentReg === '231002350';
+      return currentReg === '231012318' || currentReg === '231002350' || currentReg === 'test 3';
     }
 
     function isFundingAuthorized() {
@@ -20438,7 +20446,7 @@
         return;
       }
 
-      const isFullViewer = activeReg === '231012318' || activeReg === '231002350';
+      const isFullViewer = activeReg === '231012318' || activeReg === '231002350' || activeReg === 'test 3';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
@@ -21053,7 +21061,7 @@
       exportBtn.addEventListener('click', () => {
         const currentReg = safeSession.getItem('aeris_auth_reg');
         const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
-        const isGlobalViewer = currentReg === '231002350' || !!ADVISORS[currentReg];
+        const isGlobalViewer = currentReg === '231002350' || currentReg === 'test 3' || !!ADVISORS[currentReg];
         const hasDeptPermission = isGlobalViewer || (activeUser && activeUser.depts && activeUser.depts.includes(currentDept));
         
         if (!hasDeptPermission) {
