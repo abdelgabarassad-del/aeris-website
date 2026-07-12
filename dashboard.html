@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Luckiest+Guy&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=2.2" />
-  <link rel="stylesheet" href="dashboard.css?v=2.2" />
+  <link rel="stylesheet" href="dashboard.css?v=2.3" />
   <style>
     @keyframes spinner {
       to { transform: rotate(360deg); }
@@ -4690,6 +4690,7 @@
       }
 
       document.body.classList.add('stitch-theme');
+      console.log("[STITCH THEME] applyStitchTheme() running. Calling initSeaOtter...");
 
       // Inject custom animated background elements
       if (!document.querySelector('.stitch-bg-elements')) {
@@ -5381,6 +5382,7 @@
 
     function initSeaOtter() {
       if (otterSpawned) return;
+      console.log("[STITCH THEME] initSeaOtter() running! Spawning sea otter...");
 
       const container = document.createElement('div');
       container.className = 'sea-otter-container walking';
