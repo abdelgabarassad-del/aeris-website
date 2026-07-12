@@ -4684,7 +4684,8 @@
     function applyStitchTheme() {
       if (!isStitchUser()) {
         document.body.classList.remove('stitch-theme');
-        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements, .stitch-ukulele-container, .stitch-badness-container').forEach(el => el.remove());
+        document.querySelectorAll('.stitch-deco, .stitch-empty-deco, .stitch-corner, .stitch-corner-tl, .stitch-ohana, .stitch-paws, .stitch-bubble, .stitch-deco-trail, .stitch-bg-elements, .stitch-ukulele-container, .stitch-badness-container, .sea-otter-container, .otter-heart-particle, .otter-bubble-particle, .otter-bubble-pop-effect').forEach(el => el.remove());
+        cleanupSeaOtter();
         return;
       }
 
@@ -5367,7 +5368,494 @@
           updateBadness();
         }
       }
+
+      // Initialize sea otter screen pet
+      initSeaOtter();
     }
+
+    // ==========================================================================
+    // Ollie the Sea Otter companion variables and logic
+    // ==========================================================================
+    let otterAnimationId = null;
+    let otterSpawned = false;
+
+    function initSeaOtter() {
+      if (otterSpawned) return;
+
+      const container = document.createElement('div');
+      container.className = 'sea-otter-container walking';
+      container.id = 'sea-otter-companion';
+      
+      container.innerHTML = `
+        <div class="sea-otter-character">
+          <svg class="sea-otter-svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <!-- Tail -->
+            <g class="otter-tail" style="transform-origin: 30px 65px;">
+              <path d="M 30,70 Q 15,75 10,65 Q 15,55 35,62 Z" fill="#8a532b" />
+            </g>
+            <!-- Feet -->
+            <g class="otter-feet" style="transform-origin: 50px 80px;">
+              <ellipse cx="38" cy="82" rx="7" ry="4" fill="#70411d" class="otter-foot-l" style="transform-origin: 38px 82px;" />
+              <ellipse cx="62" cy="82" rx="7" ry="4" fill="#70411d" class="otter-foot-r" style="transform-origin: 62px 82px;" />
+            </g>
+            <!-- Body -->
+            <path d="M 30,50 Q 25,75 50,80 Q 75,75 70,50 Q 68,38 50,38 Q 32,38 30,50 Z" fill="#a0653c" class="otter-body" />
+            <!-- Belly Patch -->
+            <path d="M 36,54 Q 32,70 50,75 Q 68,70 64,54 Q 60,46 50,46 Q 40,46 36,54 Z" fill="#e8d5c4" class="otter-belly" />
+            <!-- Head Group -->
+            <g class="otter-head" style="transform-origin: 50px 30px;">
+              <!-- Ears -->
+              <circle cx="34" cy="24" r="6" fill="#8a532b" />
+              <circle cx="34" cy="24" r="3.5" fill="#f8c3cd" />
+              <circle cx="66" cy="24" r="6" fill="#8a532b" />
+              <circle cx="66" cy="24" r="3.5" fill="#f8c3cd" />
+              <!-- Main Head -->
+              <circle cx="50" cy="30" r="18" fill="#a0653c" />
+              <!-- Face Patch -->
+              <path d="M 34,32 C 34,22 66,22 66,32 C 66,42 34,42 34,32 Z" fill="#fcf3eb" />
+              <!-- Eyes -->
+              <circle cx="43" cy="28" r="2" fill="#2d2d2d" />
+              <circle cx="43.5" cy="27.5" r="0.6" fill="#ffffff" />
+              <circle cx="57" cy="28" r="2" fill="#2d2d2d" />
+              <circle cx="56.5" cy="27.5" r="0.6" fill="#ffffff" />
+              <!-- Blush -->
+              <circle cx="38" cy="32" r="2.5" fill="#ffb3ba" opacity="0.7" />
+              <circle cx="62" cy="32" r="2.5" fill="#ffb3ba" opacity="0.7" />
+              <!-- Nose/Muzzle -->
+              <path d="M 46,32 Q 50,30 54,32 Q 54,36 50,36 Q 46,36 46,32 Z" fill="#e8d5c4" />
+              <ellipse cx="50" cy="31.5" rx="2" ry="1.2" fill="#1f1f1f" />
+              <!-- Mouth -->
+              <path d="M 48.5,33 Q 50,34.5 50,33 Q 50,34.5 51.5,33" fill="none" stroke="#2d2d2d" stroke-width="0.8" stroke-linecap="round" />
+            </g>
+            <!-- Held Items -->
+            <g class="otter-held-item shell" style="display: none;">
+              <path d="M 45,55 C 43,50 57,50 55,55 C 57,58 43,58 45,55" fill="#ffdfba" stroke="#b88a5c" stroke-width="0.5" />
+              <line x1="47" y1="52" x2="48" y2="56" stroke="#b88a5c" stroke-width="0.4" />
+              <line x1="50" y1="51" x2="50" y2="56" stroke="#b88a5c" stroke-width="0.4" />
+              <line x1="53" y1="52" x2="52" y2="56" stroke="#b88a5c" stroke-width="0.4" />
+            </g>
+            <g class="otter-held-item starfish" style="display: none;">
+              <path d="M 50,46 L 53,52 L 60,53 L 55,57 L 57,64 L 50,60 L 43,64 L 45,57 L 40,53 L 47,52 Z" fill="#ffb3ba" stroke="#e06a74" stroke-width="0.5" />
+              <circle cx="48" cy="53" r="0.5" fill="#2d2d2d" />
+              <circle cx="52" cy="53" r="0.5" fill="#2d2d2d" />
+            </g>
+            <g class="otter-held-item flower" style="display: none;">
+              <circle cx="50" cy="54" r="2.5" fill="#ffcc00" />
+              <circle cx="45" cy="54" r="3" fill="#ff7fa5" />
+              <circle cx="55" cy="54" r="3" fill="#ff7fa5" />
+              <circle cx="50" cy="49" r="3" fill="#ff7fa5" />
+              <circle cx="50" cy="59" r="3" fill="#ff7fa5" />
+            </g>
+            <!-- Paws / Arms -->
+            <g class="otter-paws">
+              <path d="M 32,50 Q 42,54 46,52" fill="none" stroke="#a0653c" stroke-width="5" stroke-linecap="round" class="otter-paw-l" style="transform-origin: 32px 50px;" />
+              <path d="M 68,50 Q 58,54 54,52" fill="none" stroke="#a0653c" stroke-width="5" stroke-linecap="round" class="otter-paw-r" style="transform-origin: 68px 50px;" />
+            </g>
+          </svg>
+        </div>
+      `;
+
+      document.body.appendChild(container);
+      otterSpawned = true;
+
+      const otterWidth = 85;
+      const otterHeight = 85;
+      let x = window.innerWidth - otterWidth - 50;
+      let y = window.innerHeight - otterHeight - 12;
+      let vx = 0;
+      let vy = 0;
+      let state = 'walking';
+      let direction = -1;
+      let isDragging = false;
+      let dragOffsetX = 0;
+      let dragOffsetY = 0;
+      let lastX = x;
+      let lastY = y;
+      let lastTime = performance.now();
+      let stateTimer = Math.random() * 4000 + 2000;
+      
+      const items = ['none', 'shell', 'starfish', 'flower'];
+      let currentItem = 'none';
+
+      updateElementPos();
+
+      function updateElementPos() {
+        container.style.left = `${x}px`;
+        container.style.bottom = `${window.innerHeight - y - otterHeight}px`;
+        const character = container.querySelector('.sea-otter-character');
+        if (character) {
+          character.style.transform = `scaleX(${direction})`;
+        }
+      }
+
+      container.addEventListener('mousedown', startDrag);
+      container.addEventListener('touchstart', startDrag, { passive: false });
+
+      function startDrag(e) {
+        e.preventDefault();
+        isDragging = true;
+        state = 'dragged';
+        vx = 0;
+        vy = 0;
+        
+        container.className = 'sea-otter-container dragged';
+
+        const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+
+        dragOffsetX = clientX - x;
+        dragOffsetY = clientY - y;
+
+        lastX = clientX;
+        lastY = clientY;
+        lastTime = performance.now();
+
+        window.addEventListener('mousemove', dragMove);
+        window.addEventListener('touchmove', dragMove, { passive: false });
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+      }
+
+      function dragMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+
+        x = clientX - dragOffsetX;
+        y = clientY - dragOffsetY;
+
+        x = Math.max(0, Math.min(window.innerWidth - otterWidth, x));
+        y = Math.max(0, Math.min(window.innerHeight - otterHeight, y));
+
+        const now = performance.now();
+        const dt = now - lastTime;
+        if (dt > 0) {
+          vx = (clientX - lastX) / (dt / 16.666);
+          vy = (clientY - lastY) / (dt / 16.666);
+          vx = Math.max(-15, Math.min(15, vx));
+          vy = Math.max(-15, Math.min(15, vy));
+        }
+
+        if (clientX > lastX + 1) {
+          direction = 1;
+        } else if (clientX < lastX - 1) {
+          direction = -1;
+        }
+
+        lastX = clientX;
+        lastY = clientY;
+        lastTime = now;
+
+        updateElementPos();
+      }
+
+      function endDrag(e) {
+        if (!isDragging) return;
+        isDragging = false;
+
+        window.removeEventListener('mousemove', dragMove);
+        window.removeEventListener('touchmove', dragMove);
+        window.removeEventListener('mouseup', endDrag);
+        window.removeEventListener('touchend', endDrag);
+
+        if (Math.abs(vx) > 0.5 || Math.abs(vy) > 0.5) {
+          state = 'falling';
+          container.className = 'sea-otter-container falling';
+        } else {
+          checkLandedState();
+        }
+      }
+
+      function checkLandedState() {
+        const groundY = window.innerHeight - otterHeight - 12;
+        if (y >= groundY - 5) {
+          y = groundY;
+          vx = 0;
+          vy = 0;
+          
+          if (Math.random() < 0.6) {
+            state = 'walking';
+            container.className = 'sea-otter-container walking';
+          } else {
+            state = 'floating';
+            container.className = 'sea-otter-container floating';
+          }
+        } else {
+          state = 'falling';
+          container.className = 'sea-otter-container falling';
+        }
+      }
+
+      container.addEventListener('click', (e) => {
+        if (Math.abs(vx) > 0.8 || Math.abs(vy) > 0.8) return;
+        triggerHappySpin();
+      });
+
+      function triggerHappySpin() {
+        if (state === 'happy') return;
+        
+        state = 'happy';
+        container.className = 'sea-otter-container happy';
+
+        spawnHearts();
+        
+        if (window.ensureAudioCtx) window.ensureAudioCtx();
+        try {
+          const actx = window.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(450, actx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1200, actx.currentTime + 0.15);
+          
+          gain.gain.setValueAtTime(0.08, actx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.15);
+          
+          osc.start();
+          osc.stop(actx.currentTime + 0.15);
+        } catch(err) {}
+
+        cycleHeldItem();
+
+        setTimeout(() => {
+          if (state === 'happy') {
+            checkLandedState();
+          }
+        }, 600);
+      }
+
+      function cycleHeldItem() {
+        const itemIndex = items.indexOf(currentItem);
+        const nextIndex = (itemIndex + 1) % items.length;
+        currentItem = items[nextIndex];
+        
+        container.querySelectorAll('.otter-held-item').forEach(el => el.style.display = 'none');
+        if (currentItem !== 'none') {
+          const itemEl = container.querySelector(`.otter-held-item.${currentItem}`);
+          if (itemEl) itemEl.style.display = 'block';
+        }
+      }
+
+      function spawnHearts() {
+        const rect = container.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2 - 20;
+
+        for (let i = 0; i < 4; i++) {
+          const heart = document.createElement('div');
+          heart.className = 'otter-heart-particle';
+          heart.textContent = ['❤️', '💖', '🌺', '✨'][Math.floor(Math.random() * 4)];
+          heart.style.left = `${startX}px`;
+          heart.style.top = `${startY}px`;
+          
+          const dx = (Math.random() - 0.5) * 80;
+          const dy = -(Math.random() * 60 + 40);
+          heart.style.setProperty('--dx', `${dx}px`);
+          heart.style.setProperty('--dy', `${dy}px`);
+          heart.style.animationDelay = `${i * 0.1}s`;
+          
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 1200);
+        }
+      }
+
+      let bubbleTimer = Math.random() * 8000 + 4000;
+      function checkBubbleSpawn(dt) {
+        bubbleTimer -= dt;
+        if (bubbleTimer <= 0) {
+          bubbleTimer = Math.random() * 12000 + 6000;
+          if (state !== 'dragged') {
+            spawnBubble();
+          }
+        }
+      }
+
+      function spawnBubble() {
+        const rect = container.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2 + (direction * 2);
+        const startY = rect.top + 32;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'otter-bubble-particle';
+        bubble.style.left = `${startX}px`;
+        bubble.style.top = `${startY}px`;
+
+        const dx = (Math.random() - 0.5) * 150;
+        const dy = -(Math.random() * 150 + 200);
+        bubble.style.setProperty('--dx', `${dx}px`);
+        bubble.style.setProperty('--dy', `${dy}px`);
+
+        bubble.addEventListener('click', (e) => {
+          e.stopPropagation();
+          popBubble(bubble);
+        });
+
+        document.body.appendChild(bubble);
+        setTimeout(() => {
+          if (bubble.parentNode) bubble.remove();
+        }, 4000);
+      }
+
+      function popBubble(bubbleEl) {
+        const rect = bubbleEl.getBoundingClientRect();
+        bubbleEl.remove();
+
+        const pop = document.createElement('div');
+        pop.className = 'otter-bubble-pop-effect';
+        pop.style.left = `${rect.left + rect.width/2 - 12}px`;
+        pop.style.top = `${rect.top + rect.height/2 - 12}px`;
+        document.body.appendChild(pop);
+        setTimeout(() => pop.remove(), 250);
+
+        try {
+          const actx = window.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, actx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1500, actx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.04, actx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.08);
+          osc.start(); osc.stop(actx.currentTime + 0.08);
+        } catch(e) {}
+      }
+
+      let lastFrameTime = performance.now();
+      
+      function updateLoop(timestamp) {
+        const dt = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
+
+        if (document.hidden) {
+          otterAnimationId = requestAnimationFrame(updateLoop);
+          return;
+        }
+
+        const groundY = window.innerHeight - otterHeight - 12;
+        x = Math.max(0, Math.min(window.innerWidth - otterWidth, x));
+
+        if (isDragging) {
+          // Dragging updates are event driven
+        } else if (state === 'falling') {
+          vy += 0.55;
+          x += vx;
+          y += vy;
+          vx *= 0.98;
+          vy *= 0.99;
+
+          if (y >= groundY) {
+            y = groundY;
+            if (vy > 2.5) {
+              vy = -vy * 0.38;
+              vx *= 0.6;
+              try {
+                const actx = window.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+                const osc = actx.createOscillator();
+                const gain = actx.createGain();
+                osc.connect(gain);
+                gain.connect(actx.destination);
+                osc.frequency.setValueAtTime(220, actx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, actx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, actx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.1);
+                osc.start(); osc.stop(actx.currentTime + 0.1);
+              } catch(e) {}
+            } else {
+              vy = 0;
+              vx = 0;
+              checkLandedState();
+            }
+          }
+
+          if (x <= 0) {
+            x = 0;
+            vx = -vx * 0.5;
+            direction = 1;
+          } else if (x >= window.innerWidth - otterWidth) {
+            x = window.innerWidth - otterWidth;
+            vx = -vx * 0.5;
+            direction = -1;
+          }
+
+          updateElementPos();
+        } else if (state === 'happy') {
+          // Physics paused
+        } else {
+          stateTimer -= dt;
+          if (stateTimer <= 0) {
+            stateTimer = Math.random() * 6000 + 4000;
+            const r = Math.random();
+            if (r < 0.4) {
+              state = 'walking';
+              container.className = 'sea-otter-container walking';
+              direction = Math.random() < 0.5 ? -1 : 1;
+            } else if (r < 0.7) {
+              state = 'floating';
+              container.className = 'sea-otter-container floating';
+              vx = (Math.random() - 0.5) * 0.6;
+            } else {
+              state = 'idle';
+              container.className = 'sea-otter-container';
+              vx = 0;
+            }
+          }
+
+          if (state === 'walking') {
+            const speed = 0.9;
+            x += direction * speed;
+
+            if (x <= 15) {
+              x = 15;
+              direction = 1;
+            } else if (x >= window.innerWidth - otterWidth - 15) {
+              x = window.innerWidth - otterWidth - 15;
+              direction = -1;
+            }
+          } else if (state === 'floating') {
+            x += vx;
+            if (x <= 15) {
+              x = 15;
+              vx = -vx;
+              direction = 1;
+            } else if (x >= window.innerWidth - otterWidth - 15) {
+              x = window.innerWidth - otterWidth - 15;
+              vx = -vx;
+              direction = -1;
+            }
+            
+            if (vx > 0.05) direction = 1;
+            else if (vx < -0.05) direction = -1;
+          }
+
+          y = groundY;
+          updateElementPos();
+        }
+
+        checkBubbleSpawn(dt);
+        otterAnimationId = requestAnimationFrame(updateLoop);
+      }
+
+      otterAnimationId = requestAnimationFrame(updateLoop);
+    }
+
+    function cleanupSeaOtter() {
+      if (otterAnimationId) {
+        cancelAnimationFrame(otterAnimationId);
+        otterAnimationId = null;
+      }
+      const el = document.getElementById('sea-otter-companion');
+      if (el) el.remove();
+      document.querySelectorAll('.otter-heart-particle, .otter-bubble-particle, .otter-bubble-pop-effect').forEach(p => p.remove());
+      otterSpawned = false;
+    }
+
 
     /* ========== LIGHTNING MCQUEEN THEME (231003934 only) ========== */
 

@@ -8561,6 +8561,244 @@ body.stitch-theme {
 }
 
 
+/* ==========================================================================
+   🐾 OLLIE THE SEA OTTER COMPANION (For Hannah's Stitch Theme)
+   ========================================================================== */
+.sea-otter-container {
+  position: fixed;
+  width: 85px;
+  height: 85px;
+  bottom: 12px;
+  left: 100px;
+  z-index: 10000;
+  cursor: grab;
+  user-select: none;
+  pointer-events: auto;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  transition: transform 0.1s ease;
+  will-change: transform, left, bottom;
+}
+
+.sea-otter-container:active {
+  cursor: grabbing;
+}
+
+.sea-otter-character {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+/* Animations based on state */
+
+/* WALKING (WADDLE) */
+.sea-otter-container.walking .sea-otter-character {
+  animation: otterWaddle 0.6s infinite alternate ease-in-out;
+}
+.sea-otter-container.walking .otter-foot-l {
+  animation: footWobbleL 0.6s infinite alternate ease-in-out;
+}
+.sea-otter-container.walking .otter-foot-r {
+  animation: footWobbleR 0.6s infinite alternate ease-in-out 0.3s;
+}
+.sea-otter-container.walking .otter-tail {
+  animation: tailWiggle 0.6s infinite alternate ease-in-out;
+}
+
+/* SWIMMING / FLOATING (IDLE ON BACK) */
+.sea-otter-container.floating .sea-otter-character {
+  animation: otterFloat 2.5s infinite ease-in-out;
+}
+.sea-otter-container.floating .otter-tail {
+  animation: tailWiggleSlow 2s infinite alternate ease-in-out;
+}
+.sea-otter-container.floating .otter-foot-l,
+.sea-otter-container.floating .otter-foot-r {
+  animation: feetPedalSlow 1.5s infinite alternate ease-in-out;
+}
+
+/* DRAGGED (DANGLE) */
+.sea-otter-container.dragged {
+  filter: drop-shadow(0 12px 20px rgba(0,0,0,0.5));
+}
+.sea-otter-container.dragged .sea-otter-character {
+  animation: otterDangle 0.3s infinite alternate ease-in-out;
+}
+.sea-otter-container.dragged .otter-paw-l,
+.sea-otter-container.dragged .otter-paw-r {
+  animation: pawWiggle 0.2s infinite alternate ease-in-out;
+}
+.sea-otter-container.dragged .otter-foot-l,
+.sea-otter-container.dragged .otter-foot-r {
+  animation: feetWiggle 0.25s infinite alternate ease-in-out;
+}
+.sea-otter-container.dragged .otter-tail {
+  animation: tailWiggleFast 0.2s infinite alternate ease-in-out;
+}
+
+/* FALLING */
+.sea-otter-container.falling .sea-otter-character {
+  animation: otterFall 0.4s infinite alternate ease-in-out;
+}
+.sea-otter-container.falling .otter-paw-l,
+.sea-otter-container.falling .otter-paw-r {
+  transform-origin: top center;
+  transform: translateY(-8px) scaleY(1.2);
+}
+
+/* HAPPY SPIN (INTERACTIVE) */
+.sea-otter-container.happy .sea-otter-character {
+  animation: otterSpin 0.6s ease-in-out forwards;
+}
+
+/* KEYFRAMES */
+@keyframes otterWaddle {
+  0% { transform: rotate(-5deg) translateY(0); }
+  100% { transform: rotate(5deg) translateY(-2px); }
+}
+
+@keyframes footWobbleL {
+  0% { transform: translateY(0) scaleY(1); }
+  100% { transform: translateY(-3px) scaleY(0.8); }
+}
+
+@keyframes footWobbleR {
+  0% { transform: translateY(0) scaleY(1); }
+  100% { transform: translateY(-3px) scaleY(0.8); }
+}
+
+@keyframes tailWiggle {
+  0% { transform: rotate(-5deg) translate(-2px, 0); }
+  100% { transform: rotate(8deg) translate(2px, -1px); }
+}
+
+@keyframes tailWiggleSlow {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes tailWiggleFast {
+  0% { transform: rotate(-15deg) translate(-4px, 0); }
+  100% { transform: rotate(20deg) translate(4px, -2px); }
+}
+
+@keyframes feetPedalSlow {
+  0% { transform: translateY(0) rotate(-5deg); }
+  100% { transform: translateY(-2px) rotate(10deg); }
+}
+
+@keyframes otterFloat {
+  0% { transform: rotate(80deg) translateY(0); }
+  50% { transform: rotate(74deg) translateY(-6px); }
+  100% { transform: rotate(80deg) translateY(0); }
+}
+
+@keyframes otterDangle {
+  0% { transform: scale(1.05, 0.95) translateY(0); }
+  100% { transform: scale(0.95, 1.05) translateY(-5px); }
+}
+
+@keyframes pawWiggle {
+  0% { transform: rotate(-15deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes feetWiggle {
+  0% { transform: rotate(-20deg) translateY(-2px); }
+  100% { transform: rotate(20deg) translateY(2px); }
+}
+
+@keyframes otterFall {
+  0% { transform: scale(0.9, 1.1) rotate(-3deg); }
+  100% { transform: scale(1.1, 0.9) rotate(3deg); }
+}
+
+@keyframes otterSpin {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+/* Particles & effects */
+.otter-heart-particle {
+  position: fixed;
+  font-size: 20px;
+  z-index: 10001;
+  pointer-events: none;
+  animation: heartFloatUp 1.2s ease-out forwards;
+}
+
+@keyframes heartFloatUp {
+  0% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.otter-bubble-particle {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 40%, rgba(74, 123, 247, 0.25) 80%, rgba(255,255,255,0) 100%);
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: inset -2px -2px 4px rgba(74, 123, 247, 0.2), 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10001;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: bubbleFloatUp 4s linear forwards;
+}
+
+@keyframes bubbleFloatUp {
+  0% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.otter-bubble-particle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+}
+
+.otter-bubble-pop-effect {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  z-index: 10002;
+  pointer-events: none;
+  animation: bubblePop 0.2s ease-out forwards;
+}
+
+@keyframes bubblePop {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
 
 /* ==========================================================================
    ========== RETRO SOVIET THEME (231002350 only) ==========
