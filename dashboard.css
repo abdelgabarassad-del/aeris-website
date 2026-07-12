@@ -8565,18 +8565,16 @@ body.stitch-theme {
    🐾 OLLIE THE SEA OTTER COMPANION (For Hannah's Stitch Theme)
    ========================================================================== */
 .sea-otter-container {
-  position: fixed;
+  position: absolute;
   width: 85px;
   height: 85px;
-  bottom: 12px;
-  left: 100px;
   z-index: 10000;
   cursor: grab;
   user-select: none;
   pointer-events: auto;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   transition: transform 0.1s ease;
-  will-change: transform, left, bottom;
+  will-change: transform, left, top;
 }
 
 .sea-otter-container:active {
