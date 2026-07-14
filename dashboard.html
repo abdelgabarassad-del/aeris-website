@@ -1148,6 +1148,7 @@
       else if (regNum === '251001767') activeTheme = "totallyspies"; // Esraa Mohammed
 
       // Guide content generation based on role and theme
+      const hasFin = regNum === '231002350' || regNum === 'test 3' || regNum === '231012318' || regNum === '5550' || regNum === '5970';
       let title = "📋 Dashboard Guide & Reference";
       let welcome = "";
       let items = [];
@@ -1207,7 +1208,7 @@
             "<strong>Hunter's Ledger:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to audit the performance and task statuses of all hunters in the nightmare.",
             "<strong>Directive Transitation:</strong> Advance hunt phases (<code>▶ Start</code> / <code>✓ Done</code>) on task cards. Obsolete tasks can be banished using the <code>&times;</code> button.",
             "<strong>Dream Broadcasts:</strong> Write announcements on the News Feed to guide fellow hunters.",
-            "<strong>Nightmare Reserves (Finances):</strong> Access the Budget and Funding trackers to manage EGP allocations, edit transaction entries, and log hunter payment contributions."
+            hasFin ? "<strong>Nightmare Reserves (Finances):</strong> Access the Budget and Funding trackers to manage EGP allocations, edit transaction entries, and log hunter payment contributions." : "<strong>Nightmare Expenses (Finances):</strong> Access the Budget Tracker to see total spending and the list of spent items in the nightmare. Total income and net budget details are hidden."
           ];
         } else if (activeTheme === 'existential') {
           title = "⏳ Existential Project Survival Guide";
@@ -1217,7 +1218,7 @@
             "<strong>Survival Ledger:</strong> Audit the <strong>Progress Tracker (Excel)</strong> matrix to check if team members are performing their chores.",
             "<strong>Delete Direct:</strong> Purge tasks using the <code>&times;</code> button once they are no longer relevant in this timeline. Move tasks with <code>▶ Start</code> and <code>✓ Done</code>.",
             "<strong>Scream into the Void:</strong> Publish news announcements to keep the collective awake.",
-            "<strong>Void Treasury (Finances):</strong> Access the Budget Tracker and Funding Tracker to manage the team's earthly finances, log payments, and export CSV ledger sheets."
+            hasFin ? "<strong>Void Treasury (Finances):</strong> Access the Budget Tracker and Funding Tracker to manage the team's earthly finances, log payments, and export CSV ledger sheets." : "<strong>Void Expenses (Finances):</strong> Access the Budget Tracker to see what team EGP has been spent in this timeline. Net budget and total income details are hidden."
           ];
         } else if (activeTheme === 'stitch') {
           title = "🌺 Tableau de Bord & Directives d'Ohana";
@@ -1227,7 +1228,7 @@
             "<strong>Matrice d'Ohana :</strong> Basculez entre le <strong>Kanban</strong> et le <strong>Tracker de Progrès (Excel)</strong> pour veiller sur la famille.",
             "<strong>Expedition Tasks:</strong> Utilisez le <strong>Task Upload Form</strong> pour créer de nouvelles tâches, et utilisez les boutons (<code>▶ Start</code> / <code>✓ Done</code>) pour diriger le flux. Supprimez via <code>&times;</code>.",
             "<strong>Dream Broadcasts:</strong> Postez des messages sur le News Board pour que la famille reste alignée.",
-            "<strong>Ohana Treasury (Finances):</strong> Accès complet au Budget et au Funding Tracker pour suivre les collectes de noix de coco, les soldes EGP et enregistrer les contributions."
+            hasFin ? "<strong>Ohana Treasury (Finances):</strong> Accès complet au Budget et au Funding Tracker pour suivre les collectes de noix de coco, les soldes EGP et enregistrer les contributions." : "<strong>Dépenses d'Ohana (Finances):</strong> Accédez au Budget Tracker pour voir le total dépensé et la liste des dépenses. Le budget net et le total des revenus sont cachés."
           ];
         } else if (activeTheme === 'batman') {
           title = "🦇 Batcomputer Technical Reference HUD";
@@ -1237,7 +1238,7 @@
             "<strong>Batcomputer Tracker:</strong> Access the <strong>Progress Tracker (Excel)</strong> to scan overall member performance and edit evaluations.",
             "<strong>Batcomputer Directives:</strong> Initialisez de nouvelles directives avec le <strong>Task Upload Form</strong>, et avancez les états avec <code>▶ Start</code> / <code>✓ Done</code>. Supprimez via <code>&times;</code>.",
             "<strong>Gotham Broadcasts:</strong> Publiez des mises à jour sur le News Feed pour avertir l'équipe.",
-            "<strong>Wayne Enterprises Funding (Finances):</strong> Accès aux données financières (Budget & Funding Trackers) pour gérer le budget et enregistrer les contributions."
+            hasFin ? "<strong>Wayne Enterprises Funding (Finances):</strong> Accès aux données financières (Budget & Funding Trackers) pour gérer le budget et enregistrer les contributions." : "<strong>Batcomputer Expenses (Finances):</strong> Accédez au Budget Tracker pour voir le total des dépenses de Gotham et la liste des dépenses. Le budget net est crypté."
           ];
         } else if (activeTheme === 'mickey') {
           title = "🏰 Guide de la Maison de Mickey & Magie";
@@ -1247,7 +1248,7 @@
             "<strong>Maxitouts Progress:</strong> Auditez le <strong>Progress Tracker (Excel)</strong> pour surveiller les performances de l'équipe et attribuer des notes.",
             "<strong>Maison Directives:</strong> Créez des tâches via le <strong>Task Upload Form</strong>, déplacez avec <code>▶ Start</code> / <code>✓ Done</code>, et supprimez via <code>&times;</code>.",
             "<strong>Maison News:</strong> Diffusez des mises à jour sur le tableau officiel.",
-            "<strong>Clubhouse Treasury (Finances):</strong> Accès aux contrôles financiers complets (Budget & Funding Trackers) pour vérifier les soldes EGP et enregistrer les contributions."
+            hasFin ? "<strong>Clubhouse Treasury (Finances):</strong> Accès aux contrôles financiers complets (Budget & Funding Trackers) pour vérifier les soldes EGP et enregistrer les contributions." : "<strong>Dépenses de la Maison (Finances):</strong> Accédez au Budget Tracker pour voir le total dépensé et la liste des dépenses. Le budget net et les revenus sont cachés."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement de l'Île de Berk";
@@ -1257,7 +1258,7 @@
             "<strong>L'Œil du Dragon:</strong> Basculez vers le <strong>Progress Tracker (Excel)</strong> pour surveiller le statut de l'Ohana.",
             "<strong>Directives du Chef:</strong> Créez des tâches avec le <strong>Task Upload Form</strong>, déplacez avec <code>▶ Start</code> / <code>✓ Done</code>, et supprimez via <code>&times;</code>.",
             "<strong>Annonces de Berk:</strong> Écrivez des alertes de nouvelles pour les cavaliers.",
-            "<strong>Trésor de Berk (Finances):</strong> Accès complet aux registres de Budget et Funding pour suivre les dépenses et les paiements de Berk."
+            hasFin ? "<strong>Trésor de Berk (Finances):</strong> Accès complet aux registres de Budget et Funding pour suivre les dépenses et les paiements de Berk." : "<strong>Dépenses de Berk (Finances):</strong> Accédez au Budget Tracker pour voir le total dépensé pour les dragons. Le budget net et les revenus sont cachés."
           ];
         } else {
           title = "📋 Division Head & Vice Head Management Reference";
@@ -1267,7 +1268,7 @@
             "<strong>Audit Performance:</strong> Switch views to the <strong>Progress Tracker (Excel Matrix)</strong> to monitor department members and update task ratings.",
             "<strong>Task Review:</strong> Move tasks using <code>▶ Start</code> / <code>✓ Done</code> buttons on cards, and delete outdated tasks using the <code>&times;</code> button.",
             "<strong>Publish News:</strong> Post division announcements on the News Board.",
-            "<strong>Financial Controls:</strong> Manage the **Budget Tracker (Excel)** (track income/spendings, add transactions, delete records, export full ledger) and the **Funding Tracker** (set targets and log payments)."
+            hasFin ? "<strong>Financial Controls:</strong> Manage the **Budget Tracker (Excel)** (track income/spendings, add transactions, delete records, export full ledger) and the **Funding Tracker** (set targets and log payments)." : "<strong>Financial View:</strong> Access the **Budget Tracker (Excel)** to monitor team spending and view the spending list. Net budget, income details, and modification controls are hidden."
           ];
         }
       } else {
@@ -17403,7 +17404,7 @@
 
     function isFullFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return HEADS.has(currentReg) || currentReg === '5550' || currentReg === '5970';
+      return currentReg === '231002350' || currentReg === 'test 3' || currentReg === '231012318' || currentReg === '5550' || currentReg === '5970';
     }
 
     function isFundingAuthorized() {
@@ -20649,7 +20650,7 @@
         return;
       }
 
-      const isFullViewer = HEADS.has(activeReg) || activeReg === '5550' || activeReg === '5970';
+      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318' || activeReg === '5550' || activeReg === '5970';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
