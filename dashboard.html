@@ -1164,7 +1164,7 @@
             "<strong>Production Plan Verification:</strong> Switch from the Kanban board to the <strong>Progress Tracker (Excel)</strong> to verify production quotas and check active completion columns.",
             "<strong>DIRECTIVE AUTHORIZATION:</strong> Open individual tasks to write evaluation notes and approve completions (sets approved status).",
             "<strong>Decree Dispatch:</strong> Broadcast mobilization commands and announcements to the entire collective using the <strong>Publish Announcement</strong> panel.",
-            hasFinAccess ? "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to audit capital allocations, view income metrics, and log contribution payments." : "<strong>Treasury Exemption:</strong> Financial/budget tracking portals are restricted for this advisor."
+            hasFinAccess ? "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> to audit capital allocations. (Note: full view of the Funding Tracker is restricted to the CEO and Omar Atwan)." : "<strong>Treasury Exemption:</strong> Financial/budget tracking portals are restricted for this advisor."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement pour Conseillers";
@@ -1174,7 +1174,7 @@
             "<strong>L'Œil de Berk :</strong> Examinez les performances globales de l'Ohana dans le <strong>Tracker de Progrès (Excel)</strong>.",
             "<strong>Évaluation des Directives :</strong> Cliquez sur une tâche pour ajouter vos conseils techniques et cocher l'approbation de fin.",
             "<strong>Annonces du Conseil :</strong> Publiez des messages et des alertes importants sur le tableau officiel.",
-            hasFinAccess ? "<strong>Coffre de l'Île (Finances) :</strong> Ouvrez le tracker de budget et de financement pour auditer les dépenses et enregistrer les contributions." : "<strong>Coffre Restreint :</strong> Les registres de budget ne sont pas disponibles pour ce profil."
+            hasFinAccess ? "<strong>Coffre de l'Île (Finances) :</strong> Ouvrez le tracker de budget pour auditer les dépenses. (Note: la vue complète du Funding Tracker est réservée au CEO et à Omar Atwan)." : "<strong>Coffre Restreint :</strong> Les registres de budget ne sont pas disponibles pour ce profil."
           ];
         } else {
           title = "📋 Faculty & Advisory Management Guide";
@@ -1184,7 +1184,7 @@
             "<strong>Member Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> view to see a full performance matrix of all members.",
             "<strong>Advisory Evaluations (AUTHORIZED_REVIEWERS):</strong> Click any task card to open the technical review portal, write evaluations, and authorize completions (Approve completion).",
             "<strong>Directives & Announcements:</strong> Use the <strong>Publish Announcement</strong> button to post official announcements to the news feed.",
-            hasFinAccess ? "<strong>Financial Telemetry:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to review net budget, collected contributions, and log payments." : "<strong>Financial Exemption:</strong> Budget and funding trackers are hidden from this advisor profile."
+            hasFinAccess ? "<strong>Financial Telemetry:</strong> Access the <strong>Budget Tracker (Excel)</strong> to review net budgets and transactions. Note that full view of the Funding Tracker is restricted to the CEO and Omar Atwan." : "<strong>Financial Exemption:</strong> Budget and funding trackers are hidden from this advisor profile."
           ];
         }
       } else if (role === 'ceo' || (member && member.role === 'ceo')) {
@@ -20650,7 +20650,7 @@
         return;
       }
 
-      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318' || activeReg === '5550' || activeReg === '5970';
+      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
