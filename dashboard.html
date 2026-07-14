@@ -2819,6 +2819,10 @@
 
     // Submit task
     submitBtn.addEventListener('click', () => {
+      if (currentRole !== 'head') {
+        alert("Access Denied: Only the CEO or Team Leaders can create tasks.");
+        return;
+      }
       const title = taskTitle.value.trim();
       const desc = taskDesc.value.trim();
       const priority = taskPriority.value;
@@ -2954,6 +2958,10 @@
 
     function handleTaskAction(e) {
       e.stopPropagation();
+      if (currentRole !== 'head') {
+        alert("Access Denied: Only the CEO or Team Leaders can take action on tasks.");
+        return;
+      }
       const id = e.currentTarget.dataset.id;
       const action = e.currentTarget.dataset.action;
       const tasks = getTasks();
@@ -2967,6 +2975,10 @@
 
     function handleTaskDelete(e) {
       e.stopPropagation();
+      if (currentRole !== 'head') {
+        alert("Access Denied: Only the CEO or Team Leaders can delete tasks.");
+        return;
+      }
       const id = e.currentTarget.dataset.id;
       let tasks = getTasks();
       tasks = tasks.filter(t => t.id !== id);
@@ -13069,6 +13081,16 @@
       }
 
       return _originalTaskCard(task);
+    };
+
+    // Wrap taskCard to hide action buttons (Start/Done) on cards for non-head/non-ceo users
+    const _baseTaskCard = taskCard;
+    taskCard = function(task) {
+      let html = _baseTaskCard(task);
+      if (currentRole !== 'head') {
+        html = html.replace(/<button class="task-card__action"[\s\S]*?<\/button>/gi, '');
+      }
+      return html;
     };
 
     // Patch renderTasks to re-apply French or SpongeBob column headers after every re-render
