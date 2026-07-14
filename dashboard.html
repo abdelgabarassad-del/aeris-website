@@ -5832,7 +5832,7 @@
 
       function getGroundY() {
         if (!dashboardPage) return window.innerHeight - otterHeight - 12;
-        return dashboardPage.scrollHeight - otterHeight - 12;
+        return dashboardPage.clientHeight - otterHeight - 12;
       }
 
       function getPageWidth() {
@@ -5888,7 +5888,7 @@
         const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
         const pageRect = dashboardPage ? dashboardPage.getBoundingClientRect() : { left: 0, top: 0 };
         const pageWidth = getPageWidth();
-        const pageHeight = dashboardPage ? dashboardPage.scrollHeight : window.innerHeight;
+        const pageHeight = dashboardPage ? dashboardPage.clientHeight : window.innerHeight;
 
         x = clientX - pageRect.left - dragOffsetX;
         y = clientY - pageRect.top - dragOffsetY;
@@ -20048,17 +20048,137 @@
         "createdAt": "2026-07-02T00:00:00.000Z",
         "updatedAt": "2026-07-02T00:00:00.000Z",
         "edits": []
+    },
+    {
+        "id": "tx_sp_93",
+        "date": "2026-07-05",
+        "type": "spending",
+        "amount": 200.0,
+        "source_purpose": "To Bassem: 3d payload",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_94",
+        "date": "2026-07-09",
+        "type": "spending",
+        "amount": 5100.0,
+        "source_purpose": "To Bassem: battery",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_95",
+        "date": "2026-07-07",
+        "type": "spending",
+        "amount": 240.0,
+        "source_purpose": "To Hana: resin",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_96",
+        "date": "2038-07-01",
+        "type": "spending",
+        "amount": 290.0,
+        "source_purpose": "To Omar: nails",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_97",
+        "date": "2039-07-01",
+        "type": "spending",
+        "amount": 15.0,
+        "source_purpose": "To Omar: hinges",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_98",
+        "date": "2040-07-01",
+        "type": "spending",
+        "amount": 800.0,
+        "source_purpose": "To Omar: cnc plates",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_99",
+        "date": "2041-07-01",
+        "type": "spending",
+        "amount": 160.0,
+        "source_purpose": "To Omar: tube drilling",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_100",
+        "date": "2026-07-07",
+        "type": "spending",
+        "amount": 195.0,
+        "source_purpose": "To Omar: connectors",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_101",
+        "date": "2026-07-10",
+        "type": "spending",
+        "amount": 5000.0,
+        "source_purpose": "To Omar: ragab",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
+    },
+    {
+        "id": "tx_sp_102",
+        "date": "2026-07-07",
+        "type": "spending",
+        "amount": 18800.0,
+        "source_purpose": "To Omar Atwan: battery",
+        "notes": "Payment: instapay",
+        "addedBy": "Budget Import",
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "updatedAt": "2026-07-02T00:00:00.000Z",
+        "edits": []
     }
 ];
 
     function getTransactions() {
       try {
         let txs = JSON.parse(safeLocal.getItem(FINANCE_STORAGE_KEY));
-        const migrated = safeLocal.getItem('aeris_finance_migrated_v3');
+        const migrated = safeLocal.getItem('aeris_finance_migrated_v4');
         if (!migrated || !Array.isArray(txs)) {
           txs = SEED_TRANSACTIONS;
           safeLocal.setItem(FINANCE_STORAGE_KEY, JSON.stringify(txs));
-          safeLocal.setItem('aeris_finance_migrated_v3', 'true');
+          safeLocal.setItem('aeris_finance_migrated_v4', 'true');
         }
         return txs;
       } catch (e) {
