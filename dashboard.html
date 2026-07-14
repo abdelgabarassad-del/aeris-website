@@ -1154,23 +1154,26 @@
 
       if (role === 'advisor' || advisor) {
         // Faculty / Advisors
+        const hasFinAccess = regNum === '5550' || regNum === '5970';
         if (activeTheme === 'soviet') {
           title = "COMMISSAR FACULTY TELEMETRY HANDBOOK";
-          welcome = "⚒️ Greetings, Comrade Advisor " + name + ". The collective relies on your strategic wisdom. Direct our progress on the red front:";
+          welcome = "⚒️ Greetings, Comrade Advisor " + name + ". The collective relies on your strategic wisdom. Direct our progress on the red fronts:";
           items = [
-            "<strong>Collective Audit:</strong> Monitor all fronts of labor by toggling division tabs (Mechanical, Electrical, Software, Non-Tech).",
-            "<strong>Plan Verification Matrix:</strong> Switch from the Kanban board to the <strong>Progress Tracker (Excel)</strong> to verify production quotas.",
-            "<strong>AUTHORIZED REVIEWERS:</strong> Select individual directives (tasks) to write evaluation notes and approve completions.",
-            "<strong>Official Decrees:</strong> Dispatch commands and updates using the <strong>Publish Announcement</strong> control deck."
+            "<strong>Collective Front Audit:</strong> Monitor all branches of labor by toggling the division tabs (Mechanical, Electrical, Software, Non-Tech).",
+            "<strong>Production Plan Verification:</strong> Switch from the Kanban board to the <strong>Progress Tracker (Excel)</strong> to verify production quotas and check active completion columns.",
+            "<strong>DIRECTIVE AUTHORIZATION:</strong> Open individual tasks to write evaluation notes and approve completions (sets approved status).",
+            "<strong>Decree Dispatch:</strong> Broadcast mobilization commands and announcements to the entire collective using the <strong>Publish Announcement</strong> panel.",
+            hasFinAccess ? "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to audit capital allocations, view income metrics, and log contribution payments." : "<strong>Treasury Exemption:</strong> Financial/budget tracking portals are restricted for this advisor."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement pour Conseillers";
           welcome = "🐉 Bienvenue, Conseiller " + name + ". Guidez les dresseurs de dragons dans leurs entraînements quotidiens :";
           items = [
-            "<strong>Surveillance de l'Île :</strong> Utilisez les onglets pour observer les tâches de chaque division.",
-            "<strong>L'Œil de Berk :</strong> Examinez les performances globales dans le <strong>Tracker de Progrès (Excel)</strong>.",
-            "<strong>Évaluation des Directives :</strong> Cliquez sur une tâche pour ajouter vos conseils techniques et valider l'achèvement.",
-            "<strong>Annonces du Conseil :</strong> Publiez des messages importants sur le tableau officiel."
+            "<strong>Surveillance de l'Île :</strong> Utilisez les onglets de division pour observer les tâches de dressage en cours.",
+            "<strong>L'Œil de Berk :</strong> Examinez les performances globales de l'Ohana dans le <strong>Tracker de Progrès (Excel)</strong>.",
+            "<strong>Évaluation des Directives :</strong> Cliquez sur une tâche pour ajouter vos conseils techniques et cocher l'approbation de fin.",
+            "<strong>Annonces du Conseil :</strong> Publiez des messages et des alertes importants sur le tableau officiel.",
+            hasFinAccess ? "<strong>Coffre de l'Île (Finances) :</strong> Ouvrez le tracker de budget et de financement pour auditer les dépenses et enregistrer les contributions." : "<strong>Coffre Restreint :</strong> Les registres de budget ne sont pas disponibles pour ce profil."
           ];
         } else {
           title = "📋 Faculty & Advisory Management Guide";
@@ -1178,8 +1181,9 @@
           items = [
             "<strong>Multi-Department Audit:</strong> Switch between the Mechanical, Electrical, Software, and Non-Technical tabs to inspect task columns.",
             "<strong>Member Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> view to see a full performance matrix of all members.",
-            "<strong>Advisory Evaluations (AUTHORIZED_REVIEWERS):</strong> Click any task card to open the technical review portal, write evaluations, and authorize completions.",
-            "<strong>Directives & Announcements:</strong> Use the <strong>Publish Announcement</strong> button to post official announcements to the news feed."
+            "<strong>Advisory Evaluations (AUTHORIZED_REVIEWERS):</strong> Click any task card to open the technical review portal, write evaluations, and authorize completions (Approve completion).",
+            "<strong>Directives & Announcements:</strong> Use the <strong>Publish Announcement</strong> button to post official announcements to the news feed.",
+            hasFinAccess ? "<strong>Financial Telemetry:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to review net budget, collected contributions, and log payments." : "<strong>Financial Exemption:</strong> Budget and funding trackers are hidden from this advisor profile."
           ];
         }
       } else if (role === 'ceo' || (member && member.role === 'ceo')) {
@@ -1190,79 +1194,80 @@
           "<strong>Administrative Directives:</strong> Switch department tabs to inspect task progress in each front of the collective.",
           "<strong>Strategic Switcher:</strong> Switch views to inspect the <strong>Progress Matrix</strong> (Excel Tracker) and audit all department achievements.",
           "<strong>Advisory Evaluations:</strong> As a supreme reviewer, click any task card to issue evaluation notes and approve completions.",
-          "<strong>Mobilization Announcements:</strong> Use the <strong>Publish Announcement</strong> panel to dispatch declarations to all members."
+          "<strong>Mobilization Announcements:</strong> Use the <strong>Publish Announcement</strong> panel to dispatch declarations to all members.",
+          "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to manage capital allocations, view net budget/income, and log payments."
         ];
-      } else if (role === 'head' || (member && member.role === 'head')) {
-        // Division Heads
+      } else if (role === 'head' || (member && (member.role === 'head' || member.role === 'vice_head'))) {
+        // Division Heads & Vice Heads
         if (activeTheme === 'bloodborne') {
           title = "🩸 Hunter's Dream Workshop Reference";
           welcome = "🕯️ Ah, Bassem Toulan. The electrical hunt begins anew. Do not let the beastly tasks consume you. Guide your fellow hunters:";
           items = [
-            "<strong>Workshop Blueprints:</strong> Upload electrical directives (tasks) using the <strong>Task Upload Form</strong>.",
-            "<strong>Hunter's Ledger:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to scan the fate of all members in the nightmare.",
-            "<strong>Purge Beasts:</strong> Click &times; on task cards to banish obsolete directives from existence.",
-            "<strong>Dream Broadcasts:</strong> Write notes on the news board to alert the hunters."
+            "<strong>Workshop Blueprints:</strong> Upload and delegate electrical directives using the <strong>Task Upload Form</strong>.",
+            "<strong>Hunter's Ledger:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to audit the performance and task statuses of all hunters in the nightmare.",
+            "<strong>Directive Transitation:</strong> Advance hunt phases (<code>▶ Start</code> / <code>✓ Done</code>) on task cards. Obsolete tasks can be banished using the <code>&times;</code> button.",
+            "<strong>Dream Broadcasts:</strong> Write announcements on the News Feed to guide fellow hunters.",
+            "<strong>Nightmare Reserves (Finances):</strong> Access the Budget and Funding trackers to manage EGP allocations, edit transaction entries, and log hunter payment contributions."
           ];
         } else if (activeTheme === 'existential') {
           title = "⏳ Existential Project Survival Guide";
           welcome = "⏱️ Welcome, Head Omar Atwan. Remember, kolha fi el a5r 62 sanah. Let's manage these mechanical tasks before time runs out:";
           items = [
-            "<strong>Meaningless Tasks:</strong> Create and upload new mechanical directives using the **Task Upload Form**.",
-            "<strong>Survival Ledger:</strong> Switch to the **Progress Tracker (Excel)** view to see if members are doing their chores.",
-            "<strong>Delete direct:</strong> Remove tasks with &times; once they are no longer relevant in this timeline.",
-            "<strong>Scream into the Void:</strong> Post updates on the News Board to notify the collective."
+            "<strong>Meaningless Tasks:</strong> Create and upload new mechanical directives using the <strong>Task Upload Form</strong> before time runs out.",
+            "<strong>Survival Ledger:</strong> Audit the <strong>Progress Tracker (Excel)</strong> matrix to check if team members are performing their chores.",
+            "<strong>Delete Direct:</strong> Purge tasks using the <code>&times;</code> button once they are no longer relevant in this timeline. Move tasks with <code>▶ Start</code> and <code>✓ Done</code>.",
+            "<strong>Scream into the Void:</strong> Publish news announcements to keep the collective awake.",
+            "<strong>Void Treasury (Finances):</strong> Access the Budget Tracker and Funding Tracker to manage the team's earthly finances, log payments, and export CSV ledger sheets."
           ];
-        } else {
-          title = "📋 Division Head Management Reference";
-          welcome = "👥 Welcome, Division Head " + name + ". You are managing the " + (member.depts ? member.depts.join('/') : '') + " department. Use these administrative tools:";
-          items = [
-            "<strong>Create & Delegate:</strong> Formulate tasks with titles, descriptions, priorities, and deadlines using the <strong>Task Upload Form</strong>.",
-            "<strong>Audit Performance:</strong> Switch views to the <strong>Progress Tracker (Excel Matrix)</strong> to monitor individual members.",
-            "<strong>Task Review:</strong> Check active tasks in Kanban columns. Obsolete tasks can be permanently deleted using the &times; button.",
-            "<strong>Publish News:</strong> Post division announcements on the News Board."
-          ];
-        }
-      } else if (member && member.role === 'vice_head') {
-        // Vice Heads
-        if (activeTheme === 'stitch') {
+        } else if (activeTheme === 'stitch') {
           title = "🌺 Tableau de Bord & Directives d'Ohana";
           welcome = "🛸 Aloha, Hannah ! Ohana signifie famille, et famille signifie que personne n'est laissé de côté ni oublié. Bienvenue sur votre console de Vice-Head :";
           items = [
             "<strong>Directives de Stitch :</strong> Changez d'onglet de département pour coordonner l'équipage sur les fronts mécanique et électrique.",
-            "<strong>Matrice d'Ohana :</strong> Basculez entre le <strong>Kanban</strong> et le <strong>Tracker de Progrès</strong> pour veiller sur la famille.",
-            "<strong>Changement de Rôle :</strong> Passez en rôle <strong>Team Head</strong> (Chef d'Équipe) pour aider à créer des tâches pour la famille."
+            "<strong>Matrice d'Ohana :</strong> Basculez entre le <strong>Kanban</strong> et le <strong>Tracker de Progrès (Excel)</strong> pour veiller sur la famille.",
+            "<strong>Expedition Tasks:</strong> Utilisez le <strong>Task Upload Form</strong> pour créer de nouvelles tâches, et utilisez les boutons (<code>▶ Start</code> / <code>✓ Done</code>) pour diriger le flux. Supprimez via <code>&times;</code>.",
+            "<strong>Dream Broadcasts:</strong> Postez des messages sur le News Board pour que la famille reste alignée.",
+            "<strong>Ohana Treasury (Finances):</strong> Accès complet au Budget et au Funding Tracker pour suivre les collectes de noix de coco, les soldes EGP et enregistrer les contributions."
           ];
         } else if (activeTheme === 'batman') {
           title = "🦇 Batcomputer Technical Reference HUD";
           welcome = "🌃 Welcome back, Vice Head Ammar Yasser. Gotham's mechanical department requires vigilance. This Batcomputer console monitors progress:";
           items = [
             "<strong>Tactical Telemetry:</strong> Inspect tasks in the Mechanical column by switching tabs.",
-            "<strong>Batcomputer Tracker:</strong> Access the <strong>Progress Tracker (Excel)</strong> to scan overall member performance.",
-            "<strong>Dark Knight Duties:</strong> Elevate your active role to <strong>Team Head</strong> to initialize new directives (tasks) in the shadows."
+            "<strong>Batcomputer Tracker:</strong> Access the <strong>Progress Tracker (Excel)</strong> to scan overall member performance and edit evaluations.",
+            "<strong>Batcomputer Directives:</strong> Initialisez de nouvelles directives avec le <strong>Task Upload Form</strong>, et avancez les états avec <code>▶ Start</code> / <code>✓ Done</code>. Supprimez via <code>&times;</code>.",
+            "<strong>Gotham Broadcasts:</strong> Publiez des mises à jour sur le News Feed pour avertir l'équipe.",
+            "<strong>Wayne Enterprises Funding (Finances):</strong> Accès aux données financières (Budget & Funding Trackers) pour gérer le budget et enregistrer les contributions."
           ];
         } else if (activeTheme === 'mickey') {
           title = "🏰 Guide de la Maison de Mickey & Magie";
           welcome = "🎈 Oh là là ! Bienvenue, Vice-Head Hala Farouk ! Bienvenue à la Maison de Mickey. Faisons de la magie dans la division non-technique :";
           items = [
-            "<strong>Onglets de la Maison :</strong> Cliquez sur l'onglet Non-Technical pour voir ce que font Mickey et ses amis.",
-            "<strong>Matrice des Maxitouts :</strong> Basculez vers le <strong>Tracker de Progrès (Excel)</strong> pour veiller sur nos membres.",
-            "<strong>Chef de la Maison :</strong> Passez en rôle <strong>Team Head</strong> (Chef d'Équipe) pour aider à la création de tâches."
+            "<strong>Maison Tabs:</strong> Basculez sur l'onglet Non-Technical pour inspecter le travail de Mickey et ses amis.",
+            "<strong>Maxitouts Progress:</strong> Auditez le <strong>Progress Tracker (Excel)</strong> pour surveiller les performances de l'équipe et attribuer des notes.",
+            "<strong>Maison Directives:</strong> Créez des tâches via le <strong>Task Upload Form</strong>, déplacez avec <code>▶ Start</code> / <code>✓ Done</code>, et supprimez via <code>&times;</code>.",
+            "<strong>Maison News:</strong> Diffusez des mises à jour sur le tableau officiel.",
+            "<strong>Clubhouse Treasury (Finances):</strong> Accès aux contrôles financiers complets (Budget & Funding Trackers) pour vérifier les soldes EGP et enregistrer les contributions."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement de l'Île de Berk";
           welcome = "🐉 Bienvenue sur l'île de Berk, Hanah ! Enfourchez votre dragon et menons la division vers la victoire !";
           items = [
-            "<strong>Volez vers les Cibles :</strong> Sélectionnez les onglets pour voir les directives de chaque division.",
-            "<strong>L'Œil du Dragon :</strong> Basculez vers le **Tracker de Progrès (Excel)** pour surveiller le statut de l'Ohana.",
-            "<strong>Chef de Clan :</strong> Passez en rôle **Team Head** pour ordonner de nouvelles directives."
+            "<strong>Volez vers les Cibles:</strong> Naviguez sur les onglets de département pour surveiller les missions d'entraînement.",
+            "<strong>L'Œil du Dragon:</strong> Basculez vers le <strong>Progress Tracker (Excel)</strong> pour surveiller le statut de l'Ohana.",
+            "<strong>Directives du Chef:</strong> Créez des tâches avec le <strong>Task Upload Form</strong>, déplacez avec <code>▶ Start</code> / <code>✓ Done</code>, et supprimez via <code>&times;</code>.",
+            "<strong>Annonces de Berk:</strong> Écrivez des alertes de nouvelles pour les cavaliers.",
+            "<strong>Trésor de Berk (Finances):</strong> Accès complet aux registres de Budget et Funding pour suivre les dépenses et les paiements de Berk."
           ];
         } else {
-          title = "📋 Division Vice-Head Operational Guide";
-          welcome = "👥 Welcome, Vice Head " + name + ". You are supporting the " + (member.depts ? member.depts.join('/') : '') + " department. Here are your operational options:";
+          title = "📋 Division Head & Vice Head Management Reference";
+          welcome = "👥 Welcome, Division Leader " + name + ". You are managing the " + (member.depts ? member.depts.join('/') : '') + " department. Use these administrative tools:";
           items = [
-            "<strong>Milestone Coordination:</strong> Oversee tasks in progress and ensure deadlines are met.",
-            "<strong>Progress Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to monitor department performance.",
-            "<strong>Create Tasks:</strong> Toggle your active role to <strong>Team Head</strong> to gain access to task creation."
+            "<strong>Create & Delegate:</strong> Formulate tasks with titles, descriptions, priorities, and deadlines using the <strong>Task Upload Form</strong>.",
+            "<strong>Audit Performance:</strong> Switch views to the <strong>Progress Tracker (Excel Matrix)</strong> to monitor department members and update task ratings.",
+            "<strong>Task Review:</strong> Move tasks using <code>▶ Start</code> / <code>✓ Done</code> buttons on cards, and delete outdated tasks using the <code>&times;</code> button.",
+            "<strong>Publish News:</strong> Post division announcements on the News Board.",
+            "<strong>Financial Controls:</strong> Manage the **Budget Tracker (Excel)** (track income/spendings, add transactions, delete records, export full ledger) and the **Funding Tracker** (set targets and log payments)."
           ];
         }
       } else {
@@ -1271,89 +1276,95 @@
           title = "🍍 Bikini Bottom Task Navigation Guide";
           welcome = "🌊 Ahoy, Hana Moataz! Happy Birthday! Let's get ready to make some bubbles in the mechanical department under the sea! 🎂🎈";
           items = [
-            "<strong>Under the Sea Tasks:</strong> Click the Mechanical tab to browse current chores and checklist items.",
-            "<strong>Unbox Present & Celebrate:</strong> Use the <strong>▶ Unbox</strong> button to start a task, and <strong>✓ Celebrate</strong> once completed! Let's get that cake!",
-            "<strong>Bikini Bottom Telemetry:</strong> Check task details by clicking them to read notes from Mr. Krabs (the advisors)."
+            "<strong>Under the Sea Tasks:</strong> Click the Mechanical tab to browse current chores and checklist items in read-only mode.",
+            "<strong>Bikini Bottom Telemetry:</strong> Check task details and read evaluations from Mr. Krabs (the advisors). Action buttons (Start/Done) are locked.",
+            "<strong>Patrick's Progress:</strong> Switch to the Progress Tracker to see your own task row.",
+            "<strong>Krusty Krab Vault (Finances):</strong> Access the Budget Tracker to see total spending and the spendings list. Net budget and secret formula income details are hidden!"
           ];
         } else if (activeTheme === 'mcqueen') {
           title = "⚡ Radiator Springs Piston Cup Guide";
           welcome = "🏎️ Ka-chow, Ibrahim Hassan! Rev up your engines and let's speed through the software and mechanical tasks! 🏁";
           items = [
             "<strong>Track Map:</strong> Click tabs to select your racing tracks (departments).",
-            "<strong>Piston Cup Race:</strong> Click <strong>▶ Start</strong> to speed out of the pit stop, and click <strong>✓ Done</strong> to cross the finish line!",
-            "<strong>Pit Stop Reviews:</strong> Double-click task cards to read technical notes from Doc Hudson (your advisors)."
+            "<strong>Race Control:</strong> View task cards. Speed control buttons (Start/Done) are restricted to crew chiefs (team heads).",
+            "<strong>Pit Stop Reviews:</strong> Click task cards to read technical feedback from Doc Hudson (your advisors).",
+            "<strong>Piston Cup Telemetry (Finances):</strong> Check team spending logs. Total income and net funding stats are locked in the trailer."
           ];
         } else if (activeTheme === 'spiderman') {
           title = "🕷️ Daily Bugle Superhero Guide";
           welcome = "🕸️ Hey there, Hazem Walid! Remember, with great power comes great responsibility. Let's web-swing through mechanical tasks!";
           items = [
-            "<strong>Web Grid:</strong> Click Mechanical or other tabs to scan the neighborhood for pending tasks.",
-            "<strong>Friendly Neighborhood Actions:</strong> Click <strong>▶ Start</strong> to sling webs onto a task, and <strong>✓ Done</strong> once the villain is captured!",
-            "<strong>Bugle Telemetry:</strong> Open tasks to view notes from J. Jonah Jameson (your advisors)."
+            "<strong>Web Grid:</strong> Click Mechanical or other tabs to scan the neighborhood for pending tasks in read-only mode.",
+            "<strong>Bugle Telemetry:</strong> Open tasks to view notes from J. Jonah Jameson (your advisors). Action buttons are locked.",
+            "<strong>Daily Bugle Ledger (Finances):</strong> Access the Budget Tracker to track team expenses. Total revenue and net budget are restricted to Stark Industries."
           ];
         } else if (activeTheme === 'sonic') {
           title = "🌀 Green Hill Zone Loop Reference";
           welcome = "🦔 Gotta go fast, Sara Ahmed! Collect those gold rings and sprint through the software tasks at supersonic speed!";
           items = [
             "<strong>Zone Selection:</strong> Select the Software tab to view active task loops.",
-            "<strong>Supersonic Sprint:</strong> Use <strong>▶ Start</strong> to spin-dash into action, and click <strong>✓ Done</strong> to complete the level before Dr. Eggman catches up!",
-            "<strong>Chaos Emerald Details:</strong> Tap task cards to view feedback on your tasks."
+            "<strong>Supersonic Spectator:</strong> Scan task cards. Level completion actions (Start/Done) are locked for Tails and Sonic team leaders.",
+            "<strong>Chaos Emerald Details:</strong> Tap task cards to view feedback on your tasks.",
+            "<strong>Ring Counter (Finances):</strong> Access the Budget Tracker to view spending records. Total team gold rings and net budget are locked by the system."
           ];
         } else if (activeTheme === 'tomjerry') {
           title = "🧀 Cat & Mouse Chase Reference Card";
           welcome = "🐱 Sba7 el fol, Amr! Grab your mouse traps and let's jump into the software, mechanical, and electrical tasks! 🐭";
           items = [
             "<strong>Chase Tracks:</strong> Toggle tabs to see tasks in software, mechanical, and electrical sectors.",
-            "<strong>Mischief & Action:</strong> Click <strong>▶ Start</strong> to set the trap, and click <strong>✓ Done</strong> once the chase is won!",
-            "<strong>Trap Details:</strong> Open tasks to inspect evaluations and feedback."
+            "<strong>Chase Spec:</strong> View task cards. Trap actions (Start/Done) are locked for the main housekeepers (team leaders).",
+            "<strong>Trap Details:</strong> Open tasks to inspect evaluations and feedback.",
+            "<strong>Cheese Ledger (Finances):</strong> Access the Budget Tracker to track team expenses. Total income and net budget cheese wheels are hidden."
           ];
         } else if (activeTheme === 'tweety') {
           title = "🐣 Tweety Bird Cage Guide";
           welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our mechanical tasks.";
           items = [
             "<strong>Bird's Eye View:</strong> Click Mechanical to view what tasks are hanging on the swing.",
-            "<strong>Canary Actions:</strong> Click <strong>▶ Start</strong> to chirp at a task, and click <strong>✓ Done</strong> once the cat is gone!",
-            "<strong>Feather Details:</strong> Click a task to read messages and advice from Granny."
+            "<strong>Feather Details:</strong> Click a task to read messages and advice from Granny. Workflow actions are locked.",
+            "<strong>Cage Accounts (Finances):</strong> Access the Budget Tracker to monitor birdseed spending. Net budget and total income are hidden."
           ];
         } else if (activeTheme === 'pooh') {
           title = "🍯 Hundred Acre Wood Hunny Guide";
           welcome = "🧸 Sba7 el fol, Sara Abdo! Welcome back to a cozy corner in the Hundred Acre Wood. Let's find some hunny (tasks)!";
           items = [
             "<strong>Wood Paths:</strong> Click Mechanical tab to see what Piglet and Pooh have set up for you.",
-            "<strong>Hunny Jar Actions:</strong> Click <strong>▶ Start</strong> to dip into a task, and click <strong>✓ Done</strong> once the jar is full and empty of troubles!",
-            "<strong>Christopher Robin's Notes:</strong> Open task cards to read gentle feedback from your advisors."
+            "<strong>Christopher Robin's Notes:</strong> Open task cards to read gentle feedback from your advisors. Workflow actions are locked.",
+            "<strong>Hunny Ledger (Finances):</strong> Access the Budget Tracker to monitor team spending. Total honey income and net budget are restricted."
           ];
         } else if (activeTheme === 'ironman') {
           title = "🚀 Stark Industries Mark LXXXV HUD";
           welcome = "🤖 Jarvis online, Baraa Ibrahim. Repulsors charged. Ready to calibrate mechanical designs for Stark Industries.";
           items = [
             "<strong>System Diagnostics:</strong> Click Mechanical to view the task list.",
-            "<strong>Repulsor Ignition:</strong> Click <strong>▶ Start</strong> to initialize armor assembly, and click <strong>✓ Done</strong> to mark the mission completed!",
-            "<strong>Tony Stark Feedback:</strong> Open task detail parameters to read advisory recommendations."
+            "<strong>Tony Stark Feedback:</strong> Open task detail parameters to read advisory recommendations. State changes are locked.",
+            "<strong>Stark Ledger (Finances):</strong> Access the Budget Tracker to track team expenditures. Stark Industries revenue and net budget are encrypted."
           ];
         } else if (activeTheme === 'ladybug') {
           title = "🐞 Miraculous Superhero Action Reference";
           welcome = "🌸 Sba7 el fol, Sherry! Tikki, spots on! Let's use our lucky charms to clear our mechanical tasks!";
           items = [
             "<strong>Paris Map:</strong> Tap Mechanical tab to locate the pending task spots.",
-            "<strong>Lucky Charm Actions:</strong> Click <strong>▶ Start</strong> to activate your superpower, and click <strong>✓ Done</strong> to de-evilize the task!",
-            "<strong>Miraculous Box:</strong> Click on tasks to view advisor comments and checklist details."
+            "<strong>Miraculous Box:</strong> Click on tasks to view advisor comments and checklist details. Action triggers are locked.",
+            "<strong>Miraculous Vault (Finances):</strong> Access the Budget Tracker to see spending entries. Net budget and total income are hidden."
           ];
         } else if (activeTheme === 'totallyspies') {
           title = "🕵️‍♀️ WOOHP Spy Gadget Mission Briefing";
           welcome = "🍑 Welcome agent Esraa Mohammed! Jerry has locked in a new mission briefing for you. Get your laser lipsticks ready!";
           items = [
             "<strong>WOOHP Objective:</strong> Tap the Mechanical tab to view your assigned espionage tasks.",
-            "<strong>Missions Directive:</strong> Click <strong>▶ Start</strong> to deploy into undercover action, and click <strong>✓ Done</strong> to neutralize the villain!",
-            "<strong>Classified Intel:</strong> Open cards to read secret messages and feedback from Jerry."
+            "<strong>Classified Intel:</strong> Open cards to read secret messages and feedback from Jerry. Mission status edits are locked.",
+            "<strong>WOOHP Budget (Finances):</strong> Access the Budget Tracker to monitor mission expenditures. Total agency funding and net balance are classified."
           ];
         } else {
           title = "📋 Team Member Guide & Reference";
-          welcome = "💻 Welcome, Team Member " + name + ". Follow these steps to log your contributions and tasks efficiently:";
+          welcome = "💻 Welcome, Team Member " + name + ". Here are your available operational tools:";
           items = [
-            "<strong>Track Assignments:</strong> Toggle department tabs to see tasks uploaded by your heads.",
-            "<strong>Update Workflow:</strong> Click <strong>▶ Start</strong> to move tasks to \"In Progress\" when you begin work. Click <strong>✓ Done</strong> once completed.",
-            "<strong>Check Advisor Reviews:</strong> Click on tasks to view evaluation notes and feedback from professors and mentors."
+            "<strong>Track Assignments:</strong> Toggle department tabs to view tasks uploaded by your team leaders.",
+            "<strong>Task Read-Only View:</strong> You can click on task cards to read detailed descriptions and advisor review comments. Action buttons (Start/Done/Delete) are locked for leaders only.",
+            "<strong>My Progress:</strong> Switch to the <strong>Progress Tracker (Excel)</strong> view to track your own task completion status row.",
+            "<strong>Restricted Finances:</strong> Access the <strong>Budget Tracker (Excel)</strong> to monitor total team spending and view the spendings list. Income details, net budgets, and modification tools are hidden from your view.",
+            "<strong>Restricted Funding:</strong> Access the <strong>Funding Tracker</strong> to review your personal payment progress, target, and remaining debt."
           ];
         }
       }
