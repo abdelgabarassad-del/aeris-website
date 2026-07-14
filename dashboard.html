@@ -17392,7 +17392,7 @@
 
     function isFullFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return currentReg === '231002350' || currentReg === 'test 3' || currentReg === '231012318' || currentReg === '5550' || currentReg === '5970';
+      return HEADS.has(currentReg) || currentReg === '5550' || currentReg === '5970';
     }
 
     function isFundingAuthorized() {
@@ -20638,7 +20638,7 @@
         return;
       }
 
-      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318' || activeReg === '5550' || activeReg === '5970';
+      const isFullViewer = HEADS.has(activeReg) || activeReg === '5550' || activeReg === '5970';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
