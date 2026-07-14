@@ -2372,17 +2372,17 @@
           viewTabs.style.display = hasAccess ? 'flex' : 'none';
         }
 
-        // Show finance tab button if user is in ALL_MEMBERS
+        // Show finance tab button if user is in ALL_MEMBERS or is authorized advisor
         const viewFinanceBtn = document.getElementById('view-finance-btn');
         if (viewFinanceBtn) {
-          const hasFinanceAccess = ALL_MEMBERS.has(regNum);
+          const hasFinanceAccess = ALL_MEMBERS.has(regNum) || regNum === '5550' || regNum === '5970';
           viewFinanceBtn.style.display = hasFinanceAccess ? 'inline-flex' : 'none';
         }
 
-        // Show funding tab button if user is in ALL_MEMBERS
+        // Show funding tab button if user is in ALL_MEMBERS or is authorized advisor
         const viewFundingBtn = document.getElementById('view-funding-btn');
         if (viewFundingBtn) {
-          const hasFundingAccess = ALL_MEMBERS.has(regNum);
+          const hasFundingAccess = ALL_MEMBERS.has(regNum) || regNum === '5550' || regNum === '5970';
           viewFundingBtn.style.display = hasFundingAccess ? 'inline-flex' : 'none';
         }
 
@@ -17365,17 +17365,17 @@
     
     function isFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return ALL_MEMBERS.has(currentReg);
+      return ALL_MEMBERS.has(currentReg) || currentReg === '5550' || currentReg === '5970';
     }
 
     function isFullFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return currentReg === '231012318' || currentReg === '231002350' || currentReg === 'test 3';
+      return currentReg === '231002350' || currentReg === 'test 3' || currentReg === '231012318' || currentReg === '5550' || currentReg === '5970';
     }
 
     function isFundingAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return ALL_MEMBERS.has(currentReg);
+      return ALL_MEMBERS.has(currentReg) || currentReg === '5550' || currentReg === '5970';
     }
 
     const SEED_TRANSACTIONS = [
@@ -20616,7 +20616,7 @@
         return;
       }
 
-      const isFullViewer = activeReg === '231012318' || activeReg === '231002350' || activeReg === 'test 3';
+      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318' || activeReg === '5550' || activeReg === '5970';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
@@ -21388,6 +21388,7 @@
         // Apply filtering
         let filteredTxs = txs.filter(tx => {
           if (filterDate && tx.date !== filterDate) return false;
+          if (!isFullFinanceAuthorized()) return tx.type === 'spending';
           if (filterType !== 'all' && tx.type !== filterType) return false;
           return true;
         });
