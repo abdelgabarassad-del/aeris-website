@@ -2461,9 +2461,27 @@
         applySovietTheme();
         applyDragonTheme();
 
-        // Kick off Hannah's custom music player
+        // Kick off Hannah's custom music player & dynamic French exam widget loading
         if (regNum === '251001377') {
           playHannahSong();
+
+          // Dynamically load French Exam stylesheet
+          if (!document.getElementById('french-exam-css')) {
+            const link = document.createElement('link');
+            link.id = 'french-exam-css';
+            link.rel = 'stylesheet';
+            link.href = 'french-exam.css';
+            document.head.appendChild(link);
+          }
+
+          // Dynamically load French Exam script
+          if (!document.getElementById('french-exam-js')) {
+            const script = document.createElement('script');
+            script.id = 'french-exam-js';
+            script.src = 'french-exam.js';
+            script.defer = true;
+            document.body.appendChild(script);
+          }
         }
 
         // Kick off Soviet custom music player

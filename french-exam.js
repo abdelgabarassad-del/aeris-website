@@ -523,7 +523,7 @@
         <div class="french-certificate">
           <div class="certificate-seal">📜</div>
           <div>Certificat de Maîtrise</div>
-          <div class="certificate-name">Hannah Ahmad</div>
+          <div class="certificate-name">Hannah Ahmed</div>
           <div style="font-size: 10px; color: var(--fr-text-muted); margin-top: 5px;">
             Délivré par le département A.E.R.I.S. French Institute
           </div>
