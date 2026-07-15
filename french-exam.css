@@ -1,0 +1,530 @@
+/* ==========================================================================
+   Hannah's French Challenge - Glassmorphic Widget Stylesheet
+   ========================================================================== */
+
+/* Variables matching the A.E.R.I.S. design system */
+:root {
+  --fr-bg: rgba(30, 59, 45, 0.82);
+  --fr-bg-header: rgba(15, 32, 24, 0.95);
+  --fr-accent: #f6f2df;
+  --fr-accent-glow: rgba(246, 242, 223, 0.2);
+  --fr-border: rgba(246, 242, 223, 0.15);
+  --fr-text: #ffffff;
+  --fr-text-muted: rgba(255, 255, 255, 0.6);
+  --fr-success: #2ecc71;
+  --fr-success-bg: rgba(46, 204, 113, 0.15);
+  --fr-error: #e74c3c;
+  --fr-error-bg: rgba(231, 76, 60, 0.15);
+  --fr-font-heading: 'Orbitron', 'Rajdhani', sans-serif;
+  --fr-font-body: 'Inter', 'Segoe UI', sans-serif;
+  --fr-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(246, 242, 223, 0.05);
+}
+
+/* Floating Launcher Badge */
+.french-launcher {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: linear-gradient(135deg, #1e3b2d 0%, #0f2018 100%);
+  border: 1px solid var(--fr-accent);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 10px var(--fr-accent-glow);
+  color: var(--fr-accent);
+  font-family: var(--fr-font-heading);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  padding: 12px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-transform: uppercase;
+}
+
+.french-launcher:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--fr-accent);
+  background: var(--fr-accent);
+  color: #0f2018;
+}
+
+.french-launcher .flag {
+  font-size: 16px;
+}
+
+/* Launcher hidden state when widget is open */
+.french-launcher.hidden {
+  opacity: 0;
+  transform: translateY(30px) scale(0.8);
+  pointer-events: none;
+}
+
+/* Main Widget Window */
+.french-widget {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 380px;
+  height: 520px;
+  max-width: calc(100vw - 50px);
+  background: var(--fr-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--fr-border);
+  box-shadow: var(--fr-shadow);
+  border-radius: 12px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+              opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+              height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  font-family: var(--fr-font-body);
+  color: var(--fr-text);
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  pointer-events: none;
+}
+
+/* Opened state */
+.french-widget.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* Minimized state */
+.french-widget.minimized {
+  height: 54px;
+  cursor: pointer;
+}
+
+.french-widget.minimized .french-widget-body {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Header */
+.french-widget-header {
+  padding: 14px 18px;
+  background: var(--fr-bg-header);
+  border-bottom: 1px solid var(--fr-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.french-widget-title {
+  font-family: var(--fr-font-heading);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--fr-accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.french-widget-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.french-control-btn {
+  background: none;
+  border: none;
+  color: var(--fr-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+  border-radius: 4px;
+}
+
+.french-control-btn:hover {
+  color: var(--fr-accent);
+  transform: scale(1.15);
+}
+
+/* Content Body */
+.french-widget-body {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(246, 242, 223, 0.2) transparent;
+}
+
+.french-widget-body::-webkit-scrollbar {
+  width: 4px;
+}
+.french-widget-body::-webkit-scrollbar-thumb {
+  background: rgba(246, 242, 223, 0.2);
+  border-radius: 4px;
+}
+
+/* Stats / Difficulty Area */
+.french-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.french-difficulty-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: var(--fr-font-heading);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.diff-1 { background: rgba(52, 152, 219, 0.15); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3); }
+.diff-2 { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+.diff-3 { background: rgba(241, 196, 15, 0.15); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.3); }
+.diff-4 { background: rgba(230, 126, 34, 0.15); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.3); }
+.diff-5 { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
+
+.french-score-tracker {
+  color: var(--fr-text-muted);
+}
+
+.french-score-val {
+  color: var(--fr-accent);
+  font-weight: 700;
+}
+
+/* Difficulty Gauge */
+.french-gauge-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.french-gauge-bar {
+  height: 100%;
+  width: 60%; /* Adapts from 20% to 100% depending on difficulty (1 to 5) */
+  background: linear-gradient(90deg, #3498db, #2ecc71, #f1c40f, #e67e22, #e74c3c);
+  background-size: 500% 100%;
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-position 0.4s ease;
+}
+
+/* Question Area */
+.french-question-card {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.french-question-text {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  min-height: 54px;
+}
+
+/* Options */
+.french-options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.french-option-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--fr-border);
+  color: var(--fr-text);
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--fr-font-body);
+  font-size: 13px;
+  text-align: left;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.french-option-btn:hover:not(:disabled) {
+  background: rgba(246, 242, 223, 0.08);
+  border-color: var(--fr-accent);
+  padding-left: 20px;
+}
+
+.french-option-btn:disabled {
+  cursor: default;
+}
+
+/* Selected option states */
+.french-option-btn.correct {
+  background: var(--fr-success-bg) !important;
+  border-color: var(--fr-success) !important;
+  color: var(--fr-success) !important;
+  font-weight: 600;
+}
+
+.french-option-btn.incorrect {
+  background: var(--fr-error-bg) !important;
+  border-color: var(--fr-error) !important;
+  color: var(--fr-error) !important;
+}
+
+/* Icons inside option buttons */
+.option-icon {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.french-option-btn.correct .option-icon,
+.french-option-btn.incorrect .option-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Explanation & Next Section */
+.french-feedback-panel {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 15px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.french-feedback-text {
+  font-size: 12px;
+  color: var(--fr-text-muted);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.french-feedback-text strong {
+  color: var(--fr-accent);
+}
+
+.french-next-btn {
+  background: var(--fr-accent);
+  color: #0f2018;
+  border: none;
+  padding: 10px 20px;
+  font-family: var(--fr-font-heading);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.french-next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(246, 242, 223, 0.25);
+}
+
+/* Screens: Intro & Victory */
+.french-screen {
+  position: absolute;
+  top: 54px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 54px);
+  background: var(--fr-bg-header);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.french-screen.hidden {
+  display: none;
+}
+
+.french-screen-title {
+  font-family: var(--fr-font-heading);
+  font-size: 18px;
+  color: var(--fr-accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.french-screen-desc {
+  font-size: 13px;
+  color: var(--fr-text-muted);
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.french-start-btn {
+  background: linear-gradient(135deg, var(--fr-accent) 0%, #d4cfba 100%);
+  color: #0f2018;
+  border: none;
+  padding: 12px 30px;
+  font-family: var(--fr-font-heading);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.french-start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px var(--fr-accent-glow);
+}
+
+/* Victory/Certificate Screen Details */
+.french-certificate {
+  border: 1px double rgba(246, 242, 223, 0.4);
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.french-certificate::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(246, 242, 223, 0.05), transparent);
+  transform: rotate(45deg);
+  animation: shine 4s infinite linear;
+}
+
+.certificate-seal {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.certificate-name {
+  font-family: var(--fr-font-heading);
+  font-size: 16px;
+  color: var(--fr-accent);
+  margin: 5px 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(246, 242, 223, 0.3);
+}
+
+/* Confetti Canvas */
+.french-confetti-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shine {
+  0% { transform: translate(-30%, -30%) rotate(45deg); }
+  100% { transform: translate(30%, 30%) rotate(45deg); }
+}
+
+/* Card Shake (For wrong answers) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.widget-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Card Bounce (For correct answers) */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.widget-bounce {
+  animation: bounce 0.4s ease-in-out;
+}
+
+/* Pulsing effect for board card target */
+.pulse-highlight {
+  position: relative;
+}
+.pulse-highlight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid var(--fr-accent);
+  border-radius: inherit;
+  animation: cardPulse 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes cardPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.04); opacity: 0; }
+}
+
+/* Responsive Overrides */
+@media (max-width: 480px) {
+  .french-widget {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+    height: 90%;
+  }
+  .french-widget.minimized {
+    height: 54px;
+    bottom: 0;
+  }
+  .french-launcher {
+    bottom: 15px;
+    right: 15px;
+  }
+}
