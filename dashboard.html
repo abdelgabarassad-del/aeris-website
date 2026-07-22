@@ -1000,7 +1000,7 @@
       'test 3': { name: 'Test User 3', depts: ['mechanical', 'electrical', 'software', 'non-technical'], role: 'ceo', email: 'test3@aeris-team.org' },
       
       // Exclude from tables
-      '231000393': { name: 'Ahmed Hany', message: '🏎️ Welcome to the pit wall, Ahmed Hany! If you no longer go for a gap, you are no longer a racing driver. 🇧🇷🏁' },
+      '231000393': { name: 'Ahmed Hany', message: '🏎️ Welcome back, Ahmed Hany! "If you no longer go for a gap that exists, you are no longer a racing driver." 🇧🇷🏁' },
       '2006': { name: 'Hanah', depts: [], role: 'vice_head', email: 'hanah@aeris-team.org', hide: true },
       
       // Software Division (Pure SW)
@@ -6367,35 +6367,128 @@
     }
 
 
-    /* ========== AYRTON SENNA THEME (231000393 only) ========== */
+    /* ========== AYRTON SENNA THEME (231000393 only) — SUPER HEAVY EDITION ========== */
 
     function isSennaUser() {
       return safeSession.getItem('aeris_auth_reg') === SENNA_REG;
     }
 
+    // Audio synthesizer engine for Senna Theme
+    function playSennaSound(type) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+
+        if (type === 'rev') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(320, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1550, ctx.currentTime + 0.45);
+          osc.frequency.exponentialRampToValueAtTime(450, ctx.currentTime + 0.7);
+
+          gain.gain.setValueAtTime(0.01, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.7);
+        } else if (type === 'pit_gun') {
+          // Pneumatic air gun noise burst
+          const bufferSize = ctx.sampleRate * 0.25;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = 1800;
+          filter.Q.value = 3;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start();
+        } else if (type === 'radio') {
+          // F1 Pit Radio Beep Chatter
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1750, ctx.currentTime);
+          osc.frequency.setValueAtTime(2200, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.2);
+        } else if (type === 'victory') {
+          // Podium chord fanfare
+          [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.01, ctx.currentTime + idx * 0.08);
+            gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + idx * 0.08 + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + idx * 0.08);
+            osc.stop(ctx.currentTime + 1.2);
+          });
+        }
+      } catch (e) {
+        console.warn("Audio Context error:", e);
+      }
+    }
+
     function applySennaTheme() {
       if (!isSennaUser()) {
         document.body.classList.remove('senna-theme');
-        document.querySelectorAll('.senna-corner, .senna-corner-tl, .senna-bubble, .senna-track, .senna-telemetry-card').forEach(el => el.remove());
+        document.querySelectorAll('.senna-corner, .senna-corner-tl, .senna-bubble, .senna-track, .senna-telemetry-card, .senna-speed-canvas, .senna-spark-container').forEach(el => el.remove());
         return;
       }
 
       document.body.classList.add('senna-theme');
 
-      // Customize welcome banner icon to be a racing car/helmet SVG
+      // 1. Customize top welcome banner explicitly with Ahmed Hany's name & F1 Helmet SVG
       const welcomeBanner = document.getElementById('welcome-banner');
       if (welcomeBanner) {
         const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
         if (welcomeIcon) {
-          welcomeIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFE100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="car-spin"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`;
+          welcomeIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 100 100" class="senna-helmet-pulse">
+              <circle cx="50" cy="50" r="46" fill="#FFE100" stroke="#009B3A" stroke-width="6"/>
+              <path d="M 15 50 Q 50 20 85 50 L 85 62 Q 50 35 15 62 Z" fill="#003399"/>
+              <rect x="25" y="48" width="50" height="14" rx="4" fill="#111111" opacity="0.9"/>
+              <text x="50" y="86" font-family="'Luckiest Guy', sans-serif" font-size="22" fill="#009B3A" text-anchor="middle" font-weight="900">#1</text>
+            </svg>
+          `;
+        }
+        const welcomeText = welcomeBanner.querySelector('.welcome-banner__text');
+        if (welcomeText) {
+          welcomeText.innerHTML = `
+            <span class="welcome-banner__greeting">🏎️ Welcome back, <strong>Ahmed Hany</strong>! ⚡</span>
+            <span class="welcome-banner__role">Logged in as <strong>Ahmed Hany</strong> — Electrical Division Member | 🇧🇷 3x F1 World Champion Theme</span>
+          `;
         }
       }
 
-      // Senna Badge float at bottom right
+      # 2. Senna Badge float at bottom right
       if (!document.querySelector('.senna-corner')) {
         const corner = document.createElement('div');
         corner.className = 'senna-corner';
-        corner.title = 'Ayrton Senna — Click for Wisdom';
+        corner.title = 'Ayrton Senna — Click for F1 Wisdom & Sound';
         corner.innerHTML = `<div class="senna-badge-helmet"><span class="senna-num">1</span><span class="senna-flag">🇧🇷</span></div>`;
         document.body.appendChild(corner);
 
@@ -6417,12 +6510,12 @@
           const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
           bubble.textContent = randomQuote;
           bubble.classList.add('show');
-          playSennaEngineRev(1200, 0.35);
-          setTimeout(() => bubble.classList.remove('show'), 4500);
+          playSennaSound('rev');
+          setTimeout(() => bubble.classList.remove('show'), 5000);
         });
       }
 
-      // Senna corner top-left badge
+      # 3. Senna corner top-left badge
       if (!document.querySelector('.senna-corner-tl')) {
         const cornerTL = document.createElement('div');
         cornerTL.className = 'senna-corner-tl';
@@ -6430,16 +6523,16 @@
         document.body.appendChild(cornerTL);
       }
 
-      // Racing track trail above task board
+      # 4. Racing track trail above task board
       const taskBoard = document.getElementById('task-board');
       if (taskBoard && !document.querySelector('.senna-track')) {
         const track = document.createElement('div');
         track.className = 'senna-track';
-        track.innerHTML = `<span>🏎️ MP4/4</span><span>⚡ ERS READY</span><span>🏁 LAP 1/65</span><span>🇧🇷 SENNA #1</span><span>🏎️💨 330 KM/H</span>`;
+        track.innerHTML = `<span>🏎️ McLAREN MP4/4</span><span>⚡ ERS BOOST 100%</span><span>🏁 LAP 1/65 (INTERLAGOS)</span><span>🇧🇷 SENNA #1</span><span>🏎️💨 348 KM/H</span>`;
         taskBoard.parentNode.insertBefore(track, taskBoard);
       }
 
-      // Inject Telemetry & Engine Sound Synthesizer Card into dashboard view
+      # 5. Inject Super Heavy Telemetry & Steering Wheel Soundboard Card
       if (!document.querySelector('.senna-telemetry-card')) {
         const container = document.querySelector('.dashboard-page .container');
         if (container) {
@@ -6449,12 +6542,14 @@
             <div class="senna-telemetry-header">
               <div class="senna-telemetry-title">
                 <span class="senna-flag-icon">🇧🇷</span>
-                <h3>AYRTON SENNA F1 TELEMETRY & SHIFT LIGHT CONTROL</h3>
+                <h3>AYRTON SENNA F1 SUPER HEAVY PIT WALL TELEMETRY</h3>
                 <span class="senna-live-pill">LIVE PIT WALL</span>
               </div>
-              <div class="senna-telemetry-stats">
-                <span class="senna-stat">CIRCUIT: <strong>INTERLAGOS</strong></span>
-                <span class="senna-stat">CAR: <strong>McLAREN MP4/4 V6 TURBO</strong></span>
+              <div class="senna-car-selector">
+                <button class="senna-car-tab active" data-car="mp44">🏎️ MP4/4 (1988)</button>
+                <button class="senna-car-tab" data-car="lotus99t">🟡 Lotus 99T (1987)</button>
+                <button class="senna-car-tab" data-car="mp46">🔴 MP4/6 (1991)</button>
+                <button class="senna-car-tab" data-car="lotus97t">🖤 Lotus 97T (1985)</button>
               </div>
             </div>
             <div class="senna-telemetry-body">
@@ -6484,29 +6579,42 @@
                   </div>
                   <div class="senna-readout-box">
                     <span class="lbl">BEST LAP</span>
-                    <span class="val">1:19.537</span>
+                    <span class="val" id="senna-lap">1:19.537</span>
                     <span class="unit">QUALIFYING</span>
                   </div>
                   <div class="senna-readout-box">
-                    <span class="lbl">VOLTAGE</span>
+                    <span class="lbl">ELEC BUS</span>
                     <span class="val">24.8V</span>
-                    <span class="unit">ELEC BUS</span>
+                    <span class="unit">OK</span>
                   </div>
                 </div>
               </div>
               <div class="senna-controls-section">
-                <button class="senna-btn senna-btn--rev" id="senna-rev-btn">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                  <span>Rev Honda V6 Turbo Engine</span>
-                </button>
-                <button class="senna-btn senna-btn--lights" id="senna-reaction-btn">
-                  <span>🚥 Pit Start Light Challenge</span>
-                </button>
-                <div class="senna-reaction-result" id="senna-reaction-res">Click "Pit Start Light Challenge" to test reaction time!</div>
+                <div class="senna-soundboard-grid">
+                  <button class="senna-btn senna-btn--rev" id="senna-rev-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                    <span>Rev V6 Engine</span>
+                  </button>
+                  <button class="senna-btn senna-btn--pit" id="senna-pit-btn">
+                    <span>🔧 Pit Air Gun</span>
+                  </button>
+                  <button class="senna-btn senna-btn--radio" id="senna-radio-btn">
+                    <span>📻 Radio Chatter</span>
+                  </button>
+                  <button class="senna-btn senna-btn--victory" id="senna-victory-btn">
+                    <span>🏆 Podium Fanfare</span>
+                  </button>
+                </div>
+                <div class="senna-reaction-wrapper">
+                  <button class="senna-btn senna-btn--lights" id="senna-reaction-btn">
+                    <span>🚥 Pit Start Light Challenge</span>
+                  </button>
+                  <div class="senna-reaction-result" id="senna-reaction-res">Click "Pit Start Light Challenge" to test reaction time!</div>
+                </div>
               </div>
             </div>
           `;
-          
+
           const welcomeBannerEl = document.getElementById('welcome-banner');
           if (welcomeBannerEl && welcomeBannerEl.nextSibling) {
             container.insertBefore(telemetryCard, welcomeBannerEl.nextSibling);
@@ -6514,11 +6622,11 @@
             container.prepend(telemetryCard);
           }
 
-          setupSennaWidgetInteractions();
+          setupSennaSuperHeavyInteractions();
         }
       }
 
-      // Customize task form headers for Senna
+      # 6. Customize task form headers for Senna
       const formTitle = document.querySelector('.task-form__title');
       if (formTitle) {
         const svg = formTitle.querySelector('svg');
@@ -6554,49 +6662,68 @@
         if (svg) submitTaskBtn.appendChild(svg);
         submitTaskBtn.append(' Launch Telemetry Task!');
       }
+
+      # 7. Start Mouse Cursor Spark Particles Engine
+      initSennaSparkParticles();
     }
 
-    // Web Audio API engine rev synthesizer for Senna theme
-    function playSennaEngineRev(targetFreq = 950, duration = 0.4) {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(targetFreq, ctx.currentTime + duration * 0.7);
-        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + duration);
+    # Mouse spark particles engine for Super Heavy Senna Theme
+    function initSennaSparkParticles() {
+      if (document.querySelector('.senna-spark-container')) return;
+      const container = document.createElement('div');
+      container.className = 'senna-spark-container';
+      container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
+      document.body.appendChild(container);
 
-        gain.gain.setValueAtTime(0.01, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
-      } catch (e) {
-        console.warn("Audio Context blocked or not supported:", e);
-      }
+      let lastX = 0, lastY = 0;
+      window.addEventListener('mousemove', (e) => {
+        if (!document.body.classList.contains('senna-theme')) return;
+        const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+        if (dist > 25) {
+          lastX = e.clientX;
+          lastY = e.clientY;
+          const spark = document.createElement('div');
+          spark.className = 'senna-cursor-spark';
+          const size = Math.random() * 6 + 4;
+          const colors = ['#FFE100', '#009B3A', '#003399', '#E10600'];
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          spark.style.cssText = `
+            position: absolute;
+            left: ${e.clientX}px;
+            top: ${e.clientY}px;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            border-radius: 50%;
+            box-shadow: 0 0 10px ${color};
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.1, 0.8, 0.3, 1);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.9;
+          `;
+          container.appendChild(spark);
+          setTimeout(() => {
+            spark.style.transform = `translate(${-50 + (Math.random() * 40 - 20)}%, ${-50 + Math.random() * 40 + 10}px) scale(0)`;
+            spark.style.opacity = '0';
+          }, 20);
+          setTimeout(() => spark.remove(), 650);
+        }
+      });
     }
 
-    // Senna Pit Start Light Challenge Logic
+    # Senna Widget Interactions & Soundboard logic
     let sennaLightTimeout = null;
     let sennaStartTime = 0;
 
-    function setupSennaWidgetInteractions() {
+    function setupSennaSuperHeavyInteractions() {
       const revBtn = document.getElementById('senna-rev-btn');
       if (revBtn) {
         revBtn.onclick = () => {
-          playSennaEngineRev(1400, 0.7);
+          playSennaSound('rev');
           const rpmVal = document.getElementById('senna-rpm-val');
           const speedVal = document.getElementById('senna-speed');
-          if (rpmVal) rpmVal.textContent = '14,800';
-          if (speedVal) speedVal.textContent = '348';
+          if (rpmVal) rpmVal.textContent = '15,200';
+          if (speedVal) speedVal.textContent = '352';
           setTimeout(() => {
             if (rpmVal) rpmVal.textContent = '12,500';
             if (speedVal) speedVal.textContent = '332';
@@ -6604,6 +6731,64 @@
         };
       }
 
+      const pitBtn = document.getElementById('senna-pit-btn');
+      if (pitBtn) {
+        pitBtn.onclick = () => {
+          playSennaSound('pit_gun');
+        };
+      }
+
+      const radioBtn = document.getElementById('senna-radio-btn');
+      if (radioBtn) {
+        radioBtn.onclick = () => {
+          playSennaSound('radio');
+          const reactRes = document.getElementById('senna-reaction-res');
+          if (reactRes) {
+            reactRes.className = 'senna-reaction-result success';
+            reactRes.innerHTML = '📻 <em>"Box Box Box, Ahmed! Push now! Telemetry looks optimal!"</em>';
+          }
+        };
+      }
+
+      const vicBtn = document.getElementById('senna-victory-btn');
+      if (vicBtn) {
+        vicBtn.onclick = () => {
+          playSennaSound('victory');
+          const reactRes = document.getElementById('senna-reaction-res');
+          if (reactRes) {
+            reactRes.className = 'senna-reaction-result success';
+            reactRes.innerHTML = '🏆 <strong>P1 CHAMPION!</strong> 🏁 Chequered flag victory at Interlagos!';
+          }
+        };
+      }
+
+      # Car selector tabs logic
+      const carTabs = document.querySelectorAll('.senna-car-tab');
+      const carSpecs = {
+        'mp44': { rpm: '12,500', speed: '332', lap: '1:19.537' },
+        'lotus99t': { rpm: '11,800', speed: '320', lap: '1:21.140' },
+        'mp46': { rpm: '14,200', speed: '345', lap: '1:18.200' },
+        'lotus97t': { rpm: '11,200', speed: '315', lap: '1:24.010' }
+      };
+
+      carTabs.forEach(tab => {
+        tab.onclick = () => {
+          carTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const car = tab.dataset.car;
+          if (carSpecs[car]) {
+            const rpmVal = document.getElementById('senna-rpm-val');
+            const speedVal = document.getElementById('senna-speed');
+            const lapVal = document.getElementById('senna-lap');
+            if (rpmVal) rpmVal.textContent = carSpecs[car].rpm;
+            if (speedVal) speedVal.textContent = carSpecs[car].speed;
+            if (lapVal) lapVal.textContent = carSpecs[car].lap;
+          }
+          playSennaSound('rev');
+        };
+      });
+
+      # Reaction Time Light Challenge
       const reactBtn = document.getElementById('senna-reaction-btn');
       const reactRes = document.getElementById('senna-reaction-res');
       if (reactBtn && reactRes) {
@@ -6625,6 +6810,7 @@
             else if (reactionTime < 300) rating = '🏆 F1 Podium Reaction!';
             else rating = '🏎️ Good Pit Stop!';
             reactRes.innerHTML = `🏁 Reaction Time: <strong>${reactionTime} ms</strong> — ${rating}`;
+            playSennaSound('victory');
             return;
           }
 
@@ -6638,11 +6824,12 @@
             sennaStartTime = performance.now();
             reactRes.className = 'senna-reaction-result go';
             reactRes.textContent = '🟢 LIGHTS OUT! CLICK NOW! 🚀';
-            playSennaEngineRev(1100, 0.2);
+            playSennaSound('rev');
           }, delay);
         };
       }
     }
+
 
 
     /* ========== LIGHTNING MCQUEEN THEME (231003934 only) ========== */
