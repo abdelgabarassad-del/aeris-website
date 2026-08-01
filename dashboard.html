@@ -925,11 +925,12 @@
     const safeSession = {
       getItem(key) {
         try {
-          return sessionStorage.getItem(key);
+          const val = sessionStorage.getItem(key);
+          if (val !== null && val !== undefined) return val;
         } catch (e) {
           console.warn("Session storage access denied:", e);
-          return null;
         }
+        return safeLocal.getItem(key);
       },
       setItem(key, value) {
         try {
@@ -937,6 +938,13 @@
         } catch (e) {
           console.warn("Session storage access denied:", e);
         }
+        safeLocal.setItem(key, value);
+      },
+      removeItem(key) {
+        try {
+          sessionStorage.removeItem(key);
+        } catch (e) {}
+        safeLocal.removeItem(key);
       }
     };
 
@@ -953,10 +961,21 @@
         try {
           localStorage.setItem(key, value);
         } catch (e) {
+          console.warn("Local storage access denied or quota exceeded:", e);
+          if (typeof logToMailerConsole === 'function') {
+            logToMailerConsole(`Storage write limit reached: ${e.message}`, 'sys');
+          }
+        }
+      },
+      removeItem(key) {
+        try {
+          localStorage.removeItem(key);
+        } catch (e) {
           console.warn("Local storage access denied:", e);
         }
       }
     };
+
 
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
@@ -3669,7 +3688,7 @@
     let sbGameActiveStack = [];
     let sbGameCurrentOrder = null;
     let sbGameIsPlaying = false;
-    let sbHighScore = localStorage.getItem('sb_hs_score') || 0;
+    let sbHighScore = safeLocal.getItem('sb_hs_score') || 0;
 
     const SB_INGREDIENTS = {
       'bottom_bun': { char: '🍞', name: 'Bottom Bun' },
@@ -3784,8 +3803,8 @@
       const widgetsGrid = document.createElement('div');
       widgetsGrid.className = 'spongebob-widgets-container fade-in visible';
 
-      const cachedHighScore = localStorage.getItem('sb_hs_score') || '0';
-      const cachedJfHighScore = localStorage.getItem('sb_jf_hs_score') || '0';
+      const cachedHighScore = safeLocal.getItem('sb_hs_score') || '0';
+      const cachedJfHighScore = safeLocal.getItem('sb_jf_hs_score') || '0';
 
       widgetsGrid.innerHTML = `
         <div class="spongebob-widget" id="spongebob-game-widget">
@@ -4157,9 +4176,9 @@
       if (finalOrders) finalOrders.textContent = sbGameCompletedOrders;
       if (winOverlay) winOverlay.style.display = 'flex';
 
-      const storedHighScore = localStorage.getItem('sb_hs_score') || 0;
+      const storedHighScore = safeLocal.getItem('sb_hs_score') || 0;
       if (sbGameScore > parseInt(storedHighScore)) {
-        localStorage.setItem('sb_hs_score', sbGameScore);
+        safeLocal.setItem('sb_hs_score', sbGameScore);
         const hsScoreEl = document.getElementById('sb-hs-score');
         if (hsScoreEl) hsScoreEl.textContent = sbGameScore;
       }
@@ -4297,7 +4316,7 @@
       if (winOverlay) winOverlay.style.display = "none";
       if (startBtn) startBtn.style.display = "block";
 
-      const currentHs = localStorage.getItem('sb_jf_hs_score') || '0';
+      const currentHs = safeLocal.getItem('sb_jf_hs_score') || '0';
       if (hsScoreEl) hsScoreEl.textContent = currentHs;
 
       drawJellyfishGameFrame();
@@ -4337,9 +4356,9 @@
 
       playSpongebobSound('victory');
 
-      const currentHs = localStorage.getItem('sb_jf_hs_score') || '0';
+      const currentHs = safeLocal.getItem('sb_jf_hs_score') || '0';
       if (jfGameScore > parseInt(currentHs)) {
-        localStorage.setItem('sb_jf_hs_score', jfGameScore);
+        safeLocal.setItem('sb_jf_hs_score', jfGameScore);
         const hsScoreEl = document.getElementById('sb-jf-hs-score');
         if (hsScoreEl) hsScoreEl.textContent = jfGameScore;
       }
@@ -8657,8 +8676,8 @@
       const widgetsGrid = document.createElement('div');
       widgetsGrid.className = 'mickey-widgets-container fade-in visible';
 
-      const cachedMoves = localStorage.getItem('mickey_hs_moves') || '--';
-      const cachedTime = localStorage.getItem('mickey_hs_time') || '--';
+      const cachedMoves = safeLocal.getItem('mickey_hs_moves') || '--';
+      const cachedTime = safeLocal.getItem('mickey_hs_time') || '--';
 
       widgetsGrid.innerHTML = `
         <div class="mickey-widget" id="mickey-game-widget">
@@ -8901,13 +8920,13 @@
       if (winMoves) winMoves.textContent = mickeyGameMoves;
       if (winOverlay) winOverlay.style.display = 'flex';
 
-      const storedMoves = localStorage.getItem('mickey_hs_moves');
-      const storedSecs = localStorage.getItem('mickey_hs_secs');
+      const storedMoves = safeLocal.getItem('mickey_hs_moves');
+      const storedSecs = safeLocal.getItem('mickey_hs_secs');
 
       if (!storedMoves || mickeyGameMoves < parseInt(storedMoves)) {
-        localStorage.setItem('mickey_hs_moves', mickeyGameMoves);
-        localStorage.setItem('mickey_hs_time', finalTimeStr);
-        localStorage.setItem('mickey_hs_secs', mickeyGameSeconds);
+        safeLocal.setItem('mickey_hs_moves', mickeyGameMoves);
+        safeLocal.setItem('mickey_hs_time', finalTimeStr);
+        safeLocal.setItem('mickey_hs_secs', mickeyGameSeconds);
 
         const hsMoves = document.getElementById('mickey-hs-moves');
         const hsTime = document.getElementById('mickey-hs-time');
@@ -8915,8 +8934,8 @@
         if (hsTime) hsTime.textContent = finalTimeStr;
       } else if (mickeyGameMoves === parseInt(storedMoves)) {
         if (!storedSecs || mickeyGameSeconds < parseInt(storedSecs)) {
-          localStorage.setItem('mickey_hs_time', finalTimeStr);
-          localStorage.setItem('mickey_hs_secs', mickeyGameSeconds);
+          safeLocal.setItem('mickey_hs_time', finalTimeStr);
+          safeLocal.setItem('mickey_hs_secs', mickeyGameSeconds);
           const hsTime = document.getElementById('mickey-hs-time');
           if (hsTime) hsTime.textContent = finalTimeStr;
         }
@@ -17917,10 +17936,11 @@
     function getTransactions() {
       try {
         let txs = JSON.parse(safeLocal.getItem(FINANCE_STORAGE_KEY));
-        const migrated = safeLocal.getItem('aeris_finance_migrated_v5');
-        if (!migrated || !Array.isArray(txs)) {
+        if (!Array.isArray(txs)) {
           txs = SEED_TRANSACTIONS;
           safeLocal.setItem(FINANCE_STORAGE_KEY, JSON.stringify(txs));
+        }
+        if (!safeLocal.getItem('aeris_finance_migrated_v5')) {
           safeLocal.setItem('aeris_finance_migrated_v5', 'true');
         }
         return txs;
@@ -18918,10 +18938,10 @@
           submitterName = PERSONAL_GREETINGS[currentReg].name;
         }
 
-        // Save to localStorage
+        // Save to safeLocal storage
         let feedbackList = [];
         try {
-          feedbackList = JSON.parse(localStorage.getItem('aeris_feedback') || '[]');
+          feedbackList = JSON.parse(safeLocal.getItem('aeris_feedback') || '[]');
         } catch (ex) {
           feedbackList = [];
         }
@@ -18932,7 +18952,7 @@
           loggedInUserReg: currentReg,
           loggedInUserName: submitterName
         });
-        localStorage.setItem('aeris_feedback', JSON.stringify(feedbackList));
+        safeLocal.setItem('aeris_feedback', JSON.stringify(feedbackList));
 
         // Attempt POST to Google Sheet Script
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzLlYT9sAqutZuMJbWvqI_mobguEtl1u2DM9FjM6_qyrTVa0USP6aLdYG8hKGW1eGa/exec';
