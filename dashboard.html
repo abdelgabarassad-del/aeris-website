@@ -1012,6 +1012,18 @@
     const MICKEY_REG = '251011829';
     const SOVIET_REG = '231002350';
 
+    // 🎂 BIRTHDAY THEME TOGGLE CONFIGURATION
+    // Set to true for birthday celebration mode. Set to false to automatically restore original themes (Sonic for Sara Ahmed, Batman for Ammar Yasser)!
+    const BIRTHDAY_USERS = {
+      '251010424': true, // Sara Ahmed (Software Head) -> Original Theme: "sonic"
+      '241003033': true  // Ammar Yasser (Mechanical Vice Head) -> Original Theme: "batman"
+    };
+
+    function isBirthdayUser(regNum) {
+      const reg = regNum || safeSession.getItem('aeris_auth_reg');
+      return BIRTHDAY_USERS[reg] === true;
+    }
+
     // Structured Database mapping members to names, roles, departments, and emails
     const MEMBERS_DATABASE = {
       // CEO
@@ -1157,9 +1169,9 @@
       else if (regNum === '251003016') activeTheme = "spongebob";
       else if (regNum === '251001377') activeTheme = "stitch";
       else if (regNum === '231003934') activeTheme = "mcqueen";
-      else if (regNum === '241003033') activeTheme = "batman";
+      else if (regNum === '241003033') activeTheme = isBirthdayUser('241003033') ? "birthday" : "batman";
       else if (regNum === '251000861') activeTheme = "spiderman";
-      else if (regNum === '251010424') activeTheme = "sonic";
+      else if (regNum === '251010424') activeTheme = isBirthdayUser('251010424') ? "birthday" : "sonic";
       else if (regNum === '231003587') activeTheme = "tomjerry";
       else if (regNum === '251012364') activeTheme = "tweety";
       else if (regNum === '221011368') activeTheme = "pooh";
@@ -1284,6 +1296,28 @@
             "<strong>Annonces de Berk:</strong> Écrivez des alertes de nouvelles pour les cavaliers.",
             hasFin ? "<strong>Trésor de Berk (Finances):</strong> Accès complet aux registres de Budget et Funding pour suivre les dépenses et les paiements de Berk." : "<strong>Dépenses de Berk (Finances):</strong> Accédez au Budget Tracker pour voir le total dépensé pour les dragons. Le budget net et les revenus sont cachés."
           ];
+        } else if (activeTheme === 'birthday') {
+          if (regNum === '251010424') {
+            title = "🎂 Software Head Birthday Directives";
+            welcome = "🥳 Sba7 el fol & Happy Birthday, Software Head Sara Ahmed! 🎂 The entire software division is celebrating your special day today! Blow out the candles and command your tasks:";
+            items = [
+              "<strong>Birthday Software Directives:</strong> Switch department tabs to inspect task progress while enjoying your birthday cake!",
+              "<strong>Party Performance Matrix:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> to monitor your team's code delivery on your special day.",
+              "<strong>Candle Approvals:</strong> Click any task card to issue evaluation notes and approve completions with celebratory birthday approval!",
+              "<strong>Party News Broadcast:</strong> Publish announcements to share birthday wishes and team directives on the News Feed.",
+              hasFin ? "<strong>Software Division Treasury:</strong> Access the Budget Tracker to monitor team spending. (Original Sonic theme will auto-restore in 24 hours)." : "<strong>Software Expenses:</strong> Access the Budget Tracker to monitor team spending. (Original Sonic theme will auto-restore in 24 hours)."
+            ];
+          } else if (regNum === '241003033') {
+            title = "🎂 Mechanical Vice Head Birthday Directives";
+            welcome = "🥳 Sba7 el fol & Happy Birthday, Vice Head Ammar Yasser! 🎂 Even Gotham's dark knight pauses to celebrate the Mechanical Vice Head! Enjoy the celebration and direct mechanical operations:";
+            items = [
+              "<strong>Birthday Mechanical Directives:</strong> Inspect mechanical tasks with birthday cheer across all department tabs.",
+              "<strong>Celebration Telemetry:</strong> Access the <strong>Progress Tracker (Excel)</strong> to scan overall member performance and edit evaluations.",
+              "<strong>Batcomputer Party Directives:</strong> Initialize new directives using the <strong>Task Upload Form</strong> and move states forward (<code>▶ Start</code> / <code>✓ Done</code>).",
+              "<strong>Gotham Birthday Broadcasts:</strong> Publish updates on the News Feed to share birthday energy with the team.",
+              hasFin ? "<strong>Wayne Enterprises Reserves:</strong> Access financial data (Budget & Funding Trackers) to audit department budgets. (Original Batman theme will auto-restore in 24 hours)." : "<strong>Batcomputer Expenses:</strong> Access the Budget Tracker to monitor team spending. (Original Batman theme will auto-restore in 24 hours)."
+            ];
+          }
         } else {
           title = "📋 Division Head & Vice Head Management Reference";
           welcome = "👥 Welcome, Division Leader " + name + ". You are managing the " + friendlyDepts + " department. Use these administrative tools:";
@@ -1652,9 +1686,15 @@
       if (sessionReg === '7676767766') document.body.classList.add('love-theme');
       if (sessionReg === '251003016') document.body.classList.add('spongebob-theme');
       if (sessionReg === '231003934') document.body.classList.add('mcqueen-theme');
-      if (sessionReg === '241003033') document.body.classList.add('batman-theme');
+      if (sessionReg === '241003033') {
+        if (isBirthdayUser('241003033')) document.body.classList.add('birthday-theme');
+        else document.body.classList.add('batman-theme');
+      }
       if (sessionReg === '251000861') document.body.classList.add('spiderman-theme');
-      if (sessionReg === '251010424') document.body.classList.add('sonic-theme');
+      if (sessionReg === '251010424') {
+        if (isBirthdayUser('251010424')) document.body.classList.add('birthday-theme');
+        else document.body.classList.add('sonic-theme');
+      }
       if (sessionReg === '231003587') document.body.classList.add('tomjerry-theme');
       if (sessionReg === '241012132') document.body.classList.add('bloodborne-theme');
       if (sessionReg === '251010151') document.body.classList.add('ladybug-theme');
@@ -2385,10 +2425,16 @@
           } else {
             const isCEO = regNum === '231002350' || regNum === 'test 3';
             const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
+            let customMessage = person.message;
+            if (regNum === '251010424' && isBirthdayUser('251010424')) {
+              customMessage = '🎂🎉 HAPPY BIRTHDAY, Software Head Sara Ahmed! 🥳✨ El dkah fi el ada2 kolha! 🍰⚡';
+            } else if (regNum === '241003033' && isBirthdayUser('241003033')) {
+              customMessage = '🎂🎉 HAPPY BIRTHDAY, Vice Head Ammar Yasser! 🥳✨ baba el 2atatss! 🍰🎈';
+            }
             bannerHTML = `
               <div class="welcome-banner__icon">${roleIcon}</div>
               <div class="welcome-banner__text">
-                <span class="welcome-banner__greeting">${person.message}</span>
+                <span class="welcome-banner__greeting">${customMessage}</span>
                 <span class="welcome-banner__role">Logged in as <strong>${person.name}</strong> — ${roleLabel}</span>
               </div>
             `;
@@ -2484,6 +2530,7 @@
         applyBatmanTheme();
         applySpidermanTheme();
         applySonicTheme();
+        applyBirthdayTheme();
         applyTomJerryTheme();
         applyBloodborneTheme();
         applyLadybugTheme();
@@ -6966,7 +7013,7 @@
     }
 
     function applyBatmanTheme() {
-      if (!isBatmanUser()) {
+      if (!isBatmanUser() || isBirthdayUser('241003033')) {
         document.body.classList.remove('batman-theme');
         document.querySelectorAll('.batman-corner, .batman-corner-tl, .batman-bubble, .batman-signal, .batman-bats, .batman-deco').forEach(el => el.remove());
         return;
@@ -7182,7 +7229,7 @@
     }
 
     function applySonicTheme() {
-      if (!isSonicUser()) {
+      if (!isSonicUser() || isBirthdayUser('251010424')) {
         document.body.classList.remove('sonic-theme');
         document.querySelectorAll('.sonic-corner, .sonic-corner-tl, .sonic-bubble, .sonic-rings, .sonic-deco').forEach(el => el.remove());
         return;
@@ -7251,11 +7298,11 @@
         const svg = formTitle.querySelector('svg');
         formTitle.textContent = '';
         if (svg) formTitle.appendChild(svg);
-        formTitle.append(' Log New Zone Directive / Task');
+        formTitle.append(' Log Supersonic Task');
       }
 
       const labelTaskTitle = document.querySelector('label[for="task-title"]');
-      if (labelTaskTitle) labelTaskTitle.textContent = '🌀 Zone Mission';
+      if (labelTaskTitle) labelTaskTitle.textContent = '⚡ Task Title';
 
       const labelTaskDesc = document.querySelector('label[for="task-description"]');
       if (labelTaskDesc) labelTaskDesc.textContent = '🦊 Tails\' Blueprints / Details';
@@ -7280,6 +7327,141 @@
         submitTaskBtn.textContent = '';
         if (svg) submitTaskBtn.appendChild(svg);
         submitTaskBtn.append(' Spin Dash!');
+      }
+    }
+
+    /* ========== BIRTHDAY CELEBRATION THEME (Sara Ahmed 251010424 & Ammar Yasser 241003033) ========== */
+
+    function applyBirthdayTheme() {
+      const sessionReg = safeSession.getItem('aeris_auth_reg');
+      if (!isBirthdayUser(sessionReg)) {
+        document.body.classList.remove('birthday-theme');
+        document.querySelectorAll('.birthday-corner, .birthday-corner-tl, .birthday-bubble, .birthday-confetti, .birthday-deco').forEach(el => el.remove());
+        return;
+      }
+
+      document.body.classList.add('birthday-theme');
+
+      // Customize welcome banner icon to be a Birthday Cake
+      const welcomeBanner = document.getElementById('welcome-banner');
+      if (welcomeBanner) {
+        const welcomeIcon = welcomeBanner.querySelector('.welcome-banner__icon');
+        if (welcomeIcon) {
+          welcomeIcon.innerHTML = `<span class="birthday-cake-icon">🎂</span>`;
+        }
+      }
+
+      // Birthday floating cake trigger at bottom right
+      if (!document.querySelector('.birthday-corner')) {
+        const corner = document.createElement('div');
+        corner.className = 'birthday-corner';
+        corner.setAttribute('title', 'Click for Birthday Wishes & Confetti!');
+        corner.innerHTML = `<div class="birthday-floater">🎂</div>`;
+        document.body.appendChild(corner);
+
+        const bubble = document.createElement('div');
+        bubble.className = 'birthday-bubble';
+        document.body.appendChild(bubble);
+
+        const saraPhrases = [
+          "🎂🎉 Happy Birthday, Software Head Sara! May your code compile on the first try! 🚀✨",
+          "🥳 El dkah fi el ada2 kolha + Birthday Edition! 🍰⚡",
+          "🎈 Wishing you 365 days of 100% test coverage & pure happiness! 🎂",
+          "🎁 Gotta celebrate fast! Have the most wonderful birthday! 🦔💖",
+          "🍰 May all your software bugs turn into birthday candles today! 🎉",
+          "✨ Happy Birthday Sara! You're an incredible leader and software head! 🥳"
+        ];
+
+        const ammarPhrases = [
+          "🎂🎉 Happy Birthday, Vice Head Ammar! Even Gotham takes a day off to celebrate! 🦇✨",
+          "🥳 baba el 2atatss + Birthday Edition! 🍰🎈",
+          "🎈 Wishing you top mechanical precision & an awesome birthday! 🎂",
+          "🎁 Mechanical Vice Head supremacy! Have a heroic birthday today! 🚀🥳",
+          "🍰 Batcomputer telemetry confirms: Ammar's birthday is legendary! 🦇🎉",
+          "✨ Happy Birthday Ammar! Thank you for leading the mechanical division with pride! 🥳"
+        ];
+
+        const phrases = sessionReg === '251010424' ? saraPhrases : ammarPhrases;
+
+        corner.addEventListener('click', () => {
+          const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+          bubble.textContent = randomPhrase;
+          bubble.classList.add('show');
+          triggerBirthdayConfettiBurst();
+          setTimeout(() => bubble.classList.remove('show'), 4000);
+        });
+      }
+
+      // Top-left birthday party hat indicator
+      if (!document.querySelector('.birthday-corner-tl')) {
+        const cornerTL = document.createElement('div');
+        cornerTL.className = 'birthday-corner-tl';
+        cornerTL.innerHTML = `🥳🎉`;
+        document.body.appendChild(cornerTL);
+      }
+
+      // Party balloons trailing above task board
+      const taskBoard = document.getElementById('task-board');
+      if (taskBoard && !document.querySelector('.birthday-confetti')) {
+        const confetti = document.createElement('div');
+        confetti.className = 'birthday-confetti';
+        const confettiContent = `<span>🎈</span><span>🎂</span><span>🎉</span><span>✨</span><span>🎁</span><span>🥳</span><span>🎈</span>`;
+        confetti.innerHTML = confettiContent;
+        taskBoard.parentNode.insertBefore(confetti, taskBoard);
+      }
+
+      // Customize task form headers for Birthday Mode if user is a Head/Vice Head
+      const formTitle = document.querySelector('.task-form__title');
+      if (formTitle) {
+        const svg = formTitle.querySelector('svg');
+        formTitle.textContent = '';
+        if (svg) formTitle.appendChild(svg);
+        formTitle.append(' 🎂 Log Birthday Directives / Task');
+      }
+
+      const labelTaskTitle = document.querySelector('label[for="task-title"]');
+      if (labelTaskTitle) labelTaskTitle.textContent = '🎉 Celebration Task Title';
+
+      const labelTaskDesc = document.querySelector('label[for="task-description"]');
+      if (labelTaskDesc) labelTaskDesc.textContent = '🎂 Birthday Intel / Description';
+
+      const labelTaskPriority = document.querySelector('label[for="task-priority"]');
+      if (labelTaskPriority) labelTaskPriority.textContent = '🎁 Priority Level';
+
+      const prioritySelect = document.getElementById('task-priority');
+      if (prioritySelect) {
+        prioritySelect.querySelector('option[value="low"]').textContent = '🎈 Soft Streamer (Low)';
+        prioritySelect.querySelector('option[value="medium"]').textContent = '🎉 Party Popper (Med)';
+        prioritySelect.querySelector('option[value="high"]').textContent = '🎂 Main Cake Slice (High)';
+        prioritySelect.querySelector('option[value="urgent"]').textContent = '🎁 MASSIVE SURPRISE (Urgent)';
+      }
+
+      const labelTaskDeadline = document.querySelector('label[for="task-deadline"]');
+      if (labelTaskDeadline) labelTaskDeadline.textContent = '⌛ Celebration ETA';
+
+      const submitTaskBtn = document.getElementById('submit-task');
+      if (submitTaskBtn) {
+        const svg = submitTaskBtn.querySelector('svg');
+        submitTaskBtn.textContent = '';
+        if (svg) submitTaskBtn.appendChild(svg);
+        submitTaskBtn.append(' 🎂 Celebrate & Dispatch');
+      }
+    }
+
+    // Interactive Confetti Burst FX
+    function triggerBirthdayConfettiBurst() {
+      const confettiCount = 35;
+      const emojis = ['🎈', '🎂', '🎉', '✨', '🎁', '🥳', '🍰', '⭐', '💖'];
+      for (let i = 0; i < confettiCount; i++) {
+        const p = document.createElement('div');
+        p.className = 'birthday-burst-particle';
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.left = (Math.random() * 80 + 10) + 'vw';
+        p.style.top = (Math.random() * 20 + 70) + 'vh';
+        p.style.fontSize = (Math.random() * 16 + 18) + 'px';
+        p.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 3000);
       }
     }
 
