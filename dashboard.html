@@ -2506,6 +2506,8 @@
         }
         
         renderTasks();
+        // Start cloud sync after initial render
+        startTaskSync();
 
         // Show news board section
         const newsSection = document.getElementById('news-section');
@@ -2717,6 +2719,14 @@
     /* ========== Dashboard Logic ========== */
     const STORAGE_KEY = 'aeris_dashboard_tasks';
 
+    // ===== GOOGLE SHEETS CLOUD SYNC =====
+    // PASTE YOUR DEPLOYED GOOGLE APPS SCRIPT URL BELOW:
+    const TASKS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID_HERE/exec';
+    let _cloudSyncEnabled = TASKS_SCRIPT_URL && !TASKS_SCRIPT_URL.includes('YOUR_DEPLOYED_SCRIPT_ID_HERE');
+    let _isSyncing = false;
+    let _syncInterval = null;
+    const SYNC_INTERVAL_MS = 30000; // Poll every 30 seconds
+
     // State (declared at top of script)
 
     // DOM elements
@@ -2736,7 +2746,7 @@
       document.getElementById('experimental-banner').style.display = 'none';
     });
 
-    // Task helpers
+    // Task helpers — localStorage is the fast cache; cloud is the source of truth
     function getTasks() {
       try {
         return JSON.parse(safeLocal.getItem(STORAGE_KEY)) || [];
@@ -2745,6 +2755,103 @@
 
     function saveTasks(tasks) {
       safeLocal.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    // Cloud sync: fetch tasks from Google Sheet and update local cache
+    async function fetchTasksFromCloud() {
+      if (!_cloudSyncEnabled || _isSyncing) return;
+      _isSyncing = true;
+      try {
+        const resp = await fetch(TASKS_SCRIPT_URL + '?action=getTasks');
+        const data = await resp.json();
+        if (data.success && Array.isArray(data.tasks)) {
+          saveTasks(data.tasks);
+          renderTasks();
+        }
+      } catch (err) {
+        console.warn('Cloud task sync failed (will use local cache):', err);
+      } finally {
+        _isSyncing = false;
+      }
+    }
+
+    // Cloud sync: push a new task to the Google Sheet
+    function pushTaskToCloud(task) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'addTask');
+      params.append('id', task.id);
+      params.append('title', task.title || '');
+      params.append('description', task.description || '');
+      params.append('priority', task.priority || 'medium');
+      params.append('deadline', task.deadline || '');
+      params.append('department', task.department || 'mechanical');
+      params.append('status', task.status || 'todo');
+      params.append('createdAt', task.createdAt || new Date().toISOString());
+      params.append('isApproved', String(task.isApproved || false));
+      params.append('notes', task.notes || '');
+      params.append('memberProgress', JSON.stringify(task.memberProgress || {}));
+      params.append('reviews', JSON.stringify(task.reviews || []));
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    // Cloud sync: update a task field in the Google Sheet
+    function updateTaskInCloud(taskId, updates) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'updateTask');
+      params.append('id', taskId);
+      for (const key in updates) {
+        if (key === 'memberProgress' || key === 'reviews') {
+          params.append(key, JSON.stringify(updates[key]));
+        } else {
+          params.append(key, String(updates[key]));
+        }
+      }
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    // Cloud sync: delete a task from the Google Sheet
+    function deleteTaskFromCloud(taskId) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'deleteTask');
+      params.append('id', taskId);
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    // One-time migration: push existing localStorage tasks to the cloud
+    async function migrateLocalTasksToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const migrationKey = 'aeris_tasks_migrated';
+      if (safeLocal.getItem(migrationKey)) return; // Already migrated
+      const localTasks = getTasks();
+      if (localTasks.length === 0) {
+        safeLocal.setItem(migrationKey, 'true');
+        return;
+      }
+      try {
+        const params = new URLSearchParams();
+        params.append('action', 'bulkSync');
+        params.append('tasks', JSON.stringify(localTasks));
+        await fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
+        safeLocal.setItem(migrationKey, 'true');
+        console.log('Local tasks migrated to cloud successfully.');
+      } catch (err) {
+        console.warn('Task migration to cloud failed:', err);
+      }
+    }
+
+    // Start periodic cloud sync
+    function startTaskSync() {
+      if (!_cloudSyncEnabled) return;
+      // Migrate any existing local tasks first
+      migrateLocalTasksToCloud();
+      // Initial fetch
+      fetchTasksFromCloud();
+      // Poll every SYNC_INTERVAL_MS
+      if (_syncInterval) clearInterval(_syncInterval);
+      _syncInterval = setInterval(fetchTasksFromCloud, SYNC_INTERVAL_MS);
     }
 
     /* ========== News Board Logic ========== */
@@ -2949,7 +3056,7 @@
       }
 
       const tasks = getTasks();
-      tasks.push({
+      const newTask = {
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         title,
         description: desc,
@@ -2958,8 +3065,10 @@
         department: currentDept,
         status: 'todo',
         createdAt: new Date().toISOString()
-      });
+      };
+      tasks.push(newTask);
       saveTasks(tasks);
+      pushTaskToCloud(newTask);
 
       // Reset form
       taskTitle.value = '';
@@ -3082,6 +3191,7 @@
       if (task) {
         task.status = action;
         saveTasks(tasks);
+        updateTaskInCloud(id, { status: action });
         renderTasks();
       }
     }
@@ -3096,6 +3206,7 @@
       let tasks = getTasks();
       tasks = tasks.filter(t => t.id !== id);
       saveTasks(tasks);
+      deleteTaskFromCloud(id);
       renderTasks();
     }
 
@@ -3307,6 +3418,11 @@
         }
 
         saveTasks(tasks);
+        updateTaskInCloud(task.id, {
+          reviews: task.reviews,
+          isApproved: task.isApproved,
+          notes: task.notes || ''
+        });
         renderTasks();
 
         // Refresh modal content immediately
@@ -17926,6 +18042,7 @@
             
             // Save state immediately
             saveTasks(tasks);
+            updateTaskInCloud(task.id, { memberProgress: task.memberProgress, notifiedMembers: task.notifiedMembers });
             
             // 1. Send automated missed task email to member
             const memberSubject = `Notice of Missed Task Target: "${task.title}"`;
@@ -17939,6 +18056,7 @@
         }
       } else {
         saveTasks(tasks);
+        updateTaskInCloud(task.id, { memberProgress: task.memberProgress });
       }
       
       // Re-render Excel view
