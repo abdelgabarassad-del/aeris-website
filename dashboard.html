@@ -1553,6 +1553,7 @@
 
     function saveMemberBonuses(bonuses) {
       safeLocal.setItem(MEMBER_BONUSES_KEY, JSON.stringify(bonuses));
+      pushBonusesToCloud(bonuses);
     }
 
     function getWarningsSentState() {
@@ -1565,6 +1566,7 @@
 
     function saveWarningsSentState(state) {
       safeLocal.setItem(WARNINGS_SENT_KEY, JSON.stringify(state));
+      pushWarningsToCloud(state);
     }
 
     async function checkMemberMissedTasks(memberId, defaultDept) {
@@ -2506,8 +2508,8 @@
         }
         
         renderTasks();
-        // Start cloud sync after initial render
-        startTaskSync();
+        // Start cloud sync after initial render (tasks, news, finance, funding, bonuses, warnings)
+        startDashboardSync();
 
         // Show news board section
         const newsSection = document.getElementById('news-section');
@@ -3146,6 +3148,7 @@
       let newsList = getNews();
       newsList = newsList.filter(item => item.id !== id);
       saveNews(newsList);
+      deleteNewsFromCloud(id);
       renderNews();
     }
 
@@ -3203,14 +3206,16 @@
         }
 
         const newsList = getNews();
-        newsList.push({
+        const newsItem = {
           id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
           content,
           authorName,
           authorRole,
           createdAt: new Date().toISOString()
-        });
+        };
+        newsList.push(newsItem);
         saveNews(newsList);
+        pushNewsToCloud(newsItem);
 
         newsContent.value = '';
         newsFormWrapper.style.display = 'none';
@@ -18696,7 +18701,7 @@
       const activeName = activeUser ? activeUser.name : 'Unknown';
 
       const txs = getTransactions();
-      txs.push({
+      const newTx = {
         id: 'tx_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         date: dateEl.value,
         type: typeVal,
@@ -18707,9 +18712,11 @@
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         edits: []
-      });
+      };
+      txs.push(newTx);
 
       saveTransactions(txs);
+      pushTransactionToCloud(newTx);
       
       // Reset form
       amountEl.value = '';
@@ -18736,6 +18743,7 @@
 
       txs = txs.filter(t => t.id !== id);
       saveTransactions(txs);
+      deleteTransactionFromCloud(id);
       
       renderFinanceSection();
       logToMailerConsole(`Deleted finance record: ${tx.type === 'income' ? 'Income' : 'Spending'} of ${tx.amount.toFixed(2)} EGP.`, 'sys');
@@ -18819,6 +18827,7 @@
       tx.updatedAt = new Date().toISOString();
 
       saveTransactions(txs);
+      syncAllTransactionsToCloud();
       closeFinanceEditModal();
       renderFinanceSection();
       logToMailerConsole(`Edited finance record ID ${id}: New Amount is ${amountVal.toFixed(2)} EGP.`, 'sys');
@@ -18858,6 +18867,7 @@
 
     function saveFundingData(data) {
       safeLocal.setItem(FUNDING_STORAGE_KEY, JSON.stringify(data));
+      pushFundingToCloud(data);
     }
 
     function renderFundingSection() {
@@ -19736,6 +19746,7 @@
 
         // Clear localStorage transactions by setting to empty array
         saveTransactions([]);
+        clearTransactionsFromCloud();
 
         // Re-render the finance section
         renderFinanceSection();
