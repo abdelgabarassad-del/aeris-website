@@ -2842,17 +2842,214 @@
       }
     }
 
-    // Start periodic cloud sync
-    function startTaskSync() {
+    // Start periodic cloud sync for ALL dashboard data
+    function startDashboardSync() {
       if (!_cloudSyncEnabled) return;
-      // Migrate any existing local tasks first
+      // Migrate any existing local data first
       migrateLocalTasksToCloud();
-      // Initial fetch
-      fetchTasksFromCloud();
+      migrateLocalNewsToCloud();
+      migrateLocalTransactionsToCloud();
+      migrateLocalFundingToCloud();
+      migrateLocalBonusesToCloud();
+      migrateLocalWarningsToCloud();
+      // Initial fetch of everything
+      fetchAllFromCloud();
       // Poll every SYNC_INTERVAL_MS
       if (_syncInterval) clearInterval(_syncInterval);
-      _syncInterval = setInterval(fetchTasksFromCloud, SYNC_INTERVAL_MS);
+      _syncInterval = setInterval(fetchAllFromCloud, SYNC_INTERVAL_MS);
     }
+
+    // Fetch ALL data from cloud in one request
+    async function fetchAllFromCloud() {
+      if (!_cloudSyncEnabled || _isSyncing) return;
+      _isSyncing = true;
+      try {
+        const resp = await fetch(TASKS_SCRIPT_URL + '?action=getAll');
+        const data = await resp.json();
+        if (data.success) {
+          if (Array.isArray(data.tasks)) { saveTasks(data.tasks); renderTasks(); }
+          if (Array.isArray(data.news)) { saveNews(data.news); renderNews(); }
+          if (Array.isArray(data.transactions)) { saveTransactions_local(data.transactions); if (typeof renderFinanceSection === 'function') try { renderFinanceSection(); } catch(e){} }
+          if (data.funding) { saveFundingData_local(data.funding); if (typeof renderFundingSection === 'function') try { renderFundingSection(); } catch(e){} }
+          if (data.bonuses) { saveMemberBonuses_local(data.bonuses); }
+          if (data.warnings) { saveWarningsSentState_local(data.warnings); }
+        }
+      } catch (err) {
+        console.warn('Cloud full sync failed (will use local cache):', err);
+      } finally {
+        _isSyncing = false;
+      }
+    }
+
+    // ===== NEWS CLOUD SYNC =====
+    function pushNewsToCloud(item) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'addNews');
+      params.append('id', item.id);
+      params.append('content', item.content || '');
+      params.append('authorName', item.authorName || '');
+      params.append('authorRole', item.authorRole || '');
+      params.append('createdAt', item.createdAt || new Date().toISOString());
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    function deleteNewsFromCloud(id) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'deleteNews');
+      params.append('id', id);
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    async function migrateLocalNewsToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const mk = 'aeris_news_migrated';
+      if (safeLocal.getItem(mk)) return;
+      const items = getNews();
+      if (items.length === 0) { safeLocal.setItem(mk, 'true'); return; }
+      try {
+        const params = new URLSearchParams();
+        params.append('action', 'bulkSyncNews');
+        params.append('items', JSON.stringify(items));
+        await fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
+        safeLocal.setItem(mk, 'true');
+      } catch(e) { console.warn('News migration failed:', e); }
+    }
+
+    // ===== FINANCE CLOUD SYNC =====
+    function pushTransactionToCloud(tx) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'addTransaction');
+      params.append('id', tx.id || '');
+      params.append('type', tx.type || 'expense');
+      params.append('description', tx.source_purpose || tx.description || '');
+      params.append('amount', String(tx.amount || 0));
+      params.append('date', tx.date || '');
+      params.append('addedBy', tx.addedBy || '');
+      params.append('createdAt', tx.createdAt || new Date().toISOString());
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    function deleteTransactionFromCloud(id) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'deleteTransaction');
+      params.append('id', id);
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    function clearTransactionsFromCloud() {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'clearTransactions');
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    // Full re-sync of all transactions to cloud (used after edits)
+    function syncAllTransactionsToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const txs = getTransactions();
+      // Clear and re-push (simplest for edits)
+      clearTransactionsFromCloud();
+      setTimeout(function() {
+        const params = new URLSearchParams();
+        params.append('action', 'bulkSyncTransactions');
+        params.append('items', JSON.stringify(txs));
+        fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+      }, 500);
+    }
+
+    async function migrateLocalTransactionsToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const mk = 'aeris_transactions_migrated';
+      if (safeLocal.getItem(mk)) return;
+      const items = getTransactions();
+      if (!items || items.length === 0) { safeLocal.setItem(mk, 'true'); return; }
+      try {
+        const params = new URLSearchParams();
+        params.append('action', 'bulkSyncTransactions');
+        params.append('items', JSON.stringify(items));
+        await fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
+        safeLocal.setItem(mk, 'true');
+      } catch(e) { console.warn('Transaction migration failed:', e); }
+    }
+
+    // ===== FUNDING CLOUD SYNC =====
+    function pushFundingToCloud(data) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'saveFunding');
+      params.append('data', JSON.stringify(data));
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    async function migrateLocalFundingToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const mk = 'aeris_funding_migrated';
+      if (safeLocal.getItem(mk)) return;
+      const data = getFundingData();
+      if (!data || (!data.payments.length && Object.keys(data.agreedAmounts).every(k => data.agreedAmounts[k] === 0))) {
+        safeLocal.setItem(mk, 'true'); return;
+      }
+      try {
+        const params = new URLSearchParams();
+        params.append('action', 'saveFunding');
+        params.append('data', JSON.stringify(data));
+        await fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
+        safeLocal.setItem(mk, 'true');
+      } catch(e) { console.warn('Funding migration failed:', e); }
+    }
+
+    // ===== BONUSES CLOUD SYNC =====
+    function pushBonusesToCloud(bonuses) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'saveBonuses');
+      params.append('data', JSON.stringify(bonuses));
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    async function migrateLocalBonusesToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const mk = 'aeris_bonuses_migrated';
+      if (safeLocal.getItem(mk)) return;
+      const data = getMemberBonuses();
+      if (!data || Object.keys(data).length === 0) { safeLocal.setItem(mk, 'true'); return; }
+      try {
+        pushBonusesToCloud(data);
+        safeLocal.setItem(mk, 'true');
+      } catch(e) { console.warn('Bonuses migration failed:', e); }
+    }
+
+    // ===== WARNINGS CLOUD SYNC =====
+    function pushWarningsToCloud(warnings) {
+      if (!_cloudSyncEnabled) return;
+      const params = new URLSearchParams();
+      params.append('action', 'saveWarnings');
+      params.append('data', JSON.stringify(warnings));
+      fetch(TASKS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params }).catch(function(){});
+    }
+
+    async function migrateLocalWarningsToCloud() {
+      if (!_cloudSyncEnabled) return;
+      const mk = 'aeris_warnings_migrated';
+      if (safeLocal.getItem(mk)) return;
+      const data = getWarningsSentState();
+      if (!data || Object.keys(data).length === 0) { safeLocal.setItem(mk, 'true'); return; }
+      try {
+        pushWarningsToCloud(data);
+        safeLocal.setItem(mk, 'true');
+      } catch(e) { console.warn('Warnings migration failed:', e); }
+    }
+
+    // Local-only save helpers (used by cloud fetch to avoid re-pushing to cloud)
+    function saveNews_local(news) { safeLocal.setItem(NEWS_STORAGE_KEY, JSON.stringify(news)); }
+    function saveTransactions_local(txs) { safeLocal.setItem(FINANCE_STORAGE_KEY, JSON.stringify(txs)); }
+    function saveFundingData_local(data) { safeLocal.setItem(FUNDING_STORAGE_KEY, JSON.stringify(data)); }
+    function saveMemberBonuses_local(bonuses) { safeLocal.setItem(MEMBER_BONUSES_KEY, JSON.stringify(bonuses)); }
+    function saveWarningsSentState_local(state) { safeLocal.setItem(WARNINGS_SENT_KEY, JSON.stringify(state)); }
 
     /* ========== News Board Logic ========== */
     const NEWS_STORAGE_KEY = 'aeris_dashboard_news';
