@@ -92,7 +92,8 @@
       '251000861': { name: 'Hazem Walid', depts: ['mechanical'], role: 'member', email: 'Hazemwalid00@gmail.com' },
       '251001982': { name: 'Ahmad Aziz', depts: ['mechanical'], role: 'member', email: 'anmed.ou789b@gmail.com' },
       '241000881': { name: 'Omar Hossam Elbanan', depts: ['mechanical'], role: 'member', email: 'elbnanomar@gmail.com' },
-      '251003016': { name: 'Hana Moataz', depts: ['mechanical'], role: 'member', email: 'hanaheilaa@gmail.com' },
+      // Hana Moataz: software, mechanical, electrical (cross divisions)
+      '251003016': { name: 'Hana Moataz', depts: ['software', 'mechanical', 'electrical'], role: 'member', email: 'hanaheilaa@gmail.com' },
       
       // Mechanical Division (Pure Mech)
       '231012318': { name: 'Omar Atwan', depts: ['mechanical'], role: 'head', email: 'Omaratwan713@yahoo.com' },
@@ -372,7 +373,7 @@
           ];
         } else if (activeTheme === 'spongebob') {
           title = "🍍 Bikini Bottom Task Navigation Guide";
-          welcome = "🌊 Ahoy, Hana Moataz! Happy Birthday! Let's get ready to make some bubbles in the mechanical department under the sea! 🎂🎈";
+          welcome = "🌊 Ahoy, Hana Moataz! Happy Birthday! Let's get ready to make some bubbles in the software, mechanical, and electrical departments under the sea! 🎂🎈";
           items = [
             "<strong>Under the Sea Tasks:</strong> Click the Mechanical tab to browse current chores and checklist items in read-only mode.",
             "<strong>Bikini Bottom Telemetry:</strong> Check task details and read evaluations from Mr. Krabs (the advisors). Action buttons (Start/Done) are locked.",
