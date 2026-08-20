@@ -653,6 +653,15 @@
                 </small>
               </div>
 
+              <!-- Promo Code (Optional) -->
+              <div class="form-group">
+                <label for="promoCode">Promo Code (Optional)</label>
+                <input type="text" id="promoCode" name="promoCode" placeholder="e.g., AERIS2026 or referral code" />
+                <small style="display: block; margin-top: 6px; color: rgba(246, 242, 223, 0.7); font-size: 0.85rem; font-style: italic;">
+                  * Optional: Enter a promo code or member referral code if applicable.
+                </small>
+              </div>
+
               <!-- Terms & Conditions Section -->
               <div class="terms-container">
                 <div class="terms-header" onclick="toggleTerms()">
@@ -751,6 +760,7 @@
   newRow.push(e.parameter.experience || "");
   newRow.push(e.parameter.whyJoin || "");
   newRow.push(e.parameter.portfolioLink || "");
+  newRow.push(e.parameter.promoCode || "");
   
   sheet.appendRow(newRow);
   
