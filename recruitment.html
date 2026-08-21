@@ -450,6 +450,30 @@
     .form-group-checkbox label:hover {
       color: var(--white);
     }
+    .promo-feedback {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      display: none;
+      font-weight: 500;
+      line-height: 1.4;
+      transition: var(--transition);
+    }
+    .promo-feedback.valid {
+      display: block;
+      color: #34d399;
+    }
+    .promo-feedback.invalid {
+      display: block;
+      color: #f87171;
+    }
+    .form-group input.is-invalid {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.35) !important;
+    }
+    .form-group input.is-valid {
+      border-color: #10b981 !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    }
   </style>
 </head>
 <body>
@@ -662,9 +686,10 @@
               <!-- Promo Code (Optional) -->
               <div class="form-group">
                 <label for="promoCode">Promo Code (Optional)</label>
-                <input type="text" id="promoCode" name="promoCode" placeholder="e.g., AERIS2026 or referral code" />
-                <small style="display: block; margin-top: 6px; color: rgba(246, 242, 223, 0.7); font-size: 0.85rem; font-style: italic;">
-                  * Optional: Enter a promo code or member referral code if applicable.
+                <input type="text" id="promoCode" name="promoCode" placeholder="e.g., SND8DUDD467" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: monospace; letter-spacing: 0.08em;" />
+                <div id="promoFeedback" class="promo-feedback"></div>
+                <small id="promoHelp" style="display: block; margin-top: 6px; color: rgba(246, 242, 223, 0.7); font-size: 0.85rem; font-style: italic;">
+                  * Optional: Enter a valid promo code if you have one. Leave blank if none.
                 </small>
               </div>
 
@@ -885,6 +910,90 @@
     }, { threshold: 0.05 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+    /* Valid Promo Codes Database */
+    const VALID_PROMO_CODES = {
+      // 50% OFF — Application Fee (1 person, single use)
+      'BHXTPDPFF5E': '50% OFF — Application Fee',
+      '2RAK1VRJNVG': '50% OFF — Application Fee',
+      '40MGG1W103D': '50% OFF — Application Fee',
+      'VE6PR5N8I4P': '50% OFF — Application Fee',
+      'OCUZRENUN5Z': '50% OFF — Application Fee',
+      'F9SXMECOSFO': '50% OFF — Application Fee',
+      'JRSNVNQ65QD': '50% OFF — Application Fee',
+      'FYGWWQC38HY': '50% OFF — Application Fee',
+      'HBRPOIG8F1C': '50% OFF — Application Fee',
+      'VB9OOAEDOEC': '50% OFF — Application Fee',
+
+      // 100% OFF — Application Fee (1 person, single use)
+      'T7A9TGIQHG9': '100% OFF — Full Application Fee Waiver',
+      'T6MJXK87AU5': '100% OFF — Full Application Fee Waiver',
+      'MTZX272HPOE': '100% OFF — Full Application Fee Waiver',
+      'GYR3XKXWNRE': '100% OFF — Full Application Fee Waiver',
+      'OI65FDHJK1E': '100% OFF — Full Application Fee Waiver',
+      'YAYQ3S195JM': '100% OFF — Full Application Fee Waiver',
+      'GDZVGPMM82I': '100% OFF — Full Application Fee Waiver',
+      'YY37Q9AH8RV': '100% OFF — Full Application Fee Waiver',
+      'K8PK3YR9OUD': '100% OFF — Full Application Fee Waiver',
+      'IT3UEA3GE8N': '100% OFF — Full Application Fee Waiver',
+
+      // 50% OFF x2 — Application Fee (2 people, single use each)
+      'SND8DUDD467': '50% OFF (Shared Code) — Application Fee',
+      '6QIWEPXSK28': '50% OFF (Shared Code) — Application Fee',
+      'AFPK054NZDK': '50% OFF (Shared Code) — Application Fee',
+      '8II49KQ71N8': '50% OFF (Shared Code) — Application Fee',
+      '3JQIP98Q1ZX': '50% OFF (Shared Code) — Application Fee',
+      'HS1K3AQ6L6G': '50% OFF (Shared Code) — Application Fee',
+      'CF07UQNUPQZ': '50% OFF (Shared Code) — Application Fee',
+      'KD6FLEEPZHP': '50% OFF (Shared Code) — Application Fee',
+      'BFNO6B9M80O': '50% OFF (Shared Code) — Application Fee',
+      '1LR3PE29GD8': '50% OFF (Shared Code) — Application Fee'
+    };
+
+    const promoInput = document.getElementById('promoCode');
+    const promoFeedback = document.getElementById('promoFeedback');
+    const promoHelp = document.getElementById('promoHelp');
+
+    function validatePromoCode() {
+      if (!promoInput) return true;
+      const rawVal = promoInput.value.trim().toUpperCase();
+      promoInput.value = rawVal;
+      
+      if (rawVal === '') {
+        promoInput.classList.remove('is-invalid', 'is-valid');
+        if (promoFeedback) {
+          promoFeedback.className = 'promo-feedback';
+          promoFeedback.textContent = '';
+        }
+        if (promoHelp) promoHelp.style.display = 'block';
+        return true;
+      }
+      
+      if (VALID_PROMO_CODES[rawVal]) {
+        promoInput.classList.remove('is-invalid');
+        promoInput.classList.add('is-valid');
+        if (promoFeedback) {
+          promoFeedback.className = 'promo-feedback valid';
+          promoFeedback.textContent = `✓ Valid Code Applied: ${VALID_PROMO_CODES[rawVal]}`;
+        }
+        if (promoHelp) promoHelp.style.display = 'none';
+        return true;
+      } else {
+        promoInput.classList.remove('is-valid');
+        promoInput.classList.add('is-invalid');
+        if (promoFeedback) {
+          promoFeedback.className = 'promo-feedback invalid';
+          promoFeedback.textContent = '✕ Invalid promo code. Please enter a valid code or leave blank to continue.';
+        }
+        if (promoHelp) promoHelp.style.display = 'none';
+        return false;
+      }
+    }
+
+    if (promoInput) {
+      promoInput.addEventListener('input', validatePromoCode);
+      promoInput.addEventListener('blur', validatePromoCode);
+    }
+
     /* Form Handler */
     const form = document.getElementById('recruitmentForm');
     const formCard = document.getElementById('formCard');
@@ -896,6 +1005,13 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      // Validate Promo Code (Reject if invalid code provided)
+      if (!validatePromoCode()) {
+        promoInput.focus();
+        promoInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
       // Hide any previous errors
       errorBanner.style.display = 'none';
       
@@ -936,6 +1052,7 @@
         // Since 'no-cors' mode returns opaque response, we can transition to success
         submitBtn.classList.remove('is-loading');
         form.reset();
+        validatePromoCode();
         formCard.style.display = 'none';
         successHUD.style.display = 'block';
         window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
@@ -953,6 +1070,7 @@
       successHUD.style.display = 'none';
       formCard.style.display = 'block';
       form.reset();
+      validatePromoCode();
       toggleSubmitButton();
       window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
     });
