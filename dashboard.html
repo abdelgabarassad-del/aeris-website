@@ -18039,15 +18039,20 @@
       'software': {
         name: 'Software',
         tiers: [
-          { key: 'well', label: 'Done Well (+10 pts)', shortLabel: 'Done Well', points: 10, color: '#10b981' },
-          { key: 'poorly', label: 'Done Poorly (+5 pts)', shortLabel: 'Done Poorly', points: 5, color: '#f59e0b' }
+          { key: 'full_completion', label: 'Full Completion (Docs+Code+Fix) (+30 pts)', shortLabel: 'Full (30 pts)', points: 30, color: '#c084fc' },
+          { key: 'testing_adv', label: 'Testing & Troubleshooting Fixing (+20 pts)', shortLabel: 'Testing Fix (+20)', points: 20, color: '#38bdf8' },
+          { key: 'testing_std', label: 'Testing & Troubleshooting (+15 pts)', shortLabel: 'Testing (+15)', points: 15, color: '#06b6d4' },
+          { key: 'coding', label: 'Coding / Connection (+10 pts)', shortLabel: 'Coding (+10)', points: 10, color: '#10b981' },
+          { key: 'docs', label: 'Documentation (+5 pts)', shortLabel: 'Docs (+5)', points: 5, color: '#f59e0b' }
         ],
         aliases: {
-          'good': 'well',
-          'exceptional': 'well',
-          'least_quality': 'poorly'
+          'well': 'full_completion',
+          'poorly': 'docs',
+          'good': 'testing_adv',
+          'exceptional': 'full_completion',
+          'least_quality': 'docs'
         },
-        missedPenalty: 5,
+        missedPenalty: 0,
         bonusPoints: 10,
         allowExcused: true
       },
