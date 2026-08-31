@@ -18000,6 +18000,91 @@
     /* ========== PROGRESS TRACKER CONTROLLER & EXCEL VIEW ========== */
     let currentView = 'kanban';
 
+    /* ========== MODULAR SUBTEAM POINT SYSTEMS CONFIGURATION ========== */
+    const DEPARTMENT_POINT_SYSTEMS = {
+      'mechanical': {
+        name: 'Mechanical',
+        tiers: [
+          { key: 'exceptional', label: 'Exceptional (+3 pts)', shortLabel: 'Exceptional', points: 3, color: '#38bdf8' },
+          { key: 'good', label: 'Good Completion (+2 pts)', shortLabel: 'Good', points: 2, color: '#10b981' },
+          { key: 'least_quality', label: 'Least Quality (+1 pt)', shortLabel: 'Least Quality', points: 1, color: '#f59e0b' }
+        ],
+        aliases: {
+          'well': 'good',
+          'poorly': 'least_quality'
+        },
+        missedPenalty: 0,
+        bonusPoints: 3,
+        allowExcused: true
+      },
+      'electrical': {
+        name: 'Electrical',
+        tiers: [
+          { key: 'in_person', label: 'In-Person Attendance (+5 pts)', shortLabel: 'In-Person', points: 5, color: '#ec4899' },
+          { key: 'exceeding', label: 'Exceeding Requirements (+3 pts)', shortLabel: 'Exceeding', points: 3, color: '#38bdf8' },
+          { key: 'early_handin', label: 'Early Hand-In (1st half) (+2 pts)', shortLabel: 'Early Hand-In', points: 2, color: '#10b981' },
+          { key: 'met_parameters', label: 'Met Task Parameters (+1 pt)', shortLabel: 'Met Parameters', points: 1, color: '#f59e0b' }
+        ],
+        aliases: {
+          'well': 'met_parameters',
+          'poorly': 'met_parameters',
+          'good': 'early_handin',
+          'exceptional': 'exceeding',
+          'least_quality': 'met_parameters'
+        },
+        missedPenalty: 0,
+        bonusPoints: 5,
+        allowExcused: true
+      },
+      'software': {
+        name: 'Software',
+        tiers: [
+          { key: 'well', label: 'Done Well (+10 pts)', shortLabel: 'Done Well', points: 10, color: '#10b981' },
+          { key: 'poorly', label: 'Done Poorly (+5 pts)', shortLabel: 'Done Poorly', points: 5, color: '#f59e0b' }
+        ],
+        aliases: {
+          'good': 'well',
+          'exceptional': 'well',
+          'least_quality': 'poorly'
+        },
+        missedPenalty: 5,
+        bonusPoints: 10,
+        allowExcused: true
+      },
+      'non-technical': {
+        name: 'TDR & Marketing',
+        tiers: [
+          { key: 'well', label: 'Done Well (+10 pts)', shortLabel: 'Done Well', points: 10, color: '#10b981' },
+          { key: 'poorly', label: 'Done Poorly (+5 pts)', shortLabel: 'Done Poorly', points: 5, color: '#f59e0b' }
+        ],
+        aliases: {
+          'good': 'well',
+          'exceptional': 'well',
+          'least_quality': 'poorly'
+        },
+        missedPenalty: 5,
+        bonusPoints: 10,
+        allowExcused: true
+      }
+    };
+
+    function getDeptPointSystem(dept) {
+      return DEPARTMENT_POINT_SYSTEMS[dept] || DEPARTMENT_POINT_SYSTEMS['mechanical'];
+    }
+
+    function resolveProgressKey(dept, rawProgress) {
+      if (!rawProgress || rawProgress === 'unmarked') return 'unmarked';
+      if (rawProgress === 'not_done') return 'not_done';
+      if (rawProgress === 'excused') return 'excused';
+      const config = getDeptPointSystem(dept);
+      const isDirectTier = config.tiers.some(t => t.key === rawProgress);
+      if (isDirectTier) return rawProgress;
+      if (config.aliases && config.aliases[rawProgress]) {
+        return config.aliases[rawProgress];
+      }
+      return rawProgress;
+    }
+
     // Renders the spreadsheet grid dynamically based on the current department
     function renderProgressTracker() {
       const trackerTable = document.getElementById('tracker-table');
@@ -18016,6 +18101,7 @@
       }
       
       const tasks = getTasks().filter(t => t.department === currentDept);
+      const pointConfig = getDeptPointSystem(currentDept);
       
       // Filter out hidden members (Aries and Hanah) and map by department array membership
       let deptMembers = Object.entries(MEMBERS_DATABASE)
@@ -18047,8 +18133,12 @@
       });
       
       headerHTML += '<th style="text-align: center; min-width: 80px;">Total Done</th>';
-      headerHTML += '<th style="text-align: center; min-width: 80px; color: #10b981;">Done Well</th>';
-      headerHTML += '<th style="text-align: center; min-width: 80px; color: #f59e0b;">Done Poorly</th>';
+      
+      // Render dynamic tier metric headers
+      pointConfig.tiers.forEach(tier => {
+        headerHTML += `<th style="text-align: center; min-width: 80px; color: ${tier.color};">${tier.shortLabel}</th>`;
+      });
+      
       headerHTML += '<th style="text-align: center; min-width: 80px; color: #a78bfa;">Excused</th>';
       headerHTML += '<th style="text-align: center; min-width: 80px; color: #f87171;">Raw Missed</th>';
       headerHTML += '<th style="text-align: center; min-width: 100px; color: #60a5fa;">🏅 Bonuses</th>';
@@ -18077,18 +18167,25 @@
         `;
         
         let totalDone = 0;
-        let doneWell = 0;
-        let donePoorly = 0;
+        const tierCounts = {};
+        pointConfig.tiers.forEach(t => tierCounts[t.key] = 0);
         let notDone = 0;
         let excusedCount = 0;
         
         tasks.forEach(t => {
-          const progress = (t.memberProgress && t.memberProgress[member.id]) || 'unmarked';
+          const rawProgress = (t.memberProgress && t.memberProgress[member.id]) || 'unmarked';
+          const progress = resolveProgressKey(currentDept, rawProgress);
           
-          if (progress === 'well') { totalDone++; doneWell++; }
-          else if (progress === 'poorly') { totalDone++; donePoorly++; }
-          else if (progress === 'not_done') { notDone++; }
-          else if (progress === 'excused') { excusedCount++; }
+          if (progress === 'not_done') {
+            notDone++;
+          } else if (progress === 'excused') {
+            excusedCount++;
+          } else if (progress !== 'unmarked') {
+            totalDone++;
+            if (tierCounts[progress] !== undefined) {
+              tierCounts[progress]++;
+            }
+          }
           
           // Check editor permission: CEO, Vice Head, and Department Heads can edit
           const activeUser = MEMBERS_DATABASE[currentReg];
@@ -18099,23 +18196,28 @@
           );
           
           if (canEdit) {
+            let optionsHTML = `<option value="unmarked" ${progress === 'unmarked' ? 'selected' : ''}>Not Marked</option>`;
+            pointConfig.tiers.forEach(tier => {
+              optionsHTML += `<option value="${tier.key}" ${progress === tier.key ? 'selected' : ''}>${tier.label}</option>`;
+            });
+            optionsHTML += `<option value="not_done" ${progress === 'not_done' ? 'selected' : ''}>Not Done</option>`;
+            optionsHTML += `<option value="excused" ${progress === 'excused' ? 'selected' : ''}>Excused</option>`;
+
             rowHTML += `
               <td>
                 <select class="eval-select eval-select--${progress}" data-task-id="${t.id}" data-member-id="${member.id}">
-                  <option value="unmarked" ${progress === 'unmarked' ? 'selected' : ''}>Not Marked</option>
-                  <option value="well" ${progress === 'well' ? 'selected' : ''}>Done Well</option>
-                  <option value="poorly" ${progress === 'poorly' ? 'selected' : ''}>Done Poorly</option>
-                  <option value="not_done" ${progress === 'not_done' ? 'selected' : ''}>Not Done</option>
-                  <option value="excused" ${progress === 'excused' ? 'selected' : ''}>Excused</option>
+                  ${optionsHTML}
                 </select>
               </td>
             `;
           } else {
             let label = 'Not Marked';
-            if (progress === 'well') label = 'Done Well';
-            else if (progress === 'poorly') label = 'Done Poorly';
-            else if (progress === 'not_done') label = 'Not Done';
+            if (progress === 'not_done') label = 'Not Done';
             else if (progress === 'excused') label = 'Excused';
+            else {
+              const matchingTier = pointConfig.tiers.find(tier => tier.key === progress);
+              if (matchingTier) label = matchingTier.shortLabel;
+            }
             
             rowHTML += `
               <td>
@@ -18155,10 +18257,12 @@
         const metricClass = isAlert ? 'tracker-metric tracker-metric--missed-alert' : 'tracker-metric';
         const alertIcon = isAlert ? '⚠️ ' : '';
         
+        rowHTML += `<td class="tracker-metric">${totalDone}</td>`;
+        pointConfig.tiers.forEach(tier => {
+          rowHTML += `<td class="tracker-metric" style="color: ${tier.color};">${tierCounts[tier.key] || 0}</td>`;
+        });
+        
         rowHTML += `
-          <td class="tracker-metric">${totalDone}</td>
-          <td class="tracker-metric" style="color: #10b981;">${doneWell}</td>
-          <td class="tracker-metric" style="color: #f59e0b;">${donePoorly}</td>
           <td class="tracker-metric" style="color: #a78bfa;">${excusedCount}</td>
           <td class="tracker-metric" style="color: #f87171;">${notDone}</td>
           ${bonusCellHTML}
@@ -18171,6 +18275,7 @@
       
       // 2. Build table rows segmented into Core and Cross-Division for leaders
       let bodyHTML = '<tbody>';
+      const colSpanCount = tasks.length + 5 + pointConfig.tiers.length;
       
       if (isFullViewer) {
         // Group 1: Core Sub-team (only in this department)
@@ -18181,8 +18286,8 @@
         if (coreMembers.length > 0) {
           bodyHTML += `
             <tr class="tracker-divider-row">
-              <td colspan="${tasks.length + 8}" style="background: rgba(30, 59, 45, 0.45); font-weight: bold; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
-                📂 Core ${escapeHtml(currentDept)} Division
+              <td colspan="${colSpanCount}" style="background: rgba(30, 59, 45, 0.45); font-weight: bold; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
+                📂 Core ${escapeHtml(pointConfig.name || currentDept)} Division
               </td>
             </tr>
           `;
@@ -18194,7 +18299,7 @@
         if (crossMembers.length > 0) {
           bodyHTML += `
             <tr class="tracker-divider-row">
-              <td colspan="${tasks.length + 8}" style="background: rgba(22, 43, 33, 0.7); font-weight: bold; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
+              <td colspan="${colSpanCount}" style="background: rgba(22, 43, 33, 0.7); font-weight: bold; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px;">
                 🔄 Cross-Division &amp; Shared Members
               </td>
             </tr>
@@ -18315,34 +18420,46 @@
       )) || currentReg === '5550';
 
       const tasks = getTasks().filter(t => t.department === dept);
+      const pointConfig = getDeptPointSystem(dept);
       const bonuses = getMemberBonuses();
 
       // Get members of this department
       let deptMembers = Object.entries(MEMBERS_DATABASE)
         .filter(([id, m]) => !m.hide && m.depts.includes(dept))
         .map(([id, m]) => {
-          let doneWell = 0;
-          let donePoorly = 0;
+          const tierCounts = {};
+          pointConfig.tiers.forEach(t => tierCounts[t.key] = 0);
           let notDone = 0;
+          let excused = 0;
 
           tasks.forEach(t => {
-            const progress = (t.memberProgress && t.memberProgress[id]) || 'unmarked';
-            if (progress === 'well') doneWell++;
-            else if (progress === 'poorly') donePoorly++;
-            else if (progress === 'not_done') notDone++;
+            const rawProgress = (t.memberProgress && t.memberProgress[id]) || 'unmarked';
+            const progress = resolveProgressKey(dept, rawProgress);
+            
+            if (progress === 'not_done') notDone++;
+            else if (progress === 'excused') excused++;
+            else if (tierCounts[progress] !== undefined) {
+              tierCounts[progress]++;
+            }
           });
 
           const memberBonus = bonuses[id] || 0;
-          // Calculate score: Done Well = 10 pts, Done Poorly = 5 pts, Bonus = 10 pts, Not Done = -5 pts
-          const rawScore = (doneWell * 10) + (donePoorly * 5) + (memberBonus * 10) - (notDone * 5);
+          
+          // Calculate score based on department configuration
+          let tierScoreTotal = 0;
+          pointConfig.tiers.forEach(tier => {
+            tierScoreTotal += (tierCounts[tier.key] || 0) * tier.points;
+          });
+          
+          const rawScore = tierScoreTotal + (memberBonus * pointConfig.bonusPoints) - (notDone * (pointConfig.missedPenalty || 0));
           const score = Math.max(0, rawScore);
 
           return {
             id,
             ...m,
-            doneWell,
-            donePoorly,
+            tierCounts,
             notDone,
+            excused,
             bonus: memberBonus,
             score
           };
@@ -18359,16 +18476,22 @@
         return;
       }
 
-      // Generate HTML
+      // Generate HTML Headers
       let html = `
         <thead>
           <tr style="border-bottom: 2px solid rgba(246, 242, 223, 0.15);">
             <th style="width: 80px; text-align: center; padding: 12px 8px;">Rank</th>
             <th style="padding: 12px 12px;">Member Name</th>
-            <th style="text-align: center; padding: 12px 12px;">Done Well (+10)</th>
-            <th style="text-align: center; padding: 12px 12px;">Done Poorly (+5)</th>
-            <th style="text-align: center; padding: 12px 12px; color: #f87171;">Missed (-5)</th>
-            <th style="text-align: center; padding: 12px 12px; color: #60a5fa;">🏅 Bonuses (+10)</th>
+      `;
+
+      pointConfig.tiers.forEach(tier => {
+        html += `<th style="text-align: center; padding: 12px 12px; color: ${tier.color};">${tier.shortLabel} (+${tier.points})</th>`;
+      });
+
+      const missedLabel = pointConfig.missedPenalty > 0 ? `Missed (-${pointConfig.missedPenalty})` : 'Missed';
+      html += `
+            <th style="text-align: center; padding: 12px 12px; color: #f87171;">${missedLabel}</th>
+            <th style="text-align: center; padding: 12px 12px; color: #60a5fa;">🏅 Bonuses (+${pointConfig.bonusPoints})</th>
             <th style="text-align: center; width: 140px; padding: 12px 12px;">Overall Score</th>
           </tr>
         </thead>
@@ -18405,8 +18528,13 @@
               <span class="tracker-table__member-id" style="font-size: 0.75rem; color: var(--white-muted); display: block; margin-top: 2px;">ID: ${m.id}</span>
               ${roleBadge}
             </td>
-            <td style="text-align: center; padding: 16px 12px; font-weight: 600; color: #10b981; vertical-align: middle;">${m.doneWell}</td>
-            <td style="text-align: center; padding: 16px 12px; font-weight: 600; color: #f59e0b; vertical-align: middle;">${m.donePoorly}</td>
+        `;
+
+        pointConfig.tiers.forEach(tier => {
+          html += `<td style="text-align: center; padding: 16px 12px; font-weight: 600; color: ${tier.color}; vertical-align: middle;">${m.tierCounts[tier.key] || 0}</td>`;
+        });
+
+        html += `
             <td style="text-align: center; padding: 16px 12px; font-weight: 600; color: #f87171; vertical-align: middle;">${m.notDone}</td>
             <td style="text-align: center; padding: 16px 12px; font-weight: 600; color: #60a5fa; vertical-align: middle;">${m.bonus}</td>
             <td style="text-align: center; padding: 16px 12px; vertical-align: middle;">
