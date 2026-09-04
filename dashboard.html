@@ -358,6 +358,20 @@
         </button>
       </div>
 
+      <!-- Kanban Board Filter Bar -->
+      <div class="kanban-filter-bar fade-in" id="kanban-filter-bar" style="margin-top: 20px; margin-bottom: 12px;">
+        <span style="font-size: 0.72rem; font-weight: 700; color: var(--white-muted); text-transform: uppercase; letter-spacing: 0.06em;">Filter Board:</span>
+        <button type="button" class="kanban-filter-btn active" data-filter="all" id="kfilter-all">
+          <span>All Items</span> (<span id="kcount-all">0</span>)
+        </button>
+        <button type="button" class="kanban-filter-btn" data-filter="task" id="kfilter-task">
+          <span>📋 Tasks Only</span> (<span id="kcount-tasks">0</span>)
+        </button>
+        <button type="button" class="kanban-filter-btn" data-filter="meeting" id="kfilter-meeting">
+          <span>📅 Meetings Only</span> (<span id="kcount-meetings">0</span>)
+        </button>
+      </div>
+
       <!-- Task Board -->
       <div class="task-board fade-in" id="task-board">
         <!-- Columns: To Do, In Progress, Done -->
@@ -892,8 +906,19 @@
           <div class="task-modal__meta">
             <span class="task-meta-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Deadline: <strong id="modal-task-deadline">-</strong>
+              <span id="modal-lbl-deadline">Deadline:</span> <strong id="modal-task-deadline">-</strong>
             </span>
+          </div>
+
+          <!-- Meeting Specific Banner & Quick Jump -->
+          <div id="modal-meeting-banner" style="display: none; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 10px; padding: 14px 16px; margin-top: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div id="modal-meeting-policy-badge" style="font-size: 0.82rem; font-weight: 600; color: #c084fc; display: flex; align-items: center; gap: 6px;"></div>
+              <button type="button" class="btn-primary" id="modal-jump-tracker-btn" style="padding: 7px 16px; font-size: 0.78rem; background: linear-gradient(135deg, #9333ea, #a855f7); border: 1px solid #c084fc; cursor: pointer; border-radius: 6px; color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z M3 9h18 M3 15h18 M9 3v18 M15 3v18"/></svg>
+                <span>Track Attendance in Excel →</span>
+              </button>
+            </div>
           </div>
           
           <hr class="modal-divider">
@@ -3269,6 +3294,7 @@
 
     // Item Type & Meeting form state
     let activeItemType = 'task'; // 'task' | 'meeting'
+    let activeKanbanFilter = 'all'; // 'all' | 'task' | 'meeting'
 
     const typeBtnTask = document.getElementById('type-btn-task');
     const typeBtnMeeting = document.getElementById('type-btn-meeting');
@@ -3277,8 +3303,10 @@
     const meetingPointsDeductGroup = document.getElementById('meeting-points-deduct-group');
     const meetingDeductPoints = document.getElementById('meeting-deduct-points');
     const formHeaderText = document.getElementById('form-header-text');
+    const formHeaderIcon = document.getElementById('form-header-icon');
     const lblItemTitle = document.getElementById('lbl-item-title');
     const lblItemDesc = document.getElementById('lbl-item-desc');
+    const lblItemPriority = document.getElementById('lbl-item-priority');
     const lblItemDeadline = document.getElementById('lbl-item-deadline');
     const submitTaskText = document.getElementById('submit-task-text');
 
@@ -3289,22 +3317,32 @@
 
       if (type === 'meeting') {
         if (meetingOptionsWrapper) meetingOptionsWrapper.style.display = 'block';
-        if (formHeaderText) formHeaderText.textContent = 'Schedule New Meeting';
-        if (lblItemTitle) lblItemTitle.textContent = 'Meeting Title / Topic';
+        if (formHeaderText) formHeaderText.textContent = 'Schedule Team Meeting';
+        if (lblItemTitle) lblItemTitle.textContent = 'Meeting Title / Agenda Topic';
         if (lblItemDesc) lblItemDesc.textContent = 'Agenda & Discussion Points';
         if (lblItemDeadline) lblItemDeadline.textContent = 'Meeting Date';
-        if (taskTitle) taskTitle.placeholder = 'e.g. Weekly Technical Sync, Project Review...';
-        if (taskDesc) taskDesc.placeholder = 'Outline meeting agenda, discussion topics, links...';
+        if (lblItemPriority) lblItemPriority.textContent = 'Importance / Urgency';
+        if (taskTitle) taskTitle.placeholder = 'e.g. Weekly Technical Sync, Aerodynamics Review...';
+        if (taskDesc) taskDesc.placeholder = 'Outline meeting objectives, agenda items, links...';
         if (submitTaskText) submitTaskText.textContent = 'Schedule Meeting';
+        if (submitBtn) submitBtn.classList.add('task-form__submit--meeting');
+        if (formHeaderIcon) {
+          formHeaderIcon.innerHTML = '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>';
+        }
       } else {
         if (meetingOptionsWrapper) meetingOptionsWrapper.style.display = 'none';
         if (formHeaderText) formHeaderText.textContent = 'Upload New Task';
         if (lblItemTitle) lblItemTitle.textContent = 'Task Title';
         if (lblItemDesc) lblItemDesc.textContent = 'Description';
         if (lblItemDeadline) lblItemDeadline.textContent = 'Deadline';
+        if (lblItemPriority) lblItemPriority.textContent = 'Priority';
         if (taskTitle) taskTitle.placeholder = 'Enter task title...';
         if (taskDesc) taskDesc.placeholder = 'Describe the task in detail...';
         if (submitTaskText) submitTaskText.textContent = 'Add Task';
+        if (submitBtn) submitBtn.classList.remove('task-form__submit--meeting');
+        if (formHeaderIcon) {
+          formHeaderIcon.innerHTML = '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>';
+        }
       }
     }
 
@@ -3318,6 +3356,21 @@
         }
       });
     }
+
+    // Kanban Filter listeners
+    function setKanbanFilter(filter) {
+      activeKanbanFilter = filter;
+      ['all', 'task', 'meeting'].forEach(f => {
+        const btn = document.getElementById(`kfilter-${f}`);
+        if (btn) btn.classList.toggle('active', f === filter);
+      });
+      renderTasks();
+    }
+
+    ['all', 'task', 'meeting'].forEach(f => {
+      const btn = document.getElementById(`kfilter-${f}`);
+      if (btn) btn.addEventListener('click', () => setKanbanFilter(f));
+    });
 
     // Submit task or meeting
     submitBtn.addEventListener('click', () => {
@@ -3389,18 +3442,41 @@
         defaultText = itemType === 'meeting' ? ' Programmer la Réunion' : ' Ajouter la Tâche';
       }
       submitBtn.textContent = successText;
-      submitBtn.style.background = '#7dd3a8';
+      submitBtn.style.background = itemType === 'meeting' ? '#a855f7' : '#7dd3a8';
       submitBtn.style.color = '';
       setTimeout(() => {
         submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="submit-task-text">' + defaultText + '</span>';
         submitBtn.style.background = '';
         submitBtn.style.color = '';
+        if (itemType === 'meeting') {
+          submitBtn.classList.add('task-form__submit--meeting');
+        } else {
+          submitBtn.classList.remove('task-form__submit--meeting');
+        }
       }, 1500);
     });
 
     // Render tasks
     function renderTasks() {
-      const tasks = getTasks().filter(t => t.department === currentDept);
+      const allDeptTasks = getTasks().filter(t => t.department === currentDept);
+
+      // Update counter badges on filter buttons
+      const allCount = allDeptTasks.length;
+      const taskCount = allDeptTasks.filter(t => t.type !== 'meeting').length;
+      const meetingCount = allDeptTasks.filter(t => t.type === 'meeting').length;
+
+      const countAllEl = document.getElementById('kcount-all');
+      const countTasksEl = document.getElementById('kcount-tasks');
+      const countMeetingsEl = document.getElementById('kcount-meetings');
+      if (countAllEl) countAllEl.textContent = allCount;
+      if (countTasksEl) countTasksEl.textContent = taskCount;
+      if (countMeetingsEl) countMeetingsEl.textContent = meetingCount;
+
+      const tasks = allDeptTasks.filter(t => {
+        if (activeKanbanFilter === 'task') return t.type !== 'meeting';
+        if (activeKanbanFilter === 'meeting') return t.type === 'meeting';
+        return true;
+      });
 
       const todo = tasks.filter(t => t.status === 'todo');
       const progress = tasks.filter(t => t.status === 'progress');
@@ -3444,9 +3520,9 @@
       let actions = '';
       if (currentRole !== 'advisor') {
         if (task.status === 'todo') {
-          actions = `<button class="task-card__action" data-id="${task.id}" data-action="progress" title="${isMeeting ? 'Start meeting' : 'Start task'}">▶ ${isMeeting ? 'In Session' : 'Start'}</button>`;
+          actions = `<button class="task-card__action ${isMeeting ? 'task-card__action--meeting' : ''}" data-id="${task.id}" data-action="progress" title="${isMeeting ? 'Start meeting session' : 'Start task'}">▶ ${isMeeting ? 'In Session' : 'Start'}</button>`;
         } else if (task.status === 'progress') {
-          actions = `<button class="task-card__action" data-id="${task.id}" data-action="done" title="${isMeeting ? 'Conclude meeting' : 'Mark done'}">✓ ${isMeeting ? 'Concluded' : 'Done'}</button>`;
+          actions = `<button class="task-card__action ${isMeeting ? 'task-card__action--meeting' : ''}" data-id="${task.id}" data-action="done" title="${isMeeting ? 'Conclude meeting' : 'Mark done'}">✓ ${isMeeting ? 'Concluded' : 'Done'}</button>`;
         }
       }
 
@@ -3461,6 +3537,8 @@
           consequencePill = `<span class="task-card__consequence-badge task-card__consequence-badge--warning" title="Warning issued if missed">⚠️ Warning on Miss</span>`;
         } else if (task.meetingImportance === 'points') {
           consequencePill = `<span class="task-card__consequence-badge task-card__consequence-badge--points" title="${task.pointsDeduction || 5} pts deducted if missed">📉 -${task.pointsDeduction || 5} pts on Miss</span>`;
+        } else {
+          consequencePill = `<span class="task-card__consequence-badge task-card__consequence-badge--standard" title="Attendance logged in progress tracker">🟢 Attendance Tracked</span>`;
         }
       }
 
@@ -3472,7 +3550,7 @@
           <div class="task-card__top">
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
               ${typeBadge}
-              <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority]}</span>
+              <span class="task-card__priority task-card__priority--${task.priority}">${priorityLabels[task.priority] || task.priority}</span>
               ${consequencePill}
               ${task.isApproved ? `<span class="task-card__approved-pill">✓ Approved</span>` : ''}
             </div>
@@ -3483,7 +3561,7 @@
           <div class="task-card__footer">
             ${deadlineStr ? `<span class="task-card__deadline ${isOverdue ? 'task-card__deadline--overdue' : ''}">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              ${deadlineStr}
+              ${isMeeting ? 'Date: ' : ''}${deadlineStr}
             </span>` : ''}
             ${actions}
           </div>
@@ -3552,11 +3630,24 @@
     const modalTaskTitle = document.getElementById('modal-task-title');
     const modalTaskDesc = document.getElementById('modal-task-desc');
     const modalTaskDeadline = document.getElementById('modal-task-deadline');
+    const modalLblDeadline = document.getElementById('modal-lbl-deadline');
+    const modalMeetingBanner = document.getElementById('modal-meeting-banner');
+    const modalMeetingPolicyBadge = document.getElementById('modal-meeting-policy-badge');
+    const modalJumpTrackerBtn = document.getElementById('modal-jump-tracker-btn');
     const modalFeedbackList = document.getElementById('modal-feedback-list');
     const modalFeedbackForm = document.getElementById('modal-feedback-form');
     const modalFeedbackInput = document.getElementById('modal-feedback-input');
     const modalApproveCheckbox = document.getElementById('modal-approve-checkbox');
     const modalFeedbackSubmit = document.getElementById('modal-feedback-submit');
+
+    if (modalJumpTrackerBtn) {
+      modalJumpTrackerBtn.addEventListener('click', () => {
+        closeTaskModal();
+        if (typeof setView === 'function') {
+          setView('tracker');
+        }
+      });
+    }
 
     function openTaskModal(taskId) {
       const tasks = getTasks();
@@ -3564,6 +3655,8 @@
       if (!task) return;
 
       activeTaskId = taskId;
+
+      const isMeeting = task.type === 'meeting';
 
       // Populate basic info
       modalTaskTitle.textContent = task.title;
@@ -3576,7 +3669,7 @@
         'software': isFrenchUser() ? 'Logiciel' : 'Software',
         'non-technical': 'TDR & Marketing'
       };
-      const typePrefix = task.type === 'meeting' ? '📅 Meeting • ' : '📋 Task • ';
+      const typePrefix = isMeeting ? '📅 Meeting • ' : '📋 Task • ';
       modalTaskDept.textContent = typePrefix + (deptLabels[task.department] || task.department);
       modalTaskDept.className = `task-modal__dept-badge task-modal__dept-badge--${task.department}`;
       // Priority translation/labels
@@ -3594,6 +3687,24 @@
 
       modalTaskPriority.textContent = priorityLabels[task.priority] || task.priority;
       modalTaskPriority.className = `task-modal__priority-badge task-modal__priority-badge--${task.priority}`;
+
+      // Meeting Banner logic
+      if (modalMeetingBanner && modalMeetingPolicyBadge) {
+        if (isMeeting) {
+          modalMeetingBanner.style.display = 'block';
+          if (modalLblDeadline) modalLblDeadline.textContent = 'Meeting Date:';
+          let policyText = '🟢 Standard Meeting (Attendance logged)';
+          if (task.meetingImportance === 'warning') {
+            policyText = '⚠️ Formal Warning Policy (Issued on unexcused absence)';
+          } else if (task.meetingImportance === 'points') {
+            policyText = `📉 Point Deduction Policy (-${task.pointsDeduction || 5} pts on absence)`;
+          }
+          modalMeetingPolicyBadge.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>${policyText}</span>`;
+        } else {
+          modalMeetingBanner.style.display = 'none';
+          if (modalLblDeadline) modalLblDeadline.textContent = 'Deadline:';
+        }
+      }
 
       // Show/hide approved badge
       if (task.isApproved) {
@@ -3632,7 +3743,7 @@
         } else {
           modalApproveCheckbox.disabled = false;
           const labelSpan = modalApproveCheckbox.parentNode.querySelector('span:last-child');
-          if (labelSpan) labelSpan.textContent = isFrenchUser() ? 'Approuver la tâche' : 'Approve task completion';
+          if (labelSpan) labelSpan.textContent = isFrenchUser() ? 'Approuver la tâche' : (isMeeting ? 'Approve meeting notes' : 'Approve task completion');
         }
       } else {
         modalFeedbackForm.style.display = 'none';
