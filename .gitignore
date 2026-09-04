@@ -10,3 +10,7 @@ Thumbs.db
 *.swo
 .vscode/
 .idea/
+
+# Scratch and test files
+scratch/
+
