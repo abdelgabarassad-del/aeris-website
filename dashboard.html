@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A.E.R.I.S. Team Dashboard — Manage and view tasks across all departments. Experimental feature." />
+  <meta name="description" content="A.E.R.I.S. Team Dashboard — Manage and view tasks across all departments." />
   <title>Dashboard | A.E.R.I.S.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,21 +101,6 @@
     </nav>
   </header>
 
-  <!-- ========== EXPERIMENTAL BANNER ========== -->
-  <div class="experimental-banner" id="experimental-banner">
-    <div class="experimental-banner__inner">
-      <div class="experimental-banner__icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6l-1 7h4l-7 8 1-5H8l1-10z"/>
-        </svg>
-      </div>
-      <div class="experimental-banner__text">
-        <strong>Experimental Feature</strong>
-        <span>This dashboard is currently under development and not yet in active use. Features shown here are for preview purposes only.</span>
-      </div>
-      <button class="experimental-banner__close" id="closeBanner" aria-label="Close banner">&times;</button>
-    </div>
-  </div>
 
   <!-- ========== AUTH GATE ========== -->
   <div class="auth-gate" id="auth-gate">
@@ -1716,13 +1701,11 @@
     const authInputGroup = document.getElementById('auth-input-group');
     const dashboardPage = document.getElementById('dashboard-page');
     const siteHeader = document.getElementById('site-header');
-    const experimentalBanner = document.getElementById('experimental-banner');
     const siteFooter = document.querySelector('.site-footer');
     const roleSelector = document.getElementById('role-selector');
 
     // Hide dashboard content on load
     if (dashboardPage) dashboardPage.style.display = 'none';
-    if (experimentalBanner) experimentalBanner.style.display = 'none';
     if (siteFooter) siteFooter.style.display = 'none';
 
     // Check for existing session
@@ -2432,7 +2415,6 @@
       setTimeout(() => {
         authGate.style.display = 'none';
         dashboardPage.style.display = 'block';
-        experimentalBanner.style.display = 'block';
         siteFooter.style.display = 'block';
 
         // Auto-set role — hide the role selector since it's auto-determined
@@ -2790,11 +2772,6 @@
     const submitBtn = document.getElementById('submit-task');
     const emptyState = document.getElementById('empty-state');
     const taskBoard = document.getElementById('task-board');
-
-    // Close experimental banner
-    document.getElementById('closeBanner').addEventListener('click', () => {
-      document.getElementById('experimental-banner').style.display = 'none';
-    });
 
     // Task helpers — localStorage is the fast cache; cloud is the source of truth
     function getTasks() {
@@ -3898,15 +3875,7 @@
 
       // ARIA labels
       const toggleBtn = document.getElementById('navToggle');
-      if (toggleBtn) toggleBtn.setAttribute('aria-label', 'Activer la navigation');
-      const closeBtn = document.getElementById('closeBanner');
-      if (closeBtn) closeBtn.setAttribute('aria-label', 'Fermer la bannière');
-
-      // Experimental banner
-      const bannerStrong = document.querySelector('.experimental-banner__text strong');
-      const bannerSpan = document.querySelector('.experimental-banner__text span');
-      if (bannerStrong) bannerStrong.textContent = 'Fonctionnalité Expérimentale';
-      if (bannerSpan) bannerSpan.textContent = 'Ce tableau de bord est en cours de développement et pas encore en utilisation active. Les fonctionnalités affichées ici sont uniquement à des fins de prévisualisation.';
+    if (toggleBtn) toggleBtn.setAttribute('aria-label', 'Activer la navigation');
 
       // Navigation links
       const navTranslations = {
