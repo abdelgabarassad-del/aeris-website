@@ -348,82 +348,137 @@
       max-height: 250px;
     }
 
-    /* Collapsible Terms and Conditions */
-    .terms-container {
-      background: rgba(20, 40, 31, 0.4);
+    /* Standalone Terms and Conditions Card (Left Column) */
+    .terms-card {
+      background: rgba(30, 59, 45, 0.45);
       border: 1px solid rgba(246, 242, 223, 0.15);
-      border-radius: var(--radius);
-      margin-bottom: 20px;
-      overflow: hidden;
-      transition: border-color var(--transition);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: var(--transition);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
-    .terms-container:hover {
-      border-color: rgba(246, 242, 223, 0.3);
+
+    .terms-card:hover {
+      border-color: rgba(246, 242, 223, 0.35);
+      box-shadow: 0 12px 35px var(--accent-glow);
     }
-    .terms-header {
-      background: rgba(246, 242, 223, 0.05);
-      padding: 12px 16px;
+
+    .terms-card-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      cursor: pointer;
-      user-select: none;
-      transition: background var(--transition);
+      gap: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(246, 242, 223, 0.12);
+      padding-bottom: 12px;
     }
-    .terms-header:hover {
-      background: rgba(246, 242, 223, 0.1);
-    }
-    .terms-header-title {
-      font-family: var(--font-sub);
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+
+    .terms-card-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(246, 242, 223, 0.08);
+      border-radius: 50%;
+      border: 1px solid rgba(246, 242, 223, 0.2);
       color: var(--accent);
+      flex-shrink: 0;
     }
-    .terms-toggle-icon {
-      font-size: 0.8rem;
-      color: var(--accent-dim);
-      transition: transform 0.3s ease;
+
+    .terms-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
     }
-    .terms-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-    .terms-body.open {
-      max-height: 250px;
-      border-top: 1px solid rgba(246, 242, 223, 0.1);
-    }
-    .terms-content {
-      padding: 16px;
-      font-size: 0.85rem;
-      line-height: 1.6;
+
+    .terms-card-intro {
+      font-size: 0.88rem;
       color: var(--white-muted);
-      max-height: 240px;
-      overflow-y: auto;
+      line-height: 1.55;
+      margin-bottom: 18px;
     }
-    .terms-content::-webkit-scrollbar {
+
+    .terms-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .terms-card-body::-webkit-scrollbar {
       width: 6px;
     }
-    .terms-content::-webkit-scrollbar-track {
+
+    .terms-card-body::-webkit-scrollbar-track {
       background: rgba(246, 242, 223, 0.03);
+      border-radius: 4px;
     }
-    .terms-content::-webkit-scrollbar-thumb {
-      background: rgba(246, 242, 223, 0.15);
-      border-radius: 3px;
+
+    .terms-card-body::-webkit-scrollbar-thumb {
+      background: rgba(246, 242, 223, 0.18);
+      border-radius: 4px;
     }
-    .terms-content::-webkit-scrollbar-thumb:hover {
-      background: rgba(246, 242, 223, 0.3);
+
+    .terms-card-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(246, 242, 223, 0.35);
     }
-    .terms-content p {
-      margin-bottom: 12px;
+
+    .terms-section-block {
+      background: rgba(20, 40, 31, 0.55);
+      border: 1px solid rgba(246, 242, 223, 0.08);
+      border-radius: var(--radius);
+      padding: 14px 16px;
     }
-    .terms-content p:last-child {
+
+    .terms-section-block h4 {
+      font-family: var(--font-sub);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(246, 242, 223, 0.06);
+      padding-bottom: 4px;
+    }
+
+    .terms-section-block p {
+      font-size: 0.85rem;
+      color: var(--white-soft);
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+
+    .terms-section-block p:last-child {
       margin-bottom: 0;
     }
-    .terms-content strong {
+
+    .terms-section-block strong {
       color: var(--accent-dim);
+    }
+
+    .terms-highlight-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid #f59e0b;
+      padding: 8px 10px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 6px;
+    }
+
+    .terms-highlight-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid #ef4444;
+      padding: 8px 10px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 6px;
     }
     .form-group-checkbox {
       display: flex;
@@ -917,6 +972,64 @@
               Responsible for drafting critical technical documentation reports, leading corporate sponsorship outreach, and building the team's public image through strategic media and brand management.
             </p>
           </div>
+
+          <!-- Standalone Terms and Conditions Card (Viewable on Left) -->
+          <div class="terms-card" id="termsSection">
+            <div class="terms-card-header">
+              <div class="terms-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <h3 class="terms-card-title">Membership Terms &amp; Conditions</h3>
+            </div>
+            <div class="terms-card-intro">
+              By joining and participating in the Advanced Engineering and Robotics in Flight Systems (A.E.R.I.S.) team, all members are bound by our institutional policies and code of conduct.
+            </div>
+            <div class="terms-card-body">
+              <div class="terms-section-block">
+                <h4>1. General Conduct and Expectations</h4>
+                <p><strong>Professionalism:</strong> Members must maintain a respectful, professional, and collaborative environment at all times, both in internal meetings and when representing the team externally at competitions, exhibitions, or conferences.</p>
+                <p><strong>Commitment:</strong> Active participation in assigned subteam tasks, design reviews, and project milestones is expected. Consistent communication with team leadership regarding progress and roadblocks is required.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>2. Financial Contributions and Non-Refundability</h4>
+                <p><strong>Dues and Costs:</strong> Members may be required to contribute funds for team operations, including hardware procurement, component shipping, and competition registration fees.</p>
+                <p class="terms-highlight-warning"><strong>Strictly Non-Refundable:</strong> All financial contributions and payments made to the team are strictly non-refundable. Once funds are submitted, they are immediately allocated toward organizational expenses. Refunds will not be issued under any circumstances, including voluntary resignation, membership termination, or project cancellations.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>3. Safety and Equipment Usage</h4>
+                <p><strong>Protocol Adherence:</strong> Strict adherence to all safety protocols is mandatory when handling UAV hardware, electronics, tools, and laboratory spaces.</p>
+                <p><strong>Asset Ownership:</strong> All team equipment, procured components, and testing gear remain the property of the organization.</p>
+                <p><strong>Damage Reporting:</strong> Any accidental damage to equipment or hardware must be reported immediately to team leadership. Negligent use of equipment may result in disciplinary action.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>4. Intellectual Property and Confidentiality</h4>
+                <p><strong>Team Ownership:</strong> All engineering deliverables—including CAD models, CFD/FEA simulations, MATLAB/Simulink scripts, software codebases, and flight data—generated during your time on the team are the intellectual property of the organization.</p>
+                <p><strong>Confidentiality:</strong> Members may not share proprietary team designs, technical blueprints, or competition strategies with external parties, competing teams, or unauthorized individuals without explicit permission from team leadership.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>5. Chain of Command and Escalation Protocol</h4>
+                <p><strong>Hierarchical Escalation:</strong> All internal matters, technical questions, project issues, interpersonal disputes, or organizational grievances must strictly adhere to the established chain of command. Any concern must first be formally submitted to and reviewed by the <strong>Team Board</strong>. In the event an issue remains unresolved, that member retains the right to formally request a <strong>Board Meeting</strong>. If and only if the Board is unable to resolve the issue, the matter may then be formally escalated to the <strong>Team Mentor</strong>.</p>
+                <p class="terms-highlight-danger"><strong>Strict Faculty Communication Policy:</strong> Under no circumstances is any member permitted to bypass the Team Board and/or Team Mentor to contact supervising professors or university faculty directly regarding team matters. Direct circumvention of the chain of command or unauthorized faculty outreach constitutes a zero-tolerance breach and will result in immediate and irreversible termination from the team.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>6. Review and Termination</h4>
+                <p><strong>Performance:</strong> Leadership will monitor engineering benchmarks and task completion.</p>
+                <p><strong>Termination:</strong> The team manager reserves the right to suspend or terminate membership due to consistent failure to meet project deadlines, unexcused absences, severe safety violations, breaches of escalation protocol, or any violation of these Terms and Conditions.</p>
+              </div>
+
+              <div class="terms-section-block">
+                <h4>7. External Communications</h4>
+                <p><strong>Official Representation:</strong> Only designated leadership may officially represent the team in communications with university faculty, external delegates, technical suppliers, and competition organizers.</p>
+                <p><strong>Sponsorships and Media:</strong> Members must not solicit sponsorships, make financial agreements, or speak to external media on behalf of the organization without explicit approval from the Team Lead.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- Application Form Column -->
@@ -1056,59 +1169,16 @@
                 <div id="promoFeedback" class="promo-feedback"></div>
               </div>
 
-              <!-- Terms & Conditions Section -->
-              <div class="terms-container">
-                <div class="terms-header" onclick="toggleTerms()">
-                  <span class="terms-header-title">📋 A.E.R.I.S. Membership Terms & Conditions</span>
-                  <span class="terms-toggle-icon" id="termsToggleIcon">▲</span>
-                </div>
-                <div class="terms-body" id="termsBody">
-                  <div class="terms-content">
-                    <p><strong>A.E.R.I.S. Membership Terms and Conditions</strong><br>
-                    By joining and participating in the Advanced Engineering and Robotics in Flight Systems (A.E.R.I.S.) team, you agree to abide by the following terms and conditions.</p>
-                    
-                    <p><strong>1. General Conduct and Expectations</strong><br>
-                    <em>Professionalism:</em> Members must maintain a respectful, professional, and collaborative environment at all times, both in internal meetings and when representing the team externally at competitions, exhibitions, or conferences.<br>
-                    <em>Commitment:</em> Active participation in assigned subteam tasks, design reviews, and project milestones is expected. Consistent communication with team leadership regarding progress and roadblocks is required.</p>
-                    
-                    <p><strong>2. Financial Contributions and Non-Refundability</strong><br>
-                    <em>Dues and Costs:</em> Members may be required to contribute funds for team operations, including but not limited to hardware procurement, component shipping, and competition registration fees.<br>
-                    <strong>Strictly Non-Refundable: All financial contributions and payments made to the team are strictly non-refundable. Once funds are submitted, they are immediately allocated toward organizational expenses. Refunds will not be issued under any circumstances, including voluntary resignation, membership termination, or project cancellations.</strong></p>
-                    
-                    <p><strong>3. Safety and Equipment Usage</strong><br>
-                    <em>Protocol Adherence:</em> Strict adherence to all safety protocols is mandatory when handling UAV hardware, electronics, tools, and laboratory spaces.<br>
-                    <em>Asset Ownership:</em> All team equipment, procured components, and testing gear remain the property of the organization.<br>
-                    <em>Damage Reporting:</em> Any accidental damage to equipment or hardware must be reported immediately to team leadership. Negligent use of equipment may result in disciplinary action.</p>
-                    
-                    <p><strong>4. Intellectual Property and Confidentiality</strong><br>
-                    <em>Team Ownership:</em> All engineering deliverables—including CAD models, CFD/FEA simulations, MATLAB/Simulink scripts, software codebases, and flight data—generated during your time on the team are the intellectual property of the organization.<br>
-                    <em>Confidentiality:</em> Members may not share proprietary team designs, technical blueprints, or competition strategies with external parties, competing teams, or unauthorized individuals without explicit permission from team leadership.</p>
-                    
-                    <p><strong>5. Chain of Command and Escalation Protocol</strong><br>
-                    <em>Hierarchical Escalation & Dispute Resolution:</em> All internal matters, technical questions, project issues, interpersonal disputes, or organizational grievances must strictly adhere to the established chain of command. Any concern or grievance must first be formally submitted to and reviewed by the <strong>Team Board</strong>. In the event that a member's issue remains unresolved after submitting initial feedback, that member retains the right to formally request a <strong>Board Meeting</strong> to have their matter evaluated directly. If and only if the Board is unable to resolve or conclude the issue following this review, the matter may then be formally escalated to the <strong>Team Mentor</strong>.<br>
-                    <strong>Strict Faculty Communication Policy: Under no circumstances is any member permitted to bypass the Team Board and/or Team Mentor to contact supervising professors or university faculty directly regarding team matters. Direct circumvention of the chain of command or unauthorized faculty outreach constitutes a zero-tolerance breach and will result in immediate and irreversible termination from the team, regardless of the individual's skill level, technical contribution, role, or seniority.</strong></p>
-                    
-                    <p><strong>6. Review and Termination</strong><br>
-                    <em>Performance:</em> Leadership will monitor engineering benchmarks and task completion.<br>
-                    <em>Termination:</em> The team manager reserves the right to suspend or terminate membership due to consistent failure to meet project deadlines, unexcused absences, severe safety violations, breaches of escalation protocol, or any violation of these Terms and Conditions.</p>
-                    
-                    <p><strong>7. External Communications</strong><br>
-                    <em>Official Representation:</em> Only designated leadership may officially represent the team in communications with university faculty, external delegates, technical suppliers, and competition organizers.<br>
-                    <em>Sponsorships and Media:</em> Members must not solicit sponsorships, make financial agreements, or speak to external media on behalf of the organization without explicit approval from the Team Lead.</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Terms Warning/Notice -->
-              <p class="terms-warning-notice" style="font-size: 0.85rem; color: var(--accent-dim); margin-bottom: 12px; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px;">
-                <span style="color: #ffb703; font-size: 1rem; line-height: 1.2;">⚠️</span>
-                <span>Please thoroughly read the terms and conditions above for prospective members.</span>
+              <!-- Terms Notice -->
+              <p class="terms-warning-notice" style="font-size: 0.86rem; color: var(--accent-dim); margin-top: 12px; margin-bottom: 12px; line-height: 1.45; display: flex; align-items: flex-start; gap: 8px;">
+                <span style="color: #ffb703; font-size: 1.1rem; line-height: 1.2;">📋</span>
+                <span>Please review the complete <strong>Membership Terms &amp; Conditions</strong> displayed on the left column.</span>
               </p>
 
               <!-- Terms Checkbox Group -->
               <div class="form-group-checkbox">
                 <input type="checkbox" id="agreeTerms" name="agreeTerms" disabled />
-                <label for="agreeTerms">I have read and understood the A.E.R.I.S. Membership Terms and Conditions</label>
+                <label for="agreeTerms">I have read and understood the A.E.R.I.S. Membership Terms &amp; Conditions</label>
               </div>
 
               <!-- Submit Button (Disabled permanently) -->
@@ -1174,19 +1244,6 @@
 
   <!-- ========== SCRIPTS ========== -->
   <script>
-    /* Terms accordion toggle */
-    window.toggleTerms = function() {
-      const body = document.getElementById('termsBody');
-      const icon = document.getElementById('termsToggleIcon');
-      if (body.classList.contains('open')) {
-        body.classList.remove('open');
-        icon.style.transform = 'rotate(0deg)';
-      } else {
-        body.classList.add('open');
-        icon.style.transform = 'rotate(180deg)';
-      }
-    };
-
     /* Submit button is permanently locked */
     const submitBtn = document.getElementById('submitBtn');
     window.toggleSubmitButton = function() {
