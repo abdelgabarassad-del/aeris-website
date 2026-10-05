@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Join the A.E.R.I.S. flight systems engineering team — apply for our Mechanical, Electrical, Software, or TDR & Marketing divisions." />
-  <title>Join Our Team | A.E.R.I.S.</title>
+  <meta name="description" content="A.E.R.I.S. Recruitment Status — Application submissions are currently closed. Follow our official Instagram for future recruitment openings." />
+  <title>Recruitment Status | A.E.R.I.S.</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .recruitment-page {
@@ -474,6 +474,308 @@
       border-color: #10b981 !important;
       box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
     }
+
+    /* ==========================================
+       CLOSED RECRUITMENT & INSTAGRAM STYLES
+       ========================================== */
+    .recruitment-status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      border-radius: 50px;
+      color: #fca5a5;
+      font-family: var(--font-sub);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 auto 18px;
+      display: table;
+    }
+
+    .status-pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 10px #ef4444;
+      animation: pulseClosed 2s infinite;
+    }
+
+    /* Top Closed Notice Card */
+    .closed-notice-card {
+      position: relative;
+      background: linear-gradient(135deg, rgba(30, 59, 45, 0.85) 0%, rgba(15, 30, 23, 0.96) 100%);
+      border: 2px solid rgba(246, 242, 223, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 34px 38px;
+      margin-bottom: 40px;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(246, 242, 223, 0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .closed-notice-glow {
+      position: absolute;
+      top: -50%;
+      right: -15%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(225, 48, 108, 0.22) 0%, transparent 70%);
+      pointer-events: none;
+      filter: blur(50px);
+    }
+
+    .closed-notice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(246, 242, 223, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .closed-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      font-family: var(--font-sub);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .closed-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 6px #ef4444;
+      animation: pulseClosed 2s infinite;
+    }
+
+    .closed-tag-notice {
+      font-family: var(--font-sub);
+      font-size: 0.85rem;
+      color: var(--accent-dim);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .closed-notice-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .closed-notice-icon-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(220, 39, 67, 0.4);
+    }
+
+    .closed-notice-text h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      color: var(--accent);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .closed-notice-text p {
+      color: var(--white-soft);
+      font-size: 1.02rem;
+      line-height: 1.65;
+    }
+
+    .closed-notice-text strong {
+      color: var(--accent);
+    }
+
+    .closed-notice-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-instagram-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #ffffff !important;
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 25px rgba(220, 39, 67, 0.35);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-instagram-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(220, 39, 67, 0.55);
+      color: #ffffff !important;
+      filter: brightness(1.1);
+    }
+
+    /* Locked Form Container HUD */
+    .form-locked-hud {
+      background: rgba(15, 30, 23, 0.75);
+      border: 1.5px dashed rgba(239, 68, 68, 0.45);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-locked-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-locked-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .form-locked-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      color: #fca5a5;
+      margin: 0;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .form-locked-subtitle {
+      font-family: var(--font-sub);
+      font-size: 0.8rem;
+      color: var(--white-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .form-locked-msg {
+      color: var(--white-soft);
+      font-size: 0.94rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .btn-instagram-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: rgba(246, 242, 223, 0.08);
+      border: 1px solid rgba(246, 242, 223, 0.25);
+      border-radius: var(--radius);
+      color: var(--accent);
+      font-family: var(--font-sub);
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-instagram-locked:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* Disabled Form Fields Styling */
+    .form-disabled {
+      opacity: 0.6;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .form-disabled input,
+    .form-disabled select,
+    .form-disabled textarea {
+      background: rgba(10, 20, 16, 0.65) !important;
+      border-color: rgba(246, 242, 223, 0.1) !important;
+      color: var(--white-muted) !important;
+      cursor: not-allowed !important;
+    }
+
+    .btn-submit-locked {
+      background: rgba(30, 59, 45, 0.4) !important;
+      color: var(--white-muted) !important;
+      border: 1px solid rgba(246, 242, 223, 0.15) !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      box-shadow: none !important;
+      width: 100%;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .info-banner-closed {
+      border-left-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.08) !important;
+    }
+
+    .info-banner-closed strong {
+      color: #fca5a5 !important;
+    }
+
+    @media (max-width: 768px) {
+      .closed-notice-card {
+        padding: 24px 20px;
+      }
+      .closed-notice-body {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .closed-notice-actions {
+        width: 100%;
+      }
+      .btn-instagram-banner {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -509,18 +811,59 @@
   <main class="recruitment-page" id="recruitment-page">
     <div class="container">
       
+      <div class="recruitment-status-tag fade-in">
+        <span class="status-pulse-dot"></span> Applications Currently Closed
+      </div>
       <h1 class="section-title fade-in">Join A.E.R.I.S.</h1>
       <p class="section-subtitle fade-in">
-        Become part of our specialized aerospace sub-teams. Build custom quadcopters, model aerodynamics, code control algorithms, and shape the future of flight systems.
+        Recruitment applications for our flight systems engineering sub-teams are currently closed. Explore our divisions below and follow our Instagram for announcements on the next opening.
       </p>
+
+      <!-- ========== CLOSED RECRUITMENT NOTICE CARD ========== -->
+      <div class="closed-notice-card fade-in">
+        <div class="closed-notice-glow"></div>
+        <div class="closed-notice-header">
+          <div class="closed-badge-pill">
+            <span class="closed-dot"></span>
+            <span>Recruitment Closed</span>
+          </div>
+          <span class="closed-tag-notice">Stay Connected</span>
+        </div>
+        <div class="closed-notice-body">
+          <div class="closed-notice-icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+          <div class="closed-notice-text">
+            <h2>Oh! Want to Try Joining A.E.R.I.S.?</h2>
+            <p>
+              Recruitment is currently <strong>closed</strong> and form submissions are <strong>unavailable</strong> for this cycle.
+              Want to join our team? Follow us on <strong>Instagram</strong> to be the first to know when we announce our next recruitment opening!
+            </p>
+          </div>
+        </div>
+        <div class="closed-notice-actions">
+          <a href="https://www.instagram.com/a.e.r.i.s_2025?igsh=aWdibGM1cWR4ejUx" target="_blank" rel="noopener noreferrer" class="btn-instagram-banner" id="announcementInstagramBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+            <span>Follow @a.e.r.i.s_2025 on Instagram &#8599;</span>
+          </a>
+        </div>
+      </div>
 
       <div class="recruitment-grid">
         
         <!-- Info / Guidelines Column -->
         <div class="info-column fade-in">
-          <div class="info-banner">
-            <strong>Recruitment Process</strong>
-            Applications are reviewed on a rolling basis. Once submitted, our division heads will evaluate your profile. Shortlisted candidates will be invited for a technical and behavioral interview.
+          <div class="info-banner info-banner-closed">
+            <strong>Recruitment Process — Currently Closed</strong>
+            Admissions are closed at this time. When a new recruitment cycle opens, candidates apply through this portal, followed by technical and behavioral evaluations. Review the division overviews below to prepare for the next round!
           </div>
 
           <!-- Mechanical Team Card -->
@@ -580,29 +923,52 @@
         <div class="form-column fade-in">
           
           <div class="form-card" id="formCard">
-            <h2 style="font-family: var(--font-heading); color: var(--accent); margin-bottom: 24px; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1.5px solid rgba(246, 242, 223, 0.15); padding-bottom: 10px;">Application Form</h2>
+            <h2 style="font-family: var(--font-heading); color: var(--accent); margin-bottom: 24px; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1.5px solid rgba(246, 242, 223, 0.15); padding-bottom: 10px;">Application Form — Closed</h2>
             
-            <div class="form-error-banner" id="errorBanner">
-              <strong>Error!</strong> An issue occurred while sending your application. Please check your network connection and try again.
+            <!-- Locked Portal Notice -->
+            <div class="form-locked-hud">
+              <div class="form-locked-header">
+                <div class="form-locked-icon-badge">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="form-locked-title">Submissions Unavailable</h3>
+                  <span class="form-locked-subtitle">Application Portal Is Currently Locked</span>
+                </div>
+              </div>
+              <p class="form-locked-msg">
+                Oh, you want to try joining A.E.R.I.S.? Recruitment submissions are currently unavailable! Please wait for our social media on <strong>Instagram</strong> to announce our next recruitment opening.
+              </p>
+              <a href="https://www.instagram.com/a.e.r.i.s_2025?igsh=aWdibGM1cWR4ejUx" target="_blank" rel="noopener noreferrer" class="btn-instagram-locked">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                Follow on Instagram for Opening Announcements &#8599;
+              </a>
             </div>
 
-            <form id="recruitmentForm">
+            <div class="form-error-banner" id="errorBanner">
+              <strong>Recruitment Notice:</strong> Application submissions are currently unavailable.
+            </div>
+
+            <form id="recruitmentForm" class="form-disabled">
               
               <!-- Full Name -->
               <div class="form-group">
                 <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" name="fullName" placeholder="e.g., Jane Doe" required />
+                <input type="text" id="fullName" name="fullName" placeholder="e.g., Jane Doe" disabled />
               </div>
 
               <!-- Contact Row -->
               <div class="form-row">
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <input type="email" id="email" name="email" placeholder="e.g., jane@gmail.com" required />
+                  <input type="email" id="email" name="email" placeholder="e.g., jane@gmail.com" disabled />
                 </div>
                 <div class="form-group">
                   <label for="phone">Phone Number</label>
-                  <input type="tel" id="phone" name="phone" placeholder="e.g., +20 100 000 0000" required />
+                  <input type="tel" id="phone" name="phone" placeholder="e.g., +20 100 000 0000" disabled />
                 </div>
               </div>
 
@@ -610,11 +976,11 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="regNumber">Registration Number</label>
-                  <input type="text" id="regNumber" name="regNumber" placeholder="e.g., 23100456" required />
+                  <input type="text" id="regNumber" name="regNumber" placeholder="e.g., 23100456" disabled />
                 </div>
                 <div class="form-group">
                   <label for="academicYear">Academic Year</label>
-                  <select id="academicYear" name="academicYear" required>
+                  <select id="academicYear" name="academicYear" disabled>
                     <option value="" disabled selected>Select Year</option>
                     <option value="1st Year">1st Year (Prep)</option>
                     <option value="2nd Year">2nd Year</option>
@@ -628,14 +994,14 @@
               <!-- Major Row -->
               <div class="form-group">
                 <label for="universityId">University Major</label>
-                <input type="text" id="universityId" name="universityId" placeholder="e.g., Computer Engineering" required />
+                <input type="text" id="universityId" name="universityId" placeholder="e.g., Computer Engineering" disabled />
               </div>
 
               <!-- Preferences Row -->
               <div class="form-row">
                 <div class="form-group">
                   <label for="primaryDept">Primary Preference</label>
-                  <select id="primaryDept" name="primaryDept" required>
+                  <select id="primaryDept" name="primaryDept" disabled>
                     <option value="" disabled selected>Select Division</option>
                     <option value="Mechanical">Mechanical</option>
                     <option value="Electrical">Electrical</option>
@@ -645,7 +1011,7 @@
                 </div>
                 <div class="form-group">
                   <label for="secondaryDept">Secondary Preference</label>
-                  <select id="secondaryDept" name="secondaryDept" required>
+                  <select id="secondaryDept" name="secondaryDept" disabled>
                     <option value="" disabled selected>Select Division</option>
                     <option value="Mechanical">Mechanical</option>
                     <option value="Electrical">Electrical</option>
@@ -659,38 +1025,35 @@
               <!-- Sub-team specific interest -->
               <div class="form-group">
                 <label for="subInterest">Sub-Team Interest / Focus (Optional)</label>
-                <input type="text" id="subInterest" name="subInterest" placeholder="e.g., CAD Design, CFD, Avionics, Autonomous Code, Photography" />
+                <input type="text" id="subInterest" name="subInterest" placeholder="e.g., CAD Design, CFD, Avionics, Autonomous Code, Photography" disabled />
               </div>
 
               <!-- Previous Experience -->
               <div class="form-group">
                 <label for="experience">Previous Projects or Technical Skills</label>
-                <textarea id="experience" name="experience" rows="3" placeholder="Briefly describe your skill set, coding experience, tools used, or previous team activities..." required></textarea>
+                <textarea id="experience" name="experience" rows="3" placeholder="Briefly describe your skill set, coding experience, tools used, or previous team activities..." disabled></textarea>
               </div>
 
               <!-- Why Join -->
               <div class="form-group">
                 <label for="whyJoin">Why do you want to join A.E.R.I.S.?</label>
-                <textarea id="whyJoin" name="whyJoin" rows="3" placeholder="What motivates you to join our division, and what do you hope to learn or contribute?" required></textarea>
+                <textarea id="whyJoin" name="whyJoin" rows="3" placeholder="What motivates you to join our division, and what do you hope to learn or contribute?" disabled></textarea>
               </div>
 
               <!-- Portfolio / CV Link -->
               <div class="form-group">
                 <label for="portfolioLink">CV / Portfolio / GitHub Link (Optional)</label>
-                <input type="text" id="portfolioLink" name="portfolioLink" placeholder="e.g., https://github.com/yourprofile or write 'none'" />
+                <input type="text" id="portfolioLink" name="portfolioLink" placeholder="e.g., https://github.com/yourprofile or write 'none'" disabled />
                 <small style="display: block; margin-top: 6px; color: rgba(246, 242, 223, 0.7); font-size: 0.85rem; font-style: italic;">
-                  * Note: If you don't have an answer to this field, you can write the word "none".
+                  * Note: Submissions are currently closed.
                 </small>
               </div>
 
               <!-- Promo Code (Optional) -->
               <div class="form-group">
                 <label for="promoCode">Promo Code (Optional)</label>
-                <input type="text" id="promoCode" name="promoCode" placeholder="e.g., SND8DUDD467" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: monospace; letter-spacing: 0.08em;" />
+                <input type="text" id="promoCode" name="promoCode" placeholder="e.g., SND8DUDD467" autocomplete="off" spellcheck="false" style="text-transform: uppercase; font-family: monospace; letter-spacing: 0.08em;" disabled />
                 <div id="promoFeedback" class="promo-feedback"></div>
-                <small id="promoHelp" style="display: block; margin-top: 6px; color: rgba(246, 242, 223, 0.7); font-size: 0.85rem; font-style: italic;">
-                  * Optional: Enter a valid promo code if you have one. Leave blank if none.
-                </small>
               </div>
 
               <!-- Terms & Conditions Section -->
@@ -739,25 +1102,29 @@
               <!-- Terms Warning/Notice -->
               <p class="terms-warning-notice" style="font-size: 0.85rem; color: var(--accent-dim); margin-bottom: 12px; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px;">
                 <span style="color: #ffb703; font-size: 1rem; line-height: 1.2;">⚠️</span>
-                <span>Please thoroughly read the terms and conditions above before agreeing and submitting.</span>
+                <span>Please thoroughly read the terms and conditions above for prospective members.</span>
               </p>
 
               <!-- Terms Checkbox Group -->
               <div class="form-group-checkbox">
-                <input type="checkbox" id="agreeTerms" name="agreeTerms" required onchange="toggleSubmitButton()" />
-                <label for="agreeTerms">I have read, understood, and agree to the A.E.R.I.S. Membership Terms and Conditions</label>
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" disabled />
+                <label for="agreeTerms">I have read and understood the A.E.R.I.S. Membership Terms and Conditions</label>
               </div>
 
-              <!-- Submit Button (Enabled dynamically based on checkbox) -->
-              <button type="submit" class="btn-primary" id="submitBtn" style="width: 100%; border: none; justify-content: center; margin-top: 10px; background: rgba(30, 59, 45, 0.4); color: var(--white-muted); cursor: not-allowed; box-shadow: none; pointer-events: none;" disabled>
-                <span class="btn-text">Submit Application</span>
+              <!-- Submit Button (Disabled permanently) -->
+              <button type="button" class="btn-primary btn-submit-locked" id="submitBtn" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span class="btn-text">Submissions Closed (Unavailable)</span>
               </button>
 
             </form>
           </div>
 
-          <!-- Success Screen -->
-          <div class="form-card success-hud" id="successHUD">
+          <!-- Success Screen (Hidden) -->
+          <div class="form-card success-hud" id="successHUD" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <h3>Application Received!</h3>
             <p>
@@ -768,62 +1135,8 @@
             </button>
           </div>
 
-          <!-- Instructions Card for the user (only shows up when placeholder URL is active) -->
-          <div class="setup-card" id="setupCard">
-            <h4>💡 Setup Google Sheets Integration</h4>
-            <p style="margin-bottom: 12px;">This application form sends inputs directly to a Google Spreadsheet. To activate it:</p>
-            <ol>
-              <li>Open your **Google Spreadsheet**.</li>
-              <li>Go to **Extensions** → **Apps Script**.</li>
-              <li>Clear the code editor and paste the code below:</li>
-            </ol>
-            <div class="code-container">
-              <pre class="code-block" id="appsScriptCode">function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var newRow = [];
-  
-  newRow.push(new Date()); // Timestamp
-  newRow.push(e.parameter.fullName || "");
-  newRow.push(e.parameter.email || "");
-  newRow.push(e.parameter.phone || "");
-  newRow.push(e.parameter.regNumber || "");
-  newRow.push(e.parameter.universityId || "");
-  newRow.push(e.parameter.academicYear || "");
-  newRow.push(e.parameter.primaryDept || "");
-  newRow.push(e.parameter.secondaryDept || "");
-  newRow.push(e.parameter.subInterest || "");
-  newRow.push(e.parameter.experience || "");
-  newRow.push(e.parameter.whyJoin || "");
-  newRow.push(e.parameter.portfolioLink || "");
-  
-  // Promo code & discount mapping
-  var promoMap = {
-    'BHXTPDPFF5E': '50% OFF', '2RAK1VRJNVG': '50% OFF', '40MGG1W103D': '50% OFF', 'VE6PR5N8I4P': '50% OFF', 'OCUZRENUN5Z': '50% OFF',
-    'F9SXMECOSFO': '50% OFF', 'JRSNVNQ65QD': '50% OFF', 'FYGWWQC38HY': '50% OFF', 'HBRPOIG8F1C': '50% OFF', 'VB9OOAEDOEC': '50% OFF',
-    'T7A9TGIQHG9': '100% OFF (Full Waiver)', 'T6MJXK87AU5': '100% OFF (Full Waiver)', 'MTZX272HPOE': '100% OFF (Full Waiver)',
-    'GYR3XKXWNRE': '100% OFF (Full Waiver)', 'OI65FDHJK1E': '100% OFF (Full Waiver)', 'YAYQ3S195JM': '100% OFF (Full Waiver)',
-    'GDZVGPMM82I': '100% OFF (Full Waiver)', 'YY37Q9AH8RV': '100% OFF (Full Waiver)', 'K8PK3YR9OUD': '100% OFF (Full Waiver)',
-    'IT3UEA3GE8N': '100% OFF (Full Waiver)',
-    'SND8DUDD467': '50% OFF (Shared Code)', '6QIWEPXSK28': '50% OFF (Shared Code)', 'AFPK054NZDK': '50% OFF (Shared Code)',
-    '8II49KQ71N8': '50% OFF (Shared Code)', '3JQIP98Q1ZX': '50% OFF (Shared Code)', 'HS1K3AQ6L6G': '50% OFF (Shared Code)',
-    'CF07UQNUPQZ': '50% OFF (Shared Code)', 'KD6FLEEPZHP': '50% OFF (Shared Code)', 'BFNO6B9M80O': '50% OFF (Shared Code)',
-    '1LR3PE29GD8': '50% OFF (Shared Code)'
-  };
-  var code = (e.parameter.promoCode || "").trim().toUpperCase();
-  var promoCell = code !== "" ? code + " [" + (promoMap[code] || "Discount Applied") + "]" : "";
-  newRow.push(promoCell);
-  
-  sheet.appendRow(newRow);
-  
-  return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
-                       .setMimeType(ContentService.MimeType.JSON);
-}</pre>
-            </div>
-            <ol start="4" style="margin-top: 14px;">
-              <li>Click **Deploy** (top right) → **New deployment**.</li>
-              <li>Choose **Web app**, set "Execute as" to **Me**, and "Who has access" to **Anyone**.</li>
-              <li>Click **Deploy**, copy the **Web App URL**, and paste it in `recruitment.html` at `GOOGLE_SHEET_SCRIPT_URL`.</li>
-            </ol>
+          <!-- Setup Card (Hidden in production) -->
+          <div class="setup-card" id="setupCard" style="display: none;">
           </div>
 
         </div>
@@ -850,7 +1163,7 @@
           <a href="index.html#contact">Contact</a>
           <a href="dashboard.html">Dashboard</a>
         </div>
-                <div class="footer-branch">
+        <div class="footer-branch">
           <img src="images/academpic.png" alt="AASTMT Logo" class="footer-branch-logo" />
           <span>AASTMT — El Alamein Branch</span>
         </div>
@@ -861,10 +1174,6 @@
 
   <!-- ========== SCRIPTS ========== -->
   <script>
-    // ----------------------------------------------------
-    const GOOGLE_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhJBeQL91cCpvvLTMDkkvyE-SZcNVgWMlta8HEBhZzZB6eTqpTxnVgVWdUi92bcH5F/exec';
-    // ----------------------------------------------------
-
     /* Terms accordion toggle */
     window.toggleTerms = function() {
       const body = document.getElementById('termsBody');
@@ -878,47 +1187,29 @@
       }
     };
 
-    /* Handle checkbox change to enable/disable submit button */
-    const agreeCheckbox = document.getElementById('agreeTerms');
+    /* Submit button is permanently locked */
+    const submitBtn = document.getElementById('submitBtn');
     window.toggleSubmitButton = function() {
-      if (agreeCheckbox && submitBtn) {
-        if (agreeCheckbox.checked) {
-          submitBtn.disabled = false;
-          submitBtn.style.background = '';
-          submitBtn.style.color = '';
-          submitBtn.style.cursor = 'pointer';
-          submitBtn.style.pointerEvents = 'auto';
-          submitBtn.style.boxShadow = '';
-        } else {
-          submitBtn.disabled = true;
-          submitBtn.style.background = 'rgba(30, 59, 45, 0.4)';
-          submitBtn.style.color = 'var(--white-muted)';
-          submitBtn.style.cursor = 'not-allowed';
-          submitBtn.style.pointerEvents = 'none';
-          submitBtn.style.boxShadow = 'none';
-        }
+      if (submitBtn) {
+        submitBtn.disabled = true;
       }
     };
-
-    /* Toggle instructions card visibility */
-    const setupCard = document.getElementById('setupCard');
-    if (GOOGLE_SHEET_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' && GOOGLE_SHEET_SCRIPT_URL !== '') {
-      setupCard.style.display = 'none';
-    }
 
     /* Mobile nav toggle */
     const toggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      navLinks.classList.toggle('open');
-    });
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        toggle.classList.remove('open');
-        navLinks.classList.remove('open');
+    if (toggle && navLinks) {
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
+        navLinks.classList.toggle('open');
       });
-    });
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          toggle.classList.remove('open');
+          navLinks.classList.remove('open');
+        });
+      });
+    }
 
     /* Scroll-triggered fade-in */
     const observer = new IntersectionObserver((entries) => {
@@ -930,171 +1221,31 @@
     }, { threshold: 0.05 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    /* Valid Promo Codes Database */
-    const VALID_PROMO_CODES = {
-      // 50% OFF — Application Fee (1 person, single use)
-      'BHXTPDPFF5E': '50% OFF — Application Fee',
-      '2RAK1VRJNVG': '50% OFF — Application Fee',
-      '40MGG1W103D': '50% OFF — Application Fee',
-      'VE6PR5N8I4P': '50% OFF — Application Fee',
-      'OCUZRENUN5Z': '50% OFF — Application Fee',
-      'F9SXMECOSFO': '50% OFF — Application Fee',
-      'JRSNVNQ65QD': '50% OFF — Application Fee',
-      'FYGWWQC38HY': '50% OFF — Application Fee',
-      'HBRPOIG8F1C': '50% OFF — Application Fee',
-      'VB9OOAEDOEC': '50% OFF — Application Fee',
-
-      // 100% OFF — Application Fee (1 person, single use)
-      'T7A9TGIQHG9': '100% OFF — Full Application Fee Waiver',
-      'T6MJXK87AU5': '100% OFF — Full Application Fee Waiver',
-      'MTZX272HPOE': '100% OFF — Full Application Fee Waiver',
-      'GYR3XKXWNRE': '100% OFF — Full Application Fee Waiver',
-      'OI65FDHJK1E': '100% OFF — Full Application Fee Waiver',
-      'YAYQ3S195JM': '100% OFF — Full Application Fee Waiver',
-      'GDZVGPMM82I': '100% OFF — Full Application Fee Waiver',
-      'YY37Q9AH8RV': '100% OFF — Full Application Fee Waiver',
-      'K8PK3YR9OUD': '100% OFF — Full Application Fee Waiver',
-      'IT3UEA3GE8N': '100% OFF — Full Application Fee Waiver',
-
-      // 50% OFF x2 — Application Fee (2 people, single use each)
-      'SND8DUDD467': '50% OFF (Shared Code) — Application Fee',
-      '6QIWEPXSK28': '50% OFF (Shared Code) — Application Fee',
-      'AFPK054NZDK': '50% OFF (Shared Code) — Application Fee',
-      '8II49KQ71N8': '50% OFF (Shared Code) — Application Fee',
-      '3JQIP98Q1ZX': '50% OFF (Shared Code) — Application Fee',
-      'HS1K3AQ6L6G': '50% OFF (Shared Code) — Application Fee',
-      'CF07UQNUPQZ': '50% OFF (Shared Code) — Application Fee',
-      'KD6FLEEPZHP': '50% OFF (Shared Code) — Application Fee',
-      'BFNO6B9M80O': '50% OFF (Shared Code) — Application Fee',
-      '1LR3PE29GD8': '50% OFF (Shared Code) — Application Fee'
-    };
-
-    const promoInput = document.getElementById('promoCode');
-    const promoFeedback = document.getElementById('promoFeedback');
-    const promoHelp = document.getElementById('promoHelp');
-
-    function validatePromoCode() {
-      if (!promoInput) return true;
-      const rawVal = promoInput.value.trim().toUpperCase();
-      promoInput.value = rawVal;
-      
-      if (rawVal === '') {
-        promoInput.classList.remove('is-invalid', 'is-valid');
-        if (promoFeedback) {
-          promoFeedback.className = 'promo-feedback';
-          promoFeedback.textContent = '';
-        }
-        if (promoHelp) promoHelp.style.display = 'block';
-        return true;
-      }
-      
-      if (VALID_PROMO_CODES[rawVal]) {
-        promoInput.classList.remove('is-invalid');
-        promoInput.classList.add('is-valid');
-        if (promoFeedback) {
-          promoFeedback.className = 'promo-feedback valid';
-          promoFeedback.textContent = `✓ Valid Code Applied: ${VALID_PROMO_CODES[rawVal]}`;
-        }
-        if (promoHelp) promoHelp.style.display = 'none';
-        return true;
-      } else {
-        promoInput.classList.remove('is-valid');
-        promoInput.classList.add('is-invalid');
-        if (promoFeedback) {
-          promoFeedback.className = 'promo-feedback invalid';
-          promoFeedback.textContent = '✕ Invalid promo code. Please enter a valid code or leave blank to continue.';
-        }
-        if (promoHelp) promoHelp.style.display = 'none';
-        return false;
-      }
-    }
-
-    if (promoInput) {
-      promoInput.addEventListener('input', validatePromoCode);
-      promoInput.addEventListener('blur', validatePromoCode);
-    }
-
-    /* Form Handler */
+    /* Form Submission Prevention (Recruitment Closed) */
     const form = document.getElementById('recruitmentForm');
-    const formCard = document.getElementById('formCard');
-    const successHUD = document.getElementById('successHUD');
-    const submitBtn = document.getElementById('submitBtn');
-    const errorBanner = document.getElementById('errorBanner');
-    const resetFormBtn = document.getElementById('resetFormBtn');
+    if (form) {
+      // Disable all interactive elements inside form
+      const elements = form.querySelectorAll('input, select, textarea, button');
+      elements.forEach(el => {
+        el.disabled = true;
+      });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // Validate Promo Code (Reject if invalid code provided)
-      if (!validatePromoCode()) {
-        promoInput.focus();
-        promoInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        alert("Oh, you want to try joining? Recruitment submissions are currently closed and unavailable! Please follow our Instagram (@a.e.r.i.s_2025) to catch our next recruitment opening announcement.");
+        return false;
+      });
+    }
 
-      // Hide any previous errors
-      errorBanner.style.display = 'none';
-      
-      // Enter loading state
-      submitBtn.classList.add('is-loading');
-      
-      // Collect parameters
-      const formData = new FormData(form);
-      
-      // If URL placeholder is unchanged, simulate submission for demo purposes
-      if (GOOGLE_SHEET_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' || GOOGLE_SHEET_SCRIPT_URL === '') {
-        console.warn("A.E.R.I.S. Info: Simulating submission because GOOGLE_SHEET_SCRIPT_URL is not set.");
-        setTimeout(() => {
-          submitBtn.classList.remove('is-loading');
-          formCard.style.display = 'none';
-          successHUD.style.display = 'block';
-          window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
-        }, 1200);
-        return;
-      }
-
-      try {
-        // Convert FormData to urlencoded string for CORS compatibility
-        const params = new URLSearchParams();
-        for (const [key, value] of formData.entries()) {
-          params.append(key, value);
-        }
-
-        const response = await fetch(GOOGLE_SHEET_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors', // standard way to bypass strict preflight in GAS Web Apps
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: params.toString()
-        });
-
-        // Since 'no-cors' mode returns opaque response, we can transition to success
-        submitBtn.classList.remove('is-loading');
-        form.reset();
-        validatePromoCode();
-        formCard.style.display = 'none';
-        successHUD.style.display = 'block';
-        window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
-
-      } catch (err) {
-        console.error("Recruitment form error:", err);
-        submitBtn.classList.remove('is-loading');
-        errorBanner.style.display = 'block';
-        window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
-      }
-    });
-
-    /* Reset form from success view */
-    resetFormBtn.addEventListener('click', () => {
-      successHUD.style.display = 'none';
-      formCard.style.display = 'block';
-      form.reset();
-      validatePromoCode();
-      toggleSubmitButton();
-      window.scrollTo({ top: formCard.offsetTop - 100, behavior: 'smooth' });
-    });
+    if (submitBtn) {
+      submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert("Oh, you want to try joining? Recruitment submissions are currently unavailable! Please follow our Instagram (@a.e.r.i.s_2025) to catch our next recruitment opening announcement.");
+      });
+    }
   </script>
 
 </body>
 </html>
+

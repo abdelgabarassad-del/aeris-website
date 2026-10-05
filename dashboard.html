@@ -1029,7 +1029,7 @@
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
       '251010424', '251001377', '241012132',
-      '231012318', '241003033', '231002350', '2006', 'test 3'
+      '231012318', '241003033', '231002350', '2006', 'test 3', '251010536'
     ]);
 
     const ALL_MEMBERS = new Set([
@@ -1107,7 +1107,7 @@
       '241012132': { name: 'Bassem Toulan', depts: ['electrical'], role: 'head', email: 'toulanbassem@gmail.com' },
       '231000393': { name: 'Ahmed Hany', depts: ['electrical'], role: 'member', email: 'ahani2026@gmail.com' },
       '251010151': { name: 'Sherry George Youssef', depts: ['mechanical'], role: 'member', email: 'Sherrygeorge1@icloud.com' },
-      '251010536': { name: 'Baraa Ibrahim', depts: ['mechanical'], role: 'member', email: 'baraaibrahim2007@gmail.com' },
+      '251010536': { name: 'Baraa Ibrahim', depts: ['mechanical'], role: 'cfo', email: 'baraaibrahim2007@gmail.com' },
       '241002229': { name: 'Amir Abbas', depts: ['mechanical'], role: 'member', email: 'whithblack38@gmail.com' },
       
       // Non-Technical affairs
@@ -1233,7 +1233,7 @@
       else if (regNum === '251001767') activeTheme = "totallyspies"; // Esraa Mohammed
 
       // Guide content generation based on role and theme
-      const hasFin = regNum === '231002350' || regNum === 'test 3' || regNum === '231012318' || regNum === '5550' || regNum === '5970';
+      const hasFin = regNum === '231002350' || regNum === 'test 3' || regNum === '251010536' || regNum === '5550' || regNum === '5970';
       let title = "📋 Dashboard Guide & Reference";
       let welcome = "";
       let items = [];
@@ -1249,7 +1249,7 @@
             "<strong>Production Plan Verification:</strong> Switch from the Kanban board to the <strong>Progress Tracker (Excel)</strong> to verify production quotas and check active completion columns.",
             "<strong>DIRECTIVE AUTHORIZATION:</strong> Open individual tasks to write evaluation notes and approve completions (sets approved status).",
             "<strong>Decree Dispatch:</strong> Broadcast mobilization commands and announcements to the entire collective using the <strong>Publish Announcement</strong> panel.",
-            hasFinAccess ? "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> to audit capital allocations. (Note: full view of the Funding Tracker is restricted to the CEO and Omar Atwan)." : "<strong>Treasury Exemption:</strong> Financial/budget tracking portals are restricted for this advisor."
+            hasFinAccess ? "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> to audit capital allocations. (Note: full view of the Funding Tracker is restricted to the CEO and Baraa Ibrahim)." : "<strong>Treasury Exemption:</strong> Financial/budget tracking portals are restricted for this advisor."
           ];
         } else if (activeTheme === 'dragon') {
           title = "🐉 Guide d'Entraînement pour Conseillers";
@@ -1259,7 +1259,7 @@
             "<strong>L'Œil de Berk :</strong> Examinez les performances globales de l'Ohana dans le <strong>Tracker de Progrès (Excel)</strong>.",
             "<strong>Évaluation des Directives :</strong> Cliquez sur une tâche pour ajouter vos conseils techniques et cocher l'approbation de fin.",
             "<strong>Annonces du Conseil :</strong> Publiez des messages et des alertes importants sur le tableau officiel.",
-            hasFinAccess ? "<strong>Coffre de l'Île (Finances) :</strong> Ouvrez le tracker de budget pour auditer les dépenses. (Note: la vue complète du Funding Tracker est réservée au CEO et à Omar Atwan)." : "<strong>Coffre Restreint :</strong> Les registres de budget ne sont pas disponibles pour ce profil."
+            hasFinAccess ? "<strong>Coffre de l'Île (Finances) :</strong> Ouvrez le tracker de budget pour auditer les dépenses. (Note: la vue complète du Funding Tracker est réservée au CEO et à Baraa Ibrahim)." : "<strong>Coffre Restreint :</strong> Les registres de budget ne sont pas disponibles pour ce profil."
           ];
         } else {
           title = "📋 Faculty & Advisory Management Guide";
@@ -1269,7 +1269,7 @@
             "<strong>Member Tracking:</strong> Toggle the <strong>Progress Tracker (Excel)</strong> view to see a full performance matrix of all members.",
             "<strong>Advisory Evaluations (AUTHORIZED_REVIEWERS):</strong> Click any task card to open the technical review portal, write evaluations, and authorize completions (Approve completion).",
             "<strong>Directives & Announcements:</strong> Use the <strong>Publish Announcement</strong> button to post official announcements to the news feed.",
-            hasFinAccess ? "<strong>Financial Telemetry:</strong> Access the <strong>Budget Tracker (Excel)</strong> to review net budgets and transactions. Note that full view of the Funding Tracker is restricted to the CEO and Omar Atwan." : "<strong>Financial Exemption:</strong> Budget and funding trackers are hidden from this advisor profile."
+            hasFinAccess ? "<strong>Financial Telemetry:</strong> Access the <strong>Budget Tracker (Excel)</strong> to review net budgets and transactions. Note that full view of the Funding Tracker is restricted to the CEO and Baraa Ibrahim." : "<strong>Financial Exemption:</strong> Budget and funding trackers are hidden from this advisor profile."
           ];
         }
       } else if (role === 'ceo' || (member && member.role === 'ceo')) {
@@ -1282,6 +1282,16 @@
           "<strong>Advisory Evaluations:</strong> As a supreme reviewer, click any task card to issue evaluation notes and approve completions.",
           "<strong>Mobilization Announcements:</strong> Use the <strong>Publish Announcement</strong> panel to dispatch declarations to all members.",
           "<strong>State Treasury Ledger:</strong> Access the <strong>Budget Tracker (Excel)</strong> and <strong>Funding Tracker</strong> to manage capital allocations, view net budget/income, and log payments."
+        ];
+      } else if (role === 'cfo' || (member && member.role === 'cfo')) {
+        // CFO Guide
+        title = "💼 Chief Financial Officer (CFO) Operations Guide";
+        welcome = "📊 Welcome, CFO " + name + ". You hold executive authority over team finances, funding tracking, and operational telemetry:";
+        items = [
+          "<strong>State Treasury Ledger (Finances):</strong> Full administrative access to the <strong>Budget Tracker (Excel)</strong> — add/edit revenue, record operational expenditures, and export transaction ledgers.",
+          "<strong>Capital & Funding Tracker:</strong> Full administrative oversight of member financial commitments, target quotas, and installment records in the <strong>Funding Tracker</strong>.",
+          "<strong>Performance & Resource Matrix:</strong> Access the <strong>Progress Tracker (Excel)</strong> to monitor divisional progress and resource allocations across all branches.",
+          "<strong>Directives & Dispatch:</strong> Publish official announcements and dispatch notices to all members."
         ];
       } else if (role === 'head' || (member && (member.role === 'head' || member.role === 'vice_head'))) {
         // Division Heads & Vice Heads
@@ -1441,11 +1451,11 @@
           ];
         } else if (activeTheme === 'ironman') {
           title = "🚀 Stark Industries Mark LXXXV HUD";
-          welcome = "🤖 Jarvis online, Baraa Ibrahim. Repulsors charged. Ready to calibrate mechanical designs for Stark Industries.";
+          welcome = "🤖 Jarvis online, Baraa Ibrahim (CFO). Repulsors charged. Ready to calibrate mechanical designs and manage Stark Industries capital reserves.";
           items = [
             "<strong>System Diagnostics:</strong> Click Mechanical to view the task list.",
-            "<strong>Tony Stark Feedback:</strong> Open task detail parameters to read advisory recommendations. State changes are locked.",
-            "<strong>Stark Ledger (Finances):</strong> Access the Budget Tracker to track team expenditures. Stark Industries revenue and net budget are encrypted."
+            "<strong>Executive Authorization:</strong> Open task cards to review advisory directives and track progress.",
+            hasFin ? "<strong>Stark Industries Treasury (CFO Access):</strong> Full access to the Budget Tracker (Excel) and Funding Tracker to manage net budgets, log payments, and audit capital allocations." : "<strong>Stark Ledger (Finances):</strong> Access the Budget Tracker to track team expenditures."
           ];
         } else if (activeTheme === 'ladybug') {
           title = "🐞 Miraculous Superhero Action Reference";
@@ -1498,6 +1508,7 @@
     const TRACKER_FULL_VIEWERS = new Set([
       '231002350', // CEO
       'test 3',    // CEO (Test)
+      '251010536', // CFO (Baraa Ibrahim)
       '5550',      // Eng. Mohamad Ashraf
       '5970',      // Professor Alaa Ossman
       '8383',      // Professor Aly Haridi
@@ -2456,7 +2467,8 @@
             `;
           } else {
             const isCEO = regNum === '231002350' || regNum === 'test 3';
-            const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
+            const isCFO = regNum === '251010536' || (person && person.role === 'cfo') || (MEMBERS_DATABASE[regNum] && MEMBERS_DATABASE[regNum].role === 'cfo');
+            const roleLabel = isCEO ? 'CEO' : (isCFO ? 'CFO' : (role === 'head' ? 'Team Head' : 'Team Member'));
             let customMessage = person.message;
             if (regNum === '251010424' && isBirthdayUser('251010424')) {
               customMessage = '🎂🎉 HAPPY BIRTHDAY, Software Head Sara Ahmed! 🥳✨ El dkah fi el ada2 kolha! 🍰⚡';
@@ -2473,7 +2485,8 @@
           }
         } else {
           const isCEO = regNum === '231002350' || regNum === 'test 3';
-          const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
+          const isCFO = regNum === '251010536' || (MEMBERS_DATABASE[regNum] && MEMBERS_DATABASE[regNum].role === 'cfo');
+          const roleLabel = isCEO ? 'CEO' : (isCFO ? 'CFO' : (role === 'head' ? 'Team Head' : 'Team Member'));
           bannerHTML = `
             <div class="welcome-banner__icon">${roleIcon}</div>
             <div class="welcome-banner__text">
@@ -2653,7 +2666,8 @@
         }
       } else {
         const isCEO = regNum === '231002350' || regNum === 'test 3';
-        const roleLabel = role === 'head' ? (isCEO ? 'CEO' : 'Team Head') : 'Team Member';
+        const isCFO = regNum === '251010536' || (MEMBERS_DATABASE[regNum] && MEMBERS_DATABASE[regNum].role === 'cfo');
+        const roleLabel = isCEO ? 'CEO' : (isCFO ? 'CFO' : (role === 'head' ? 'Team Head' : 'Team Member'));
         welcomeText = `Access granted — Welcome, <strong>${roleLabel}</strong>`;
       }
 
@@ -3351,9 +3365,9 @@
     submitBtn.addEventListener('click', () => {
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const member = MEMBERS_DATABASE[currentReg];
-      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo'));
+      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo' || member.role === 'cfo'));
       if (!isLeadership) {
-        alert("Access Denied: Only the CEO, Team Heads, or Vice Heads can create tasks or schedule meetings.");
+        alert("Access Denied: Only the CEO, CFO, Team Heads, or Vice Heads can create tasks or schedule meetings.");
         return;
       }
       const title = taskTitle.value.trim();
@@ -3503,7 +3517,7 @@
 
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const member = MEMBERS_DATABASE[currentReg];
-      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo'));
+      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo' || member.role === 'cfo'));
       const deleteBtn = isLeadership ? `<button class="task-card__delete" data-id="${task.id}" title="Delete">&times;</button>` : '';
 
       let consequencePill = '';
@@ -3553,9 +3567,9 @@
       e.stopPropagation();
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const member = MEMBERS_DATABASE[currentReg];
-      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo'));
+      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo' || member.role === 'cfo'));
       if (!isLeadership) {
-        alert("Access Denied: Only the CEO, Team Heads, or Vice Heads can take action on tasks.");
+        alert("Access Denied: Only the CEO, CFO, Team Heads, or Vice Heads can take action on tasks.");
         return;
       }
       const id = e.currentTarget.dataset.id;
@@ -3574,9 +3588,9 @@
       e.stopPropagation();
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const member = MEMBERS_DATABASE[currentReg];
-      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo'));
+      const isLeadership = currentRole === 'head' || (member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo' || member.role === 'cfo'));
       if (!isLeadership) {
-        alert("Access Denied: Only the CEO, Team Heads, or Vice Heads can delete tasks.");
+        alert("Access Denied: Only the CEO, CFO, Team Heads, or Vice Heads can delete tasks.");
         return;
       }
       const id = e.currentTarget.dataset.id;
@@ -18314,7 +18328,7 @@
         .map(([id, m]) => ({ id, ...m }));
         
       const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
-      const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
+      const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'cfo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
       
       if (!isLeadership) {
         // Standard members can only track their own progress row
@@ -18364,6 +18378,8 @@
         let roleBadge = '';
         if (member.role === 'ceo') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--ceo">CEO</span>';
+        } else if (member.role === 'cfo') {
+          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--cfo">CFO</span>';
         } else if (member.role === 'head') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head">Head</span>';
         } else if (member.role === 'vice_head') {
@@ -18410,10 +18426,11 @@
             }
           }
           
-          // Check editor permission: CEO, Vice Head, and Department Heads can edit
+          // Check editor permission: CEO, CFO, Vice Head, and Department Heads can edit
           const activeUser = MEMBERS_DATABASE[currentReg];
           const canEdit = activeUser && (
             activeUser.role === 'ceo' || 
+            activeUser.role === 'cfo' || 
             activeUser.role === 'vice_head' || 
             (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
           );
@@ -18480,6 +18497,7 @@
         const activeUser = MEMBERS_DATABASE[currentReg];
         const canEditBonus = activeUser && (
           activeUser.role === 'ceo' || 
+          activeUser.role === 'cfo' || 
           activeUser.role === 'vice_head' || 
           (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
         );
@@ -18680,9 +18698,10 @@
       const currentReg = safeSession.getItem('aeris_auth_reg');
       const activeUser = MEMBERS_DATABASE[currentReg] || ADVISORS[currentReg];
 
-      // Full access roles: CEO, Head, Vice Head, or Eng. Mohamad (registration ID '5550')
+      // Full access roles: CEO, CFO, Head, Vice Head, or Eng. Mohamad (registration ID '5550')
       const hasFullAccess = (activeUser && (
         activeUser.role === 'ceo' ||
+        activeUser.role === 'cfo' ||
         activeUser.role === 'head' ||
         activeUser.role === 'vice_head'
       )) || currentReg === '5550';
@@ -18802,6 +18821,8 @@
         let roleBadge = '';
         if (m.role === 'ceo') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--ceo" style="margin-left: 8px;">CEO</span>';
+        } else if (m.role === 'cfo') {
+          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--cfo" style="margin-left: 8px;">CFO</span>';
         } else if (m.role === 'head') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head" style="margin-left: 8px;">Head</span>';
         } else if (m.role === 'vice_head') {
@@ -18848,7 +18869,7 @@
 
     function isFullFinanceAuthorized() {
       const currentReg = safeSession.getItem('aeris_auth_reg');
-      return currentReg === '231002350' || currentReg === 'test 3' || currentReg === '231012318' || currentReg === '5550' || currentReg === '5970';
+      return currentReg === '231002350' || currentReg === 'test 3' || currentReg === '251010536' || currentReg === '5550' || currentReg === '5970';
     }
 
     function isFundingAuthorized() {
@@ -19303,7 +19324,7 @@
         return;
       }
 
-      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '231012318';
+      const isFullViewer = activeReg === '231002350' || activeReg === 'test 3' || activeReg === '251010536';
 
       // Update Labels
       const lblTarget = document.getElementById('funding-lbl-target');
@@ -19762,7 +19783,7 @@
         if (view === 'kanban') {
           const regNum = safeSession.getItem('aeris_auth_reg');
           const member = MEMBERS_DATABASE[regNum];
-          const isLeadership = member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo');
+          const isLeadership = member && (member.role === 'head' || member.role === 'vice_head' || member.role === 'ceo' || member.role === 'cfo');
           taskForm.style.display = isLeadership ? 'block' : 'none';
         } else {
           taskForm.style.display = 'none';
@@ -19933,7 +19954,7 @@
           .map(([id, m]) => ({ id, ...m }));
           
         const isFullViewer = TRACKER_FULL_VIEWERS.has(currentReg);
-        const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
+        const isLeadership = isFullViewer || (activeUser && (activeUser.role === 'ceo' || activeUser.role === 'cfo' || activeUser.role === 'head' || activeUser.role === 'vice_head'));
         
         if (!isLeadership) {
           deptMembers = deptMembers.filter(m => m.id === currentReg);

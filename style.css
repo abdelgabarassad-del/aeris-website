@@ -1578,5 +1578,54 @@ h1, h2, h3, h4, h5, h6 {
   .lightbox-close { top: 15px; right: 15px; font-size: 2rem; }
 }
 
+/* ==========================================
+   RECRUITMENT CLOSED STATES & BADGES
+   ========================================== */
+.btn-primary.btn-closed {
+  background: rgba(30, 59, 45, 0.75);
+  color: var(--accent);
+  border: 1px solid rgba(246, 242, 223, 0.35);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+}
+
+.btn-primary.btn-closed:hover {
+  background: rgba(30, 59, 45, 0.95);
+  border-color: var(--accent);
+  box-shadow: 0 0 25px var(--accent-glow);
+  color: #ffffff;
+}
+
+.btn-closed-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5b5b;
+  box-shadow: 0 0 8px #ff5b5b;
+  margin-right: 6px;
+  animation: pulseClosed 2s infinite;
+}
+
+@keyframes pulseClosed {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+.badge-status-closed {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 
 

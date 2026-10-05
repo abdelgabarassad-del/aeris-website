@@ -11738,6 +11738,12 @@ body.stitch-theme {
   border-color: rgba(239, 68, 68, 0.2);
 }
 
+.tracker-table__member-role--cfo {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
 .tracker-table__member-role--head {
   background: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
