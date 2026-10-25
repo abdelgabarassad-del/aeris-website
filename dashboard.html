@@ -645,6 +645,10 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                   <span>Set Target for All</span>
                 </button>
+                <button class="btn-secondary" id="funding-zero-all-btn" style="height: 38px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.08); color: #fca5a5; cursor: pointer; border-radius: 6px; padding: 0 12px; font-weight: 600; font-size: 0.85rem;" title="Zero all debts, agreed amounts, and money in tracker">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  <span>Zero All Debts</span>
+                </button>
                 <button class="btn-primary" id="funding-add-payment-btn" style="height: 38px; display: inline-flex; align-items: center; gap: 6px;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   <span>Record Payment</span>
@@ -20096,8 +20100,16 @@
 
     /* ========== FUNDING & CONTRIBUTIONS TRACKER SYSTEM ========== */
     const FUNDING_STORAGE_KEY = 'aeris_funding_data_v2';
+    const FUNDING_ZEROED_FLAG = 'aeris_funding_zeroed_2026';
 
     function getFundingData() {
+      // One-time check: wipe any stale pre-reset local funding debts
+      if (!safeLocal.getItem(FUNDING_ZEROED_FLAG)) {
+        safeLocal.removeItem(FUNDING_STORAGE_KEY);
+        safeLocal.setItem('aeris_funding_migrated', 'true');
+        safeLocal.setItem(FUNDING_ZEROED_FLAG, 'true');
+      }
+
       try {
         const stored = safeLocal.getItem(FUNDING_STORAGE_KEY);
         if (stored) {
@@ -20172,10 +20184,12 @@
       // Show/Hide top headers
       const searchInput = document.getElementById('funding-search-input');
       const setAllBtn = document.getElementById('funding-set-all-targets-btn');
+      const zeroAllBtn = document.getElementById('funding-zero-all-btn');
       const addPayBtn = document.getElementById('funding-add-payment-btn');
       
       if (searchInput) searchInput.style.display = isFullViewer ? 'inline-block' : 'none';
       if (setAllBtn) setAllBtn.style.display = isFullViewer ? 'inline-flex' : 'none';
+      if (zeroAllBtn) zeroAllBtn.style.display = isFullViewer ? 'inline-flex' : 'none';
       if (addPayBtn) addPayBtn.style.display = isFullViewer ? 'inline-flex' : 'none';
 
       // Show/Hide actions table headers
@@ -20635,6 +20649,35 @@
       closeAllTargetsModal();
       renderFundingSection();
       logToMailerConsole(`Updated target agreed contribution for ALL members to ${amountVal.toFixed(2)} EGP.`, 'sys');
+    }
+
+    function zeroAllFundingData() {
+      if (!isWarningManager()) {
+        alert("Unauthorized: Only CEO and CFO can reset or zero funding data.");
+        return;
+      }
+
+      if (!confirm("⚠️ Are you sure you want to ZERO all debts, agreed targets, and money in the fund tracker?\n\nThis will reset all member agreed amounts to 0.00 EGP, clear all recorded payments, and clear all financial warnings.")) {
+        return;
+      }
+
+      const zeroedAgreed = {};
+      for (const reg in MEMBERS_DATABASE) {
+        if (!MEMBERS_DATABASE[reg].hide) {
+          zeroedAgreed[reg] = 0;
+        }
+      }
+
+      const data = {
+        agreedAmounts: zeroedAgreed,
+        payments: [],
+        warnings: {}
+      };
+
+      saveFundingData(data);
+      renderFundingSection();
+      logToMailerConsole('All debts, targets, payments, and warnings in the fund tracker have been zeroed out to 0.00 EGP.', 'sys');
+      alert("✅ Success: All debts, agreed targets, payments, and warnings in the fund tracker have been zeroed out.");
     }
 
     /* ========== BIND EVENTS AND ACTIONS ========== */
@@ -21211,6 +21254,11 @@
     const fundingSetAllTargetsBtn = document.getElementById('funding-set-all-targets-btn');
     if (fundingSetAllTargetsBtn) {
       fundingSetAllTargetsBtn.addEventListener('click', openAllTargetsModal);
+    }
+
+    const fundingZeroAllBtn = document.getElementById('funding-zero-all-btn');
+    if (fundingZeroAllBtn) {
+      fundingZeroAllBtn.addEventListener('click', zeroAllFundingData);
     }
 
     const fundingAllTargetsClose = document.getElementById('funding-all-targets-close');
