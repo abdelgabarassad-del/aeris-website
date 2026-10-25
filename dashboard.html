@@ -956,6 +956,94 @@
         </div>
       </div>
 
+      <!-- ========== TASK WHATSAPP WARNING DISPATCH MODAL ========== -->
+      <div class="task-modal" id="task-whatsapp-modal" style="display: none;">
+        <div class="task-modal__overlay" id="task-whatsapp-overlay"></div>
+        <div class="task-modal__content" style="max-width: 600px;">
+          <button class="task-modal__close" id="task-whatsapp-close" aria-label="Close modal">&times;</button>
+          
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <div style="background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.4); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+              💬
+            </div>
+            <div>
+              <h2 class="task-modal__title" style="margin: 0; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; color: #4ade80;">Task WhatsApp Warning Notice</h2>
+              <span style="font-size: 0.8rem; color: var(--white-muted);">Dispatch an official missed task warning notice directly to the member's WhatsApp</span>
+            </div>
+          </div>
+
+          <!-- Email Status Confirmation Banner -->
+          <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem;">📧</span>
+            <span style="font-size: 0.83rem; color: #bfdbfe;">
+              <strong>Automated Email Dispatched:</strong> The standard formal missed task notice has already been emailed to <strong id="task-wa-modal-member-email" style="color: #fff;">-</strong>. WhatsApp dispatch is an optional extra channel.
+            </span>
+          </div>
+
+          <!-- Target & Task Details Card -->
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+              <div>
+                <strong id="task-wa-modal-member-name" style="font-size: 1.05rem; color: #f8fafc; display: block;">Member Name</strong>
+                <span id="task-wa-modal-member-reg" style="font-family: monospace; font-size: 0.82rem; color: var(--white-muted);">Reg: -</span>
+              </div>
+              <span id="task-wa-modal-status-badge" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); padding: 3px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700;">
+                ❌ Missed / Not Done
+              </span>
+            </div>
+            
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;">
+              <div><span style="color: var(--white-muted);">Task:</span> <strong id="task-wa-modal-task-title" style="color: #e2e8f0;">-</strong></div>
+              <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <div><span style="color: var(--white-muted);">Department:</span> <strong id="task-wa-modal-task-dept" style="color: #60a5fa; text-transform: uppercase;">-</strong></div>
+                <div><span style="color: var(--white-muted);">Deadline:</span> <strong id="task-wa-modal-task-deadline" style="color: #fde047;">-</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden storage fields -->
+          <input type="hidden" id="task-wa-modal-task-id" />
+          <input type="hidden" id="task-wa-modal-target-reg" />
+
+          <!-- WhatsApp Configuration & Custom Note -->
+          <div style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.25); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+              <label for="task-wa-modal-phone" style="font-weight: 600; font-size: 0.85rem; color: #4ade80; display: inline-flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span>Member WhatsApp Phone Number</span>
+              </label>
+              <input type="tel" id="task-wa-modal-phone" placeholder="e.g. 01012345678 or +201012345678" style="padding: 10px 12px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-family: monospace; font-size: 0.92rem;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+              <label for="task-wa-modal-notes" style="font-weight: 600; font-size: 0.85rem; color: #cbd5e1;">Additional Leadership Note (Optional)</label>
+              <input type="text" id="task-wa-modal-notes" placeholder="e.g. Please submit CAD files before Friday..." style="padding: 9px 12px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: inherit; font-size: 0.85rem;" />
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label style="font-weight: 600; font-size: 0.8rem; color: var(--white-muted);">WhatsApp Message Preview</label>
+                <span style="font-size: 0.72rem; color: #86efac;">Auto-generated</span>
+              </div>
+              <div id="task-wa-modal-preview" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: #e2e8f0; font-family: monospace; white-space: pre-wrap; max-height: 140px; overflow-y: auto;">
+              </div>
+            </div>
+
+            <div id="task-wa-modal-feedback" style="display: none; margin-top: 10px; padding: 8px 12px; border-radius: 6px; font-size: 0.82rem;"></div>
+          </div>
+
+          <!-- Modal Action Buttons -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <button type="button" class="btn-secondary" id="task-wa-modal-skip-btn" style="padding: 9px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: transparent; cursor: pointer; font-size: 0.85rem; color: var(--white-muted);">
+              Skip WhatsApp (Email Already Sent)
+            </button>
+            <button type="button" class="btn-primary" id="task-wa-modal-send-btn" style="background: linear-gradient(135deg, #25d366, #16a34a); border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; color: #fff; font-size: 0.9rem; box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);">
+              <span>💬 Send Warning via WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Feedback Section -->
       <div class="feedback-section fade-in" id="feedback-section" style="display: none; margin-top: 24px;">
         <div class="tracker-card">
@@ -1086,6 +1174,40 @@
             <!-- Roster list -->
             <div id="ceo-meeting-roster-container" style="max-height: 320px; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 8px;">
               <!-- Attendees loaded dynamically -->
+            </div>
+          </div>
+
+          <!-- Normal Task Department Members & Warnings Panel -->
+          <div id="modal-normal-task-warnings-panel" style="display: none; margin-top: 16px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 12px; padding: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.35);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.45); padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">⚡ Department Deliverables</span>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #f8fafc;" id="task-panel-title">Member Progress &amp; WhatsApp Warnings</h3>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="task-panel-dept-badge" style="font-size: 0.76rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(59,130,246,0.2); color: #93c5fd; border: 1px solid rgba(59,130,246,0.35);"></span>
+                <span id="task-panel-missed-summary" style="font-size: 0.8rem; color: #fca5a5; font-weight: 700; background: rgba(239,68,68,0.15); padding: 3px 8px; border-radius: 6px;">0 Missed</span>
+              </div>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--white-muted); margin: 0 0 14px 0; line-height: 1.5;">
+              Monitor individual member delivery on this task. When a task is marked missed, an email is dispatched automatically. You can also send an official warning notice via WhatsApp as an extra channel.
+            </p>
+
+            <!-- Search and Filter -->
+            <div style="margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="task-member-roster-search" placeholder="Search members by name or ID..." style="flex: 1; min-width: 180px; padding: 8px 12px; border-radius: 6px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); color: inherit; font-size: 0.85rem;" />
+              <select id="task-member-roster-filter" style="padding: 8px 10px; border-radius: 6px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); color: inherit; font-size: 0.82rem;">
+                <option value="all">All Department Members</option>
+                <option value="missed">Missed / Not Done Only</option>
+                <option value="done">Completed (Tiers 1-3)</option>
+                <option value="unmarked">Not Marked</option>
+              </select>
+            </div>
+
+            <!-- Roster list -->
+            <div id="task-member-roster-container" style="max-height: 280px; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 8px;">
+              <!-- Loaded dynamically -->
             </div>
           </div>
           
@@ -1532,6 +1654,205 @@
         `;
       }
       return { url, formattedPhone };
+    }
+
+    /* ========== TASK WHATSAPP WARNING SYSTEM ========== */
+    function generateTaskWarningWhatsAppMessage(opts) {
+      const { memberName, taskTitle, department, deadline, isFinalWarning, netMissedCount, bonusesCount, missedTasksList, issuerName, notes } = opts;
+      
+      if (isFinalWarning) {
+        const lines = [
+          `🚨 *A.E.R.I.S. Operations — FINAL ATTENDANCE & PERFORMANCE NOTICE* 🚨`,
+          ``,
+          `Dear *${memberName || 'Team Member'}*,`,
+          ``,
+          `This is an official administrative warning from *A.E.R.I.S. Team Leadership*. You have accumulated *${netMissedCount || 3} Net Missed Tasks* (adjusted for ${bonusesCount || 0} active bonuses):`,
+          ``,
+          missedTasksList ? missedTasksList : `• Task deliverables overdue or incomplete`,
+          ``,
+          notes ? `📝 *Leadership Remarks:* "${notes}"` : null,
+          issuerName ? `👤 *Issued By:* ${issuerName}` : null,
+          ``,
+          `⚠️ *Critical Notice:* Consistent failure to complete deliverables impacts overall project milestones and violates team guidelines. Continued negligence will lead to immediate review of your team membership.`,
+          ``,
+          `— _A.E.R.I.S. Board of Directors & Operations_`
+        ].filter(l => l !== null);
+        return lines.join('\n');
+      }
+
+      const lines = [
+        `⚠️ *A.E.R.I.S. Operations — Official Task Warning Notice* ⚠️`,
+        ``,
+        `Dear *${memberName || 'Team Member'}*,`,
+        ``,
+        `This is an official administrative notification from *A.E.R.I.S. Team Leadership* regarding your progress in the *${department ? department.toUpperCase() : 'Team'}* department.`,
+        ``,
+        `📋 *Task Details:*`,
+        `• *Task Title:* "${taskTitle || 'Assigned Task'}"`,
+        department ? `• *Department:* ${department.toUpperCase()}` : null,
+        deadline ? `• *Deadline:* ${deadline}` : null,
+        `• *Status:* Marked as *Missed / Not Done* by leadership`,
+        notes ? `• *Leadership Note:* "${notes}"` : null,
+        issuerName ? `• *Evaluator:* ${issuerName}` : null,
+        ``,
+        `⚡ *Action Required:*`,
+        `Please maintain timely progress on your assigned responsibilities and contact your department head immediately to discuss deliverable completion and schedule alignment.`,
+        ``,
+        `— _A.E.R.I.S. Team Administration_`
+      ].filter(l => l !== null);
+      return lines.join('\n');
+    }
+
+    function dispatchWhatsAppTaskWarning(phone, message, memberName, taskTitle) {
+      const formattedPhone = formatPhoneForWhatsApp(phone);
+      let url;
+      if (formattedPhone) {
+        url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+      } else {
+        url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+      }
+
+      if (typeof logToMailerConsole === 'function') {
+        logToMailerConsole(`[WHATSAPP] Missed task notice for "${taskTitle}" prepared for ${memberName} (${formattedPhone ? '+' + formattedPhone : 'General dispatch'}). Launching WhatsApp...`, 'sys');
+      }
+
+      try {
+        window.open(url, '_blank');
+      } catch (e) {
+        console.warn("Could not launch WhatsApp window:", e);
+      }
+      
+      const fb = document.getElementById('task-wa-modal-feedback');
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = 'rgba(37, 211, 102, 0.15)';
+        fb.style.border = '1px solid rgba(37, 211, 102, 0.4)';
+        fb.style.color = '#86efac';
+        fb.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span>✓ WhatsApp notice dispatched for <strong>${escapeHtml(memberName || 'Member')}</strong> (${formattedPhone ? '+' + formattedPhone : 'Choose recipient'})!</span>
+            <a href="${url}" target="_blank" style="color: #4ade80; text-decoration: underline; font-weight: 600;">Open Chat &rarr;</a>
+          </div>
+        `;
+      }
+      return { url, formattedPhone };
+    }
+
+    let _activeTaskWaContext = null;
+
+    function openTaskWhatsAppModal(taskId, memberId, isFinalWarning, customOpts) {
+      const tasks = (typeof getTasks === 'function') ? getTasks() : [];
+      const task = tasks.find(t => t.id === taskId);
+      const member = MEMBERS_DATABASE[memberId];
+      if (!member) return;
+
+      const modal = document.getElementById('task-whatsapp-modal');
+      if (!modal) return;
+
+      _activeTaskWaContext = {
+        taskId: taskId,
+        memberId: memberId,
+        isFinalWarning: !!isFinalWarning,
+        task: task,
+        member: member,
+        customOpts: customOpts || {}
+      };
+
+      const nameEl = document.getElementById('task-wa-modal-member-name');
+      const regEl = document.getElementById('task-wa-modal-member-reg');
+      const emailEl = document.getElementById('task-wa-modal-member-email');
+      const taskTitleEl = document.getElementById('task-wa-modal-task-title');
+      const taskDeptEl = document.getElementById('task-wa-modal-task-dept');
+      const taskDeadlineEl = document.getElementById('task-wa-modal-task-deadline');
+      const statusBadgeEl = document.getElementById('task-wa-modal-status-badge');
+      const phoneInput = document.getElementById('task-wa-modal-phone');
+      const notesInput = document.getElementById('task-wa-modal-notes');
+      const previewEl = document.getElementById('task-wa-modal-preview');
+      const feedbackEl = document.getElementById('task-wa-modal-feedback');
+
+      const taskIdInput = document.getElementById('task-wa-modal-task-id');
+      const targetRegInput = document.getElementById('task-wa-modal-target-reg');
+
+      if (taskIdInput) taskIdInput.value = taskId || '';
+      if (targetRegInput) targetRegInput.value = memberId || '';
+
+      if (nameEl) nameEl.textContent = member.name;
+      if (regEl) regEl.textContent = `Registration ID: ${memberId}`;
+      if (emailEl) emailEl.textContent = member.email || 'Registered Email';
+      if (taskTitleEl) taskTitleEl.textContent = task ? task.title : 'Task Deliverable';
+      if (taskDeptEl) taskDeptEl.textContent = task ? task.department : (member.depts && member.depts[0]) || 'General';
+      if (taskDeadlineEl) taskDeadlineEl.textContent = task && task.deadline ? task.deadline : 'Immediate / Scheduled';
+
+      if (statusBadgeEl) {
+        if (isFinalWarning) {
+          statusBadgeEl.textContent = '🚨 3 Net Missed Tasks (Final Notice)';
+          statusBadgeEl.style.background = 'rgba(239, 68, 68, 0.25)';
+          statusBadgeEl.style.color = '#ef4444';
+          statusBadgeEl.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+        } else {
+          statusBadgeEl.textContent = '❌ Missed / Not Done';
+          statusBadgeEl.style.background = 'rgba(239, 68, 68, 0.2)';
+          statusBadgeEl.style.color = '#fca5a5';
+          statusBadgeEl.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        }
+      }
+
+      // Populate Phone
+      let phone = member.phone || (typeof FIXED_MEMBER_PHONES !== 'undefined' ? FIXED_MEMBER_PHONES[memberId] : '') || '';
+      if (!phone) {
+        try {
+          const customPhones = JSON.parse(safeLocal.getItem('aeris_custom_member_phones') || '{}');
+          phone = customPhones[memberId] || '';
+        } catch(e){}
+      }
+      if (phoneInput) phoneInput.value = phone;
+
+      if (notesInput) notesInput.value = '';
+      if (feedbackEl) {
+        feedbackEl.style.display = 'none';
+        feedbackEl.innerHTML = '';
+      }
+
+      function updatePreview() {
+        if (!previewEl) return;
+        const currentReg = safeSession.getItem('aeris_auth_reg');
+        const issuerName = MEMBERS_DATABASE[currentReg]?.name || 'Team Leadership';
+        const notes = notesInput ? notesInput.value.trim() : '';
+
+        const msg = generateTaskWarningWhatsAppMessage({
+          memberName: member.name,
+          taskTitle: task ? task.title : 'Task Deliverable',
+          department: task ? task.department : '',
+          deadline: task && task.deadline ? task.deadline : '',
+          isFinalWarning: !!isFinalWarning,
+          netMissedCount: customOpts?.netMissedCount || 3,
+          bonusesCount: customOpts?.bonusesCount || 0,
+          missedTasksList: customOpts?.missedTasksList || '',
+          issuerName: issuerName,
+          notes: notes
+        });
+        previewEl.textContent = msg;
+        return msg;
+      }
+
+      updatePreview();
+
+      if (notesInput) {
+        notesInput.oninput = updatePreview;
+      }
+      if (phoneInput) {
+        phoneInput.onchange = () => {
+          saveMemberPhone(memberId, phoneInput.value.trim());
+        };
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeTaskWhatsAppModal() {
+      const modal = document.getElementById('task-whatsapp-modal');
+      if (modal) modal.style.display = 'none';
+      _activeTaskWaContext = null;
     }
 
     // Render dashboard guide/reference card (collapsible & role/theme customized)
@@ -4157,6 +4478,7 @@
       // Render CEO Meeting Warnings Panel and Member Status
       renderCeoMeetingWarningsPanel(task);
       renderMemberMeetingStatus(task);
+      renderNormalTaskWarningsPanel(task);
 
       // Show modal
       taskModal.style.display = 'flex';
@@ -4375,6 +4697,9 @@
                   <span style="background: rgba(239, 68, 68, 0.22); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
                     ⚠️ Warning Active ${timeStr ? '(' + timeStr + ')' : ''}
                   </span>
+                  <button type="button" class="btn-whatsapp-pill btn-meeting-wa-warn" data-member-id="${m.id}" data-task-id="${task.id}" style="padding: 5px 10px; border-radius: 6px; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 4px;">
+                    <span>💬 WhatsApp</span>
+                  </button>
                   <button type="button" class="btn-ceo-revoke-warn" data-member-id="${m.id}" style="padding: 5px 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.25); color: #e2e8f0; border-radius: 6px; font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                     Revoke Warning
                   </button>
@@ -4426,12 +4751,150 @@
             await revokeCeoMeetingWarning(task.id, memberId);
           });
         });
+
+        container.querySelectorAll('.btn-meeting-wa-warn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openTaskWhatsAppModal(btn.dataset.taskId, btn.dataset.memberId);
+          });
+        });
       }
 
       updateRosterHTML();
 
       if (searchInput) searchInput.oninput = updateRosterHTML;
       if (filterSelect) filterSelect.onchange = updateRosterHTML;
+    }
+
+    function renderNormalTaskWarningsPanel(task) {
+      const panel = document.getElementById('modal-normal-task-warnings-panel');
+      if (!panel) return;
+
+      const currentReg = safeSession.getItem('aeris_auth_reg');
+      const activeUser = MEMBERS_DATABASE[currentReg];
+      const isLeader = activeUser && (
+        activeUser.role === 'ceo' ||
+        activeUser.role === 'cfo' ||
+        activeUser.role === 'vice_head' ||
+        (activeUser.role === 'head' && activeUser.depts.includes(task.department))
+      );
+
+      if (!isLeader || task.type === 'meeting') {
+        panel.style.display = 'none';
+        return;
+      }
+
+      panel.style.display = 'block';
+
+      const deptBadge = document.getElementById('task-panel-dept-badge');
+      const missedSummary = document.getElementById('task-panel-missed-summary');
+      const container = document.getElementById('task-member-roster-container');
+      const searchInput = document.getElementById('task-member-roster-search');
+      const filterSelect = document.getElementById('task-member-roster-filter');
+
+      if (deptBadge) {
+        deptBadge.textContent = `🏢 ${task.department ? task.department.toUpperCase() : 'GENERAL'}`;
+      }
+
+      // Collect department members
+      let roster = [];
+      Object.entries(MEMBERS_DATABASE).forEach(([id, m]) => {
+        if (!m.hide && m.depts && m.depts.includes(task.department)) {
+          roster.push({ id, ...m });
+        }
+      });
+
+      // Sort alphabetically by name
+      roster.sort((a, b) => a.name.localeCompare(b.name));
+
+      task.memberProgress = task.memberProgress || {};
+      let totalMissed = 0;
+      roster.forEach(m => {
+        if (task.memberProgress[m.id] === 'not_done') {
+          totalMissed++;
+        }
+      });
+
+      if (missedSummary) {
+        missedSummary.textContent = `${totalMissed} Missed`;
+      }
+
+      function updateTaskRosterHTML() {
+        const q = (searchInput?.value || '').toLowerCase().trim();
+        const filter = filterSelect?.value || 'all';
+
+        const filtered = roster.filter(m => {
+          const prog = task.memberProgress[m.id] || 'unmarked';
+          const isMissed = prog === 'not_done';
+          const isDone = prog.startsWith('tier_') || prog === 'done' || prog === 'attended';
+          const isUnmarked = prog === 'unmarked';
+
+          if (filter === 'missed' && !isMissed) return false;
+          if (filter === 'done' && !isDone) return false;
+          if (filter === 'unmarked' && !isUnmarked) return false;
+
+          if (!q) return true;
+          const matchName = (m.name || '').toLowerCase().includes(q);
+          const matchId = (m.id || '').toLowerCase().includes(q);
+          return matchName || matchId;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<div style="text-align: center; padding: 18px; color: var(--white-muted); font-size: 0.85rem; font-style: italic;">No department members match this filter.</div>`;
+          return;
+        }
+
+        let html = '';
+        filtered.forEach(m => {
+          const prog = task.memberProgress[m.id] || 'unmarked';
+          let statusBadge = '';
+          if (prog === 'not_done') {
+            statusBadge = `<span style="background: rgba(239, 68, 68, 0.22); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); padding: 3px 9px; border-radius: 14px; font-size: 0.76rem; font-weight: 700;">❌ Missed / Not Done</span>`;
+          } else if (prog === 'tier_1') {
+            statusBadge = `<span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); padding: 3px 9px; border-radius: 14px; font-size: 0.76rem; font-weight: 700;">⭐ Tier 1 (Done)</span>`;
+          } else if (prog === 'tier_2') {
+            statusBadge = `<span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); padding: 3px 9px; border-radius: 14px; font-size: 0.76rem; font-weight: 700;">⭐⭐ Tier 2 (Done)</span>`;
+          } else if (prog === 'tier_3') {
+            statusBadge = `<span style="background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.4); padding: 3px 9px; border-radius: 14px; font-size: 0.76rem; font-weight: 700;">⭐⭐⭐ Tier 3 (Done)</span>`;
+          } else if (prog === 'excused') {
+            statusBadge = `<span style="background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.4); padding: 3px 9px; border-radius: 14px; font-size: 0.76rem; font-weight: 600;">🛡️ Excused</span>`;
+          } else {
+            statusBadge = `<span style="color: #64748b; font-size: 0.76rem; font-style: italic;">Not Marked</span>`;
+          }
+
+          html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 180px;">
+                <div style="display: flex; flex-direction: column;">
+                  <strong style="color: #f1f5f9; font-size: 0.88rem;">${escapeHtml(m.name)}</strong>
+                  <span style="font-size: 0.75rem; color: var(--white-muted);">ID: ${m.id}</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                ${statusBadge}
+                <button type="button" class="btn-whatsapp-pill btn-task-panel-wa" data-member-id="${m.id}" data-task-id="${task.id}" style="padding: 5px 12px; border-radius: 6px; font-size: 0.76rem; display: inline-flex; align-items: center; gap: 5px;">
+                  <span>💬 WhatsApp Warning</span>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+
+        // Bind WhatsApp buttons
+        container.querySelectorAll('.btn-task-panel-wa').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openTaskWhatsAppModal(btn.dataset.taskId, btn.dataset.memberId);
+          });
+        });
+      }
+
+      updateTaskRosterHTML();
+
+      if (searchInput) searchInput.oninput = updateTaskRosterHTML;
+      if (filterSelect) filterSelect.onchange = updateTaskRosterHTML;
     }
 
     async function issueCeoMeetingWarning(taskId, memberId) {
@@ -4486,6 +4949,9 @@
       if (currentView === 'tracker') {
         renderProgressTracker();
       }
+
+      // Offer WhatsApp warning dispatch as extra option
+      openTaskWhatsAppModal(task.id, memberId);
     }
 
     async function revokeCeoMeetingWarning(taskId, memberId) {
@@ -19252,11 +19718,23 @@
               optionsHTML += `<option value="excused" ${progress === 'excused' ? 'selected' : ''}>Excused</option>`;
             }
             
+            let waBtnHtml = '';
+            if (rawProgress === 'not_done') {
+              waBtnHtml = `
+                <button type="button" class="btn-cell-wa-warn" data-task-id="${t.id}" data-member-id="${member.id}" title="Send WhatsApp Warning Notice to ${escapeHtml(member.name)}" style="background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.4); color: #4ade80; padding: 2px 7px; border-radius: 4px; cursor: pointer; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 2px; vertical-align: middle; transition: all 0.2s;">
+                  <span>💬</span>
+                </button>
+              `;
+            }
+
             rowHTML += `
               <td>
-                <select class="eval-select eval-select--${progress}" data-task-id="${t.id}" data-member-id="${member.id}">
-                  ${optionsHTML}
-                </select>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+                  <select class="eval-select eval-select--${progress}" data-task-id="${t.id}" data-member-id="${member.id}">
+                    ${optionsHTML}
+                  </select>
+                  ${waBtnHtml}
+                </div>
               </td>
             `;
           } else {
@@ -19389,6 +19867,14 @@
       trackerTable.querySelectorAll('.bonus-btn').forEach(btn => {
         btn.addEventListener('click', handleBonusChange);
       });
+
+      // Bind cell WhatsApp warning button clicks
+      trackerTable.querySelectorAll('.btn-cell-wa-warn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openTaskWhatsAppModal(btn.dataset.taskId, btn.dataset.memberId);
+        });
+      });
     }
 
     // Handles evaluation changes and triggers email alerts
@@ -19469,10 +19955,17 @@
             }
             const memberBody = `Dear ${member.name},\n\nThis email is sent to inform you that your status on the ${itemTypeName} "${task.title}" in the ${task.department} department has been marked as Missed/Not Done by team leadership.${penaltyNotice}\n\nPlease ensure you maintain timely progress and attend all scheduled team sessions. Contact your department head if you have any questions.\n\nBest regards,\nA.E.R.I.S. Team Administration`;
             
-            await sendMailerEmail(member.email, member.name, memberSubject, memberBody);
+            // 1. Send automated notice email to member (dispatched in background)
+            sendMailerEmail(member.email, member.name, memberSubject, memberBody).catch(err => console.warn("Mailer dispatch error:", err));
             
             // 2. Perform 3 missed tasks warning logic
-            await checkMemberMissedTasks(memberId, task.department);
+            checkMemberMissedTasks(memberId, task.department).catch(err => console.warn("Missed tasks check error:", err));
+
+            // 3. Offer WhatsApp warning dispatch as extra option immediately
+            openTaskWhatsAppModal(task.id, memberId);
+          } else {
+            // Already notified by email previously; offer WhatsApp warning dispatch modal
+            openTaskWhatsAppModal(task.id, memberId);
           }
         }
       } else {
@@ -21721,6 +22214,49 @@
       warnPhoneInput.addEventListener('change', () => {
         const targetReg = document.getElementById('warn-modal-target-reg')?.value;
         if (targetReg) saveMemberPhone(targetReg, warnPhoneInput.value.trim());
+      });
+    }
+
+    // Task WhatsApp Warning Modal Listeners
+    const taskWaClose = document.getElementById('task-whatsapp-close');
+    if (taskWaClose) taskWaClose.addEventListener('click', closeTaskWhatsAppModal);
+
+    const taskWaOverlay = document.getElementById('task-whatsapp-overlay');
+    if (taskWaOverlay) taskWaOverlay.addEventListener('click', closeTaskWhatsAppModal);
+
+    const taskWaSkipBtn = document.getElementById('task-wa-modal-skip-btn');
+    if (taskWaSkipBtn) taskWaSkipBtn.addEventListener('click', closeTaskWhatsAppModal);
+
+    const taskWaSendBtn = document.getElementById('task-wa-modal-send-btn');
+    if (taskWaSendBtn) {
+      taskWaSendBtn.addEventListener('click', () => {
+        const targetReg = document.getElementById('task-wa-modal-target-reg')?.value;
+        const taskId = document.getElementById('task-wa-modal-task-id')?.value;
+        const phoneInput = document.getElementById('task-wa-modal-phone');
+        const previewEl = document.getElementById('task-wa-modal-preview');
+
+        if (!targetReg || !MEMBERS_DATABASE[targetReg]) {
+          alert("Please select a valid member to dispatch WhatsApp warning.");
+          return;
+        }
+
+        const member = MEMBERS_DATABASE[targetReg];
+        const phone = phoneInput ? phoneInput.value.trim() : (member.phone || '');
+        if (phone) saveMemberPhone(targetReg, phone);
+
+        const tasks = (typeof getTasks === 'function') ? getTasks() : [];
+        const task = tasks.find(t => t.id === taskId);
+        const msg = previewEl ? previewEl.textContent : '';
+
+        dispatchWhatsAppTaskWarning(phone, msg, member.name, task?.title || 'Assigned Task');
+      });
+    }
+
+    const taskWaPhoneInput = document.getElementById('task-wa-modal-phone');
+    if (taskWaPhoneInput) {
+      taskWaPhoneInput.addEventListener('change', () => {
+        const targetReg = document.getElementById('task-wa-modal-target-reg')?.value;
+        if (targetReg) saveMemberPhone(targetReg, taskWaPhoneInput.value.trim());
       });
     }
   </script>
