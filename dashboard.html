@@ -1333,7 +1333,7 @@
 
     /* ========== TEAM DATABASE ========== */
     const HEADS = new Set([
-      '251010424', '251001377', '241012132',
+      '251012364', '251010424', '251001377', '241012132',
       '231012318', '241003033', '231002350', '2006', 'test 3', '251010536'
     ]);
 
@@ -1415,7 +1415,7 @@
       '241002229': { name: 'Amir Abbas', fullName: 'Amir Abbas Ibrahim', depts: ['mechanical'], role: 'member', email: 'whithblack38@gmail.com', phone: '01552116306' },
       
       // Non-Technical affairs
-      '251012364': { name: 'Mahinor Harb', depts: ['mechanical'], role: 'member', email: 'mahinouryoussefharb@gmail.com', phone: '01129744742' },
+      '251012364': { name: 'Mahinor Harb', fullName: 'Mahinour Harb', depts: ['non-technical'], role: 'head', email: 'mahinouryoussefharb@gmail.com', phone: '01129744742' },
       '221011368': { name: 'Sara Abdo', depts: ['mechanical'], role: 'member', email: 'sara.abdo@aeris-team.org', phone: '01050871400' },
       '251001767': { name: 'Esraa Mohammed', depts: ['mechanical'], role: 'member', email: 'esraamohamedahmed255@gmail.com' },
       '221003996': { name: 'Ahmed Tarek', depts: ['mechanical'], role: 'member', email: 'ahmadtarekk17@gmail.com' },
@@ -2064,6 +2064,16 @@
               hasFin ? "<strong>Wayne Enterprises Reserves:</strong> Access financial data (Budget & Funding Trackers) to audit department budgets. (Original Batman theme will auto-restore in 24 hours)." : "<strong>Batcomputer Expenses:</strong> Access the Budget Tracker to monitor team spending. (Original Batman theme will auto-restore in 24 hours)."
             ];
           }
+        } else if (activeTheme === 'tweety') {
+          title = "🐣 Tweety Bird Marketing Command Guide";
+          welcome = "🐥 Sba7 el fol, Head Mahinor! I taw a puddy tat! Spread your wings and lead the TDR & Marketing division to victory! 🐤✨";
+          items = [
+            "<strong>Marketing Directives:</strong> Formulate and upload outreach campaigns, branding, and TDR tasks using the <strong>Task Upload Form</strong>.",
+            "<strong>Bird's Eye Matrix:</strong> Switch views to the <strong>Progress Tracker (Excel)</strong> to monitor marketing deliverables, campaign progress, and task ratings.",
+            "<strong>Cage Directives (Workflow):</strong> Move marketing tasks through phases (<code>▶ Start</code> / <code>✓ Done</code>), and dismiss completed or obsolete cards with <code>&times;</code>.",
+            "<strong>Flock Announcements:</strong> Post official TDR & Marketing broadcasts on the News Board for the entire team.",
+            hasFin ? "<strong>Birdseed Vault (Finances):</strong> Access the Budget Tracker to monitor department funds and seed allocations." : "<strong>Birdseed Expenses:</strong> Access the Budget Tracker to monitor team spending logs."
+          ];
         } else if (activeTheme === 'sonic') {
           title = "🌀 Green Hill Zone Software Directives";
           welcome = "🦔 Gotta go fast, Software Head Sara Ahmed! Collect those gold rings and sprint through the software tasks at supersonic speed! ⚡";
@@ -2142,9 +2152,9 @@
           ];
         } else if (activeTheme === 'tweety') {
           title = "🐣 Tweety Bird Cage Guide";
-          welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our mechanical tasks.";
+          welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our marketing tasks.";
           items = [
-            "<strong>Bird's Eye View:</strong> Click Mechanical to view what tasks are hanging on the swing.",
+            "<strong>Bird's Eye View:</strong> Click TDR & Marketing to view what tasks are hanging on the swing.",
             "<strong>Feather Details:</strong> Click a task to read messages and advice from Granny. Workflow actions are locked.",
             "<strong>Cage Accounts (Finances):</strong> Access the Budget Tracker to monitor birdseed spending. Net budget and total income are hidden."
           ];
