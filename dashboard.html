@@ -3626,7 +3626,30 @@
           if (Array.isArray(data.tasks)) { saveTasks(data.tasks); renderTasks(); }
           if (Array.isArray(data.news)) { saveNews(data.news); renderNews(); }
           if (Array.isArray(data.transactions)) { saveTransactions_local(data.transactions); if (typeof renderFinanceSection === 'function') try { renderFinanceSection(); } catch(e){} }
-          if (data.funding) { saveFundingData_local(data.funding); if (typeof renderFundingSection === 'function') try { renderFundingSection(); } catch(e){} }
+          if (data.funding) {
+            let localFunding = null;
+            try {
+              localFunding = JSON.parse(safeLocal.getItem(FUNDING_STORAGE_KEY));
+            } catch(e) {}
+            const cloudHasPayments = data.funding.payments && data.funding.payments.length > 0;
+            const cloudHasTargets = data.funding.agreedAmounts && Object.values(data.funding.agreedAmounts).some(v => v > 0);
+            const localHasPayments = localFunding && localFunding.payments && localFunding.payments.length > 0;
+            const localHasTargets = localFunding && localFunding.agreedAmounts && Object.values(localFunding.agreedAmounts).some(v => v > 0);
+
+            if (!cloudHasPayments && !cloudHasTargets && (localHasPayments || localHasTargets)) {
+              pushFundingToCloud(localFunding);
+            } else if (localHasPayments && cloudHasPayments) {
+              const pMap = new Map();
+              data.funding.payments.forEach(p => pMap.set(p.id, p));
+              localFunding.payments.forEach(p => pMap.set(p.id, p));
+              data.funding.payments = Array.from(pMap.values());
+              saveFundingData_local(data.funding);
+              if (typeof renderFundingSection === 'function') try { renderFundingSection(); } catch(e){}
+            } else {
+              saveFundingData_local(data.funding);
+              if (typeof renderFundingSection === 'function') try { renderFundingSection(); } catch(e){}
+            }
+          }
           if (data.bonuses) { saveMemberBonuses_local(data.bonuses); }
           if (data.warnings) { saveWarningsSentState_local(data.warnings); }
         }
@@ -20593,22 +20616,25 @@
 
     /* ========== FUNDING & CONTRIBUTIONS TRACKER SYSTEM ========== */
     const FUNDING_STORAGE_KEY = 'aeris_funding_data_v2';
-    const FUNDING_ZEROED_FLAG = 'aeris_funding_zeroed_2026';
-
     function getFundingData() {
-      // One-time check: wipe any stale pre-reset local funding debts
-      if (!safeLocal.getItem(FUNDING_ZEROED_FLAG)) {
-        safeLocal.removeItem(FUNDING_STORAGE_KEY);
-        safeLocal.setItem('aeris_funding_migrated', 'true');
-        safeLocal.setItem(FUNDING_ZEROED_FLAG, 'true');
-      }
-
       try {
         const stored = safeLocal.getItem(FUNDING_STORAGE_KEY);
         if (stored) {
           const data = JSON.parse(stored);
           if (data && data.agreedAmounts && data.payments) {
             if (!data.warnings) data.warnings = {};
+            // If any active member has 0 or missing target, restore target to 400.00 EGP
+            let hasChanges = false;
+            for (const reg in MEMBERS_DATABASE) {
+              if (!MEMBERS_DATABASE[reg].hide && (data.agreedAmounts[reg] === undefined || data.agreedAmounts[reg] === 0)) {
+                data.agreedAmounts[reg] = 400;
+                hasChanges = true;
+              }
+            }
+            if (hasChanges) {
+              safeLocal.setItem(FUNDING_STORAGE_KEY, JSON.stringify(data));
+              pushFundingToCloud(data);
+            }
             return data;
           }
         }
@@ -20616,12 +20642,12 @@
         console.warn("Failed to read funding data:", e);
       }
       
-      // Fallback/initialization: default 0 EGP for everyone in MEMBERS_DATABASE
+      // Fallback/initialization: default 400 EGP for everyone in MEMBERS_DATABASE
       const initialAgreed = {};
       for (const reg in MEMBERS_DATABASE) {
         // Exclude members marked with hide: true
         if (!MEMBERS_DATABASE[reg].hide) {
-          initialAgreed[reg] = 0;
+          initialAgreed[reg] = 400;
         }
       }
       const initialData = {
