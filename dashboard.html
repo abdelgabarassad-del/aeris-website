@@ -3867,6 +3867,39 @@
     /* ========== News Board Logic ========== */
     const NEWS_STORAGE_KEY = 'aeris_dashboard_news';
 
+    // Hardcoded seed news items (always present in source, injected on first load per ID)
+    const SEEDED_NEWS = [
+      {
+        id: 'm9ngps20261010',
+        content: '\u{1f6f0}\u{fe0f} Hardware Update: The HolyBro M9N GPS module has officially arrived! Big milestone for our flight systems \u2014 the M9N is now in our hands and ready for integration into the drone platform. \u{1f389}\n\n\u2014 A.E.R.I.S. Leadership',
+        authorName: 'Abduljabar Asaad',
+        authorRole: 'CEO',
+        createdAt: '2026-10-10T12:00:00.000Z'
+      },
+      {
+        id: 'fpvcam20261101',
+        content: '\u{1f4f7} Hardware Update: The FPV camera arrived on October 24th, and after integration and testing, we\u2019re happy to confirm it was successfully operational as of November 1st! Great progress on the avionics front. \u{1f680}\n\n\u2014 A.E.R.I.S. Leadership',
+        authorName: 'Abduljabar Asaad',
+        authorRole: 'CEO',
+        createdAt: '2026-10-24T12:00:00.000Z'
+      }
+    ];
+
+    function seedDefaultNews() {
+      let newsList = [];
+      try { newsList = JSON.parse(safeLocal.getItem(NEWS_STORAGE_KEY)) || []; } catch(e) {}
+      const existingIds = new Set(newsList.map(n => n.id));
+      let changed = false;
+      SEEDED_NEWS.forEach(item => {
+        if (!existingIds.has(item.id)) {
+          newsList.push(item);
+          changed = true;
+        }
+      });
+      if (changed) safeLocal.setItem(NEWS_STORAGE_KEY, JSON.stringify(newsList));
+    }
+    seedDefaultNews();
+
     const newsToggleFormBtn = document.getElementById('news-toggle-form');
     const newsFormWrapper = document.getElementById('news-form-wrapper');
     const newsContent = document.getElementById('news-content');
