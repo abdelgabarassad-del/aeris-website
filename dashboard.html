@@ -1343,7 +1343,9 @@
       '251001377', '251010151', '241003033', '251001035',
       '251010536', '241002278', '251003016',
       '231012318', '231003587', '251001982', '221003996',
-      '241002229', '241000881', '231002350', '2006', 'test 3', '251000861', '221010336'
+      '241002229', '241000881', '231002350', '2006', 'test 3', '251000861', '221010336',
+      '261010676', '261007066', '252000200', '251010610',
+      '261002081', '251000910', '241001412', '241010954'
     ]);
 
     // Theme Customization Registration Numbers
@@ -1406,6 +1408,8 @@
       '251000305': { name: 'Abdelrahman Ehab Elsayed', fullName: 'Abdelrahman Ehab', depts: ['mechanical'], role: 'member', email: 'Bodyehab2007@gmail.com', phone: '01011245508' },
       '251001035': { name: 'Yousef Ashraf Sakr', depts: ['mechanical'], role: 'member', email: 'yousefsakr2007@gmail.com', phone: '01022376711' },
       '241002278': { name: 'Marwan Mohamed Elghazaly', depts: ['mechanical'], role: 'member', email: 'Aboamrowan67@gmail.com' },
+      '261010676': { name: 'Yahya Ghaly', fullName: 'Yahya Ghaly', depts: ['mechanical'], role: 'member', email: 'yahya.ghaly@gmail.com', phone: '01205511458' },
+      '252000200': { name: 'Halla Tamer El Shafie', fullName: 'Halla Tamer El Shafie', depts: ['mechanical'], role: 'member', email: 'hallatamer5487@gmail.com', phone: '01141915166' },
       
       // Electrical Division (Pure Elec)
       '241012132': { name: 'Bassem Toulan', depts: ['electrical'], role: 'head', email: 'toulanbassem@gmail.com', phone: '01010465384' },
@@ -1427,7 +1431,13 @@
       // Ibrahim Hassan: software and mechanical
       '231003934': { name: 'Ibrahim Hassan Ibrahim', depts: ['software', 'mechanical'], role: 'member', email: 'ibrahim.hassan@aeris-team.org' },
       // Amr Mohamed: software, mechanical, electrical
-      '231003587': { name: 'Amr Mohamed El Ghazaly', fullName: 'Amr Elghazaly', depts: ['software', 'mechanical', 'electrical'], role: 'member', email: 'Aboamrowan3232@gmail.com', phone: '01092094888' }
+      '231003587': { name: 'Amr Mohamed El Ghazaly', fullName: 'Amr Elghazaly', depts: ['software', 'mechanical', 'electrical'], role: 'member', email: 'Aboamrowan3232@gmail.com', phone: '01092094888' },
+      '261007066': { name: 'Yahya Amin', fullName: 'Yahya Amin', depts: ['mechanical', 'electrical'], role: 'member', email: 'yahya.za.futre.ame2024@gmail.com', phone: '01157724896' },
+      '251010610': { name: 'Ibrahim Amr Zaytoun', fullName: 'Ibrahim amr Ibrahim ahmed zaytoun', depts: ['software', 'electrical'], role: 'member', email: 'ibrahimamr390@gmail.com', phone: '01003548906' },
+      '261002081': { name: 'Mahmoud Moataz Samaha', fullName: 'Mahmoud Moataz Samaha', depts: ['mechanical', 'electrical'], role: 'member', email: 'Samahamahmoud708@gmail.com', phone: '01208666989' },
+      '251000910': { name: 'Tabarak Mohamed', fullName: 'tabarak mohamed', depts: ['mechanical', 'electrical'], role: 'member', email: 'tabarakmohamed043@gmail.com', phone: '01099656170' },
+      '241001412': { name: 'Mazen Hany Emara', fullName: 'Mazen hany emara', depts: ['mechanical', 'electrical'], role: 'member', email: 'mazen.hany.emara@gmail.com', phone: '01091721217' },
+      '241010954': { name: 'Omar Ibrahim Khalil', fullName: 'Omar Ibrahim khalil', depts: ['electrical', 'mechanical'], role: 'member', email: 'omariibrahim.4040@gmail.com', phone: '01094208400' }
     };
 
     const ADVISORS = {
@@ -1530,7 +1540,15 @@
       '251000305': '01011245508', // Abdelrahman Ehab
       '241000881': '01556543755', // Omar Hossam Elbanan
       '251000861': '01091832937', // Hazem Walid Abdelhamid
-      '861': '01091832937'        // Hazem Walid (shorthand ID)
+      '861': '01091832937',       // Hazem Walid (shorthand ID)
+      '261010676': '01205511458', // Yahya Ghaly
+      '261007066': '01157724896', // Yahya Amin
+      '252000200': '01141915166', // Halla Tamer El Shafie
+      '251010610': '01003548906', // Ibrahim amr Ibrahim ahmed zaytoun
+      '261002081': '01208666989', // Mahmoud Moataz Samaha
+      '251000910': '01099656170', // tabarak mohamed
+      '241001412': '01091721217', // Mazen hany emara
+      '241010954': '01094208400'  // Omar Ibrahim khalil
     };
 
     // Initialize custom member phone numbers from localStorage & fixed database
@@ -2418,7 +2436,15 @@
       '251001982': { name: 'ahmad aziz', message: 'sba7 el fol' },
       '221003996': { name: 'ahmed tarek', message: 'malk el gym kolo' },
       '241002229': { name: 'amir abbas', message: 'sba7 el fol' },
-      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' }
+      '241000881': { name: 'Omar Hossam Elbanan', message: 'monkznah 3aml eh' },
+      '261010676': { name: 'Yahya Ghaly', message: 'Welcome to A.E.R.I.S., Yahya! 🚀' },
+      '261007066': { name: 'Yahya Amin', message: 'Welcome to A.E.R.I.S., Yahya! ⚡' },
+      '252000200': { name: 'Halla Tamer El Shafie', message: 'Welcome to A.E.R.I.S., Halla! ✈️' },
+      '251010610': { name: 'Ibrahim Amr Zaytoun', message: 'Welcome to A.E.R.I.S., Ibrahim! 💻' },
+      '261002081': { name: 'Mahmoud Moataz Samaha', message: 'Welcome to A.E.R.I.S., Mahmoud! 🛠️' },
+      '251000910': { name: 'Tabarak Mohamed', message: 'Welcome to A.E.R.I.S., Tabarak! 🌟' },
+      '241001412': { name: 'Mazen Hany Emara', message: 'Welcome to A.E.R.I.S., Mazen! ⚙️' },
+      '241010954': { name: 'Omar Ibrahim Khalil', message: 'Welcome to A.E.R.I.S., Omar! 🔌' }
     };
 
     /* ========== AUTH GATE LOGIC ========== */
