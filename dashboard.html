@@ -1419,7 +1419,7 @@
       '241002229': { name: 'Amir Abbas', fullName: 'Amir Abbas Ibrahim', depts: ['mechanical'], role: 'member', email: 'whithblack38@gmail.com', phone: '01552116306' },
       
       // Non-Technical affairs
-      '251012364': { name: 'Mahinor Harb', fullName: 'Mahinour Harb', depts: ['non-technical'], role: 'head', email: 'mahinouryoussefharb@gmail.com', phone: '01129744742' },
+      '251012364': { name: 'Mahinor Harb', fullName: 'Mahinour Harb', depts: ['non-technical', 'mechanical'], role: 'head', headDept: 'non-technical', email: 'mahinouryoussefharb@gmail.com', phone: '01129744742' },
       '221011368': { name: 'Sara Abdo', depts: ['mechanical'], role: 'member', email: 'sara.abdo@aeris-team.org', phone: '01050871400' },
       '251001767': { name: 'Esraa Mohammed', depts: ['mechanical'], role: 'member', email: 'esraamohamedahmed255@gmail.com' },
       '221003996': { name: 'Ahmed Tarek', depts: ['mechanical'], role: 'member', email: 'ahmadtarekk17@gmail.com' },
@@ -2086,6 +2086,7 @@
           title = "🐣 Tweety Bird Marketing Command Guide";
           welcome = "🐥 Sba7 el fol, Head Mahinor! I taw a puddy tat! Spread your wings and lead the TDR & Marketing division to victory! 🐤✨";
           items = [
+            "<strong>Dual-Division Flight:</strong> Toggle between the <strong>TDR & Marketing</strong> and <strong>Mechanical</strong> tabs to coordinate marketing campaigns or follow up on mechanical tasks.",
             "<strong>Marketing Directives:</strong> Formulate and upload outreach campaigns, branding, and TDR tasks using the <strong>Task Upload Form</strong>.",
             "<strong>Bird's Eye Matrix:</strong> Switch views to the <strong>Progress Tracker (Excel)</strong> to monitor marketing deliverables, campaign progress, and task ratings.",
             "<strong>Cage Directives (Workflow):</strong> Move marketing tasks through phases (<code>▶ Start</code> / <code>✓ Done</code>), and dismiss completed or obsolete cards with <code>&times;</code>.",
@@ -2170,9 +2171,9 @@
           ];
         } else if (activeTheme === 'tweety') {
           title = "🐣 Tweety Bird Cage Guide";
-          welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our marketing tasks.";
+          welcome = "🐥 Sba7 el fol, Mahinor! I taw a puddy tat! Let's stay safe in our cage and complete our mechanical and marketing tasks.";
           items = [
-            "<strong>Bird's Eye View:</strong> Click TDR & Marketing to view what tasks are hanging on the swing.",
+            "<strong>Bird's Eye View:</strong> Toggle between the TDR & Marketing and Mechanical tabs to view what tasks are hanging on the swing.",
             "<strong>Feather Details:</strong> Click a task to read messages and advice from Granny. Workflow actions are locked.",
             "<strong>Cage Accounts (Finances):</strong> Access the Budget Tracker to monitor birdseed spending. Net budget and total income are hidden."
           ];
@@ -3277,9 +3278,10 @@
         if (document.getElementById('tab-software')) document.getElementById('tab-software').style.display = depts.includes('software') ? 'inline-flex' : 'none';
         if (document.getElementById('tab-non-technical')) document.getElementById('tab-non-technical').style.display = depts.includes('non-technical') ? 'inline-flex' : 'none';
         
-        // Select the first available department if the current one is not in their allowed depts
-        if (!depts.includes(currentDept) && depts.length > 0) {
-          currentDept = depts[0];
+        // Select the first available department if current one not allowed or head prefers headDept
+        const shouldSwitchDept = (!depts.includes(currentDept) || (personObj && personObj.role === 'head' && personObj.headDept && currentDept !== personObj.headDept)) && depts.length > 0;
+        if (shouldSwitchDept) {
+          currentDept = (personObj && personObj.headDept && depts.includes(personObj.headDept)) ? personObj.headDept : depts[0];
           // Update active class on tab buttons
           const deptTabsList = ['mechanical', 'electrical', 'software', 'non-technical'];
           deptTabsList.forEach(d => {
@@ -4873,7 +4875,7 @@
         activeUser.role === 'ceo' ||
         activeUser.role === 'cfo' ||
         activeUser.role === 'vice_head' ||
-        (activeUser.role === 'head' && activeUser.depts.includes(task.department))
+        (activeUser.role === 'head' && (activeUser.headDept ? activeUser.headDept === task.department : activeUser.depts.includes(task.department)))
       );
 
       if (!isLeader || task.type === 'meeting') {
@@ -19730,7 +19732,11 @@
         } else if (member.role === 'cfo') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--cfo">CFO</span>';
         } else if (member.role === 'head') {
-          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head">Head</span>';
+          if (member.headDept && member.headDept !== currentDept) {
+            roleBadge = '';
+          } else {
+            roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head">Head</span>';
+          }
         } else if (member.role === 'vice_head') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--vice_head">Vice Head</span>';
         }
@@ -19781,7 +19787,7 @@
             activeUser.role === 'ceo' || 
             activeUser.role === 'cfo' || 
             activeUser.role === 'vice_head' || 
-            (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
+            (activeUser.role === 'head' && (activeUser.headDept ? activeUser.headDept === currentDept : activeUser.depts.includes(currentDept)))
           );
           
           if (canEdit) {
@@ -19871,7 +19877,7 @@
           activeUser.role === 'ceo' || 
           activeUser.role === 'cfo' || 
           activeUser.role === 'vice_head' || 
-          (activeUser.role === 'head' && activeUser.depts.includes(currentDept))
+          (activeUser.role === 'head' && (activeUser.headDept ? activeUser.headDept === currentDept : activeUser.depts.includes(currentDept)))
         );
         
         let bonusCellHTML = '';
@@ -20235,7 +20241,11 @@
         } else if (m.role === 'cfo') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--cfo" style="margin-left: 8px;">CFO</span>';
         } else if (m.role === 'head') {
-          roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head" style="margin-left: 8px;">Head</span>';
+          if (m.headDept && m.headDept !== currentLeaderboardDept) {
+            roleBadge = '';
+          } else {
+            roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--head" style="margin-left: 8px;">Head</span>';
+          }
         } else if (m.role === 'vice_head') {
           roleBadge = '<span class="tracker-table__member-role tracker-table__member-role--vice_head" style="margin-left: 8px;">Vice Head</span>';
         }
